@@ -8,25 +8,18 @@
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        html, body {
-            min-height: 100%;
+        /* Reset básico */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
             overflow-x: hidden;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        main {
-            flex: 1 0 auto;
-        }
-
-        footer {
-            flex-shrink: 0;
+            position: relative;
         }
 
         /* Estilos base */
@@ -116,28 +109,41 @@
             right: 10px;
         }
 
-        /* Ajustes para modo vertical en móvil */
+        /* Ajustes específicos para móvil vertical */
         @media (max-width: 768px) and (orientation: portrait) {
+            body {
+                display: block;
+                min-height: 100%;
+            }
+
             section {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-            }
-
-            section:last-of-type {
-                padding-bottom: 1rem;
-            }
-
-            .social-links {
-                margin-bottom: 0;
+                padding: 2rem 0;
+                margin: 0;
             }
 
             #contacto {
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+
+            .social-links {
                 padding-bottom: 1rem;
+                margin-bottom: 0;
             }
 
             footer {
-                margin-top: 0;
                 padding: 1rem 0;
+                margin: 0;
+            }
+
+            .container {
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+
+            .py-20 {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
             }
         }
 
@@ -667,34 +673,39 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contacto" class="py-20 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+    <section id="contacto" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center mb-12">Contacto</h2>
-            <div class="max-w-2xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <a href="mailto:sevenkeyschool@gmail.com" class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        <i class="fas fa-envelope text-2xl"></i>
-                        <span>sevenkeyschool@gmail.com</span>
-                    </a>
-                    <a href="https://wa.me/573133697599?text=Hola,%20les%20escribo%20desde%20la%20página%20web%20de%20Seven%20Keys%20School.%20Me%20gustaría%20obtener%20más%20información." target="_blank" class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        <i class="fab fa-whatsapp text-2xl"></i>
-                        <span>WhatsApp</span>
-                    </a>
-                    <a href="https://www.tiktok.com/@sevenkeyschool?_t=8rc80epH5IW&_r=1" target="_blank" class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        <i class="fab fa-tiktok text-2xl"></i>
-                        <span>TikTok</span>
-                    </a>
-                    <a href="https://www.instagram.com/sevenkeyschool/" target="_blank" class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        <i class="fab fa-instagram text-2xl"></i>
-                        <span>Instagram</span>
-                    </a>
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center space-y-8">
+                    <p class="text-xl">¿Listo para comenzar tu viaje musical?</p>
+                    <div class="social-links flex flex-wrap justify-center gap-4">
+                        <a href="https://wa.me/573133697599?text=Hola,%20me%20interesa%20tomar%20clases%20de%20música" 
+                           target="_blank" 
+                           class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            <i class="fab fa-whatsapp text-2xl"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a href="https://www.tiktok.com/@sevenkeyschool" 
+                           target="_blank" 
+                           class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            <i class="fab fa-tiktok text-2xl"></i>
+                            <span>TikTok</span>
+                        </a>
+                        <a href="https://www.instagram.com/sevenkeyschool/" 
+                           target="_blank" 
+                           class="flex items-center justify-center space-x-3 bg-gold text-blue-900 p-4 rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            <i class="fab fa-instagram text-2xl"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
+    <footer class="bg-gray-900 text-white">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2024 Seven Keys School. Todos los derechos reservados.</p>
         </div>
