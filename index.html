@@ -348,7 +348,7 @@
     </button>
 
     <!-- Audio element -->
-    <audio id="bgMusic" autoplay loop>
+    <audio id="bgMusic" preload="auto">
         <source src="audio/opening seven keys.mp3" type="audio/mpeg">
     </audio>
 
@@ -361,9 +361,17 @@
 
             // Configuración inicial
             audio.volume = 0.3;
-            audio.play().catch(function(error) {
-                console.log("Reproducción automática bloqueada por el navegador");
-            });
+            
+            // Intentar reproducir inmediatamente
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Reproducción automática exitosa
+                }).catch(error => {
+                    // Auto-play fue prevenido
+                    console.log("Reproducción automática bloqueada por el navegador");
+                });
+            }
 
             // Toggle música
             musicToggle.addEventListener('click', function() {
@@ -913,30 +921,30 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contacto" class="py-16 bg-white">
+    <section id="contacto" class="py-16 bg-gradient-to-r from-indigo-500 to-purple-600">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-blue-900 mb-4">Contacto</h2>
-                <p class="text-gray-600">¡Comienza tu viaje musical hoy!</p>
+                <h2 class="text-4xl font-bold text-white mb-4">Contacto</h2>
+                <p class="text-white">¡Comienza tu viaje musical hoy!</p>
             </div>
             <div class="flex flex-wrap justify-center gap-8 mb-8">
                 <!-- WhatsApp -->
-                <a href="https://wa.me/573133697599" target="_blank" class="flex items-center justify-center gap-3 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300">
+                <a href="https://wa.me/573133697599" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fab fa-whatsapp text-2xl"></i>
                     <span>WhatsApp</span>
                 </a>
                 <!-- Instagram -->
-                <a href="https://www.instagram.com/sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition duration-300">
+                <a href="https://www.instagram.com/sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fab fa-instagram text-2xl"></i>
                     <span>Instagram</span>
                 </a>
                 <!-- TikTok -->
-                <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition duration-300">
+                <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fab fa-tiktok text-2xl"></i>
                     <span>TikTok</span>
                 </a>
                 <!-- Email -->
-                <a href="mailto:sevenkeyschool@gmail.com" class="flex items-center justify-center gap-3 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-300">
+                <a href="mailto:sevenkeyschool@gmail.com" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fas fa-envelope text-2xl"></i>
                     <span>Email</span>
                 </a>
