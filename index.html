@@ -211,6 +211,45 @@
                 margin-top: 10%;
             }
         }
+
+        /* Ajustes para el widget de Instagram */
+        .instagram-media-wrapper {
+            position: relative;
+            width: 100% !important;
+            max-width: 550px !important;
+            margin: 0 auto !important;
+            min-width: unset !important;
+        }
+
+        .instagram-media {
+            min-width: unset !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+        }
+
+        @media (max-width: 768px) {
+            .instagram-media-wrapper {
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+            }
+
+            .instagram-media {
+                margin: 0 !important;
+                min-width: unset !important;
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+
+            /* Ajuste específico para el contenedor del widget */
+            #instagram-embed-container {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
+                min-height: 450px !important;
+                overflow: hidden !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -279,21 +318,21 @@
                         <i class="fas fa-music"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-blue-900 mb-2">Múltiples Instrumentos</h3>
-                    <p class="text-gray-600">Aprende guitarra, piano, bajo, violín y más con profesores especializados</p>
+                    <p class="text-gray-600 text-justify">Aprende guitarra, piano, bajo, violín y más con profesores especializados</p>
                 </div>
                 <div class="text-center p-6">
                     <div class="text-4xl text-gold mb-4">
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-blue-900 mb-2">Metodología Única</h3>
-                    <p class="text-gray-600">Programa personalizado adaptado a tus objetivos y ritmo de aprendizaje</p>
+                    <p class="text-gray-600 text-justify">Programa personalizado adaptado a tus objetivos y ritmo de aprendizaje</p>
                 </div>
                 <div class="text-center p-6">
                     <div class="text-4xl text-gold mb-4">
                         <i class="fas fa-globe"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-blue-900 mb-2">Clases Flexibles</h3>
-                    <p class="text-gray-600">Modalidad presencial o virtual, adaptándonos a tu ubicación y horario</p>
+                    <p class="text-gray-600 text-justify">Modalidad presencial o virtual, adaptándonos a tu ubicación y horario</p>
                 </div>
             </div>
         </div>
@@ -323,7 +362,7 @@
                                         <p class="text-gray-600">Madre de Familia desde Francia</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic">"Mis hijos, de 10 y 19 años, disfrutan mucho de sus clases de piano y de arpa que se ajustan, no solamente a sus intereses particulares sino a sus necesidades y horarios, considerando que vivimos en Francia con 6 y 7 horas de diferencia horaria. Juan Diego diseña sus clases buscando siempre la comprensión de lo que estudian pues es la mejor manera de poder aplicar lo aprendido en otros contextos. Para ello, propone ejercicios muy interesantes y complementa sus clases, ejercitación y deberes con divertidas actividades en línea que permiten reforzar las nociones, entrenarse y progresar en autonomía."</p>
+                                <p class="text-gray-600 italic text-justify">"Mis hijos, de 10 y 19 años, disfrutan mucho de sus clases de piano y de arpa que se ajustan, no solamente a sus intereses particulares sino a sus necesidades y horarios, considerando que vivimos en Francia con 6 y 7 horas de diferencia horaria. Juan Diego diseña sus clases buscando siempre la comprensión de lo que estudian pues es la mejor manera de poder aplicar lo aprendido en otros contextos. Para ello, propone ejercicios muy interesantes y complementa sus clases, ejercitación y deberes con divertidas actividades en línea que permiten reforzar las nociones, entrenarse y progresar en autonomía."</p>
                             </div>
                         </div>
                         
@@ -339,7 +378,7 @@
                                         <p class="text-gray-600">Madre de Familia desde Yopal</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic">"Fue una experiencia maravillosa, mi hijo Juan Alejandro disfrutó las clases de iniciación musical junto con la profesora Keila que tiene una magia inmensa con los niños, desde entonces mi hijo ama la música, ahora es estudiante de piano."</p>
+                                <p class="text-gray-600 italic text-justify">"Fue una experiencia maravillosa, mi hijo Juan Alejandro disfrutó las clases de iniciación musical junto con la profesora Keila que tiene una magia inmensa con los niños, desde entonces mi hijo ama la música, ahora es estudiante de piano."</p>
                             </div>
                         </div>
                         
@@ -355,7 +394,7 @@
                                         <p class="text-gray-600">Madre de Familia desde Reino Unido</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic">"Mi hijo disfruta mucho las clases online de guitarra con el profesor Juan Diego y su avance han sido muy significativo. El hecho de que podamos conectarnos estando fuera de Colombia es una oportunidad para tener clases personalizadas, en horarios convenientes y con flexibilidad. Juan Diego se preocupa por ofrecer lecciones acordes a sus canciones preferidas y prepara videos para que pueda practicar y mejorar su técnica cada semana. ¡Totalmente recomendable!"</p>
+                                <p class="text-gray-600 italic text-justify">"Mi hijo disfruta mucho las clases online de guitarra con el profesor Juan Diego y su avance han sido muy significativo. El hecho de que podamos conectarnos estando fuera de Colombia es una oportunidad para tener clases personalizadas, en horarios convenientes y con flexibilidad. Juan Diego se preocupa por ofrecer lecciones acordes a sus canciones preferidas y prepara videos para que pueda practicar y mejorar su técnica cada semana. ¡Totalmente recomendable!"</p>
                             </div>
                         </div>
                          <!-- Testimonio 4 -->
@@ -370,7 +409,7 @@
                 <p class="text-gray-600">Madre de Familia desde Cajicá</p>
             </div>
         </div>
-        <p class="text-gray-600 italic">"Estoy muy contenta con las clases de música! La asesoría que Juan Diego nos dio desde el principio para facilitar el proceso del niño ha hecho toda la diferencia! Empezaron con ukelele y ahora mi hijo se la ha facilitado mucho el proceso con la guitarra! Verlo tan feliz y avanzando cada vez más me encanta! Juan tiene mucho feeling con los niños! Gracias por tanta dedicación!"</p>
+        <p class="text-gray-600 italic text-justify">"Estoy muy contenta con las clases de música! La asesoría que Juan Diego nos dio desde el principio para facilitar el proceso del niño ha hecho toda la diferencia! Empezaron con ukelele y ahora mi hijo se la ha facilitado mucho el proceso con la guitarra! Verlo tan feliz y avanzando cada vez más me encanta! Juan tiene mucho feeling con los niños! Gracias por tanta dedicación!"</p>
     </div>
 </div>
                     </div>
@@ -414,21 +453,21 @@
                     <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
                         <i class="fas fa-child text-4xl text-blue-800 mb-6"></i>
                         <h4 class="text-xl font-bold mb-4">Iniciación Musical</h4>
-                        <p class="text-gray-600">Abriendo las puertas del mundo musical desde los 5 años</p>
+                        <p class="text-gray-600 text-justify">Abriendo las puertas del mundo musical desde los 5 años</p>
                     </div>
                 </div>
                 <div class="transform hover:scale-105 transition-transform duration-300">
                     <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
                         <i class="fas fa-clock text-4xl text-blue-800 mb-6"></i>
                         <h4 class="text-xl font-bold mb-4">Horarios Flexibles</h4>
-                        <p class="text-gray-600">Tu música, tu tiempo, tu espacio</p>
+                        <p class="text-gray-600 text-justify">Tu música, tu tiempo, tu espacio</p>
                     </div>
                 </div>
                 <div class="transform hover:scale-105 transition-transform duration-300">
                     <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
                         <i class="fas fa-globe text-4xl text-blue-800 mb-6"></i>
                         <h4 class="text-xl font-bold mb-4">Alcance Global</h4>
-                        <p class="text-gray-600">Llevando música sin fronteras a cada rincón del mundo</p>
+                        <p class="text-gray-600 text-justify">Llevando música sin fronteras a cada rincón del mundo</p>
                     </div>
                 </div>
             </div>
@@ -436,7 +475,7 @@
             <!-- Comunidad Musical -->
             <div class="text-center mb-12">
                 <h3 class="text-2xl font-bold text-blue-900 mb-4">Nuestra Comunidad Musical</h3>
-                <p class="text-gray-600 mb-8">Únete a nuestra comunidad global de músicos y sé parte de esta historia</p>
+                <p class="text-gray-600 mb-8 text-justify">Únete a nuestra comunidad global de músicos y sé parte de esta historia</p>
             </div>
             
             <!-- Instagram Feed con diseño mejorado -->
@@ -480,7 +519,7 @@
                             <i class="fas fa-music text-white text-2xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold mb-4">Iniciación Musical</h3>
-                        <p class="text-gray-600 mb-6">
+                        <p class="text-gray-600 mb-6 text-justify">
                             Programa diseñado para introducir a los más pequeños en el maravilloso mundo de la música. 
                             A través de juegos, canciones y actividades lúdicas, desarrollamos las bases musicales fundamentales.
                         </p>
@@ -500,7 +539,7 @@
                             <i class="fas fa-graduation-cap text-white text-2xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold mb-4">Desarrollo Musical</h3>
-                        <p class="text-gray-600 mb-6">
+                        <p class="text-gray-600 mb-6 text-justify">
                             Clases personalizadas virtuales y presenciales* en diversos instrumentos, adaptadas a tu nivel y objetivos musicales.
                         </p>
                         <div class="grid grid-cols-2 gap-4 mb-6">
@@ -537,7 +576,7 @@
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center mb-12">Metodología</h2>
             <div class="max-w-3xl mx-auto text-center">
-                <p class="text-lg text-gray-600 mb-8">
+                <p class="text-lg text-gray-600 mb-8 text-justify">
                     Nuestra metodología se basa en la personalización y la flexibilidad. 
                     Cada estudiante tiene un plan de estudios adaptado a sus necesidades y objetivos.
                 </p>
@@ -545,17 +584,17 @@
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <i class="fas fa-book text-3xl text-blue-800 mb-4"></i>
                         <h4 class="text-xl font-bold mb-2">Plan de Estudios Personalizado</h4>
-                        <p class="text-gray-600">Adaptado a tus necesidades y objetivos</p>
+                        <p class="text-gray-600 text-justify">Adaptado a tus necesidades y objetivos</p>
                     </div>
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <i class="fas fa-clock text-3xl text-blue-800 mb-4"></i>
                         <h4 class="text-xl font-bold mb-2">Horarios Flexibles</h4>
-                        <p class="text-gray-600">Adaptados a tu disponibilidad</p>
+                        <p class="text-gray-600 text-justify">Adaptados a tu disponibilidad</p>
                     </div>
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <i class="fas fa-globe text-3xl text-blue-800 mb-4"></i>
                         <h4 class="text-xl font-bold mb-2">Clases en Línea</h4>
-                        <p class="text-gray-600">Para estudiantes de todo el mundo</p>
+                        <p class="text-gray-600 text-justify">Para estudiantes de todo el mundo</p>
                     </div>
                 </div>
             </div>
@@ -611,14 +650,14 @@
                                 </iframe>
                             </div>
                             <h4 class="text-lg font-semibold text-blue-900">Proyecto de Investigación Musical</h4>
-                            <p class="text-sm text-gray-600">Investigación premiada sobre la implementación de la gramática musical en preescolar, demostrando la efectividad de nuestra metodología de enseñanza temprana.</p>
+                            <p class="text-sm text-gray-600 text-justify">Investigación premiada sobre la implementación de la gramática musical en preescolar, demostrando la efectividad de nuestra metodología de enseñanza temprana.</p>
                         </div>
 
                         <!-- Artículo Universidad de la Sabana -->
                         <div class="lg:col-span-2 space-y-4">
                             <div class="bg-gray-50 p-6 rounded-lg">
                                 <h4 class="text-lg font-semibold text-blue-900 mb-3">Artículo en Revista Apuntes de Familia - Universidad de la Sabana</h4>
-                                <p class="text-gray-600 mb-4">Publicación donde se reconoce nuestra metodología innovadora en educación musical temprana.</p>
+                                <p class="text-gray-600 mb-4 text-justify">Aporte de nuestro fundador al artículo sobre la Música una forma de expresión publicado en la revista Apuntes de Familia de la Universidad de la Sabana.</p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable">
                                     <img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable">
@@ -641,7 +680,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Perfil Profesional</h4>
-                                <p class="text-sm text-gray-600">Presentación de mis habilidades y experiencia como educador musical, mostrando mi enfoque pedagógico y compromiso con la enseñanza.</p>
+                                <p class="text-sm text-gray-600 text-justify">Presentación de mis habilidades y experiencia como educador musical, mostrando mi enfoque pedagógico y compromiso con la enseñanza.</p>
                             </div>
                             <!-- Video 2 -->
                             <div class="space-y-2">
@@ -656,7 +695,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Premio Maestro Francisco Cristancho</h4>
-                                <p class="text-sm text-gray-600">Momento especial recibiendo un regalo del Maestro Francisco Cristancho durante mi graduación, un reconocimiento significativo a mi trayectoria musical.</p>
+                                <p class="text-sm text-gray-600 text-justify">Momento especial recibiendo un regalo del Maestro Francisco Cristancho durante mi graduación, un reconocimiento significativo a mi trayectoria musical.</p>
                             </div>
                             <!-- Video 3 -->
                             <div class="space-y-2">
@@ -671,7 +710,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Educación Sin Fronteras</h4>
-                                <p class="text-sm text-gray-600">Experiencia de enseñanza virtual internacional, conectando maestros de Bogotá y Cajicá con una estudiante de canto en Francia.</p>
+                                <p class="text-sm text-gray-600 text-justify">Experiencia de enseñanza virtual internacional, conectando maestros de Bogotá y Cajicá con una estudiante de canto en Francia.</p>
                             </div>
                             <!-- Video 4 -->
                             <div class="space-y-2">
@@ -686,7 +725,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Interpretación con Maestro Cristancho</h4>
-                                <p class="text-sm text-gray-600">Interpretación musical acompañado al piano por el reconocido Maestro Francisco Cristancho, demostrando la excelencia artística de nuestra escuela.</p>
+                                <p class="text-sm text-gray-600 text-justify">Interpretación musical acompañado al piano por el reconocido Maestro Francisco Cristancho, demostrando la excelencia artística de nuestra escuela.</p>
                             </div>
                             <!-- Video 5 -->
                             <div class="space-y-2">
@@ -701,7 +740,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Ensamble de Tambores</h4>
-                                <p class="text-sm text-gray-600">Participación como cantante en el ensamble de tambores del Taller Musical Francisco Cristancho, fusionando voces y percusión en una experiencia musical única.</p>
+                                <p class="text-sm text-gray-600 text-justify">Participación como cantante en el ensamble de tambores del Taller Musical Francisco Cristancho, fusionando voces y percusión en una experiencia musical única.</p>
                             </div>
                             <!-- Video 6 -->
                             <div class="space-y-2">
@@ -716,7 +755,7 @@
                                     </iframe>
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Nuestra Música Colombiana</h4>
-                                <p class="text-sm text-gray-600">La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p>
+                                <p class="text-sm text-gray-600 text-justify">La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p>
                             </div>
                         </div>
                     </div>
@@ -731,7 +770,7 @@
             <h2 class="text-4xl font-bold text-center mb-12">Contacto</h2>
             <div class="max-w-4xl mx-auto">
                 <div class="text-center space-y-8">
-                    <p class="text-xl">¿Listo para comenzar tu viaje musical?</p>
+                    <p class="text-xl text-justify">¿Listo para comenzar tu viaje musical?</p>
                     <div class="social-links flex flex-wrap justify-center gap-4">
                         <a href="https://wa.me/573133697599?text=Hola,%20me%20interesa%20tomar%20clases%20de%20música" 
                            target="_blank" 
@@ -910,6 +949,37 @@
                     closeModal();
                 }
             });
+        });
+    </script>
+
+    <!-- Sección de Instagram -->
+    <div id="instagram-embed-container" class="instagram-media-wrapper">
+        <blockquote 
+            class="instagram-media" 
+            data-instgrm-permalink="https://www.instagram.com/reel/C3HtIgfLkG_/?utm_source=ig_embed&amp;utm_campaign=loading" 
+            data-instgrm-version="14"
+            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; padding:0;">
+        </blockquote>
+    </div>
+
+    <script>
+        // Función para recargar el widget de Instagram
+        function reloadInstagramEmbed() {
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+            }
+        }
+
+        // Recargar widget cuando cambie el tamaño de la ventana
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(reloadInstagramEmbed, 250);
+        });
+
+        // Asegurarse de que el widget se cargue correctamente
+        document.addEventListener('DOMContentLoaded', function() {
+            reloadInstagramEmbed();
         });
     </script>
 </body>
