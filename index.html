@@ -252,65 +252,27 @@
         }
 
         /* Estilos para el control de audio */
-        .audio-control {
+        .music-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 50px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .audio-control:hover {
-            transform: scale(1.05);
-        }
-
-        .audio-button {
-            background: none;
             border: none;
-            cursor: pointer;
             color: var(--gold);
-            font-size: 1.5rem;
-            padding: 5px;
             transition: all 0.3s ease;
         }
 
-        .audio-button:hover {
-            color: var(--blue-900);
-        }
-
-        .volume-control {
-            width: 80px;
-            margin: 0 10px;
-        }
-
-        .volume-slider {
-            width: 100%;
-            height: 4px;
-            -webkit-appearance: none;
-            background: #ddd;
-            border-radius: 2px;
-            outline: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            background: var(--gold);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .volume-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+        .music-toggle:hover {
+            transform: scale(1.1);
         }
 
         /* Modal de bienvenida */
@@ -380,20 +342,14 @@
         </div>
     </div>
 
-    <!-- Control de audio -->
-    <div class="audio-control" id="audioControl">
-        <button class="audio-button" id="playPauseBtn">
-            <i class="fas fa-play" id="playIcon"></i>
-        </button>
-        <div class="volume-control">
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="30">
-        </div>
-    </div>
+    <!-- Botón simple de música -->
+    <button class="music-toggle" id="musicToggle">
+        <i class="fas fa-volume-up" id="musicIcon"></i>
+    </button>
 
     <!-- Audio element -->
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop autoplay>
         <source src="audio/opening seven keys.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
     </audio>
 
     <!-- Navigation -->
@@ -475,7 +431,7 @@
                         <i class="fas fa-globe"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-blue-900 mb-2">Clases Flexibles</h3>
-                    <p class="text-gray-600 text-justify">Modalidad presencial o virtual, adaptándonos a tu ubicación y horario</p>
+                    <p class="text-gray-600 text-justify">Tu música, tu tiempo, tu espacio</p>
                 </div>
             </div>
         </div>
@@ -768,7 +724,7 @@
                                     Mi trayectoria incluye más de 10 años ejerciendo la docencia especialmente en las edades de preescolar y primaria, en el año 2017 fui el ganador del premio al Maestro en el Gimnasio Fontana por el proyecto de investigación "¿Puede el aprendizaje de la gramática musical incluirse en la edad de preescolar?"
                                 </p>
                                 <p class="text-gray-600 text-justify">
-                                    Seven Keys es una escuela informal, han sido los mismos usuarios los que con sus recomendaciones nos han hecho crecer y aquí podrás encontrar una comunidad de maestros dispuestos a acompañarte en tu proceso adaptando las clases a tus intereses, bien sea que estés comenzado o quieras mejorar el nivel que ya tienes. ¡Bienvenido!
+                                    Seven Keys es una escuela informal, han sido los mismos usuarios los que con sus recomendaciones nos han hecho crecer y aquí podrás encontrar una comunidad de maestros dispuestos a acompañarte en tu proceso adaptando las clases a tus intereses, bien sea que estés comenzando o quieras mejorar el nivel que ya tienes. ¡Bienvenido!
                                 </p>
                             </div>
                         </div>
@@ -899,6 +855,21 @@
                                 </div>
                                 <h4 class="text-lg font-semibold text-blue-900">Nuestra Música Colombiana</h4>
                                 <p class="text-sm text-gray-600 text-justify">La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p>
+                            </div>
+                            <!-- Video 7 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/Qw4CyZxBRV4" 
+                                        title="A Dónde vas" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">A Dónde vas</h4>
+                                <p class="text-sm text-gray-600 text-justify">Interpretación musical de la canción "A Dónde vas" en vivo.</p>
                             </div>
                         </div>
                     </div>
@@ -1130,94 +1101,33 @@
         // Código existente...
         {{ ... }}
 
-        // Funcionalidad del audio
+        // Funcionalidad simple de música
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('bgMusic');
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const playIcon = document.getElementById('playIcon');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const welcomeModal = document.getElementById('welcomeModal');
-            const enableMusic = document.getElementById('enableMusic');
-            const disableMusic = document.getElementById('disableMusic');
-            
+            const musicToggle = document.getElementById('musicToggle');
+            const musicIcon = document.getElementById('musicIcon');
+
             // Configuración inicial
             audio.volume = 0.3;
-            
-            // Mostrar modal de bienvenida si es la primera visita
-            if (!localStorage.getItem('musicPreference')) {
-                welcomeModal.style.display = 'flex';
-            } else if (localStorage.getItem('musicPreference') === 'enabled') {
-                playAudioWithFadeIn();
-            }
 
-            // Botones del modal
-            enableMusic.addEventListener('click', function() {
-                localStorage.setItem('musicPreference', 'enabled');
-                welcomeModal.style.display = 'none';
-                playAudioWithFadeIn();
-            });
-
-            disableMusic.addEventListener('click', function() {
-                localStorage.setItem('musicPreference', 'disabled');
-                welcomeModal.style.display = 'none';
-            });
-
-            // Control de reproducción
-            playPauseBtn.addEventListener('click', function() {
-                if (audio.paused) {
-                    playAudioWithFadeIn();
+            // Toggle música
+            musicToggle.addEventListener('click', function() {
+                if (audio.muted) {
+                    audio.muted = false;
+                    musicIcon.className = 'fas fa-volume-up';
                 } else {
-                    pauseAudioWithFadeOut();
+                    audio.muted = true;
+                    musicIcon.className = 'fas fa-volume-mute';
                 }
-            });
-
-            // Control de volumen
-            volumeSlider.addEventListener('input', function() {
-                audio.volume = this.value / 100;
-                updatePlayIcon();
             });
 
             // Pausar música cuando se reproduce un video
             document.querySelectorAll('iframe').forEach(iframe => {
                 iframe.addEventListener('click', function() {
-                    pauseAudioWithFadeOut();
+                    audio.muted = true;
+                    musicIcon.className = 'fas fa-volume-mute';
                 });
             });
-
-            // Funciones de utilidad
-            function playAudioWithFadeIn() {
-                audio.play();
-                playIcon.className = 'fas fa-pause';
-                fadeAudio(true);
-            }
-
-            function pauseAudioWithFadeOut() {
-                fadeAudio(false);
-            }
-
-            function fadeAudio(fadeIn) {
-                const fadeInterval = 50;
-                const fadeStep = 0.05;
-                const targetVolume = fadeIn ? volumeSlider.value / 100 : 0;
-                
-                const fade = setInterval(() => {
-                    if (fadeIn && audio.volume < targetVolume) {
-                        audio.volume = Math.min(audio.volume + fadeStep, targetVolume);
-                    } else if (!fadeIn && audio.volume > 0) {
-                        audio.volume = Math.max(audio.volume - fadeStep, 0);
-                    } else {
-                        clearInterval(fade);
-                        if (!fadeIn) {
-                            audio.pause();
-                            playIcon.className = 'fas fa-play';
-                        }
-                    }
-                }, fadeInterval);
-            }
-
-            function updatePlayIcon() {
-                playIcon.className = audio.paused ? 'fas fa-play' : 'fas fa-pause';
-            }
         });
     </script>
 </body>
