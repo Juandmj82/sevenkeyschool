@@ -8,6 +8,27 @@
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
         /* Estilos base */
         :root {
             --gold: #F6AD55;
@@ -97,12 +118,26 @@
 
         /* Ajustes para modo vertical en móvil */
         @media (max-width: 768px) and (orientation: portrait) {
-            .container {
-                padding-bottom: 0;
+            section {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
             }
-            
-            #contacto {
+
+            section:last-of-type {
+                padding-bottom: 1rem;
+            }
+
+            .social-links {
                 margin-bottom: 0;
+            }
+
+            #contacto {
+                padding-bottom: 1rem;
+            }
+
+            footer {
+                margin-top: 0;
+                padding: 1rem 0;
             }
         }
 
