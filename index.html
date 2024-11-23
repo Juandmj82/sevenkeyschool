@@ -68,28 +68,84 @@
 
         /* Estilos para el menú móvil */
         .mobile-menu {
-            position: absolute;
-            top: 100%;
+            position: fixed;
+            top: 80px;
             left: 0;
             right: 0;
             width: 100%;
+            background-color: rgba(30, 58, 138, 0.95);
+            z-index: 40;
+            transition: transform 0.3s ease-in-out;
             transform: translateY(0);
-            transition: all 0.3s ease;
         }
 
         .mobile-menu.hidden {
-            display: none;
-            transform: translateY(-10px);
+            transform: translateY(-100%);
+            pointer-events: none;
         }
 
         .mobile-menu a {
             padding: 1rem;
             display: block;
+            text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .mobile-menu a:last-child {
             border-bottom: none;
+        }
+
+        /* Estilos para los testimonios */
+        .testimonials-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .testimonials-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .testimonial-slide {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .testimonial-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-nav:hover {
+            background: white;
+        }
+
+        .prev-testimonial {
+            left: 10px;
+        }
+
+        .next-testimonial {
+            right: 10px;
+        }
+
+        /* Ajuste para el espacio en blanco en modo vertical */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .founder-social {
+                margin-bottom: 0;
+                padding-bottom: 1rem;
+            }
         }
     </style>
 </head>
@@ -645,30 +701,70 @@
             const menuButton = document.getElementById('menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
             
-            menuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-                // Añadir animación al mostrar
-                if (!mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.style.animation = 'fadeIn 0.3s ease forwards';
-                }
-            });
-
-            // Cerrar menú al hacer clic en un enlace
-            const mobileLinks = mobileMenu.querySelectorAll('a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('hidden');
                 });
-            });
 
-            // Cerrar menú al hacer clic fuera
-            document.addEventListener('click', function(event) {
-                if (!menuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
-                    mobileMenu.classList.add('hidden');
+                // Cerrar menú al hacer clic en un enlace
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+
+                // Cerrar menú al hacer clic fuera
+                document.addEventListener('click', function(e) {
+                    if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Testimonios
+            const testimonialsWrapper = document.querySelector('.testimonials-wrapper');
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const prevButton = document.querySelector('.prev-testimonial');
+            const nextButton = document.querySelector('.next-testimonial');
+            let currentSlide = 0;
+
+            if (testimonialsWrapper && slides.length > 0) {
+                function updateSlidePosition() {
+                    testimonialsWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
                 }
-            });
 
-            // Código existente para el scroll...
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    updateSlidePosition();
+                }
+
+                function prevSlide() {
+                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    updateSlidePosition();
+                }
+
+                if (prevButton) prevButton.addEventListener('click', prevSlide);
+                if (nextButton) nextButton.addEventListener('click', nextSlide);
+
+                // Swipe para móvil
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                testimonialsWrapper.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                testimonialsWrapper.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    if (touchStartX - touchEndX > 50) {
+                        nextSlide();
+                    } else if (touchEndX - touchStartX > 50) {
+                        prevSlide();
+                    }
+                });
+            }
         });
     </script>
 </body>
