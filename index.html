@@ -250,9 +250,152 @@
                 overflow: hidden !important;
             }
         }
+
+        /* Estilos para el control de audio */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.05);
+        }
+
+        .audio-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 1.5rem;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-button:hover {
+            color: var(--blue-900);
+        }
+
+        .volume-control {
+            width: 80px;
+            margin: 0 10px;
+        }
+
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Modal de bienvenida */
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .welcome-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .welcome-button {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-button.primary {
+            background: var(--gold);
+            color: white;
+        }
+
+        .welcome-button.secondary {
+            background: #eee;
+            color: #666;
+        }
+
+        .welcome-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Modal de bienvenida -->
+    <div id="welcomeModal" class="welcome-modal">
+        <div class="welcome-content">
+            <h3 class="text-2xl font-bold mb-4">¡Bienvenido a Seven Keys School!</h3>
+            <p class="text-gray-600 mb-4">¿Te gustaría disfrutar de nuestra música de fondo mientras exploras la página?</p>
+            <div class="welcome-buttons">
+                <button id="enableMusic" class="welcome-button primary">Sí, por favor</button>
+                <button id="disableMusic" class="welcome-button secondary">No, gracias</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control de audio -->
+    <div class="audio-control" id="audioControl">
+        <button class="audio-button" id="playPauseBtn">
+            <i class="fas fa-play" id="playIcon"></i>
+        </button>
+        <div class="volume-control">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="30">
+        </div>
+    </div>
+
+    <!-- Audio element -->
+    <audio id="bgMusic" loop>
+        <source src="audio/opening seven keys.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
     <!-- Navigation -->
     <nav class="fixed w-full z-50 nav-transparent">
         <div class="container mx-auto px-6 py-4">
@@ -980,6 +1123,101 @@
         // Asegurarse de que el widget se cargue correctamente
         document.addEventListener('DOMContentLoaded', function() {
             reloadInstagramEmbed();
+        });
+    </script>
+
+    <script>
+        // Código existente...
+        {{ ... }}
+
+        // Funcionalidad del audio
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playIcon = document.getElementById('playIcon');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const welcomeModal = document.getElementById('welcomeModal');
+            const enableMusic = document.getElementById('enableMusic');
+            const disableMusic = document.getElementById('disableMusic');
+            
+            // Configuración inicial
+            audio.volume = 0.3;
+            
+            // Mostrar modal de bienvenida si es la primera visita
+            if (!localStorage.getItem('musicPreference')) {
+                welcomeModal.style.display = 'flex';
+            } else if (localStorage.getItem('musicPreference') === 'enabled') {
+                playAudioWithFadeIn();
+            }
+
+            // Botones del modal
+            enableMusic.addEventListener('click', function() {
+                localStorage.setItem('musicPreference', 'enabled');
+                welcomeModal.style.display = 'none';
+                playAudioWithFadeIn();
+            });
+
+            disableMusic.addEventListener('click', function() {
+                localStorage.setItem('musicPreference', 'disabled');
+                welcomeModal.style.display = 'none';
+            });
+
+            // Control de reproducción
+            playPauseBtn.addEventListener('click', function() {
+                if (audio.paused) {
+                    playAudioWithFadeIn();
+                } else {
+                    pauseAudioWithFadeOut();
+                }
+            });
+
+            // Control de volumen
+            volumeSlider.addEventListener('input', function() {
+                audio.volume = this.value / 100;
+                updatePlayIcon();
+            });
+
+            // Pausar música cuando se reproduce un video
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.addEventListener('click', function() {
+                    pauseAudioWithFadeOut();
+                });
+            });
+
+            // Funciones de utilidad
+            function playAudioWithFadeIn() {
+                audio.play();
+                playIcon.className = 'fas fa-pause';
+                fadeAudio(true);
+            }
+
+            function pauseAudioWithFadeOut() {
+                fadeAudio(false);
+            }
+
+            function fadeAudio(fadeIn) {
+                const fadeInterval = 50;
+                const fadeStep = 0.05;
+                const targetVolume = fadeIn ? volumeSlider.value / 100 : 0;
+                
+                const fade = setInterval(() => {
+                    if (fadeIn && audio.volume < targetVolume) {
+                        audio.volume = Math.min(audio.volume + fadeStep, targetVolume);
+                    } else if (!fadeIn && audio.volume > 0) {
+                        audio.volume = Math.max(audio.volume - fadeStep, 0);
+                    } else {
+                        clearInterval(fade);
+                        if (!fadeIn) {
+                            audio.pause();
+                            playIcon.className = 'fas fa-play';
+                        }
+                    }
+                }, fadeInterval);
+            }
+
+            function updatePlayIcon() {
+                playIcon.className = audio.paused ? 'fas fa-play' : 'fas fa-pause';
+            }
         });
     </script>
 </body>
