@@ -65,6 +65,32 @@
         .stagger-animate > *:nth-child(1) { animation-delay: 0.2s; }
         .stagger-animate > *:nth-child(2) { animation-delay: 0.4s; }
         .stagger-animate > *:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Estilos para el menú móvil */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            width: 100%;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu.hidden {
+            display: none;
+            transform: translateY(-10px);
+        }
+
+        .mobile-menu a {
+            padding: 1rem;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -92,13 +118,15 @@
         </div>
         <!-- Mobile Menu -->
         <div class="mobile-menu hidden md:hidden bg-blue-900 bg-opacity-95">
-            <div class="px-6 py-4 space-y-4">
-                <a href="#inicio" class="block text-white hover:text-gold transition">Inicio</a>
-                <a href="#nuestra-escuela" class="block text-white hover:text-gold transition">Nuestra Escuela</a>
-                <a href="#programas" class="block text-white hover:text-gold transition">Programas</a>
-                <a href="#metodologia" class="block text-white hover:text-gold transition">Metodología</a>
-                <a href="#fundador" class="block text-white hover:text-gold transition">Fundador</a>
-                <a href="#contacto" class="block text-white hover:text-gold transition">Contacto</a>
+            <div class="container mx-auto">
+                <div class="px-6 py-2 space-y-1">
+                    <a href="#inicio" class="block text-white hover:text-gold transition">Inicio</a>
+                    <a href="#nuestra-escuela" class="block text-white hover:text-gold transition">Nuestra Escuela</a>
+                    <a href="#programas" class="block text-white hover:text-gold transition">Programas</a>
+                    <a href="#metodologia" class="block text-white hover:text-gold transition">Metodología</a>
+                    <a href="#fundador" class="block text-white hover:text-gold transition">Fundador</a>
+                    <a href="#contacto" class="block text-white hover:text-gold transition">Contacto</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -243,12 +271,12 @@
             <div class="max-w-4xl mx-auto mb-20">
                 <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white rounded-2xl overflow-hidden shadow-2xl">
                     <div class="p-8 md:p-12">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-gold typing-effect">Bienvenidos a Seven Keys</h3>
+                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-gold">Bienvenidos a Seven Keys</h3>
                         <div class="prose prose-lg prose-invert stagger-animate">
-                            <p class="mb-6 text-lg leading-relaxed slide-up">
+                            <p class="mb-6 text-lg leading-relaxed text-justify slide-up">
                                 Seven Keys es una comunidad de músicos independientes que descubrimos, en un momento de la historia tan difícil como lo fue la pandemia, la posibilidad de usar las herramientas tecnológicas para brindar a las familias en cualquier lugar del mundo un momento de conexión, de alegría, de motivación a través de la música.
                             </p>
-                            <p class="mb-6 text-lg leading-relaxed slide-up" style="animation-delay: 0.3s;">
+                            <p class="mb-6 text-lg leading-relaxed text-justify slide-up" style="animation-delay: 0.3s;">
                                 ¿Recuerdas esas imágenes de tantos amigos alrededor del mundo tocando en sus balcones para alegrar el vecindario? A pesar del dolor, la gente redescubrió en el arte, especialmente en la música, un aliciente para continuar a pesar de las dificultades.
                             </p>
                             <p class="text-xl font-semibold text-gold italic glow-text slide-up" style="animation-delay: 0.6s;">
@@ -619,6 +647,10 @@
             
             menuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
+                // Añadir animación al mostrar
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.style.animation = 'fadeIn 0.3s ease forwards';
+                }
             });
 
             // Cerrar menú al hacer clic en un enlace
@@ -627,6 +659,13 @@
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
+            });
+
+            // Cerrar menú al hacer clic fuera
+            document.addEventListener('click', function(event) {
+                if (!menuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
             });
 
             // Código existente para el scroll...
