@@ -158,6 +158,59 @@
                 transform: translateY(0);
             }
         }
+
+        /* Estilos para el modal de imágenes */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+            margin-top: 2%;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 15px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .zoomable {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .zoomable:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-width: 95%;
+                margin-top: 10%;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -567,8 +620,8 @@
                                 <h4 class="text-lg font-semibold text-blue-900 mb-3">Artículo en Revista Apuntes de Familia - Universidad de la Sabana</h4>
                                 <p class="text-gray-600 mb-4">Publicación donde se reconoce nuestra metodología innovadora en educación musical temprana.</p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                    <img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                    <img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable">
+                                    <img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable">
                                 </div>
                             </div>
                         </div>
@@ -711,6 +764,14 @@
         </div>
     </footer>
 
+    <!-- Modal para las imágenes -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Imagen ampliada">
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Menú móvil
@@ -810,6 +871,45 @@
                     }
                 });
             }
+
+            // Funcionalidad del modal de imágenes
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            const zoomableImages = document.getElementsByClassName('zoomable');
+
+            // Agregar evento click a todas las imágenes zoomables
+            Array.from(zoomableImages).forEach(img => {
+                img.onclick = function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt;
+                    document.body.style.overflow = 'hidden'; // Prevenir scroll
+                }
+            });
+
+            // Cerrar modal al hacer click en X
+            closeBtn.onclick = closeModal;
+
+            // Cerrar modal al hacer click fuera de la imagen
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+
+            // Función para cerrar el modal
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }
+
+            // Cerrar modal con la tecla ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
         });
     </script>
 </body>
