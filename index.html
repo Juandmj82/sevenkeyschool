@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven Keys School | Escuela de Música</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Efectos de texto y animaciones */
+        .fade-in-text {
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .typing-effect {
+            border-right: 3px solid #F6AD55;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(246, 173, 85, 0.5);
+            transition: text-shadow 0.3s ease;
+        }
+
+        .glow-text:hover {
+            text-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #F6AD55 }
+        }
+
+        .stagger-animate > * {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .stagger-animate > *:nth-child(1) { animation-delay: 0.2s; }
+        .stagger-animate > *:nth-child(2) { animation-delay: 0.4s; }
+        .stagger-animate > *:nth-child(3) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 nav-transparent">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold text-white">
+                    <img src="img/logo.png" alt="Seven Keys School" class="h-32 w-auto" id="nav-logo">
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="text-white hover:text-gold transition nav-link">Inicio</a>
+                    <a href="#nuestra-escuela" class="text-white hover:text-gold transition nav-link">Nuestra Escuela</a>
+                    <a href="#programas" class="text-white hover:text-gold transition nav-link">Programas</a>
+                    <a href="#metodologia" class="text-white hover:text-gold transition nav-link">Metodología</a>
+                    <a href="#fundador" class="text-white hover:text-gold transition nav-link">Fundador</a>
+                    <a href="#contacto" class="text-white hover:text-gold transition nav-link">Contacto</a>
+                </div>
+                <button class="md:hidden text-white" id="menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden md:hidden bg-blue-900 bg-opacity-95">
+            <div class="px-6 py-4 space-y-4">
+                <a href="#inicio" class="block text-white hover:text-gold transition py-2">Inicio</a>
+                <a href="#nuestra-escuela" class="block text-white hover:text-gold transition py-2">Nuestra Escuela</a>
+                <a href="#programas" class="block text-white hover:text-gold transition py-2">Programas</a>
+                <a href="#metodologia" class="block text-white hover:text-gold transition py-2">Metodología</a>
+                <a href="#fundador" class="block text-white hover:text-gold transition py-2">Fundador</a>
+                <a href="#contacto" class="block text-white hover:text-gold transition py-2">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-overlay"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 animate-fade-in text-white">Seven Keys School</h1>
+            <p class="text-xl mb-4 text-white italic">"Me até a la fuerza que vivía en mí, con siete llaves de imaginación"</p>
+            <p class="text-lg mb-8 text-white opacity-75">― Alejandro Sanz</p>
+            <h2 class="text-2xl md:text-4xl mb-8 text-white">Tu camino hacia la excelencia musical</h2>
+            <p class="text-xl mb-12 text-white">Educación musical personalizada | Presencial y Virtual</p>
+            <div class="flex justify-center space-x-4">
+                <a href="#programas" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-blue-900 transition">Explorar Programas</a>
+                <a href="#contacto" class="bg-gold text-blue-900 px-8 py-3 rounded-full hover:bg-white transition">Clase Prueba Gratis</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="text-4xl text-gold mb-4">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Múltiples Instrumentos</h3>
+                    <p class="text-gray-600">Aprende guitarra, piano, bajo, violín y más con profesores especializados</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="text-4xl text-gold mb-4">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Metodología Única</h3>
+                    <p class="text-gray-600">Programa personalizado adaptado a tus objetivos y ritmo de aprendizaje</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="text-4xl text-gold mb-4">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Clases Flexibles</h3>
+                    <p class="text-gray-600">Modalidad presencial o virtual, adaptándonos a tu ubicación y horario</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-900 to-indigo-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Lo que dicen nuestros estudiantes</h2>
+            
+            <!-- Testimonials Slider -->
+            <div class="relative max-w-4xl mx-auto">
+                <div class="testimonials-slider overflow-hidden">
+                    <div class="slider-container flex transition-transform duration-500">
+                        <!-- Testimonio 1 -->
+                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <div class="flex items-center mb-4">
+                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-xl font-semibold">Angela María</h4>
+                                        <p class="text-gray-600">Madre de Familia desde Francia</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 italic">"Mis hijos, de 10 y 19 años, disfrutan mucho de sus clases de piano y de arpa que se ajustan, no solamente a sus intereses particulares sino a sus necesidades y horarios, considerando que vivimos en Francia con 6 y 7 horas de diferencia horaria. Juan Diego diseña sus clases buscando siempre la comprensión de lo que estudian pues es la mejor manera de poder aplicar lo aprendido en otros contextos. Para ello, propone ejercicios muy interesantes y complementa sus clases, ejercitación y deberes con divertidas actividades en línea que permiten reforzar las nociones, entrenarse y progresar en autonomía."</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonio 2 -->
+                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <div class="flex items-center mb-4">
+                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-xl font-semibold">Diana Guío</h4>
+                                        <p class="text-gray-600">Madre de Familia desde Yopal</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 italic">"Fue una experiencia maravillosa, mi hijo Juan Alejandro disfrutó las clases de iniciación musical junto con la profesora Keila que tiene una magia inmensa con los niños, desde entonces mi hijo ama la música, ahora es estudiante de piano."</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonio 3 -->
+                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
+                            <div class="bg-white rounded-xl shadow-lg p-8">
+                                <div class="flex items-center mb-4">
+                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-xl font-semibold">Laura Argüello</h4>
+                                        <p class="text-gray-600">Madre de Familia desde Reino Unido</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 italic">"Mi hijo disfruta mucho las clases online de guitarra con el profesor Juan Diego y su avance han sido muy significativo. El hecho de que podamos conectarnos estando fuera de Colombia es una oportunidad para tener clases personalizadas, en horarios convenientes y con flexibilidad. Juan Diego se preocupa por ofrecer lecciones acordes a sus canciones preferidas y prepara videos para que pueda practicar y mejorar su técnica cada semana. ¡Totalmente recomendable!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:bg-gold hover:text-white focus:outline-none prev-button">
+                    <i class="fas fa-chevron-left text-blue-900"></i>
+                </button>
+                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:bg-gold hover:text-white focus:outline-none next-button">
+                    <i class="fas fa-chevron-right text-blue-900"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="nuestra-escuela" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Nuestra Escuela</h2>
+            
+            <!-- Historia y Misión -->
+            <div class="max-w-4xl mx-auto mb-20">
+                <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="p-8 md:p-12">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-gold typing-effect">Bienvenidos a Seven Keys</h3>
+                        <div class="prose prose-lg prose-invert stagger-animate">
+                            <p class="mb-6 text-lg leading-relaxed slide-up">
+                                Seven Keys es una comunidad de músicos independientes que descubrimos, en un momento de la historia tan difícil como lo fue la pandemia, la posibilidad de usar las herramientas tecnológicas para brindar a las familias en cualquier lugar del mundo un momento de conexión, de alegría, de motivación a través de la música.
+                            </p>
+                            <p class="mb-6 text-lg leading-relaxed slide-up" style="animation-delay: 0.3s;">
+                                ¿Recuerdas esas imágenes de tantos amigos alrededor del mundo tocando en sus balcones para alegrar el vecindario? A pesar del dolor, la gente redescubrió en el arte, especialmente en la música, un aliciente para continuar a pesar de las dificultades.
+                            </p>
+                            <p class="text-xl font-semibold text-gold italic glow-text slide-up" style="animation-delay: 0.6s;">
+                                "Eso queremos ser a través de nuestra escuela: una balsa que lleve la música a cualquier lugar del mundo para salvar del naufragio."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Características -->
+            <div class="grid md:grid-cols-3 gap-8 mb-20">
+                <div class="transform hover:scale-105 transition-transform duration-300">
+                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
+                        <i class="fas fa-child text-4xl text-blue-800 mb-6"></i>
+                        <h4 class="text-xl font-bold mb-4">Iniciación Musical</h4>
+                        <p class="text-gray-600">Abriendo las puertas del mundo musical desde los 5 años</p>
+                    </div>
+                </div>
+                <div class="transform hover:scale-105 transition-transform duration-300">
+                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
+                        <i class="fas fa-clock text-4xl text-blue-800 mb-6"></i>
+                        <h4 class="text-xl font-bold mb-4">Horarios Flexibles</h4>
+                        <p class="text-gray-600">Tu música, tu tiempo, tu espacio</p>
+                    </div>
+                </div>
+                <div class="transform hover:scale-105 transition-transform duration-300">
+                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
+                        <i class="fas fa-globe text-4xl text-blue-800 mb-6"></i>
+                        <h4 class="text-xl font-bold mb-4">Alcance Global</h4>
+                        <p class="text-gray-600">Llevando música sin fronteras a cada rincón del mundo</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comunidad Musical -->
+            <div class="text-center mb-12">
+                <h3 class="text-2xl font-bold text-blue-900 mb-4">Nuestra Comunidad Musical</h3>
+                <p class="text-gray-600 mb-8">Únete a nuestra comunidad global de músicos y sé parte de esta historia</p>
+            </div>
+            
+            <!-- Instagram Feed con diseño mejorado -->
+            <div class="bg-gray-50 rounded-2xl p-8 shadow-inner max-w-5xl mx-auto">
+                <div class="instagram-feed-container mb-8">
+                    <script>
+                        window.onload = function() {
+                            var container = document.createElement('div');
+                            container.innerHTML = '<iframe src="https://www.instagram.com/sevenkeyschool/embed" width="100%" height="750" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
+                            document.querySelector('.instagram-feed-container').appendChild(container);
+                        }
+                    </script>
+                </div>
+                <div class="text-center">
+                    <a href="https://www.instagram.com/sevenkeyschool/" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fab fa-instagram text-xl"></i>
+                        Sé parte de nuestra comunidad
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programas" class="py-20 bg-blue-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Nuestros Programas</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Iniciación Musical -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-music text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Iniciación Musical</h3>
+                        <p class="text-gray-600 mb-6">
+                            Programa diseñado para introducir a los más pequeños en el maravilloso mundo de la música. 
+                            A través de juegos, canciones y actividades lúdicas, desarrollamos las bases musicales fundamentales.
+                        </p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-gold mr-2"></i>Desarrollo auditivo</li>
+                            <li><i class="fas fa-check text-gold mr-2"></i>Ritmo y movimiento</li>
+                            <li><i class="fas fa-check text-gold mr-2"></i>Expresión corporal</li>
+                            <li><i class="fas fa-check text-gold mr-2"></i>Canto y voz</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Desarrollo Musical -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                    <div class="p-8">
+                        <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Desarrollo Musical</h3>
+                        <p class="text-gray-600 mb-6">
+                            Clases personalizadas virtuales y presenciales* en diversos instrumentos, adaptadas a tu nivel y objetivos musicales.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2">Instrumentos:</h4>
+                                <ul class="text-gray-600 space-y-2">
+                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Guitarra</li>
+                                    <li><i class="fas fa-music text-gold mr-2"></i>Piano</li>
+                                    <li><i class="fas fa-drum text-gold mr-2"></i>Batería</li>
+                                    <li><i class="fas fa-microphone text-gold mr-2"></i>Técnica Vocal</li>
+                                    <li><i class="fas fa-music text-gold mr-2"></i>Violín</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2">Y también:</h4>
+                                <ul class="text-gray-600 space-y-2">
+                                    <li><i class="fas fa-music text-gold mr-2"></i>Bajo</li>
+                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Ukelele</li>
+                                    <li><i class="fas fa-music text-gold mr-2"></i>Arpa</li>
+                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Cuatro</li>
+                                    <li><i class="fas fa-drum text-gold mr-2"></i>Maracas</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 italic">* Las clases presenciales están sujetas a la ubicación geográfica.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="metodologia" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Metodología</h2>
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="text-lg text-gray-600 mb-8">
+                    Nuestra metodología se basa en la personalización y la flexibilidad. 
+                    Cada estudiante tiene un plan de estudios adaptado a sus necesidades y objetivos.
+                </p>
+                <div class="grid md:grid-cols-3 gap-8 mt-12">
+                    <div class="p-6 bg-white rounded-lg shadow-lg">
+                        <i class="fas fa-book text-3xl text-blue-800 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Plan de Estudios Personalizado</h4>
+                        <p class="text-gray-600">Adaptado a tus necesidades y objetivos</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-lg">
+                        <i class="fas fa-clock text-3xl text-blue-800 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Horarios Flexibles</h4>
+                        <p class="text-gray-600">Adaptados a tu disponibilidad</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-lg">
+                        <i class="fas fa-globe text-3xl text-blue-800 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Clases en Línea</h4>
+                        <p class="text-gray-600">Para estudiantes de todo el mundo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section -->
+    <section id="fundador" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Nuestro Fundador</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="flex flex-col md:flex-row items-start gap-8">
+                        <div class="md:w-1/3">
+                            <img src="img/founder.jpeg" alt="Juan Diego Merchán" class="w-full h-auto rounded-lg shadow-md mb-6">
+                            <div class="text-center">
+                                <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" class="text-blue-900 hover:text-gold transition">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="prose max-w-none">
+                                <p class="text-gray-600 mb-6 text-justify">
+                                    Soy Juan Diego Merchán músico del taller musical Francisco Cristancho de Bogotá, con mi esposa Ángela Paola Delgado fundamos la escuela de música Seven keys en el año 2020, fue una época difícil para muchas personas por la pandemia, pero a pesar de esas dificultades nos dio la oportunidad de crear nuestra escuela llevando la música a muchos hogares en Colombia y al rededor del mundo, aprovechando la tecnología como medio de conexión para desarrollar nuestras clases.
+                                </p>
+                                <p class="text-gray-600 mb-6 text-justify">
+                                    Mi trayectoria incluye más de 10 años ejerciendo la docencia especialmente en las edades de preescolar y primaria, en el año 2017 fui el ganador del premio al Maestro en el Gimnasio Fontana por el proyecto de investigación "¿Puede el aprendizaje de la gramática musical incluirse en la edad de preescolar?", demostrando la importancia y efectividad de la educación musical desde edades tempranas y cómo puede crear vínculos en el proceso de aprendizaje con otras áreas.
+                                </p>
+                                <p class="text-gray-600 text-justify">
+                                    Seven Keys es una escuela informal, han sido los mismos usuarios los que con sus recomendaciones nos han hecho crecer y aquí podrás encontrar una comunidad de maestros dispuestos a acompañarte en tu proceso adaptando las clases a tus intereses, bien sea que estés comenzado o quieras mejorar el nivel que ya tienes. ¡Bienvenido!
+                                </p>
+                            </div>
+                            <div class="mt-6 flex flex-wrap gap-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-child text-gold text-xl w-8"></i>
+                                    <span class="text-gray-700">Especialista en educación musical temprana</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-graduation-cap text-gold text-xl w-8"></i>
+                                    <span class="text-gray-700">Investigador en pedagogía musical infantil</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-brain text-gold text-xl w-8"></i>
+                                    <span class="text-gray-700">Experto en desarrollo musical cognitivo</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex gap-4">
+                                <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" class="text-blue-900 hover:text-gold transition">
+                                    <i class="fab fa-linkedin text-2xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         
+                <!-- Galería de Experiencia -->
+                <div class="mt-12 bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-6">Galería de Experiencia</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Video Destacado -->
+                        <div class="lg:col-span-1 space-y-4">
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe 
+                                    class="w-full rounded-lg shadow-md"
+                                    height="315"
+                                    src="https://www.youtube.com/embed/JUBTn9BbfDc" 
+                                    title="Proyecto de Investigación Musical" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h4 class="text-lg font-semibold text-blue-900">Proyecto de Investigación Musical</h4>
+                            <p class="text-sm text-gray-600">Investigación premiada sobre la implementación de la gramática musical en preescolar, demostrando la efectividad de nuestra metodología de enseñanza temprana.</p>
+                        </div>
+
+                        <!-- Artículo Universidad de la Sabana -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="text-lg font-semibold text-blue-900 mb-3">Artículo en Revista Apuntes de Familia - Universidad de la Sabana</h4>
+                                <p class="text-gray-600 mb-4">Publicación donde se reconoce nuestra metodología innovadora en educación musical temprana.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                    <img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid de Videos -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:col-span-3">
+                            <!-- Video 1 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/ooY3AedtD-s" 
+                                        title="Perfil Profesional" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Perfil Profesional</h4>
+                                <p class="text-sm text-gray-600">Presentación de mis habilidades y experiencia como educador musical, mostrando mi enfoque pedagógico y compromiso con la enseñanza.</p>
+                            </div>
+                            <!-- Video 2 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/RfCJn8_Hnx0" 
+                                        title="Premio Maestro Francisco Cristancho" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Premio Maestro Francisco Cristancho</h4>
+                                <p class="text-sm text-gray-600">Momento especial recibiendo un regalo del Maestro Francisco Cristancho durante mi graduación, un reconocimiento significativo a mi trayectoria musical.</p>
+                            </div>
+                            <!-- Video 3 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/UXYUijj7zcY" 
+                                        title="Educación Internacional" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Educación Sin Fronteras</h4>
+                                <p class="text-sm text-gray-600">Experiencia de enseñanza virtual internacional, conectando maestros de Bogotá y Cajicá con una estudiante de canto en Francia.</p>
+                            </div>
+                            <!-- Video 4 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/Bvlc37MtmT0" 
+                                        title="Interpretación con Maestro Cristancho" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Interpretación con Maestro Cristancho</h4>
+                                <p class="text-sm text-gray-600">Interpretación musical acompañado al piano por el reconocido Maestro Francisco Cristancho, demostrando la excelencia artística de nuestra escuela.</p>
+                            </div>
+                            <!-- Video 5 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/-3f16qGkhjk" 
+                                        title="Ensamble de Tambores" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Ensamble de Tambores</h4>
+                                <p class="text-sm text-gray-600">Participación como cantante en el ensamble de tambores del Taller Musical Francisco Cristancho, fusionando voces y percusión en una experiencia musical única.</p>
+                            </div>
+                            <!-- Video 6 -->
+                            <div class="space-y-2">
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe 
+                                        class="w-full h-full rounded-lg shadow-lg"
+                                        src="https://www.youtube.com/embed/Ha9IbfjsS_M" 
+                                        title="Música Colombiana" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-900">Nuestra Música Colombiana</h4>
+                                <p class="text-sm text-gray-600">La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="py-20 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Contacto</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <a href="mailto:sevenkeyschool@gmail.com" class="flex items-center justify-center space-x-3 bg-white bg-opacity-10 p-4 rounded-lg hover:bg-opacity-20 transition">
+                        <i class="fas fa-envelope text-2xl"></i>
+                        <span>sevenkeyschool@gmail.com</span>
+                    </a>
+                    <a href="https://wa.me/573133697599" target="_blank" class="flex items-center justify-center space-x-3 bg-white bg-opacity-10 p-4 rounded-lg hover:bg-opacity-20 transition">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://www.tiktok.com/@sevenkeyschool?_t=8rc80epH5IW&_r=1" target="_blank" class="flex items-center justify-center space-x-3 bg-white bg-opacity-10 p-4 rounded-lg hover:bg-opacity-20 transition">
+                        <i class="fab fa-tiktok text-2xl"></i>
+                        <span>TikTok</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Seven Keys School. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
