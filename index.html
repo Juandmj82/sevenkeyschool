@@ -8,6 +8,12 @@
     <link href="css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Estilos base */
+        :root {
+            --gold: #F6AD55;
+            --blue-900: #2a4365;
+        }
+
         /* Efectos de texto y animaciones */
         .fade-in-text {
             animation: fadeIn 1.5s ease-in;
@@ -19,13 +25,6 @@
             animation: slideUp 0.8s ease forwards;
         }
 
-        .typing-effect {
-            border-right: 3px solid #F6AD55;
-            white-space: nowrap;
-            overflow: hidden;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
         .glow-text {
             text-shadow: 0 0 10px rgba(246, 173, 85, 0.5);
             transition: text-shadow 0.3s ease;
@@ -35,67 +34,23 @@
             text-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #F6AD55 }
-        }
-
-        .stagger-animate > * {
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .stagger-animate > *:nth-child(1) { animation-delay: 0.2s; }
-        .stagger-animate > *:nth-child(2) { animation-delay: 0.4s; }
-        .stagger-animate > *:nth-child(3) { animation-delay: 0.6s; }
-
-        /* Estilos para el menú móvil */
+        /* Menú móvil */
         .mobile-menu {
-            position: fixed;
-            top: 80px;
+            position: absolute;
+            top: 100%;
             left: 0;
             right: 0;
-            width: 100%;
-            background-color: rgba(30, 58, 138, 0.95);
-            z-index: 40;
-            transition: transform 0.3s ease-in-out;
-            transform: translateY(0);
-        }
-
-        .mobile-menu.hidden {
+            transition: all 0.3s ease-in-out;
             transform: translateY(-100%);
-            pointer-events: none;
+            opacity: 0;
         }
 
-        .mobile-menu a {
-            padding: 1rem;
-            display: block;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        .mobile-menu a:last-child {
-            border-bottom: none;
-        }
-
-        /* Estilos para los testimonios */
+        /* Slider de testimonios */
         .testimonials-container {
             position: relative;
             overflow: hidden;
@@ -109,42 +64,57 @@
 
         .testimonial-slide {
             flex: 0 0 100%;
-            max-width: 100%;
         }
 
-        .testimonial-nav {
+        .slider-button {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
+            background-color: var(--gold);
+            color: var(--blue-900);
             width: 40px;
             height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            z-index: 10;
             transition: all 0.3s ease;
         }
 
-        .testimonial-nav:hover {
-            background: white;
+        .slider-button:hover {
+            background-color: white;
         }
 
-        .prev-testimonial {
+        .prev-button {
             left: 10px;
         }
 
-        .next-testimonial {
+        .next-button {
             right: 10px;
         }
 
-        /* Ajuste para el espacio en blanco en modo vertical */
+        /* Ajustes para modo vertical en móvil */
         @media (max-width: 768px) and (orientation: portrait) {
-            .founder-social {
+            .container {
+                padding-bottom: 0;
+            }
+            
+            #contacto {
                 margin-bottom: 0;
-                padding-bottom: 1rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -165,7 +135,7 @@
                     <a href="#fundador" class="text-white hover:text-gold transition nav-link">Fundador</a>
                     <a href="#contacto" class="text-white hover:text-gold transition nav-link">Contacto</a>
                 </div>
-                <button class="md:hidden text-white" id="menu-button">
+                <button class="md:hidden text-white" aria-label="Menu" id="menu-button">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -173,15 +143,17 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div class="mobile-menu hidden md:hidden bg-blue-900 bg-opacity-95">
-            <div class="container mx-auto">
-                <div class="px-6 py-2 space-y-1">
-                    <a href="#inicio" class="block text-white hover:text-gold transition">Inicio</a>
-                    <a href="#nuestra-escuela" class="block text-white hover:text-gold transition">Nuestra Escuela</a>
-                    <a href="#programas" class="block text-white hover:text-gold transition">Programas</a>
-                    <a href="#metodologia" class="block text-white hover:text-gold transition">Metodología</a>
-                    <a href="#fundador" class="block text-white hover:text-gold transition">Fundador</a>
-                    <a href="#contacto" class="block text-white hover:text-gold transition">Contacto</a>
+        <div class="mobile-menu hidden md:hidden">
+            <div class="bg-blue-900 bg-opacity-95 shadow-lg">
+                <div class="container mx-auto py-4">
+                    <div class="px-6 space-y-3">
+                        <a href="#inicio" class="block text-white hover:text-gold transition py-2">Inicio</a>
+                        <a href="#nuestra-escuela" class="block text-white hover:text-gold transition py-2">Nuestra Escuela</a>
+                        <a href="#programas" class="block text-white hover:text-gold transition py-2">Programas</a>
+                        <a href="#metodologia" class="block text-white hover:text-gold transition py-2">Metodología</a>
+                        <a href="#fundador" class="block text-white hover:text-gold transition py-2">Fundador</a>
+                        <a href="#contacto" class="block text-white hover:text-gold transition py-2">Contacto</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -239,8 +211,12 @@
             
             <!-- Testimonials Slider -->
             <div class="relative max-w-4xl mx-auto">
-                <div class="testimonials-slider overflow-hidden">
-                    <div class="slider-container flex transition-transform duration-500">
+                <div class="testimonials-container relative">
+                    <button class="slider-button prev-button" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="testimonials-wrapper">
                         <!-- Testimonio 1 -->
                         <div class="testimonial-slide w-full flex-shrink-0 px-4">
                             <div class="bg-white rounded-xl shadow-lg p-8">
@@ -304,16 +280,11 @@
     </div>
 </div>
                     </div>
+                    
+                    <button class="slider-button next-button" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-               
-
-                <!-- Navigation Buttons -->
-                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:bg-gold hover:text-white focus:outline-none prev-button">
-                    <i class="fas fa-chevron-left text-blue-900"></i>
-                </button>
-                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:bg-gold hover:text-white focus:outline-none next-button">
-                    <i class="fas fa-chevron-right text-blue-900"></i>
-                </button>
             </div>
         </div>
     </section>
@@ -696,27 +667,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Navegación móvil
-            const mobileMenuButton = document.querySelector('[aria-label="Menu"]');
+            // Menú móvil
+            const menuButton = document.getElementById('menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
-            const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
 
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => {
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('active');
                 });
 
                 // Cerrar menú al hacer clic en un enlace
-                mobileMenuLinks.forEach(link => {
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('active');
                     });
                 });
 
                 // Cerrar menú al hacer clic fuera
                 document.addEventListener('click', (e) => {
-                    if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
                         mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('active');
                     }
                 });
             }
@@ -729,7 +704,7 @@
             let currentSlide = 0;
 
             function updateSlidePosition() {
-                if (testimonialsWrapper) {
+                if (testimonialsWrapper && slides.length > 0) {
                     testimonialsWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
                 }
             }
@@ -748,7 +723,6 @@
                 }
             }
 
-            // Agregar event listeners para los botones
             if (prevButton) {
                 prevButton.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -763,7 +737,7 @@
                 });
             }
 
-            // Inicializar la posición del slider
+            // Inicializar posición del slider
             updateSlidePosition();
 
             // Soporte para swipe en móvil
