@@ -348,36 +348,44 @@
     </button>
 
     <!-- Audio element -->
-    <audio id="bgMusic" preload="auto">
+    <audio id="bgMusic" preload="auto" loop>
         <source src="audio/opening seven keys.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Funcionalidad simple de música
-        document.addEventListener('DOMContentLoaded', function() {
+        // Funcionalidad de música
+        function initAudio() {
             const audio = document.getElementById('bgMusic');
             const musicToggle = document.getElementById('musicToggle');
             const musicIcon = document.getElementById('musicIcon');
 
             // Configuración inicial
             audio.volume = 0.3;
-            
-            // Intentar reproducir inmediatamente
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Reproducción automática exitosa
-                }).catch(error => {
-                    // Auto-play fue prevenido
-                    console.log("Reproducción automática bloqueada por el navegador");
-                });
+
+            // Función para intentar reproducir
+            function attemptPlay() {
+                audio.play()
+                    .then(() => {
+                        console.log("Reproducción iniciada con éxito");
+                    })
+                    .catch(error => {
+                        console.log("Error en reproducción automática:", error);
+                    });
             }
+
+            // Intentar reproducir en diferentes eventos
+            document.addEventListener('click', attemptPlay, { once: true });
+            document.addEventListener('touchstart', attemptPlay, { once: true });
+            document.addEventListener('scroll', attemptPlay, { once: true });
+            window.addEventListener('load', attemptPlay);
+            document.addEventListener('DOMContentLoaded', attemptPlay);
 
             // Toggle música
             musicToggle.addEventListener('click', function() {
                 if (audio.muted) {
                     audio.muted = false;
                     musicIcon.className = 'fas fa-volume-up';
+                    attemptPlay(); // Intentar reproducir si no está reproduciendo
                 } else {
                     audio.muted = true;
                     musicIcon.className = 'fas fa-volume-mute';
@@ -391,7 +399,10 @@
                     musicIcon.className = 'fas fa-volume-mute';
                 });
             });
-        });
+        }
+
+        // Iniciar la funcionalidad de audio
+        initAudio();
     </script>
 
     <!-- Navigation -->
