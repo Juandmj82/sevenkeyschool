@@ -348,9 +348,43 @@
     </button>
 
     <!-- Audio element -->
-    <audio id="bgMusic" loop autoplay>
+    <audio id="bgMusic" autoplay loop>
         <source src="audio/opening seven keys.mp3" type="audio/mpeg">
     </audio>
+
+    <script>
+        // Funcionalidad simple de música
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const musicIcon = document.getElementById('musicIcon');
+
+            // Configuración inicial
+            audio.volume = 0.3;
+            audio.play().catch(function(error) {
+                console.log("Reproducción automática bloqueada por el navegador");
+            });
+
+            // Toggle música
+            musicToggle.addEventListener('click', function() {
+                if (audio.muted) {
+                    audio.muted = false;
+                    musicIcon.className = 'fas fa-volume-up';
+                } else {
+                    audio.muted = true;
+                    musicIcon.className = 'fas fa-volume-mute';
+                }
+            });
+
+            // Pausar música cuando se reproduce un video
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.addEventListener('click', function() {
+                    audio.muted = true;
+                    musicIcon.className = 'fas fa-volume-mute';
+                });
+            });
+        });
+    </script>
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 nav-transparent">
@@ -911,7 +945,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white">
+    <footer class="bg-blue-900 text-white py-12 mt-20">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2024 Seven Keys School. Todos los derechos reservados.</p>
         </div>
