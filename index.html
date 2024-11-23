@@ -695,73 +695,98 @@
     </footer>
 
     <script>
-        // Navegación y Scroll
         document.addEventListener('DOMContentLoaded', function() {
-            // Menú móvil
-            const menuButton = document.getElementById('menu-button');
+            // Navegación móvil
+            const mobileMenuButton = document.querySelector('[aria-label="Menu"]');
             const mobileMenu = document.querySelector('.mobile-menu');
-            
-            if (menuButton && mobileMenu) {
-                menuButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
                     mobileMenu.classList.toggle('hidden');
                 });
 
                 // Cerrar menú al hacer clic en un enlace
-                const mobileLinks = mobileMenu.querySelectorAll('a');
-                mobileLinks.forEach(link => {
+                mobileMenuLinks.forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.add('hidden');
                     });
                 });
 
                 // Cerrar menú al hacer clic fuera
-                document.addEventListener('click', function(e) {
-                    if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
                         mobileMenu.classList.add('hidden');
                     }
                 });
             }
 
-            // Testimonios
+            // Slider de testimonios
             const testimonialsWrapper = document.querySelector('.testimonials-wrapper');
             const slides = document.querySelectorAll('.testimonial-slide');
-            const prevButton = document.querySelector('.prev-testimonial');
-            const nextButton = document.querySelector('.next-testimonial');
+            const prevButton = document.querySelector('.prev-button');
+            const nextButton = document.querySelector('.next-button');
             let currentSlide = 0;
 
-            if (testimonialsWrapper && slides.length > 0) {
-                function updateSlidePosition() {
+            function updateSlidePosition() {
+                if (testimonialsWrapper) {
                     testimonialsWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
                 }
+            }
 
-                function nextSlide() {
+            function nextSlide() {
+                if (slides.length > 0) {
                     currentSlide = (currentSlide + 1) % slides.length;
                     updateSlidePosition();
                 }
+            }
 
-                function prevSlide() {
+            function prevSlide() {
+                if (slides.length > 0) {
                     currentSlide = (currentSlide - 1 + slides.length) % slides.length;
                     updateSlidePosition();
                 }
+            }
 
-                if (prevButton) prevButton.addEventListener('click', prevSlide);
-                if (nextButton) nextButton.addEventListener('click', nextSlide);
+            // Agregar event listeners para los botones
+            if (prevButton) {
+                prevButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    prevSlide();
+                });
+            }
 
-                // Swipe para móvil
-                let touchStartX = 0;
-                let touchEndX = 0;
+            if (nextButton) {
+                nextButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    nextSlide();
+                });
+            }
 
-                testimonialsWrapper.addEventListener('touchstart', e => {
-                    touchStartX = e.changedTouches[0].screenX;
+            // Inicializar la posición del slider
+            updateSlidePosition();
+
+            // Soporte para swipe en móvil
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            if (testimonialsWrapper) {
+                testimonialsWrapper.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
                 });
 
-                testimonialsWrapper.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    if (touchStartX - touchEndX > 50) {
-                        nextSlide();
-                    } else if (touchEndX - touchStartX > 50) {
-                        prevSlide();
+                testimonialsWrapper.addEventListener('touchmove', (e) => {
+                    touchEndX = e.touches[0].clientX;
+                });
+
+                testimonialsWrapper.addEventListener('touchend', () => {
+                    const swipeDistance = touchEndX - touchStartX;
+                    if (Math.abs(swipeDistance) > 50) {
+                        if (swipeDistance > 0) {
+                            prevSlide();
+                        } else {
+                            nextSlide();
+                        }
                     }
                 });
             }
