@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,10 +16,9 @@
         }
 
         html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Estilos base */
@@ -79,10 +78,9 @@
         }
 
         html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Estilos base */
@@ -392,7 +390,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Modal de bienvenida -->
     <div id="welcomeModal" class="welcome-modal">
         <div class="welcome-content">
@@ -546,7 +544,7 @@
                     <div class="text-4xl text-gold mb-4">
                         <i class="fas fa-globe"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Clases Flexibles</h3>
+                    <h3 class="text-xl font-bold mb-2">Clases Flexibles</h3>
                     <p class="text-gray-600 text-justify">Tu música, tu tiempo, tu espacio</p>
                 </div>
             </div>
