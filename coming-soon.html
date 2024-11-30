@@ -92,78 +92,83 @@
 
             <!-- EmailJS Scripts -->
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-            <script type="text/javascript">
-                (function() {
-                    emailjs.init('NCmJofKfXOYVpMbO7');
-                })();
-            
-                document.getElementById('notify-form').addEventListener('submit', function(event) {
-                    event.preventDefault();
+            <script>
+                emailjs.init("NCmJofKfXOYVpMbO7");
+
+                async function saveToSheets(email) {
+                    const url = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
                     
-                    // Mostrar estado de carga
-                    const btn = event.target.querySelector('button');
-                    const statusDiv = document.getElementById('form-status');
-                    const originalText = btn.innerHTML;
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ email })
+                        });
+                        return true;
+                    } catch (error) {
+                        console.error('Error saving to sheets:', error);
+                        return false;
+                    }
+                }
+
+                document.getElementById('notify-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formStatus = document.getElementById('form-status');
+                    const submitButton = this.querySelector('button[type="submit"]');
                     const userEmail = document.getElementById('user_email').value;
                     
-                    btn.innerHTML = 'Enviando...';
-                    btn.disabled = true;
-                    statusDiv.innerHTML = '';
+                    // Deshabilitar el botón y mostrar estado de carga
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+                    formStatus.className = 'text-gray-300';
+                    formStatus.textContent = 'Enviando...';
 
-                    // Función para guardar en Google Sheets
-                    const saveToSheets = async (email) => {
-                        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
+                    try {
+                        // Enviar email y guardar en sheets
+                        const [emailResult] = await Promise.all([
+                            emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
+                                user_email: userEmail
+                            }),
+                            saveToSheets(userEmail)
+                        ]);
+
+                        formStatus.className = 'text-green-400';
+                        formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
+                        this.reset();
+                    } catch (error) {
+                        console.error('Error:', error);
+                        formStatus.className = 'text-red-400';
+                        formStatus.textContent = 'Hubo un error. Por favor, intenta nuevamente.';
+                    } finally {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Registrarme';
                         
-                        try {
-                            console.log('Intentando guardar en Sheets:', email);
-                            
-                            const response = await fetch(SHEETS_URL, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ email: email })
-                            });
-                            
-                            console.log('Respuesta de Sheets:', response);
-                            return true;
-                            
-                        } catch (error) {
-                            console.error('Error al guardar en Sheets:', error);
-                            return false;
-                        }
-                    };
-            
-                    // Enviar email y guardar en sheets
-                    Promise.all([
-                        emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
-                            user_email: userEmail
-                        }),
-                        saveToSheets(userEmail)
-                    ])
-                    .then(function() {
-                        btn.innerHTML = '¡Registrado!';
-                        btn.style.backgroundColor = '#68D391'; // Verde para éxito
-                        document.getElementById('notify-form').reset();
-                        statusDiv.innerHTML = '<p class="text-green-600 mt-2">¡Te has registrado exitosamente!</p>';
+                        // Limpiar mensaje después de 5 segundos
                         setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                            btn.style.backgroundColor = '#F6AD55';
-                        }, 3000);
-                    })
-                    .catch(function(error) {
-                        console.log('Error:', error);
-                        btn.innerHTML = 'Error';
-                        btn.style.backgroundColor = '#FC8181'; // Rojo para error
-                        statusDiv.innerHTML = '<p class="text-red-600 mt-2">Hubo un error. Por favor intenta de nuevo.</p>';
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                            btn.style.backgroundColor = '#F6AD55';
-                        }, 3000);
-                    });
+                            formStatus.textContent = '';
+                        }, 5000);
+                    }
                 });
+
+                // Countdown Timer
+                function updateCountdown() {
+                    const launchDate = new Date('December 3, 2024 00:00:00').getTime();
+                    const now = new Date().getTime();
+                    const distance = launchDate - now;
+
+                    document.getElementById('days').textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                    document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                    document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+                }
+
+                // Actualizar cada segundo
+                setInterval(updateCountdown, 1000);
+                updateCountdown();
             </script>
         
             <!-- Social Links -->
@@ -173,34 +178,6 @@
                 <a href="https://wa.me/573133697599" class="social-icon text-2xl"><i class="fab fa-whatsapp"></i></a>
             </div>
         </div>
-
-        <script>
-            function updateCountdown() {
-                const launchDate = new Date('2024-12-03T00:00:00').getTime();
-                const now = new Date().getTime();
-                const distance = launchDate - now;
-        
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-                document.getElementById('days').textContent = String(days).padStart(2, '0');
-                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-            }
-        
-            // Actualizar cada segundo
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
-        
-        // Manejar formulario
-        document.getElementById('notify-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Aquí puedes agregar la lógica para guardar el email
-            alert('¡Gracias! Te notificaremos cuando lancemos.');
-        });
-    </script>
+    </div>
 </body>
 </html>
