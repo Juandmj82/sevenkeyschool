@@ -96,24 +96,23 @@
                 emailjs.init("NCmJofKfXOYVpMbO7");
 
                 async function saveToSheets(email) {
-                    const url = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
+                    const url = 'https://script.google.com/macros/s/AKfycbyK3wQjh0aaO19I_KM8-r1kgaK8E2cl-Ems2V3p6ie8_ALVrqm_furEBBfJj4RAg7OXeQ/exec';
                     
                     try {
                         // Crear URL con parámetros
                         const urlWithParams = `${url}?email=${encodeURIComponent(email)}`;
                         
-                        const response = await fetch(urlWithParams, {
-                            method: 'GET',
-                            mode: 'no-cors'
-                        });
+                        console.log('Intentando guardar en Sheets:', email);
+                        console.log('URL:', urlWithParams);
                         
-                        console.log('Intento de guardar en Sheets:', email);
-                        console.log('URL utilizada:', urlWithParams);
-                        console.log('Response from Sheets:', response);
+                        const response = await fetch(urlWithParams);
+                        const data = await response.text();
+                        console.log('Respuesta de Sheets:', data);
+                        
                         return true;
                     } catch (error) {
-                        console.error('Error saving to sheets:', error);
-                        return false;
+                        console.error('Error al guardar en Sheets:', error);
+                        throw error; // Propagar el error para mejor manejo
                     }
                 }
 
@@ -131,23 +130,23 @@
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        // Enviar email primero
-                        console.log('Enviando email a:', userEmail);
+                        // Primero guardar en Google Sheets
+                        console.log('Iniciando guardado en Sheets...');
+                        await saveToSheets(userEmail);
+                        console.log('Guardado en Sheets completado');
+
+                        // Luego enviar el email
+                        console.log('Enviando email...');
                         const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
                             user_email: userEmail
                         });
                         console.log('Email enviado:', emailResult);
 
-                        // Luego guardar en Google Sheets
-                        console.log('Guardando en Sheets:', userEmail);
-                        const sheetsResult = await saveToSheets(userEmail);
-                        console.log('Sheets guardado:', sheetsResult);
-
                         formStatus.className = 'text-green-400';
                         formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
                         this.reset();
                     } catch (error) {
-                        console.error('Error completo:', error);
+                        console.error('Error en el proceso:', error);
                         formStatus.className = 'text-red-400';
                         formStatus.textContent = 'Hubo un error. Por favor, intenta nuevamente.';
                     } finally {
