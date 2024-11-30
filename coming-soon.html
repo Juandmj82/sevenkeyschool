@@ -99,14 +99,17 @@
                     const url = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
                     
                     try {
+                        const formData = new FormData();
+                        formData.append('email', email);
+                        
                         const response = await fetch(url, {
                             method: 'POST',
                             mode: 'no-cors',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ email })
+                            body: formData
                         });
+                        
+                        // Agregamos logs para debug
+                        console.log('Response from Sheets:', response);
                         return true;
                     } catch (error) {
                         console.error('Error saving to sheets:', error);
@@ -128,13 +131,15 @@
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        // Enviar email y guardar en sheets
-                        const [emailResult] = await Promise.all([
-                            emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
-                                user_email: userEmail
-                            }),
-                            saveToSheets(userEmail)
-                        ]);
+                        // Primero intentamos guardar en Google Sheets
+                        const sheetsResult = await saveToSheets(userEmail);
+                        console.log('Sheets result:', sheetsResult);
+
+                        // Luego enviamos el email
+                        const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
+                            user_email: userEmail
+                        });
+                        console.log('Email result:', emailResult);
 
                         formStatus.className = 'text-green-400';
                         formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
