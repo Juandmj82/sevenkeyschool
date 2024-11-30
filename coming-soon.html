@@ -96,12 +96,17 @@
                 emailjs.init("NCmJofKfXOYVpMbO7");
 
                 async function saveToSheets(email) {
-                    const url = 'https://script.google.com/macros/s/AKfycbzfSBvBR72HTRfDu1N4rikU5Vls0Xu06DMM9NW1etBdirOogxHuvyp-3T2IpCGZQ2nUhw/exec';
+                    const url = 'https://script.google.com/macros/s/AKfycbx-iWrsrwy0Ht6oLTxIisUsBp5xgwdvjq0Jjcp8lheFVc3u23m1dlK39RXx4tzRcnKC5A/exec';
                     
                     try {
-                        const urlWithParams = `${url}?email=${encodeURIComponent(email)}`;
+                        // Crear URL con el email usando user_email como parámetro
+                        const urlWithParams = `${url}?user_email=${encodeURIComponent(email)}`;
+                        console.log('Intentando acceder a:', urlWithParams);
+                        
+                        // Hacer la solicitud simple
                         const response = await fetch(urlWithParams);
                         const text = await response.text();
+                        console.log('Respuesta de Google:', text);
                         return text.includes('Success');
                     } catch (error) {
                         console.error('Error:', error);
