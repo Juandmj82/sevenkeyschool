@@ -95,25 +95,6 @@
             <script>
                 emailjs.init("NCmJofKfXOYVpMbO7");
 
-                async function saveToSheets(email) {
-                    const url = 'https://script.google.com/macros/s/AKfycbx-iWrsrwy0Ht6oLTxIisUsBp5xgwdvjq0Jjcp8lheFVc3u23m1dlK39RXx4tzRcnKC5A/exec';
-                    
-                    try {
-                        // Crear URL con el email usando user_email como parámetro
-                        const urlWithParams = `${url}?user_email=${encodeURIComponent(email)}`;
-                        console.log('Intentando acceder a:', urlWithParams);
-                        
-                        // Hacer la solicitud simple
-                        const response = await fetch(urlWithParams);
-                        const text = await response.text();
-                        console.log('Respuesta de Google:', text);
-                        return text.includes('Success');
-                    } catch (error) {
-                        console.error('Error:', error);
-                        return false;
-                    }
-                }
-
                 document.getElementById('notify-form').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     
@@ -127,19 +108,14 @@
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        const sheetsResult = await saveToSheets(userEmail);
-                        
-                        if (sheetsResult) {
-                            await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
-                                user_email: userEmail
-                            });
+                        // Enviar email usando EmailJS
+                        await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
+                            user_email: userEmail
+                        });
 
-                            formStatus.className = 'text-green-400';
-                            formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
-                            this.reset();
-                        } else {
-                            throw new Error('No se pudo guardar en Google Sheets');
-                        }
+                        formStatus.className = 'text-green-400';
+                        formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
+                        this.reset();
                     } catch (error) {
                         formStatus.className = 'text-red-400';
                         formStatus.textContent = 'Hubo un error. Por favor, intenta nuevamente.';
