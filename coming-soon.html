@@ -96,47 +96,24 @@
                 emailjs.init("NCmJofKfXOYVpMbO7");
 
                 async function saveToSheets(email) {
-                    const url = 'https://script.google.com/macros/s/AKfycbxnFDAP0rM2AJkod81JMox3yKmeHiRLvyb_Lh0hS0wTgMhhY5q4U0Dm-hfuSJTZeO9jsw/exec';
+                    const url = 'https://script.google.com/macros/s/AKfycbxz9zXNgkB0RhnwOakjlPAK7751VoU63z2uEt7a3mECHsdfskI1TVf_VvM9h2JEWZL49g/exec';
                     
                     try {
                         console.log('Iniciando solicitud a Google Sheets...');
                         
                         // Crear URL con parámetros
                         const urlWithParams = `${url}?email=${encodeURIComponent(email)}`;
-                        console.log('URL completa:', urlWithParams);
+                        console.log('Intentando acceder a:', urlWithParams);
 
-                        // Intentar primero con JSONP
-                        const script = document.createElement('script');
-                        script.src = `${urlWithParams}&callback=handleSheetResponse`;
+                        // Hacer la solicitud usando fetch
+                        const response = await fetch(urlWithParams);
+                        const text = await response.text();
+                        console.log('Respuesta de Sheets:', text);
                         
-                        // Crear una promesa para manejar la respuesta
-                        const responsePromise = new Promise((resolve, reject) => {
-                            // Definir la función de callback global
-                            window.handleSheetResponse = function(response) {
-                                console.log('Respuesta de Sheets recibida:', response);
-                                document.head.removeChild(script);
-                                delete window.handleSheetResponse;
-                                resolve(response);
-                            };
-
-                            // Manejar errores
-                            script.onerror = () => {
-                                document.head.removeChild(script);
-                                delete window.handleSheetResponse;
-                                reject(new Error('Error al cargar el script'));
-                            };
-                        });
-
-                        // Agregar el script al documento
-                        document.head.appendChild(script);
-
-                        // Esperar la respuesta
-                        const response = await responsePromise;
-                        console.log('Proceso de Sheets completado:', response);
-                        return true;
+                        return text.includes('Success');
                     } catch (error) {
-                        console.error('Error detallado al guardar en Sheets:', error);
-                        throw error;
+                        console.error('Error al guardar en Sheets:', error);
+                        return false;
                     }
                 }
 
@@ -153,23 +130,25 @@
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        console.log('Iniciando proceso de registro...');
-                        
-                        // Primero intentar guardar en Sheets
-                        console.log('Llamando a saveToSheets...');
+                        // Primero guardar en Sheets
+                        console.log('Guardando email en Sheets:', userEmail);
                         const sheetsResult = await saveToSheets(userEmail);
-                        console.log('Resultado de saveToSheets:', sheetsResult);
+                        console.log('Resultado de Sheets:', sheetsResult);
 
-                        // Luego enviar el email
-                        console.log('Enviando email...');
-                        const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
-                            user_email: userEmail
-                        });
-                        console.log('Resultado del email:', emailResult);
+                        if (sheetsResult) {
+                            // Si se guardó en Sheets, enviar email
+                            console.log('Enviando email...');
+                            const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
+                                user_email: userEmail
+                            });
+                            console.log('Email enviado:', emailResult);
 
-                        formStatus.className = 'text-green-400';
-                        formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
-                        this.reset();
+                            formStatus.className = 'text-green-400';
+                            formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
+                            this.reset();
+                        } else {
+                            throw new Error('No se pudo guardar en Google Sheets');
+                        }
                     } catch (error) {
                         console.error('Error en el proceso:', error);
                         formStatus.className = 'text-red-400';
