@@ -99,16 +99,16 @@
                     const url = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
                     
                     try {
-                        const formData = new FormData();
-                        formData.append('email', email);
+                        // Crear URL con parámetros
+                        const urlWithParams = `${url}?email=${encodeURIComponent(email)}`;
                         
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            body: formData
+                        const response = await fetch(urlWithParams, {
+                            method: 'GET',
+                            mode: 'no-cors'
                         });
                         
-                        // Agregamos logs para debug
+                        console.log('Intento de guardar en Sheets:', email);
+                        console.log('URL utilizada:', urlWithParams);
                         console.log('Response from Sheets:', response);
                         return true;
                     } catch (error) {
@@ -131,21 +131,23 @@
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        // Primero intentamos guardar en Google Sheets
-                        const sheetsResult = await saveToSheets(userEmail);
-                        console.log('Sheets result:', sheetsResult);
-
-                        // Luego enviamos el email
+                        // Enviar email primero
+                        console.log('Enviando email a:', userEmail);
                         const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
                             user_email: userEmail
                         });
-                        console.log('Email result:', emailResult);
+                        console.log('Email enviado:', emailResult);
+
+                        // Luego guardar en Google Sheets
+                        console.log('Guardando en Sheets:', userEmail);
+                        const sheetsResult = await saveToSheets(userEmail);
+                        console.log('Sheets guardado:', sheetsResult);
 
                         formStatus.className = 'text-green-400';
                         formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
                         this.reset();
                     } catch (error) {
-                        console.error('Error:', error);
+                        console.error('Error completo:', error);
                         formStatus.className = 'text-red-400';
                         formStatus.textContent = 'Hubo un error. Por favor, intenta nuevamente.';
                     } finally {
