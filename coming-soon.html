@@ -99,20 +99,32 @@
                     const url = 'https://script.google.com/macros/s/AKfycbxz9zXNgkB0RhnwOakjlPAK7751VoU63z2uEt7a3mECHsdfskI1TVf_VvM9h2JEWZL49g/exec';
                     
                     try {
-                        console.log('Iniciando solicitud a Google Sheets...');
+                        console.log('=== Inicio del proceso de registro ===');
+                        console.log('Email a registrar:', email);
+                        console.log('URL del Apps Script:', url);
                         
                         // Crear URL con parámetros
                         const urlWithParams = `${url}?email=${encodeURIComponent(email)}`;
-                        console.log('Intentando acceder a:', urlWithParams);
+                        console.log('URL completa con parámetros:', urlWithParams);
 
+                        console.log('Iniciando solicitud fetch a Google Sheets...');
                         // Hacer la solicitud usando fetch
                         const response = await fetch(urlWithParams);
-                        const text = await response.text();
-                        console.log('Respuesta de Sheets:', text);
+                        console.log('Respuesta recibida. Status:', response.status);
                         
-                        return text.includes('Success');
+                        const text = await response.text();
+                        console.log('Contenido de la respuesta:', text);
+                        
+                        const success = text.includes('Success');
+                        console.log('¿Registro exitoso?:', success);
+                        console.log('=== Fin del proceso de registro ===');
+                        
+                        return success;
                     } catch (error) {
-                        console.error('Error al guardar en Sheets:', error);
+                        console.error('=== Error en el proceso de registro ===');
+                        console.error('Tipo de error:', error.name);
+                        console.error('Mensaje de error:', error.message);
+                        console.error('Error completo:', error);
                         return false;
                     }
                 }
@@ -131,17 +143,19 @@
 
                     try {
                         // Primero guardar en Sheets
-                        console.log('Guardando email en Sheets:', userEmail);
+                        console.log('=== Iniciando proceso completo ===');
+                        console.log('1. Guardando email en Sheets:', userEmail);
                         const sheetsResult = await saveToSheets(userEmail);
                         console.log('Resultado de Sheets:', sheetsResult);
 
                         if (sheetsResult) {
                             // Si se guardó en Sheets, enviar email
-                            console.log('Enviando email...');
+                            console.log('2. Enviando email de confirmación...');
                             const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
                                 user_email: userEmail
                             });
-                            console.log('Email enviado:', emailResult);
+                            console.log('Resultado del envío de email:', emailResult);
+                            console.log('=== Proceso completado con éxito ===');
 
                             formStatus.className = 'text-green-400';
                             formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
@@ -150,7 +164,8 @@
                             throw new Error('No se pudo guardar en Google Sheets');
                         }
                     } catch (error) {
-                        console.error('Error en el proceso:', error);
+                        console.error('=== Error en el proceso completo ===');
+                        console.error('Error:', error);
                         formStatus.className = 'text-red-400';
                         formStatus.textContent = 'Hubo un error. Por favor, intenta nuevamente.';
                     } finally {
