@@ -112,15 +112,24 @@
 
                     // Función para guardar en Google Sheets
                     const saveToSheets = async (email) => {
+                        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec';
+                        
                         try {
-                            const response = await fetch('https://script.google.com/macros/s/AKfycbwbIfBurS2Y6i8SDB75dZe0aJqMTAsjrj6r74dcZo_tvrwCmDyt2VDVlLKRjt2KBYLpAw/exec', {
+                            console.log('Intentando guardar en Sheets:', email);
+                            
+                            const response = await fetch(SHEETS_URL, {
                                 method: 'POST',
-                                body: JSON.stringify({ email: email }),
-                                mode: 'no-cors'
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ email: email })
                             });
+                            
+                            console.log('Respuesta de Sheets:', response);
                             return true;
+                            
                         } catch (error) {
-                            console.log('Sheets error:', error);
+                            console.error('Error al guardar en Sheets:', error);
                             return false;
                         }
                     };
