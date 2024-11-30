@@ -105,14 +105,33 @@
                         console.log('Intentando guardar en Sheets:', email);
                         console.log('URL:', urlWithParams);
                         
-                        const response = await fetch(urlWithParams);
+                        const response = await fetch(urlWithParams, {
+                            method: 'GET',
+                            mode: 'cors',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        // Si la respuesta no es ok, lanzar error
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        
                         const data = await response.text();
                         console.log('Respuesta de Sheets:', data);
                         
-                        return true;
+                        try {
+                            const jsonData = JSON.parse(data);
+                            console.log('Datos parseados:', jsonData);
+                            return jsonData.result === 'success';
+                        } catch (e) {
+                            console.log('Respuesta no es JSON:', data);
+                            return true; // Asumimos éxito si no podemos parsear la respuesta
+                        }
                     } catch (error) {
                         console.error('Error al guardar en Sheets:', error);
-                        throw error; // Propagar el error para mejor manejo
+                        throw error;
                     }
                 }
 
@@ -123,24 +142,25 @@
                     const submitButton = this.querySelector('button[type="submit"]');
                     const userEmail = document.getElementById('user_email').value;
                     
-                    // Deshabilitar el botón y mostrar estado de carga
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
                     formStatus.className = 'text-gray-300';
                     formStatus.textContent = 'Enviando...';
 
                     try {
-                        // Primero guardar en Google Sheets
+                        // Primero intentar guardar en Sheets
                         console.log('Iniciando guardado en Sheets...');
-                        await saveToSheets(userEmail);
-                        console.log('Guardado en Sheets completado');
+                        const sheetsResult = await saveToSheets(userEmail);
+                        console.log('Resultado de Sheets:', sheetsResult);
 
-                        // Luego enviar el email
-                        console.log('Enviando email...');
-                        const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
-                            user_email: userEmail
-                        });
-                        console.log('Email enviado:', emailResult);
+                        // Si Sheets fue exitoso, enviar email
+                        if (sheetsResult) {
+                            console.log('Enviando email...');
+                            const emailResult = await emailjs.send('service_7zorhh8', 'template_ltpkpjg', {
+                                user_email: userEmail
+                            });
+                            console.log('Email enviado:', emailResult);
+                        }
 
                         formStatus.className = 'text-green-400';
                         formStatus.textContent = '¡Registro exitoso! Te mantendremos informado.';
@@ -153,7 +173,6 @@
                         submitButton.disabled = false;
                         submitButton.textContent = 'Registrarme';
                         
-                        // Limpiar mensaje después de 5 segundos
                         setTimeout(() => {
                             formStatus.textContent = '';
                         }, 5000);
