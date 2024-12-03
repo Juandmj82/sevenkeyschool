@@ -784,14 +784,14 @@
                     <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
                         <i class="fas fa-clock text-4xl text-blue-800 mb-6"></i>
                         <h4 class="text-xl font-bold mb-4">Horarios Flexibles</h4>
-                        <p class="text-gray-600 text-justify">Tu música, tu tiempo, tu espacio</p>
+                        <p class="text-gray-600 text-justify">Adaptados a tu disponibilidad</p>
                     </div>
                 </div>
                 <div class="transform hover:scale-105 transition-transform duration-300">
                     <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
                         <i class="fas fa-globe text-4xl text-blue-800 mb-6"></i>
-                        <h4 class="text-xl font-bold mb-4">Alcance Global</h4>
-                        <p class="text-gray-600 text-justify">Llevando música sin fronteras a cada rincón del mundo</p>
+                        <h4 class="text-xl font-bold mb-4">Clases en Línea</h4>
+                        <p class="text-gray-600 text-justify">Para estudiantes de todo el mundo</p>
                     </div>
                 </div>
             </div>
@@ -1513,5 +1513,15 @@
             });
         });
     </script>
+    <audio id="bgMusic" loop>
+        <source src="music/background.mp3" type="audio/mp3">
+    </audio>
+    
+    <!-- Control de música -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button id="musicToggle" class="bg-blue-900 hover:bg-gold text-white p-3 rounded-full shadow-lg transition-all">
+            <i id="musicIcon" class="fas fa-volume-mute"></i>
+        </button>
+    </div>
 </body>
 </html>
