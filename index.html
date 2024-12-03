@@ -70,47 +70,6 @@
             text-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
         }
 
-        /* Resto de los estilos... */
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Estilos base */
-        :root {
-            --gold: #F6AD55;
-            --blue-900: #2a4365;
-        }
-
-        /* Efectos de texto y animaciones */
-        .fade-in-text {
-            animation: fadeIn 1.5s ease-in;
-        }
-
-        .slide-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.8s ease forwards;
-        }
-
-        .glow-text {
-            text-shadow: 0 0 10px rgba(246, 173, 85, 0.5);
-            transition: text-shadow 0.3s ease;
-        }
-
-        .glow-text:hover {
-            text-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
-        }
-
         /* Menú móvil */
         .mobile-menu {
             position: absolute;
@@ -1494,31 +1453,9 @@
             const audio = document.getElementById('bgMusic');
             const musicToggle = document.getElementById('musicToggle');
             const musicIcon = document.getElementById('musicIcon');
-            let hasInteracted = false;
 
             // Configuración inicial
             audio.volume = 0.3;
-
-            // Función para intentar reproducir
-            function attemptPlay() {
-                if (!hasInteracted) {
-                    audio.play()
-                        .then(() => {
-                            hasInteracted = true;
-                            musicIcon.className = 'fas fa-volume-up';
-                            console.log("Reproducción iniciada con éxito");
-                        })
-                        .catch(error => {
-                            console.log("Error en reproducción:", error);
-                        });
-                }
-            }
-
-            // Intentar reproducir en diferentes eventos
-            document.addEventListener('click', attemptPlay, { once: true });
-            document.addEventListener('touchstart', attemptPlay, { once: true });
-            document.addEventListener('scroll', attemptPlay, { once: true });
-            window.addEventListener('load', attemptPlay);
 
             // Toggle música
             musicToggle.addEventListener('click', function() {
@@ -1539,6 +1476,17 @@
                     audio.pause();
                     musicIcon.className = 'fas fa-volume-mute';
                 });
+            });
+
+            // Intentar reproducir al cargar
+            window.addEventListener('load', function() {
+                audio.play()
+                    .then(() => {
+                        musicIcon.className = 'fas fa-volume-up';
+                    })
+                    .catch(error => {
+                        console.log('Error al reproducir:', error);
+                    });
             });
         });
 
