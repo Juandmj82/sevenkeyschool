@@ -6,6 +6,27 @@
   <title>Seven Keys School | Juegos de Práctica Musical</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Dashboard Title Animation */
+    @keyframes titleSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .dashboard-title {
+      animation: titleSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .dashboard-title h1 {
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 60%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
     /* Welcome Card styles */
     .profe-welcome-container {
       display: flex;
@@ -246,8 +267,8 @@
 
   <main>
     <div class="dashboard-title">
-      <h1>Área de Juegos Progresivos</h1>
-      <p>Practica lectura musical, entrena tu oído y diviértete subiendo de nivel.</p>
+      <h1>Zona de Juegos Seven Keys</h1>
+      <p>Practica tu lectura musical, supera desafíos y diviértete subiendo de nivel.</p>
     </div>
 
     <!-- Profe Welcome Card -->
