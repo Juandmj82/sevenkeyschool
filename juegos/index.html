@@ -52,7 +52,7 @@
       font-style: italic;
     }
 
-    /* Welcome Modal Styles */
+    /* Welcome & Preview Modal Styles */
     .welcome-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -146,12 +146,30 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
     }
+    .btn-action-welcome:disabled {
+      background: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
 
     /* Header logo */
     .header-logo {
       height: 60px;
       width: auto;
       display: block;
+    }
+
+    /* Badges for note preview */
+    .note-badge {
+      background: rgba(167, 139, 250, 0.15);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      color: #c084fc;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.72rem;
     }
 
     @media (max-width: 600px) {
@@ -165,7 +183,7 @@
 </head>
 <body>
 
-  <!-- Welcome Modal -->
+  <!-- Welcome First-Time Modal -->
   <div class="welcome-overlay" id="welcome-modal-overlay">
     <div class="welcome-card">
       <img src="../img/logo.png" alt="Seven Keys School" class="welcome-logo">
@@ -180,6 +198,39 @@
       </div>
       
       <button class="btn-action-welcome" id="btn-close-welcome">¡Comenzar a practicar!</button>
+    </div>
+  </div>
+
+  <!-- Game / Level Preview Modal (Populated Dynamically) -->
+  <div class="welcome-overlay" id="preview-modal-overlay">
+    <div class="welcome-card" style="max-width: 520px;">
+      <h2 class="welcome-title" id="preview-title">Nivel 1: Clave de Sol Inicial</h2>
+      
+      <div class="welcome-profe" style="padding: 12px; gap: 8px;">
+        <img src="../img/profe.jpg" id="preview-avatar" class="welcome-avatar-img" style="width: 80px; height: 80px;" alt="Teacher Juan Di">
+        <span class="profe-name">Teacher Juan Di</span>
+        <div class="welcome-bubble" id="preview-description" style="font-size: 0.8rem;">
+          ¡Cargando descripción...
+        </div>
+      </div>
+      
+      <!-- Level Details Box -->
+      <div id="preview-stats-box" class="level-details-box" style="text-align: left; width: 100%; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; font-size: 0.82rem; display: flex; flex-direction: column; gap: 8px;">
+        <div><strong style="color: #a78bfa;">Clave:</strong> <span id="preview-clef" style="color: #e2e8f0;">Sol</span></div>
+        <div><strong style="color: #a78bfa;">Objetivo:</strong> <span id="preview-target" style="color: #e2e8f0;">10 aciertos</span></div>
+        <div><strong style="color: #a78bfa;">Tiempo:</strong> <span id="preview-time" style="color: #e2e8f0;">Sin límite</span></div>
+        <div>
+          <strong style="color: #a78bfa; display: block; margin-bottom: 4px;">Notas a practicar:</strong>
+          <div id="preview-notes-container" style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <!-- Note badges go here -->
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-buttons" style="display: flex; gap: 10px; width: 100%; margin-top: 8px;">
+        <button class="btn-secondary" id="btn-close-preview" style="flex: 1; padding: 10px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #cbd5e1; cursor: pointer; font-weight: 700; transition: background 0.2s;">Volver</button>
+        <button class="btn-action-welcome" id="btn-play-preview" style="flex: 2; margin-top: 0; padding: 10px 20px;">¡Comenzar Desafío!</button>
+      </div>
     </div>
   </div>
 
@@ -210,7 +261,7 @@
 
     <div class="levels-grid">
       <!-- Level 1 -->
-      <div class="level-card" id="card-1" onclick="startLevel(1)">
+      <div class="level-card" id="card-1" onclick="showPreview(1)">
         <div class="level-header">
           <span class="level-number">Nivel 1</span>
           <span class="level-status-icon" id="status-1">🔓</span>
@@ -226,7 +277,7 @@
       </div>
 
       <!-- Level 2 -->
-      <div class="level-card locked" id="card-2" onclick="startLevel(2)">
+      <div class="level-card locked" id="card-2" onclick="showPreview(2)">
         <div class="level-header">
           <span class="level-number">Nivel 2</span>
           <span class="level-status-icon" id="status-2">🔒</span>
@@ -242,7 +293,7 @@
       </div>
 
       <!-- Level 3 -->
-      <div class="level-card locked" id="card-3" onclick="startLevel(3)">
+      <div class="level-card locked" id="card-3" onclick="showPreview(3)">
         <div class="level-header">
           <span class="level-number">Nivel 3</span>
           <span class="level-status-icon" id="status-3">🔒</span>
@@ -258,7 +309,7 @@
       </div>
 
       <!-- Level 4 -->
-      <div class="level-card locked" id="card-4" onclick="startLevel(4)">
+      <div class="level-card locked" id="card-4" onclick="showPreview(4)">
         <div class="level-header">
           <span class="level-number">Nivel 4</span>
           <span class="level-status-icon" id="status-4">🔒</span>
@@ -274,7 +325,7 @@
       </div>
 
       <!-- Level 5 -->
-      <div class="level-card locked" id="card-5" onclick="startLevel(5)">
+      <div class="level-card locked" id="card-5" onclick="showPreview(5)">
         <div class="level-header">
           <span class="level-number">Nivel 5</span>
           <span class="level-status-icon" id="status-5">🔒</span>
@@ -306,7 +357,7 @@
       </div>
 
       <!-- Atrapa Notas Game -->
-      <div class="level-card" id="card-atrapa" onclick="window.location.href='atrapa.html'" style="border-color: rgba(213, 0, 249, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(213, 0, 249, 0.03) 100%);">
+      <div class="level-card" id="card-atrapa" onclick="showPreview('atrapa')" style="border-color: rgba(213, 0, 249, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(213, 0, 249, 0.03) 100%);">
         <div class="level-header">
           <span class="level-number" style="color: var(--color-purple);">Juego Infantil</span>
           <span class="level-status-icon">🎮</span>
@@ -324,6 +375,74 @@
   </main>
 
   <script>
+    // Levels DB configuration
+    const LEVELS_PREVIEW_DATA = {
+      1: {
+        title: "Nivel 1: Clave de Sol Inicial",
+        description: `"¡Hola! En este primer nivel aprenderás a leer las 5 notas fundamentales en la Clave de Sol: Do, Re, Mi, Fa y Sol. ¡Es el primer gran paso para tocar el piano! ¡Vamos con toda!"`,
+        clef: "🎼 Clave de Sol",
+        target: "10 aciertos",
+        time: "Sin límite de tiempo",
+        notes: ["DO4", "RE4", "MI4", "FA4", "SOL4"],
+        avatar: "../img/profe.jpg",
+        url: "game.html?level=1"
+      },
+      2: {
+        title: "Nivel 2: Clave de Sol Completa",
+        description: `"¡Excelente trabajo superando el primer nivel! Ahora ampliaremos nuestro rango a una octava completa en la Clave de Sol, desde Do4 hasta Do5. El reto se pone más interesante. ¿Estás listo?"`,
+        clef: "🎼 Clave de Sol",
+        target: "10 aciertos",
+        time: "Sin límite de tiempo",
+        notes: ["DO4", "RE4", "MI4", "FA4", "SOL4", "LA4", "SI4", "DO5"],
+        avatar: "../img/profe.jpg",
+        url: "game.html?level=2"
+      },
+      3: {
+        title: "Nivel 3: Clave de Fa Inicial",
+        description: `"¡Es hora de entrenar la mano izquierda! Entramos en el registro grave con la Clave de Fa. Practicaremos las notas desde Do3 hasta Sol3. ¡Presta mucha atención a la posición de las líneas!"`,
+        clef: "𝄢 Clave de Fa",
+        target: "10 aciertos",
+        time: "Sin límite de tiempo",
+        notes: ["DO3", "RE3", "MI3", "FA3", "SOL3"],
+        avatar: "../img/profe.jpg",
+        url: "game.html?level=3"
+      },
+      4: {
+        title: "Nivel 4: Clave de Fa Completa",
+        description: `"¡Increíble progreso! Domina completamente el registro grave del piano con una octava completa en la Clave de Fa (desde Do3 a Do4). Supéralo para desbloquear el gran desafío final."`,
+        clef: "𝄢 Clave de Fa",
+        target: "10 aciertos",
+        time: "Sin límite de tiempo",
+        notes: ["DO3", "RE3", "MI3", "FA3", "SOL3", "LA3", "SI3", "DO4"],
+        avatar: "../img/profe.jpg",
+        url: "game.html?level=4"
+      },
+      5: {
+        title: "Nivel 5: Gran Desafío Mixto",
+        description: `"¡Este es el reto absoluto de nuestra escuela! Las Claves de Sol y Fa se mezclarán de manera aleatoria en el pentagrama, y tendrás solo 4 segundos para responder por nota. ¡Demuestra que eres un maestro!"`,
+        clef: "🎼 / 𝄢 Mixta",
+        target: "15 aciertos",
+        time: "⏳ Contrarreloj (4s / nota)",
+        notes: ["DO3", "FA3", "DO4", "SOL4", "DO5", "Y más..."],
+        avatar: "../img/profe.jpg",
+        url: "game.html?level=5"
+      },
+      "atrapa": {
+        title: "Atrapa Notas",
+        description: `"¡Mi juego interactivo favorito! Aquí verás caer burbujas con notas y deberás reventarlas tocando la tecla correcta en el piano virtual. Podrás configurar la velocidad, claves y colores. ¡Diviértete!"`,
+        clef: "Configurable",
+        target: "Récord personal (Meta: 150 pts)",
+        time: "Burbujas cayendo",
+        notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "atrapa.html"
+      }
+    };
+
+    let userProgress = {
+      unlocked: [1]
+    };
+
     // Load local storage progress
     document.addEventListener("DOMContentLoaded", () => {
       // Progress defaults
@@ -332,9 +451,10 @@
         highScores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
       };
 
-      // Set defaults if not existing
       if (!progress.unlocked) progress.unlocked = [1];
       if (!progress.highScores) progress.highScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      
+      userProgress = progress;
 
       for (let i = 1; i <= 5; i++) {
         const card = document.getElementById(`card-${i}`);
@@ -367,7 +487,6 @@
       
       const welcomeShown = localStorage.getItem("sevenkeys_games_welcome_shown");
       if (!welcomeShown) {
-        // Show modal on first load
         setTimeout(() => {
           welcomeOverlay.classList.add("show");
         }, 500);
@@ -377,13 +496,73 @@
         welcomeOverlay.classList.remove("show");
         localStorage.setItem("sevenkeys_games_welcome_shown", "true");
       });
+
+      // Close Preview Modal listeners
+      const previewOverlay = document.getElementById("preview-modal-overlay");
+      document.getElementById("btn-close-preview").addEventListener("click", () => {
+        previewOverlay.classList.remove("show");
+      });
     });
 
-    function startLevel(levelNum) {
-      const progress = JSON.parse(localStorage.getItem("sevenkeys_progress")) || { unlocked: [1] };
-      if (progress.unlocked.includes(levelNum)) {
-        window.location.href = `game.html?level=${levelNum}`;
+    // Show Preview Modal
+    function showPreview(levelId) {
+      // Check if locked
+      if (typeof levelId === 'number' && !userProgress.unlocked.includes(levelId)) {
+        // Locked level custom message from Teacher Juan Di
+        const previewOverlay = document.getElementById("preview-modal-overlay");
+        document.getElementById("preview-title").textContent = `Nivel Bloqueado`;
+        document.getElementById("preview-avatar").src = "../img/profe_sad.jpg";
+        document.getElementById("preview-description").textContent = `"¡Alto ahí, pequeño músico! 🛑 Este nivel aún está bloqueado. Debes completar el nivel anterior para poder acceder a este desafío. ¡Sigue practicando, ya casi llegas!"`;
+        
+        // Hide stats box and disable play button
+        document.getElementById("preview-stats-box").style.display = "none";
+        const playBtn = document.getElementById("btn-play-preview");
+        playBtn.textContent = "Bloqueado";
+        playBtn.setAttribute("disabled", "true");
+        
+        previewOverlay.classList.add("show");
+        return;
       }
+
+      const data = LEVELS_PREVIEW_DATA[levelId];
+      if (!data) return;
+
+      const previewOverlay = document.getElementById("preview-modal-overlay");
+      
+      // Update UI elements
+      document.getElementById("preview-title").textContent = data.title;
+      document.getElementById("preview-avatar").src = data.avatar;
+      document.getElementById("preview-description").textContent = data.description;
+      
+      // Show stats box and update details
+      const statsBox = document.getElementById("preview-stats-box");
+      statsBox.style.display = "flex";
+      
+      document.getElementById("preview-clef").textContent = data.clef;
+      document.getElementById("preview-target").textContent = data.target;
+      document.getElementById("preview-time").textContent = data.time;
+      
+      // Generate badges
+      const notesContainer = document.getElementById("preview-notes-container");
+      notesContainer.innerHTML = "";
+      data.notes.forEach(note => {
+        const badge = document.createElement("span");
+        badge.className = "note-badge";
+        badge.textContent = note;
+        notesContainer.appendChild(badge);
+      });
+
+      // Enable and configure play button
+      const playBtn = document.getElementById("btn-play-preview");
+      playBtn.textContent = "¡Comenzar Desafío!";
+      playBtn.removeAttribute("disabled");
+      
+      // Click handler redirection
+      playBtn.onclick = () => {
+        window.location.href = data.url;
+      };
+
+      previewOverlay.classList.add("show");
     }
   </script>
 </body>
