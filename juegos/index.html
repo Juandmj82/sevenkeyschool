@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Juegos de Práctica Musical</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Welcome Card styles */
+    .profe-welcome-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 2.5rem;
+      width: 100%;
+      max-width: 820px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+    .profe-avatar-welcome {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .profe-avatar-welcome:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+    .profe-welcome-bubble {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .profe-welcome-name {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .profe-welcome-bubble p {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    /* Welcome Modal Styles */
+    .welcome-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(7, 6, 15, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .welcome-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .welcome-card {
+      background: radial-gradient(circle at center, rgba(20, 16, 48, 0.99) 0%, rgba(8, 7, 24, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.2);
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 480px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .welcome-overlay.show .welcome-card {
+      transform: scale(1);
+    }
+    .welcome-logo {
+      height: 70px;
+      width: auto;
+      margin-bottom: 4px;
+    }
+    .welcome-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .welcome-profe {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .welcome-avatar-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+    }
+    .welcome-bubble {
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+      font-style: italic;
+    }
+    .btn-action-welcome {
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 36px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 8px;
+      width: 100%;
+    }
+    .btn-action-welcome:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    /* Header logo */
+    .header-logo {
+      height: 60px;
+      width: auto;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .profe-welcome-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Modal -->
+  <div class="welcome-overlay" id="welcome-modal-overlay">
+    <div class="welcome-card">
+      <img src="../img/logo.png" alt="Seven Keys School" class="welcome-logo">
+      <h2 class="welcome-title">¡Bienvenido a la Zona de Juegos!</h2>
+      
+      <div class="welcome-profe">
+        <img src="../img/profe.jpg" class="welcome-avatar-img" alt="Teacher Juan Di">
+        <span class="profe-name">Teacher Juan Di</span>
+        <div class="welcome-bubble">
+          "¡Hola! Qué alegría tenerte aquí. Soy tu tutor Teacher Juan Di. En esta zona encontrarás juegos y niveles progresivos para entrenar tu lectura de notas y tu oído musical. ¡Elige el que prefieras y diviértete aprendiendo!"
+        </div>
+      </div>
+      
+      <button class="btn-action-welcome" id="btn-close-welcome">¡Comenzar a practicar!</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="../index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver a la Web
+    </a>
+  </header>
+
+  <main>
+    <div class="dashboard-title">
+      <h1>Área de Juegos Progresivos</h1>
+      <p>Practica lectura musical, entrena tu oído y diviértete subiendo de nivel.</p>
+    </div>
+
+    <!-- Profe Welcome Card -->
+    <div class="profe-welcome-container">
+      <img src="../img/profe.jpg" class="profe-avatar-welcome" alt="Teacher Juan Di">
+      <div class="profe-welcome-bubble">
+        <span class="profe-name">Teacher Juan Di</span>
+        <p>"¡Hola! Elige tu nivel preferido abajo para empezar a practicar. Cada juego te ayudará a leer partituras a primera vista de forma divertida. ¡Vamos con toda!"</p>
+      </div>
+    </div>
+
+    <div class="levels-grid">
+      <!-- Level 1 -->
+      <div class="level-card" id="card-1" onclick="startLevel(1)">
+        <div class="level-header">
+          <span class="level-number">Nivel 1</span>
+          <span class="level-status-icon" id="status-1">🔓</span>
+        </div>
+        <div class="level-info">
+          <h2>Clave de Sol Inicial</h2>
+          <p>Aprende las notas básicas en las líneas y espacios centrales: Do, Re, Mi, Fa, Sol.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" id="score-1">Récord: 0</span>
+          <button class="btn-play-level">Jugar</button>
+        </div>
+      </div>
+
+      <!-- Level 2 -->
+      <div class="level-card locked" id="card-2" onclick="startLevel(2)">
+        <div class="level-header">
+          <span class="level-number">Nivel 2</span>
+          <span class="level-status-icon" id="status-2">🔒</span>
+        </div>
+        <div class="level-info">
+          <h2>Clave de Sol Octava</h2>
+          <p>Amplía tu lectura cubriendo una octava completa en el pentagrama de Sol (Do4 a Do5).</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" id="score-2">Récord: 0</span>
+          <button class="btn-play-level" disabled>Bloqueado</button>
+        </div>
+      </div>
+
+      <!-- Level 3 -->
+      <div class="level-card locked" id="card-3" onclick="startLevel(3)">
+        <div class="level-header">
+          <span class="level-number">Nivel 3</span>
+          <span class="level-status-icon" id="status-3">🔒</span>
+        </div>
+        <div class="level-info">
+          <h2>Clave de Fa Inicial</h2>
+          <p>Entra en el registro grave. Lee las notas fundamentales del pentagrama inferior (Do3 a Sol3).</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" id="score-3">Récord: 0</span>
+          <button class="btn-play-level" disabled>Bloqueado</button>
+        </div>
+      </div>
+
+      <!-- Level 4 -->
+      <div class="level-card locked" id="card-4" onclick="startLevel(4)">
+        <div class="level-header">
+          <span class="level-number">Nivel 4</span>
+          <span class="level-status-icon" id="status-4">🔒</span>
+        </div>
+        <div class="level-info">
+          <h2>Clave de Fa Octava</h2>
+          <p>Domina completamente el registro grave del piano con una octava completa en clave de Fa.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" id="score-4">Récord: 0</span>
+          <button class="btn-play-level" disabled>Bloqueado</button>
+        </div>
+      </div>
+
+      <!-- Level 5 -->
+      <div class="level-card locked" id="card-5" onclick="startLevel(5)">
+        <div class="level-header">
+          <span class="level-number">Nivel 5</span>
+          <span class="level-status-icon" id="status-5">🔒</span>
+        </div>
+        <div class="level-info">
+          <h2>Gran Desafío Mixto</h2>
+          <p>El reto definitivo: Claves de Sol y Fa combinadas, con tiempo de respuesta limitado por nota.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" id="score-5">Récord: 0</span>
+          <button class="btn-play-level" disabled>Bloqueado</button>
+        </div>
+      </div>
+
+      <!-- Custom Level -->
+      <div class="level-card" id="card-custom" onclick="window.location.href='custom.html'" style="border-color: rgba(0, 229, 255, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 229, 255, 0.03) 100%);">
+        <div class="level-header">
+          <span class="level-number" style="color: var(--color-cyan);">Personalizado</span>
+          <span class="level-status-icon">⚙️</span>
+        </div>
+        <div class="level-info">
+          <h2>Práctica a tu Medida</h2>
+          <p>Elige exactamente qué notas de la Clave de Sol y de Fa deseas practicar en tu sesión.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" style="color: var(--color-cyan); border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">Modo Libre</span>
+          <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-cyan) 0%, #00b0c4 100%); color: var(--bg-dark);">Configurar</button>
+        </div>
+      </div>
+
+      <!-- Atrapa Notas Game -->
+      <div class="level-card" id="card-atrapa" onclick="window.location.href='atrapa.html'" style="border-color: rgba(213, 0, 249, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(213, 0, 249, 0.03) 100%);">
+        <div class="level-header">
+          <span class="level-number" style="color: var(--color-purple);">Juego Infantil</span>
+          <span class="level-status-icon">🎮</span>
+        </div>
+        <div class="level-info">
+          <h2>Atrapa Notas</h2>
+          <p>Lee las notas que se muestran en el pentagrama y explota las burbujas correctas en el teclado.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" style="color: var(--color-purple); border-color: rgba(213, 0, 249, 0.2); background: rgba(213, 0, 249, 0.05);">¡Nuevo!</span>
+          <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-purple) 0%, #a100bc 100%); color: var(--text-main);">¡Jugar!</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Load local storage progress
+    document.addEventListener("DOMContentLoaded", () => {
+      // Progress defaults
+      let progress = JSON.parse(localStorage.getItem("sevenkeys_progress")) || {
+        unlocked: [1],
+        highScores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+      };
+
+      // Set defaults if not existing
+      if (!progress.unlocked) progress.unlocked = [1];
+      if (!progress.highScores) progress.highScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+      for (let i = 1; i <= 5; i++) {
+        const card = document.getElementById(`card-${i}`);
+        if (!card) continue;
+        const isUnlocked = progress.unlocked.includes(i);
+        const statusIcon = document.getElementById(`status-${i}`);
+        const scoreBadge = document.getElementById(`score-${i}`);
+        const btn = card.querySelector(".btn-play-level");
+
+        // Highscore display
+        const hs = progress.highScores[i] || 0;
+        scoreBadge.textContent = `Récord: ${hs}`;
+
+        if (isUnlocked) {
+          card.classList.remove("locked");
+          statusIcon.textContent = "🔓";
+          btn.removeAttribute("disabled");
+          btn.textContent = "Jugar";
+        } else {
+          card.classList.add("locked");
+          statusIcon.textContent = "🔒";
+          btn.setAttribute("disabled", "true");
+          btn.textContent = "Bloqueado";
+        }
+      }
+
+      // Welcome Modal logic
+      const welcomeOverlay = document.getElementById("welcome-modal-overlay");
+      const btnCloseWelcome = document.getElementById("btn-close-welcome");
+      
+      const welcomeShown = localStorage.getItem("sevenkeys_games_welcome_shown");
+      if (!welcomeShown) {
+        // Show modal on first load
+        setTimeout(() => {
+          welcomeOverlay.classList.add("show");
+        }, 500);
+      }
+
+      btnCloseWelcome.addEventListener("click", () => {
+        welcomeOverlay.classList.remove("show");
+        localStorage.setItem("sevenkeys_games_welcome_shown", "true");
+      });
+    });
+
+    function startLevel(levelNum) {
+      const progress = JSON.parse(localStorage.getItem("sevenkeys_progress")) || { unlocked: [1] };
+      if (progress.unlocked.includes(levelNum)) {
+        window.location.href = `game.html?level=${levelNum}`;
+      }
+    }
+  </script>
+</body>
+</html>

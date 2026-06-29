@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Práctica Personalizada</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .setup-container {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 800px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--color-gold);
+      padding-left: 10px;
+    }
+
+    /* Option Selectors */
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .opt-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: center;
+      transition: var(--transition-smooth);
+    }
+
+    .opt-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .opt-card.active {
+      background: rgba(212, 175, 55, 0.1);
+      border-color: var(--color-gold);
+      box-shadow: 0 0 10px var(--color-gold-glow);
+    }
+
+    .opt-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .opt-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Notes Picker Pills */
+    .notes-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .group-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .note-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .note-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--color-cyan);
+    }
+
+    .note-pill.active {
+      background: rgba(0, 229, 255, 0.12);
+      border-color: var(--color-cyan);
+      color: var(--color-cyan);
+      box-shadow: 0 0 10px var(--color-cyan-glow);
+    }
+
+    .note-pill .octave-sub {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+
+    /* Slider / Number row */
+    .btn-row {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .btn-choice {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-choice:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-choice.active {
+      background: var(--text-main);
+      color: var(--bg-dark);
+      border-color: var(--text-main);
+    }
+
+    .btn-play-custom {
+      background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%);
+      color: var(--bg-dark);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--color-gold-glow);
+      text-align: center;
+      transition: var(--transition-smooth);
+      align-self: center;
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .btn-play-custom:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px var(--color-gold);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" style="height: 50px; width: auto; display: block;">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver al Menú
+    </a>
+  </header>
+
+  <main>
+    <div class="dashboard-title" style="margin-bottom: 1.5rem;">
+      <h1>Diseña tu Práctica</h1>
+      <p>Selecciona la clave, escoge las notas de tu método y ajusta el ritmo.</p>
+    </div>
+
+    <div class="setup-container">
+      <!-- 1. CLEF SELECTOR -->
+      <div>
+        <h2 class="section-title">1. Elige la Clave</h2>
+        <div class="option-grid">
+          <div class="opt-card active" id="clef-sol" onclick="selectClef('sol')">
+            <h3>🎼 Clave de Sol</h3>
+            <p>Registro medio - agudo (mano derecha)</p>
+          </div>
+          <div class="opt-card" id="clef-fa" onclick="selectClef('fa')">
+            <h3>𝄢 Clave de Fa</h3>
+            <p>Registro medio - grave (mano izquierda)</p>
+          </div>
+          <div class="opt-card" id="clef-mixed" onclick="selectClef('mixed')">
+            <h3>𝄫 Claves Combinadas</h3>
+            <p>Lectura a dos manos mixta</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. NOTES PICKER -->
+      <div>
+        <h2 class="section-title">2. Elige las Notas a Practicar</h2>
+        
+        <!-- Sol notes -->
+        <div class="notes-group" id="group-sol">
+          <div class="group-label">Notas en Clave de Sol (Octavas 4 y 5):</div>
+          <div class="pills-container">
+            <div class="note-pill active" data-note="C4" onclick="toggleNote(this)">DO <span class="octave-sub">4</span></div>
+            <div class="note-pill active" data-note="D4" onclick="toggleNote(this)">RE <span class="octave-sub">4</span></div>
+            <div class="note-pill active" data-note="E4" onclick="toggleNote(this)">MI <span class="octave-sub">4</span></div>
+            <div class="note-pill active" data-note="F4" onclick="toggleNote(this)">FA <span class="octave-sub">4</span></div>
+            <div class="note-pill active" data-note="G4" onclick="toggleNote(this)">SOL <span class="octave-sub">4</span></div>
+            <div class="note-pill" data-note="A4" onclick="toggleNote(this)">LA <span class="octave-sub">4</span></div>
+            <div class="note-pill" data-note="B4" onclick="toggleNote(this)">SI <span class="octave-sub">4</span></div>
+            <div class="note-pill" data-note="C5" onclick="toggleNote(this)">DO <span class="octave-sub">5</span></div>
+          </div>
+        </div>
+
+        <!-- Fa notes -->
+        <div class="notes-group" id="group-fa" style="display:none;">
+          <div class="group-label">Notas en Clave de Fa (Octavas 3 y 4):</div>
+          <div class="pills-container">
+            <div class="note-pill active" data-note="C3" onclick="toggleNote(this)">DO <span class="octave-sub">3</span></div>
+            <div class="note-pill active" data-note="D3" onclick="toggleNote(this)">RE <span class="octave-sub">3</span></div>
+            <div class="note-pill active" data-note="E3" onclick="toggleNote(this)">MI <span class="octave-sub">3</span></div>
+            <div class="note-pill active" data-note="F3" onclick="toggleNote(this)">FA <span class="octave-sub">3</span></div>
+            <div class="note-pill active" data-note="G3" onclick="toggleNote(this)">SOL <span class="octave-sub">3</span></div>
+            <div class="note-pill" data-note="A3" onclick="toggleNote(this)">LA <span class="octave-sub">3</span></div>
+            <div class="note-pill" data-note="B3" onclick="toggleNote(this)">SI <span class="octave-sub">3</span></div>
+            <div class="note-pill" data-note="C4" onclick="toggleNote(this)">DO <span class="octave-sub">4</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. GOAL & SPEED -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+        <div>
+          <h2 class="section-title">3. Objetivo de Aciertos</h2>
+          <div class="btn-row">
+            <button class="btn-choice" onclick="selectGoal(5)">5</button>
+            <button class="btn-choice active" onclick="selectGoal(10)">10</button>
+            <button class="btn-choice" onclick="selectGoal(15)">15</button>
+            <button class="btn-choice" onclick="selectGoal(20)">20</button>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section-title">4. Límite de Tiempo por Nota</h2>
+          <div class="btn-row">
+            <button class="btn-choice active" onclick="selectSpeed(null)">Sin Límite</button>
+            <button class="btn-choice" onclick="selectSpeed(10000)">10s</button>
+            <button class="btn-choice" onclick="selectSpeed(5000)">5s</button>
+            <button class="btn-choice" onclick="selectSpeed(3000)">3s</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAUNCH -->
+      <button class="btn-play-custom" onclick="launchCustomGame()">Iniciar Práctica</button>
+    </div>
+  </main>
+
+  <script>
+    let selectedClef = 'sol';
+    let selectedGoal = 10;
+    let selectedSpeed = null;
+
+    function selectClef(clef) {
+      selectedClef = clef;
+      
+      // Update visual tabs
+      document.querySelectorAll('.opt-card').forEach(c => c.classList.remove('active'));
+      document.getElementById(`clef-${clef}`).classList.add('active');
+
+      // Update visible note pickers based on clef
+      const groupSol = document.getElementById('group-sol');
+      const groupFa = document.getElementById('group-fa');
+
+      if (clef === 'sol') {
+        groupSol.style.display = 'block';
+        groupFa.style.display = 'none';
+      } else if (clef === 'fa') {
+        groupSol.style.display = 'none';
+        groupFa.style.display = 'block';
+      } else { // Mixed
+        groupSol.style.display = 'block';
+        groupFa.style.display = 'block';
+      }
+    }
+
+    function toggleNote(pill) {
+      pill.classList.toggle('active');
+    }
+
+    function selectGoal(goal) {
+      selectedGoal = goal;
+      const buttons = event.target.parentNode.children;
+      Array.from(buttons).forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function selectSpeed(speed) {
+      selectedSpeed = speed;
+      const buttons = event.target.parentNode.children;
+      Array.from(buttons).forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function launchCustomGame() {
+      // Find all active note pills that are visible
+      const notes = [];
+      const clefGroupFilter = selectedClef === 'sol' ? ['group-sol'] : (selectedClef === 'fa' ? ['group-fa'] : ['group-sol', 'group-fa']);
+      
+      clefGroupFilter.forEach(groupId => {
+        const activePills = document.querySelectorAll(`#${groupId} .note-pill.active`);
+        activePills.forEach(p => {
+          const noteName = p.getAttribute('data-note');
+          if (!notes.includes(noteName)) {
+            notes.push(noteName);
+          }
+        });
+      });
+
+      if (notes.length === 0) {
+        alert("Por favor, selecciona al menos una nota musical para practicar.");
+        return;
+      }
+
+      // Save custom configuration to sessionStorage
+      const customConfig = {
+        clef: selectedClef,
+        notes: notes,
+        targetScore: selectedGoal,
+        timeLimit: selectedSpeed
+      };
+
+      sessionStorage.setItem("sevenkeys_custom_config", JSON.stringify(customConfig));
+      
+      // Redirect to game.html in custom mode
+      window.location.href = `game.html?level=custom`;
+    }
+  </script>
+</body>
+</html>

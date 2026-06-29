@@ -376,13 +376,35 @@
 
     <script>
         // Funcionalidad de música
-        document.addEventListener('DOMContentLoaded', function() {
+        function initAudio() {
             const audio = document.getElementById('bgMusic');
             const musicToggle = document.getElementById('musicToggle');
             const musicIcon = document.getElementById('musicIcon');
+            let hasInteracted = false;
 
             // Configuración inicial
             audio.volume = 0.3;
+
+            // Función para intentar reproducir
+            function attemptPlay() {
+                if (!hasInteracted) {
+                    audio.play()
+                        .then(() => {
+                            hasInteracted = true;
+                            musicIcon.className = 'fas fa-volume-up';
+                            console.log("Reproducción iniciada con éxito");
+                        })
+                        .catch(error => {
+                            console.log("Error en reproducción:", error);
+                        });
+                }
+            }
+
+            // Intentar reproducir en diferentes eventos
+            document.addEventListener('click', attemptPlay, { once: true });
+            document.addEventListener('touchstart', attemptPlay, { once: true });
+            document.addEventListener('scroll', attemptPlay, { once: true });
+            window.addEventListener('load', attemptPlay);
 
             // Toggle música
             musicToggle.addEventListener('click', function() {
@@ -404,16 +426,10 @@
                     musicIcon.className = 'fas fa-volume-mute';
                 });
             });
+        }
 
-            // Intentar reproducir al cargar
-            window.addEventListener('load', function() {
-                audio.play()
-                    .then(() => {
-                        musicIcon.className = 'fas fa-volume-up';
-                    })
-                    .catch(error => console.log('Error al reproducir:', error));
-            });
-        });
+        // Iniciar la funcionalidad de audio
+        initAudio();
     </script>
 
     <!-- Navigation -->
@@ -1228,12 +1244,12 @@
                     <span>Instagram</span>
                 </a>
                 <!-- TikTok -->
-                <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
+                <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fab fa-tiktok text-2xl"></i>
                     <span>TikTok</span>
                 </a>
                 <!-- Email -->
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
                     <i class="fas fa-envelope text-2xl"></i>
                     <span>Email</span>
                 </a>
@@ -1490,7 +1506,7 @@
     
     <!-- Control de música -->
     <div class="fixed bottom-4 right-4 z-50">
-        <button id="musicToggle" class="bg-orange-500 hover:bg-blue-900 text-white p-3 rounded-full shadow-lg transition-all">
+        <button id="musicToggle" class="bg-gold hover:bg-blue-900 text-white p-3 rounded-full shadow-lg transition-all">
             <i id="musicIcon" class="fas fa-volume-mute"></i>
         </button>
     </div>

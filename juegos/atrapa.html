@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Atrapa Notas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at center, #16142a 0%, #07070d 100%);
+      color: #f8fafc;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top Header Bar ── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #ffffff 0%, #a2a1a7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .logo-key {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn-back {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s;
+    }
+    .btn-back:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── Main Viewport ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 16px 12px;
+      gap: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── HUD Dashboard ── */
+    .hud {
+      width: 100%;
+      max-width: 820px;
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 8px 20px;
+      flex-shrink: 0;
+    }
+    .hud-block {
+      display: flex;
+      flex-direction: column;
+    }
+    .hud-label {
+      font-size: 0.68rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+    .hud-score {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f59e0b;
+      line-height: 1;
+    }
+    .hud-hearts {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      text-align: right;
+    }
+    .hud-hint {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #e2e8f0;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* ── Sight-Reading staff viewport ── */
+    .staff-box {
+      width: 100%;
+      max-width: 820px;
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 10px 16px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #big-staff-svg {
+      width: 100%;
+      max-width: 520px;
+      height: 135px;
+      display: block;
+    }
+
+    /* ── Game Canvas Stage ── */
+    .canvas-wrap {
+      flex: 1;
+      width: 100%;
+      max-width: 820px;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 4px 30px rgba(0,0,0,0.8);
+      min-height: 120px;
+    }
+    #game-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── Profe Toast Notification for losing a life ── */
+    .profe-toast {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: radial-gradient(circle at center, rgba(30, 27, 75, 0.98) 0%, rgba(15, 12, 45, 0.99) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(239, 68, 68, 0.2);
+      border-radius: 14px;
+      padding: 10px 14px;
+      max-width: 290px;
+      z-index: 200;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    .profe-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .profe-toast-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #ef4444;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .profe-toast-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .profe-toast-name {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #f87171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profe-toast-text {
+      font-size: 0.72rem;
+      color: #f1f5f9;
+      line-height: 1.3;
+      font-style: italic;
+    }
+
+    /* ── Floating Premium Dialogs ── */
+    .overlay-card {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 95%; max-width: 460px;
+      background: radial-gradient(circle at center, rgba(18, 15, 42, 0.99) 0%, rgba(6, 5, 20, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 24px;
+      text-align: center;
+      border-radius: 20px;
+      z-index: 100;
+    }
+    .overlay-card h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Profe Interaction Stickers (Horizontal Row for start overlay) */
+    .profe-sticker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin: 4px 0;
+      width: 100%;
+      max-width: 440px;
+      text-align: left;
+    }
+    .profe-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid #a78bfa;
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+      flex-shrink: 0;
+    }
+    .profe-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .profe-name {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profe-bubble {
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+    }
+
+    /* Profe Showcase Vertical Layout (Large representation for game over / win modals) */
+    .profe-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0;
+      width: 100%;
+    }
+    .profe-avatar-large {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.55);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .profe-avatar-large:hover {
+      transform: scale(1.06) rotate(2deg);
+    }
+    .profe-bubble-large {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+      position: relative;
+      max-width: 410px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.02);
+    }
+    .profe-bubble-large::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 8px 8px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.07) transparent;
+    }
+
+    /* Selectors Styling */
+    .selector-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin: 2px 0;
+      width: 100%;
+    }
+    .selector-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .speed-selector, .clef-selector, .color-selector {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-speed, .btn-clef, .btn-color {
+      background: rgba(255, 255, 255, 0.04);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 16px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-speed:hover, .btn-clef:hover, .btn-color:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .btn-speed.active, .btn-clef.active, .btn-color.active {
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 30px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 6px;
+    }
+    .btn-action:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+    }
+    .btn-action:active {
+      transform: translateY(1px);
+    }
+
+    /* ── True Centered Floating Modals (With Max Height + Scroll prevention) ── */
+    .end-modal {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 95%; max-width: 480px;
+      max-height: 96dvh;
+      overflow-y: auto;
+      background: radial-gradient(circle at center, rgba(18, 15, 42, 0.99) 0%, rgba(6, 5, 20, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.15);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 24px;
+      text-align: center;
+      border-radius: 20px;
+      z-index: 100;
+    }
+    
+    /* Scrollbar Styling for end-modal if screens are extremely short */
+    .end-modal::-webkit-scrollbar {
+      width: 6px;
+    }
+    .end-modal::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .end-modal::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .modal-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: 0px;
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+    }
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── The 3D Piano Keyboard ── */
+    .piano-wrap {
+      width: 100%;
+      max-width: 820px;
+      flex-shrink: 0;
+      padding: 2px 0 6px;
+    }
+
+    .piano {
+      position: relative;
+      width: 100%;
+      height: 125px;
+      display: flex;
+      background: #0f172a;
+      padding: 5px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.05);
+      user-select: none;
+    }
+
+    /* White keys with 3D feel */
+    .wkey {
+      flex: 1;
+      height: 100%;
+      background: linear-gradient(to bottom, #ffffff 0%, #f1f5f9 85%, #cbd5e1 100%);
+      color: #1e293b;
+      border: 1px solid #94a3b8;
+      border-radius: 0 0 6px 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 26px; 
+      font-size: 0.8rem;
+      font-weight: 800;
+      position: relative;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 0 #94a3b8, inset 0 2px 2px rgba(255, 255, 255, 0.8);
+      transition: transform 0.05s, box-shadow 0.05s;
+    }
+    
+    .wkey:active, .wkey.pressed {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #94a3b8, inset 0 1px 1px rgba(0,0,0,0.1);
+      background: linear-gradient(to bottom, #eaeef3 0%, #cbd5e1 100%);
+    }
+
+    /* Bottom color-coding pill */
+    .wkey::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--glow-color);
+      background-color: var(--glow-color);
+    }
+    
+    .wkey.do  { --glow-color: #ef4444; } 
+    .wkey.re  { --glow-color: #f97316; } 
+    .wkey.mi  { --glow-color: #eab308; } 
+    .wkey.fa  { --glow-color: #22c55e; } 
+    .wkey.sol { --glow-color: #06b6d4; } 
+    .wkey.la  { --glow-color: #1d4ed8; } 
+    .wkey.si  { --glow-color: #a855f7; } 
+    .wkey.do2 { --glow-color: #ef4444; } 
+
+    /* Black keys */
+    .black-keys {
+      position: absolute;
+      top: 5px; left: 5px;
+      width: calc(100% - 10px); height: calc(60% - 5px);
+      pointer-events: none;
+      z-index: 5;
+    }
+    .bkey {
+      position: absolute;
+      width: 5.2%;
+      max-width: 22px;
+      min-width: 12px;
+      height: 100%;
+      background: linear-gradient(to bottom, #1e1b4b 0%, #0f0c2e 80%, #030014 100%);
+      border-radius: 0 0 4px 4px;
+      border: 1px solid rgba(255,255,255,0.05);
+      transform: translateX(-50%);
+      box-shadow: 0 4px 3px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+    }
+
+    @media (max-height: 640px) {
+      .piano { height: 110px; }
+      .wkey { padding-bottom: 20px; }
+      #big-staff-svg { height: 110px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <span class="logo-text">SEVEN <span class="logo-key">KEYS</span> SCHOOL</span>
+    <a href="index.html" class="btn-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Menú
+    </a>
+  </div>
+
+  <main>
+    <!-- HUD -->
+    <div class="hud">
+      <div class="hud-block">
+        <span class="hud-label">Puntos</span>
+        <span class="hud-score" id="hud-score">0</span>
+      </div>
+      <div class="hud-hint">¿Qué nota es esta? Presiona la tecla abajo</div>
+      <div class="hud-block" style="align-items: flex-end;">
+        <span class="hud-label">Vidas</span>
+        <span class="hud-hearts" id="hearts-box">❤️❤️❤️</span>
+      </div>
+    </div>
+
+    <!-- Sight-Reading Staff Box -->
+    <div class="staff-box">
+      <svg id="big-staff-svg" viewBox="0 0 500 160" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <!-- Canvas (falling bubble) -->
+    <div class="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+      
+      <!-- Interactive Toast Alert when losing a life -->
+      <div class="profe-toast" id="profe-toast">
+        <img src="../img/profe_sad.jpg" class="profe-toast-avatar" alt="Teacher Juan Di">
+        <div class="profe-toast-content">
+          <span class="profe-toast-name">Teacher Juan Di</span>
+          <span class="profe-toast-text" id="profe-toast-text">"¡Tú puedes! ¡Inténtalo de nuevo!"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start overlay with Profe instructions (Friendly Normal Face) -->
+    <div class="overlay-card" id="start-overlay">
+      <h2>Atrapa Notas</h2>
+      
+      <!-- Profe Sticker (profe.jpg) -->
+      <div class="profe-sticker">
+        <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
+        <div class="profe-text-box">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble">
+            "¡Hola, hola! 🎶 ¿Listo para convertirte en un experto lector de partituras? Elige tu clave y velocidad favorita, ¡y vamos a divertirnos haciendo música!"
+          </div>
+        </div>
+      </div>
+      
+      <!-- Clef Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Clave:</span>
+        <div class="clef-selector">
+          <button class="btn-clef active" data-clef="treble">𝄞 Sol</button>
+          <button class="btn-clef" data-clef="bass">𝄢 Fa</button>
+        </div>
+      </div>
+
+      <!-- Bubble Color Mode Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Ayuda Visual (Burbujas):</span>
+        <div class="color-selector">
+          <button class="btn-color active" data-color-mode="colored">🎨 Con Color (Fácil)</button>
+          <button class="btn-color" data-color-mode="glass">💎 Sin Color (Desafío)</button>
+        </div>
+      </div>
+
+      <!-- Speed Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Velocidad:</span>
+        <div class="speed-selector">
+          <button class="btn-speed active" data-speed="slow">🐢 Lento</button>
+          <button class="btn-speed" data-speed="medium">🐇 Medio</button>
+          <button class="btn-speed" data-speed="fast">⚡ Rápido</button>
+        </div>
+      </div>
+
+      <button class="btn-action" id="btn-start">¡Iniciar Juego!</button>
+    </div>
+
+    <!-- Win modal with LARGE Profe celebrating (profe_celebrate.jpg) -->
+    <div class="end-modal" id="win-modal">
+      <div class="modal-icon">🏆</div>
+      <div class="modal-title">¡Excelente!</div>
+      
+      <!-- Large Profe Showcase Vertical Layout -->
+      <div class="profe-showcase">
+        <img src="../img/profe_celebrate.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+        <span class="profe-name">Teacher Juan Di</span>
+        <div class="profe-bubble-large">
+          "¡Wow, qué brillante! 🌟 ¡Me has dejado con la boca abierta! Tus ojos leen las notas a la velocidad de la luz. ¿Hacemos un trato? Desactiva los colores ahora mismo y demuéstrame que puedes leer como todo un pianista profesional. ¡Yo sé que tú puedes!"
+        </div>
+      </div>
+      
+      <!-- Clef Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Clave:</span>
+        <div class="clef-selector">
+          <button class="btn-clef active" data-clef="treble">𝄞 Sol</button>
+          <button class="btn-clef" data-clef="bass">𝄢 Fa</button>
+        </div>
+      </div>
+
+      <!-- Bubble Color Mode Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Ayuda Visual:</span>
+        <div class="color-selector">
+          <button class="btn-color active" data-color-mode="colored">🎨 Con Color</button>
+          <button class="btn-color" data-color-mode="glass">💎 Sin Color</button>
+        </div>
+      </div>
+
+      <!-- Speed Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Velocidad:</span>
+        <div class="speed-selector">
+          <button class="btn-speed active" data-speed="slow">🐢 Lento</button>
+          <button class="btn-speed" data-speed="medium">🐇 Medio</button>
+          <button class="btn-speed" data-speed="fast">⚡ Rápido</button>
+        </div>
+      </div>
+
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="location.href='index.html'">Menú</button>
+        <button class="btn-action" id="btn-restart-win">Jugar de nuevo</button>
+      </div>
+    </div>
+
+    <!-- Lose modal with LARGE Profe pensive/encouraging (profe_sad.jpg) -->
+    <div class="end-modal" id="lose-modal">
+      <div class="modal-icon">💫</div>
+      <div class="modal-title">¡Buen intento!</div>
+      
+      <!-- Large Profe Showcase Vertical Layout -->
+      <div class="profe-showcase">
+        <img src="../img/profe_sad.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+        <span class="profe-name">Teacher Juan Di</span>
+        <div class="profe-bubble-large">
+          "¡Ouch, estuvimos súper cerca! ⚡ No te preocupes, los mejores músicos fallan notas todo el tiempo. ¡La clave es no rendirse jamás! ¿Qué te parece si bajamos un poco el ritmo y lo intentamos de nuevo juntos? ¡Vamos!"
+        </div>
+      </div>
+      
+      <!-- Clef Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Clave:</span>
+        <div class="clef-selector">
+          <button class="btn-clef active" data-clef="treble">𝄞 Sol</button>
+          <button class="btn-clef" data-clef="bass">𝄢 Fa</button>
+        </div>
+      </div>
+
+      <!-- Bubble Color Mode Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Ayuda Visual:</span>
+        <div class="color-selector">
+          <button class="btn-color active" data-color-mode="colored">🎨 Con Color</button>
+          <button class="btn-color" data-color-mode="glass">💎 Sin Color</button>
+        </div>
+      </div>
+
+      <!-- Speed Selector -->
+      <div class="selector-group">
+        <span class="selector-label">Velocidad:</span>
+        <div class="speed-selector">
+          <button class="btn-speed active" data-speed="slow">🐢 Lento</button>
+          <button class="btn-speed" data-speed="medium">🐇 Medio</button>
+          <button class="btn-speed" data-speed="fast">⚡ Rápido</button>
+        </div>
+      </div>
+
+      <div class="modal-btns">
+        <button class="btn-secondary" onclick="location.href='index.html'">Menú</button>
+        <button class="btn-action" id="btn-restart-lose">Intentar de nuevo</button>
+      </div>
+    </div>
+
+    <!-- Piano keyboard -->
+    <div class="piano-wrap">
+      <div class="piano" id="piano">
+        <!-- 8 White keys -->
+        <button class="wkey do"  data-note="C">DO</button>
+        <button class="wkey re"  data-note="D">RE</button>
+        <button class="wkey mi"  data-note="E">MI</button>
+        <button class="wkey fa"  data-note="F">FA</button>
+        <button class="wkey sol" data-note="G">SOL</button>
+        <button class="wkey la"  data-note="A">LA</button>
+        <button class="wkey si"  data-note="B">SI</button>
+        <button class="wkey do2" data-note="C2">DO</button>
+
+        <!-- Black keys -->
+        <div class="black-keys">
+          <div class="bkey" style="left: 12.5%;"></div>
+          <div class="bkey" style="left: 25%;"></div>
+          <div class="bkey" style="left: 50%;"></div>
+          <div class="bkey" style="left: 62.5%;"></div>
+          <div class="bkey" style="left: 75%;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="atrapa.js"></script>
+</body>
+</html>
