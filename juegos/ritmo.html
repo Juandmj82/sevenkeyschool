@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Aventura Rítmica</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Custom styles for Rhythm Game */
+    .rhythm-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* Phase tabs selector */
+    .phase-selector {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    .btn-phase-tab {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .btn-phase-tab:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+    .btn-phase-tab.active {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: var(--color-gold);
+      color: var(--color-gold);
+      box-shadow: 0 0 10px var(--color-gold-glow);
+    }
+    .btn-phase-tab.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Phase Boards wrapper */
+    .phase-board {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      min-height: 280px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .phase-board.active {
+      display: flex;
+    }
+
+    /* Phase 1: Balanza visual assets */
+    .balance-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+    }
+    .balance-scale-graphic {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 40px;
+      width: 100%;
+      height: 120px;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    /* Scale fulcrum */
+    .balance-scale-graphic::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 20px 40px 20px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.15) transparent;
+      width: 0;
+      height: 0;
+    }
+    /* Beam */
+    .balance-beam {
+      position: absolute;
+      bottom: 40px;
+      left: 10%;
+      right: 10%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.3);
+      transform-origin: center;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    }
+    .balance-plate {
+      width: 110px;
+      height: 14px;
+      background: radial-gradient(circle, #2a2456 0%, #171435 100%);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      position: absolute;
+      bottom: 20px;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .balance-plate-label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .balance-plate.left {
+      left: 12%;
+    }
+    .balance-plate.right {
+      right: 12%;
+    }
+
+    /* Compás visualization box */
+    .compas-display {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(0,0,0,0.3);
+      border: 1.5px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 20px;
+      width: 100%;
+      max-width: 460px;
+      justify-content: center;
+      position: relative;
+    }
+    .compas-time-signature {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--color-gold);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+      text-align: center;
+      border-right: 2px solid rgba(255, 255, 255, 0.1);
+      padding-right: 15px;
+    }
+    .compas-slots {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 52px;
+    }
+
+    /* Toolbox of draggable / clickable musical figures */
+    .rhythm-toolbox {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .figure-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      width: 76px;
+      transition: all 0.2s ease;
+      user-select: none;
+      position: relative;
+    }
+    .figure-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--color-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+    }
+    .figure-card:active {
+      transform: translateY(0);
+    }
+    .figure-symbol {
+      font-size: 2.2rem;
+      line-height: 1;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f1f5f9;
+    }
+    .figure-value {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .figure-name-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Placed note items */
+    .placed-note-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1.5px solid var(--color-gold);
+      border-radius: 10px;
+      width: 48px;
+      height: 48px;
+      font-size: 1.8rem;
+      color: #ffffff;
+      position: relative;
+      cursor: pointer;
+      animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+    }
+    .placed-note-item:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+    .placed-note-item:hover::after {
+      content: '×';
+      position: absolute;
+      top: -6px; right: -6px;
+      background: #ef4444;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Phase 2: Dictation Specific */
+    .dictation-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .btn-play-rhythm {
+      background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%);
+      color: var(--bg-dark);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px var(--color-gold-glow);
+      transition: all 0.2s ease;
+    }
+    .btn-play-rhythm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+    .btn-play-rhythm:active {
+      transform: translateY(0);
+    }
+
+    /* Phase 3: Tapping Specific */
+    .tap-track-container {
+      width: 100%;
+      height: 90px;
+      background: rgba(0,0,0,0.4);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .tap-target-line {
+      position: absolute;
+      top: 0; left: 80px;
+      width: 4px; height: 100%;
+      background: var(--color-cyan);
+      box-shadow: 0 0 10px var(--color-cyan);
+      z-index: 5;
+    }
+    .tap-active-area {
+      position: absolute;
+      top: 0; left: 60px;
+      width: 44px; height: 100%;
+      background: rgba(0, 229, 255, 0.05);
+      border-left: 1px dashed rgba(0, 229, 255, 0.2);
+      border-right: 1px dashed rgba(0, 229, 255, 0.2);
+    }
+    .tap-scrolling-track {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .tap-pad-btn {
+      width: 100%;
+      max-width: 320px;
+      height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1e1b4b 0%, #111029 100%);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      user-select: none;
+    }
+    .tap-pad-btn:active, .tap-pad-btn.pressed {
+      transform: scale(0.96);
+      border-color: var(--color-cyan);
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, #1e1b4b 100%);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+    }
+    .tap-pad-value {
+      font-size: 0.65rem;
+      color: var(--color-cyan);
+      font-weight: 600;
+    }
+
+    /* Metronome visual indicator */
+    .metronome-visual-indicator {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 5px;
+    }
+    .metronome-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      transition: background 0.1s ease;
+    }
+    .metronome-dot.active {
+      background: var(--color-gold);
+      box-shadow: 0 0 8px var(--color-gold-glow);
+    }
+
+    /* Profe styles for overlays */
+    .profe-sticker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin: 8px 0;
+      width: 100%;
+      max-width: 420px;
+      text-align: left;
+    }
+    .profe-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid #a78bfa;
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+      flex-shrink: 0;
+    }
+    .profe-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .profe-name {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+    .profe-bubble {
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+    }
+
+    /* Profe Showcase Vertical Layout (Large representation for game over / win modals) */
+    .profe-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0 8px;
+      width: 100%;
+    }
+    .profe-avatar-large {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.55);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .profe-avatar-large:hover {
+      transform: scale(1.06) rotate(2deg);
+    }
+    .profe-bubble-large {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+      position: relative;
+      max-width: 410px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.02);
+    }
+    .profe-bubble-large::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 8px 8px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.07) transparent;
+    }
+
+    /* Modal layout overrides to match index.html styles and fix centering */
+    .overlay-modal {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      right: auto;
+      bottom: auto;
+      transform: translate(-50%, -50%);
+      width: 95%; max-width: 480px;
+      max-height: 96dvh;
+      overflow-y: auto;
+      background: radial-gradient(circle at center, rgba(18, 15, 42, 0.99) 0%, rgba(6, 5, 20, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.15);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 24px;
+      text-align: center;
+      border-radius: 20px;
+      z-index: 100;
+      animation: fadeInCentred 0.3s ease-out forwards;
+    }
+    @keyframes fadeInCentred {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    .modal-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: 0px;
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+    }
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Profe Toast Notification for mid-game mistakes */
+    .profe-toast {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: radial-gradient(circle at center, rgba(30, 27, 75, 0.98) 0%, rgba(15, 12, 45, 0.99) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(239, 68, 68, 0.2);
+      border-radius: 14px;
+      padding: 10px 14px;
+      max-width: 290px;
+      z-index: 200;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    .profe-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .profe-toast-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #ef4444;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .profe-toast-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .profe-toast-name {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #f87171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profe-toast-text {
+      font-size: 0.72rem;
+      color: #f1f5f9;
+      line-height: 1.3;
+      font-style: italic;
+    }
+
+    /* Header Logo size */
+    .header-logo {
+      height: 50px;
+      width: auto;
+      display: block;
+    }
+    
+    .start-prompt {
+      width: 95%;
+      max-width: 440px;
+      padding: 16px 20px;
+    }
+  </style>
+</head>
+<body class="game-page-layout">
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Menú Principal
+    </a>
+  </header>
+
+  <main>
+    <div class="rhythm-container">
+      <!-- Phase Selector Tabs -->
+      <div class="phase-selector">
+        <button class="btn-phase-tab active" id="tab-1" onclick="switchPhase(1)">Fase 1: Balanza de Tiempos</button>
+        <button class="btn-phase-tab locked" id="tab-2" onclick="switchPhase(2)" disabled>Fase 2: El Eco del Teacher</button>
+        <button class="btn-phase-tab locked" id="tab-3" onclick="switchPhase(3)" disabled>Fase 3: Sigue el Ritmo</button>
+      </div>
+
+      <!-- Game Main Card -->
+      <div class="game-container">
+        <!-- HUD / Stats -->
+        <div class="game-hud">
+          <div class="hud-group">
+            <div class="hud-item">
+              <span class="hud-label" id="hud-phase-name-label">Fase Actual</span>
+              <span class="hud-value gold" id="hud-phase-num">Fase 1</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">Reto</span>
+              <span class="hud-value" id="hud-challenge-desc">1 / 5</span>
+            </div>
+          </div>
+
+          <div class="hud-group">
+            <div class="hud-item" style="align-items: center;">
+              <span class="hud-label">Vidas</span>
+              <div class="hearts-container" id="hearts-box">
+                <span class="heart-filled">❤️</span>
+                <span class="heart-filled">❤️</span>
+                <span class="heart-filled">❤️</span>
+              </div>
+            </div>
+            <div class="hud-item" style="align-items: flex-end;">
+              <span class="hud-label">Puntaje</span>
+              <span class="hud-value" id="hud-score">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Overlay Screen -->
+        <div class="start-prompt" id="start-overlay" style="z-index: 80;">
+          <h2 style="font-weight: 800; font-size: 1.6rem; margin-bottom: 4px;" id="overlay-phase-title">Fase 1: Balanza de Tiempos</h2>
+          
+          <div class="profe-sticker">
+            <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
+            <div class="profe-text-box">
+              <span class="profe-name">Teacher Juan Di</span>
+              <div class="profe-bubble" id="overlay-phase-desc">
+                Cargando fase...
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-start-game" id="btn-start" style="margin-top: 4px;">Iniciar Fase</button>
+        </div>
+
+        <!-- ================= FASE 1 BOARD ================= -->
+        <div class="phase-board active" id="board-1">
+          <div class="balance-wrapper">
+            <!-- Balance scale graphic representation -->
+            <div class="balance-scale-graphic">
+              <!-- Left side plate (shows active compás contents) -->
+              <div class="balance-plate left" id="balance-plate-left">
+                <span class="balance-plate-label" style="color: #6366f1;">Tu compás</span>
+              </div>
+              <!-- Right side plate (shows target weights) -->
+              <div class="balance-plate right" id="balance-plate-right">
+                <span class="balance-plate-label" style="color: var(--color-gold);">Meta</span>
+              </div>
+              <!-- Beam linking plates -->
+              <div class="balance-beam" id="balance-beam"></div>
+            </div>
+
+            <!-- Target Compás display -->
+            <div class="compas-display">
+              <div class="compas-time-signature" id="compas-fraction">
+                <span>4</span>
+                <span>4</span>
+              </div>
+              <div class="compas-slots" id="compas-slots-container">
+                <!-- Added figures draw here -->
+                <span style="color: var(--text-muted); font-size: 0.8rem; font-style: italic;">Haz clic en una figura para agregarla...</span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.85rem; font-weight: 700; color: #a78bfa;" id="balance-status-label">
+              Tiempos: 0 / 4
+            </div>
+
+            <!-- Figures Toolbox -->
+            <div class="rhythm-toolbox" id="toolbox-1">
+              <!-- Negra -->
+              <div class="figure-card" onclick="addFigureToCompas('negra')">
+                <span class="figure-symbol">𝅘𝅥</span>
+                <span class="figure-name-tag">Negra</span>
+                <span class="figure-value">1 tiempo</span>
+              </div>
+              <!-- Blanca -->
+              <div class="figure-card" onclick="addFigureToCompas('blanca')">
+                <span class="figure-symbol">𝅗𝅥</span>
+                <span class="figure-name-tag">Blanca</span>
+                <span class="figure-value">2 tiempos</span>
+              </div>
+              <!-- Corcheas -->
+              <div class="figure-card" onclick="addFigureToCompas('corcheas')">
+                <span class="figure-symbol" style="letter-spacing: -6px; margin-right: 6px;">𝅘𝅥𝅮𝅘𝅥𝅮</span>
+                <span class="figure-name-tag">Corcheas</span>
+                <span class="figure-value">1 tiempo</span>
+              </div>
+              <!-- Silencio de negra -->
+              <div class="figure-card" onclick="addFigureToCompas('silencio-negra')">
+                <span class="figure-symbol">𝄽</span>
+                <span class="figure-name-tag">Silencio</span>
+                <span class="figure-value">1 tiempo</span>
+              </div>
+            </div>
+            
+            <button class="btn-primary" id="btn-check-balance" style="margin-top: 10px; width: 100%; max-width: 220px;" onclick="validateBalanceCompas()">Validar Balanza</button>
+          </div>
+        </div>
+
+        <!-- ================= FASE 2 BOARD ================= -->
+        <div class="phase-board" id="board-2">
+          <div class="dictation-control">
+            <div class="profe-sticker" style="max-width: 100%;">
+              <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
+              <div class="profe-text-box">
+                <span class="profe-name">Teacher Juan Di</span>
+                <div class="profe-bubble">
+                  "Escucha atentamente el ritmo que voy a tocar, y ordénalo en las casillas vacías de abajo."
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-play-rhythm" id="btn-play-sound" onclick="playTargetRhythm()">
+              <span>🔊 Escuchar Ritmo</span>
+            </button>
+            
+            <!-- Target Slot Boxes -->
+            <div class="compas-display" style="max-width: 100%;">
+              <div class="compas-time-signature">
+                <span>4</span>
+                <span>4</span>
+              </div>
+              <div class="compas-slots" id="dictation-slots-container">
+                <!-- Placed dictation cards go here -->
+              </div>
+            </div>
+
+            <!-- Figures Toolbox for dictation -->
+            <div class="rhythm-toolbox" id="toolbox-2">
+              <div class="figure-card" onclick="addFigureToDictation('negra')">
+                <span class="figure-symbol">𝅘𝅥</span>
+                <span class="figure-name-tag">Negra</span>
+              </div>
+              <div class="figure-card" onclick="addFigureToDictation('blanca')">
+                <span class="figure-symbol">𝅗𝅥</span>
+                <span class="figure-name-tag">Blanca</span>
+              </div>
+              <div class="figure-card" onclick="addFigureToDictation('corcheas')">
+                <span class="figure-symbol" style="letter-spacing: -6px; margin-right: 6px;">𝅘𝅥𝅮𝅘𝅥𝅮</span>
+                <span class="figure-name-tag">Corcheas</span>
+              </div>
+              <div class="figure-card" onclick="addFigureToDictation('silencio-negra')">
+                <span class="figure-symbol">𝄽</span>
+                <span class="figure-name-tag">Silencio</span>
+              </div>
+            </div>
+
+            <button class="btn-primary" id="btn-check-dictation" style="margin-top: 10px; width: 100%; max-width: 220px;" onclick="validateDictation()">Validar Eco</button>
+          </div>
+        </div>
+
+        <!-- ================= FASE 3 BOARD ================= -->
+        <div class="phase-board" id="board-3">
+          <div class="metronome-visual-indicator" id="metronome-dots-container">
+            <span class="metronome-dot" id="dot-0"></span>
+            <span class="metronome-dot" id="dot-1"></span>
+            <span class="metronome-dot" id="dot-2"></span>
+            <span class="metronome-dot" id="dot-3"></span>
+          </div>
+
+          <!-- Scrolling Track Canvas -->
+          <div class="tap-track-container">
+            <div class="tap-target-line"></div>
+            <div class="tap-active-area"></div>
+            <canvas class="tap-scrolling-track" id="tap-canvas"></canvas>
+          </div>
+
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--color-cyan);" id="tap-instruction-label">
+            Presiona ESPACIO o el botón cuando las figuras pasen por la línea azul
+          </div>
+
+          <!-- Big Tap Button -->
+          <button class="tap-pad-btn" id="tap-pad-trigger">
+            <span>¡TAP RITMO!</span>
+            <span class="tap-pad-value">(Barra Espaciadora)</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Feedback box -->
+      <div class="feedback-box" id="feedback-box" style="margin-top: 0.5rem;"></div>
+
+      <!-- Interactive Toast Alert when losing a life -->
+      <div class="profe-toast" id="profe-toast">
+        <img src="../img/profe_sad.jpg" class="profe-toast-avatar" alt="Teacher Juan Di">
+        <div class="profe-toast-content">
+          <span class="profe-toast-name">Teacher Juan Di</span>
+          <span class="profe-toast-text" id="profe-toast-text">"¡Tú puedes! ¡Inténtalo de nuevo!"</span>
+        </div>
+      </div>
+
+      <!-- Confetti Canvas -->
+      <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; border-radius: 24px;"></canvas>
+
+      <!-- Win Modal Overlay with Large Profe Celebrating -->
+      <div class="overlay-modal" id="win-modal">
+        <div class="modal-icon win">🏆</div>
+        <div class="modal-title" id="win-modal-title">¡Fase Completada!</div>
+        
+        <div class="profe-showcase">
+          <img src="../img/profe_celebrate.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large" id="win-message">
+            Excelente sentido del ritmo. ¡Has completado esta fase!
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-next-phase" onclick="loadNextPhase()">Siguiente Fase</button>
+        </div>
+      </div>
+
+      <!-- Lose Modal Overlay with Large Profe Encouraging -->
+      <div class="overlay-modal" id="lose-modal">
+        <div class="modal-icon lose">❌</div>
+        <div class="modal-title">Fin del Juego</div>
+        
+        <div class="profe-showcase">
+          <img src="../img/profe_sad.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large">
+            "¡Ouch, nos quedamos sin vidas! ⚡ Pero no te preocupes, el ritmo se aprende con la práctica constante. ¿Intentamos una vez más? ¡Vamos, tú puedes!"
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-restart" onclick="restartGame()">Intentar de Nuevo</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="ritmo.js"></script>
+</body>
+</html>

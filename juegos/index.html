@@ -392,6 +392,22 @@
           <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-purple) 0%, #a100bc 100%); color: var(--text-main);">¡Jugar!</button>
         </div>
       </div>
+
+      <!-- Aventura Rítmica Game -->
+      <div class="level-card" id="card-ritmo" onclick="showPreview('ritmo')" style="border-color: rgba(212, 175, 55, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.03) 100%);">
+        <div class="level-header">
+          <span class="level-number" style="color: var(--color-gold);">Juego de Ritmo</span>
+          <span class="level-status-icon">🥁</span>
+        </div>
+        <div class="level-info">
+          <h2>Aventura Rítmica</h2>
+          <p>Domina las figuras de duración musical (negras, corcheas, silencios) mediante divertidos retos de oído y precisión.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" style="color: var(--color-gold); border-color: rgba(212, 175, 55, 0.2); background: rgba(212, 175, 55, 0.05);">¡Nuevo!</span>
+          <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%); color: var(--bg-dark);">¡Jugar!</button>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -457,6 +473,16 @@
         notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
         avatar: "../img/profe_celebrate.jpg",
         url: "atrapa.html"
+      },
+      "ritmo": {
+        title: "Aventura Rítmica",
+        description: `"¡Prepárate para sentir el pulso! En este juego entrenaremos tu sentido del ritmo con divertidos retos: resolverás la balanza de compases, repetirás patrones al oído y harás tapping en tiempo real. ¡El ritmo está en tus manos!"`,
+        clef: "Compases rítmicos",
+        target: "Completar las 3 fases",
+        time: "Tiempo real / Metrónomo",
+        notes: ["Negras (𝅘𝅥)", "Corcheas (𝅘𝅥𝅮)", "Blancas (𝅗𝅥)", "Silencios (𝄽)"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "ritmo.html"
       }
     };
 
