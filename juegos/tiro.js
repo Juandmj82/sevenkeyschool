@@ -175,6 +175,11 @@ function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
   canvas.width = rect.width;
   canvas.height = rect.height;
+  
+  if (confettiCanvas) {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -449,71 +454,71 @@ class Laser {
 
     ctx.save();
     
-    // 1. Outer Glowing Energy Halo (Thick, low opacity cyan)
-    ctx.globalAlpha = this.life * 0.4;
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.3)";
-    ctx.lineWidth = 20 * this.life;
+    // 1. Thick Outer Glowing Energy Halo (Thick, low opacity cyan)
+    ctx.globalAlpha = this.life * 0.35;
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.25)";
+    ctx.lineWidth = 36 * this.life;
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
 
-    // 2. Mid Beam (Neon Cyan)
-    ctx.globalAlpha = this.life * 0.8;
+    // 2. Mid Beam (Broad Neon Cyan)
+    ctx.globalAlpha = this.life * 0.75;
     ctx.strokeStyle = "#00e5ff";
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = 25;
     ctx.shadowColor = "#00e5ff";
-    ctx.lineWidth = 7 * this.life;
+    ctx.lineWidth = 13 * this.life;
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
 
-    // 3. Hot Inner Core (Thin, pure white)
+    // 3. Hot Inner Core (Thicker, pure white)
     ctx.globalAlpha = this.life;
     ctx.strokeStyle = "#ffffff";
     ctx.shadowBlur = 0;
-    ctx.lineWidth = 2.5 * this.life;
+    ctx.lineWidth = 4 * this.life;
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
 
     // 3b. Crackling lightning electrical arcs (jagged path wrapping around laser)
-    ctx.globalAlpha = this.life * 0.7;
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.9)";
-    ctx.lineWidth = 1.8 * this.life;
+    ctx.globalAlpha = this.life * 0.8;
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.95)";
+    ctx.lineWidth = 3 * this.life;
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     const dx = this.endX - this.startX;
     const dy = this.endY - this.startY;
-    const steps = 5;
+    const steps = 6;
     for (let s = 1; s < steps; s++) {
-      const px = this.startX + (dx / steps) * s + (Math.random() * 16 - 8) * this.life;
-      const py = this.startY + (dy / steps) * s + (Math.random() * 16 - 8) * this.life;
+      const px = this.startX + (dx / steps) * s + (Math.random() * 26 - 13) * this.life;
+      const py = this.startY + (dy / steps) * s + (Math.random() * 26 - 13) * this.life;
       ctx.lineTo(px, py);
     }
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
 
-    // 4. Muzzle Plasma Flare at the bottom shooter point
-    const flareGrad = ctx.createRadialGradient(this.startX, this.startY, 0, this.startX, this.startY, 40 * this.life);
-    flareGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
-    flareGrad.addColorStop(0.3, "rgba(0, 229, 255, 0.7)");
+    // 4. Muzzle Plasma Flare at the bottom shooter point (Larger)
+    const flareGrad = ctx.createRadialGradient(this.startX, this.startY, 0, this.startX, this.startY, 58 * this.life);
+    flareGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+    flareGrad.addColorStop(0.3, "rgba(0, 229, 255, 0.85)");
     flareGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
     ctx.fillStyle = flareGrad;
     ctx.beginPath();
-    ctx.arc(this.startX, this.startY, 40 * this.life, 0, Math.PI * 2);
+    ctx.arc(this.startX, this.startY, 58 * this.life, 0, Math.PI * 2);
     ctx.fill();
 
-    // 5. Impact Plasma Flare at the target destination point
-    const hitGrad = ctx.createRadialGradient(this.endX, this.endY, 0, this.endX, this.endY, 28 * this.life);
-    hitGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
-    hitGrad.addColorStop(0.4, "rgba(0, 229, 255, 0.75)");
+    // 5. Impact Plasma Flare at the target destination point (Larger)
+    const hitGrad = ctx.createRadialGradient(this.endX, this.endY, 0, this.endX, this.endY, 44 * this.life);
+    hitGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
+    hitGrad.addColorStop(0.35, "rgba(0, 229, 255, 0.85)");
     hitGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
     ctx.fillStyle = hitGrad;
     ctx.beginPath();
-    ctx.arc(this.endX, this.endY, 28 * this.life, 0, Math.PI * 2);
+    ctx.arc(this.endX, this.endY, 44 * this.life, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
@@ -803,10 +808,9 @@ function restartWholeGame() {
 function triggerVictory() {
   isGameActive = false;
   
-  // Set up full-screen confetti canvas size and make visible
+  // Set up full-screen confetti canvas size
   confettiCanvas.width = window.innerWidth;
   confettiCanvas.height = window.innerHeight;
-  confettiCanvas.style.display = "block";
 
   // Trigger spectacular confetti rain
   confettis = [];
@@ -862,7 +866,6 @@ function closeAllModals() {
   document.getElementById("modal-victory").classList.remove("active");
   document.getElementById("modal-defeat").classList.remove("active");
   confettis = [];
-  confettiCanvas.style.display = "none";
 }
 
 // Main Canvas Loop (60 FPS)
@@ -943,9 +946,8 @@ function drawLoop() {
         }
       }
     }
-    if (confettis.length === 0) {
-      confettiCanvas.style.display = "none";
-    }
+  } else {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
   }
 
   requestAnimationFrame(drawLoop);
