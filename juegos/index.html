@@ -408,6 +408,22 @@
           <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%); color: var(--bg-dark);">¡Jugar!</button>
         </div>
       </div>
+
+      <!-- Tiro al Blanco Game -->
+      <div class="level-card" id="card-tiro" onclick="showPreview('tiro')" style="border-color: rgba(0, 229, 255, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 229, 255, 0.03) 100%);">
+        <div class="level-header">
+          <span class="level-number" style="color: #00e5ff;">Tiro al Blanco</span>
+          <span class="level-status-icon">🎯</span>
+        </div>
+        <div class="level-info">
+          <h2>Tiro al Blanco Rítmico</h2>
+          <p>Escucha el pulso de la figura y dispara a la burbuja correcta en una lluvia de figuras en movimiento.</p>
+        </div>
+        <div class="level-footer">
+          <span class="score-badge" style="color: #00e5ff; border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">¡Nuevo!</span>
+          <button class="btn-play-level" style="background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%); color: var(--bg-dark);">¡Jugar!</button>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -483,6 +499,16 @@
         notes: ["Negras (𝅘𝅥)", "Corcheas (𝅘𝅥𝅮)", "Blancas (𝅗𝅥)", "Silencios (𝄽)"],
         avatar: "../img/profe_celebrate.jpg",
         url: "ritmo.html"
+      },
+      "tiro": {
+        title: "Tiro al Blanco",
+        description: `"¡Apunta, escucha y dispara! En esta galería de tiro, el Teacher Juan Di te tocará una figura rítmica y tendrás una lluvia de burbujas flotantes en pantalla. Tendrás que disparar únicamente a la que coincida con el sonido. ¡Agudiza el oído y afina la puntería!"`,
+        clef: "Duración de figuras",
+        target: "Puntuación de 100 puntos",
+        time: "Lluvia de figuras",
+        notes: ["Negra (𝅘𝅥)", "Blanca (𝅗𝅥)", "Corcheas (𝅘𝅥𝅮)", "Silencio (𝄽)"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "tiro.html"
       }
     };
 
