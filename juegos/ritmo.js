@@ -53,11 +53,27 @@ let trackNotes = [];
 let tapScores = [];
 let metronomeActive = false;
 
-// Scrolling track figures database
+// Reading track figures database for Phase 3 (5 progressive challenges)
 const PHASE3_CHALLENGES = {
   1: {
-    notes: ["negra", "negra", "blanca", "silencio-negra", "negra", "corcheas", "negra"],
-    label: "Sigue el compás y haz tapping en el objetivo azul"
+    pattern: ["negra", "negra", "silencio-negra", "negra"],
+    label: "Sigue el compás de 4 tiempos. ¡No toques en los silencios!"
+  },
+  2: {
+    pattern: ["negra", "corcheas", "negra", "silencio-negra"],
+    label: "¡Cuidado con las corcheas rápidas y el silencio al final!"
+  },
+  3: {
+    pattern: ["blanca", "negra", "negra"],
+    label: "La blanca dura 2 tiempos. ¡Púlsala al inicio y mantén el tempo!"
+  },
+  4: {
+    pattern: ["corcheas", "silencio-negra", "corcheas", "negra"],
+    label: "Desafío rítmico sincopado: corcheas y silencios alternados"
+  },
+  5: {
+    pattern: ["blanca", "silencio-negra", "corcheas"],
+    label: "¡El reto rítmico final con Teacher Juan Di!"
   }
 };
 
@@ -645,19 +661,22 @@ function validateDictation() {
 // --- FASE 3: SIGUE EL RITMO (LECTURA DE COMPÁS ESTÁTICO) LOGIC ---
 
 let metronomeIntervalId = null;
-let tapsReceivedInCurrentBeat = 0;
-let phase3TargetPattern = ["negra", "negra", "silencio-negra", "negra"];
+let phase3NotesTapped = [];
 let isPreRolling = true;
 let preRollCount = 0;
+let phase3StartTime = 0;
 
 function setupPhase3Challenge() {
-  document.getElementById("hud-challenge-desc").textContent = "Desafío Único";
+  document.getElementById("hud-challenge-desc").textContent = `${activeChallenge} / 5`;
   
   const container = document.getElementById("reading-slots-container");
   container.innerHTML = "";
   
+  const cfg = PHASE3_CHALLENGES[activeChallenge];
+  const pattern = cfg.pattern;
+  
   // Render figures statically
-  phase3TargetPattern.forEach((fig, index) => {
+  pattern.forEach((fig, index) => {
     const item = document.createElement("div");
     item.className = "placed-note-item";
     item.id = `reading-slot-${index}`;
@@ -665,8 +684,8 @@ function setupPhase3Challenge() {
     container.appendChild(item);
   });
   
-  currentBeat = -1; // Start before beat 0 (intro pre-roll)
-  tapsReceivedInCurrentBeat = 0;
+  currentBeat = -1; 
+  phase3NotesTapped = new Array(pattern.length).fill(false);
   isPreRolling = true;
   preRollCount = 0;
   metronomeActive = true;
@@ -675,6 +694,7 @@ function setupPhase3Challenge() {
   document.querySelectorAll(".metronome-dot").forEach(d => d.classList.remove("active"));
   
   const tickPeriod = BEAT_DURATION_MS;
+  let nextExpectedTick = Date.now();
   
   function metronomeTick() {
     if (!metronomeActive || !isGameActive) return;
@@ -696,35 +716,32 @@ function setupPhase3Challenge() {
       if (preRollCount >= 4) {
         isPreRolling = false;
         currentBeat = -1; // Reset to start beat sequence on next tick
+        phase3StartTime = Date.now(); // Mark game start exactly here!
       }
     } else {
       // Gameplay clicks
       
-      // 1. Evaluate the PREVIOUS beat's taps (if we were on a valid beat)
-      if (currentBeat >= 0 && currentBeat < 4) {
-        const figType = phase3TargetPattern[currentBeat];
+      // 1. Evaluate the PREVIOUS beat's taps
+      if (currentBeat >= 0 && currentBeat < pattern.length) {
+        const figType = pattern[currentBeat];
         const isNote = figType !== "silencio-negra";
         
         if (isNote) {
-          if (tapsReceivedInCurrentBeat > 0) {
-            // Correct tap!
+          // If the note was not tapped, it's a miss!
+          if (!phase3NotesTapped[currentBeat]) {
+            handleTapMiss();
+            if (lives <= 0) return; // Stop if dead
+          } else {
+            // Correct hit! Add score
             score += 25;
             updateHUD();
             feedbackBox.className = "feedback-box feedback-correct";
             feedbackBox.textContent = "⭐ ¡Excelente!";
-          } else {
-            // Missed note!
-            handleTapMiss();
-            if (lives <= 0) return; // Stop if dead
           }
         } else {
           // Silence
-          if (tapsReceivedInCurrentBeat > 0) {
-            // Tapped on silence!
-            handleTapMiss();
-            if (lives <= 0) return;
-          } else {
-            // Respected silence!
+          // If they did NOT tap on silence, it's correct!
+          if (!phase3NotesTapped[currentBeat]) {
             score += 15;
             updateHUD();
             feedbackBox.className = "feedback-box feedback-correct";
@@ -732,9 +749,6 @@ function setupPhase3Challenge() {
           }
         }
       }
-      
-      // Reset tap counter
-      tapsReceivedInCurrentBeat = 0;
       
       // 2. Advance beat
       if (currentBeat >= 0) {
@@ -745,10 +759,19 @@ function setupPhase3Challenge() {
       
       currentBeat++;
       
-      if (currentBeat >= 4) {
-        // Complete!
+      if (currentBeat >= pattern.length) {
+        // Complete this challenge!
         stopPhase3Loop();
-        handlePhaseComplete();
+        
+        if (activeChallenge >= 5) {
+          handlePhaseComplete();
+        } else {
+          // Flash board success, load next challenge
+          feedbackBox.className = "feedback-box feedback-correct";
+          feedbackBox.textContent = "¡Compás completado con éxito!";
+          activeChallenge++;
+          setTimeout(setupPhase3Challenge, 1500);
+        }
         return;
       }
       
@@ -762,23 +785,29 @@ function setupPhase3Challenge() {
         else d.classList.remove("active");
       });
       
-      // Play tick sound
-      playWoodblockTone(currentBeat === 0 ? 900 : 600, 0.05, 0.35);
+      // Play guide tick sound
+      playWoodblockTone(currentBeat === 0 ? 900 : 600, 0.05, 0.25);
     }
     
-    metronomeIntervalId = setTimeout(metronomeTick, tickPeriod);
+    // Constant metronome sound scheduling to avoid timing drift
+    nextExpectedTick += tickPeriod;
+    const now = Date.now();
+    const drift = now - nextExpectedTick;
+    metronomeIntervalId = setTimeout(metronomeTick, Math.max(0, tickPeriod - drift));
   }
   
   // Start the tick loop
-  metronomeIntervalId = setTimeout(metronomeTick, 200);
+  nextExpectedTick = Date.now();
+  metronomeTick();
 }
 
 function handleTapInput() {
   if (currentPhase !== 3 || !isGameActive) return;
   initAudio();
   
-  // Play click response tone
-  playWoodblockTone(850, 0.04, 0.45);
+  // Play a completely different tone for the user's tap (bright chime bell!)
+  // So the GUIDE metronome click remains dry and constant, and the user hears their instrument sound separately!
+  playWoodblockTone(1200, 0.04, 0.35); // Clean high chime
   
   // Flash trigger button visual state
   const btn = document.getElementById("tap-pad-trigger");
@@ -789,16 +818,45 @@ function handleTapInput() {
   
   if (isPreRolling) return;
   
-  // Increment tap count for validation on tick
-  tapsReceivedInCurrentBeat++;
+  const tapTime = Date.now();
+  const relativeTapTime = tapTime - phase3StartTime;
   
-  // Immediate visual feedback on the slot card itself
-  const slot = document.getElementById(`reading-slot-${currentBeat}`);
-  if (slot) {
-    slot.style.transform = "scale(1.15)";
-    setTimeout(() => {
-      if (slot) slot.style.transform = "";
-    }, 120);
+  // Find which beat is closest to this tap
+  const cfg = PHASE3_CHALLENGES[activeChallenge];
+  const pattern = cfg.pattern;
+  const i = Math.round(relativeTapTime / BEAT_DURATION_MS);
+  
+  if (i >= 0 && i < pattern.length) {
+    const targetBeatTime = i * BEAT_DURATION_MS;
+    const diff = Math.abs(relativeTapTime - targetBeatTime);
+    
+    // Tolerancia amplia de 250ms
+    if (diff < 260) {
+      const figType = pattern[i];
+      if (figType === "silencio-negra") {
+        // Tapped on a silence! Error!
+        if (!phase3NotesTapped[i]) {
+          phase3NotesTapped[i] = true; // Mark to avoid duplicate misses
+          handleTapMiss();
+        }
+      } else {
+        // Tapped on a note!
+        if (!phase3NotesTapped[i]) {
+          phase3NotesTapped[i] = true;
+          // Trigger immediate scale feedback on the slot card itself
+          const slot = document.getElementById(`reading-slot-${i}`);
+          if (slot) {
+            slot.style.transform = "scale(1.15)";
+            setTimeout(() => {
+              if (slot) slot.style.transform = "";
+            }, 120);
+          }
+        }
+      }
+    } else {
+      // Tapped outside of any beat window (in no-man's land). Count as fail.
+      handleTapMiss();
+    }
   }
 }
 
