@@ -168,8 +168,8 @@ const arenaContainer = document.getElementById("arena-container");
 const crosshair = document.getElementById("crosshair-element");
 
 // Full-screen Confetti Canvas Setup (Null-safe)
-const confettiCanvas = document.getElementById("confetti-canvas");
-const confettiCtx = confettiCanvas ? confettiCanvas.getContext("2d") : null;
+let confettiCanvas = document.getElementById("confetti-canvas");
+let confettiCtx = confettiCanvas ? confettiCanvas.getContext("2d") : null;
 
 function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
@@ -811,7 +811,19 @@ function triggerVictory() {
   // Trigger spectacular confetti rain ONLY at the end of Level 5
   confettis = [];
   if (currentLevel === 5) {
-    for (let i = 0; i < 180; i++) {
+    let dynCanvas = document.getElementById("confetti-canvas");
+    if (!dynCanvas) {
+      dynCanvas = document.createElement("canvas");
+      dynCanvas.id = "confetti-canvas";
+      dynCanvas.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1100;";
+      document.body.appendChild(dynCanvas);
+    }
+    dynCanvas.width = window.innerWidth;
+    dynCanvas.height = window.innerHeight;
+    confettiCanvas = dynCanvas;
+    confettiCtx = dynCanvas.getContext("2d");
+
+    for (let i = 0; i < 220; i++) {
       confettis.push(new Confetti());
     }
   }
