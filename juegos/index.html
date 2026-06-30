@@ -362,6 +362,23 @@
         text-align: center;
         padding: 16px;
       }
+      .category-tabs {
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        padding: 4px 6px 12px 6px !important;
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+      }
+      .category-tabs::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+      }
+      .tab-btn {
+        flex-shrink: 0;
+        padding: 8px 14px !important;
+        font-size: 0.78rem !important;
+      }
     }
   </style>
 </head>
