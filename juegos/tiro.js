@@ -64,7 +64,7 @@ function playFigureSound(figureType, callback) {
   const now = audioCtx.currentTime;
 
   if (figureType === 'negra') {
-    playPianoTone(beatDurationMs * 0.45, now);
+    playPianoTone(beatDurationMs * 0.7, now);
     setTimeout(callback, beatDurationMs);
   } else if (figureType === 'blanca') {
     playPianoTone(beatDurationMs * 1.9, now);
@@ -166,6 +166,10 @@ const canvas = document.getElementById("shooting-canvas");
 const ctx = canvas.getContext("2d");
 const arenaContainer = document.getElementById("arena-container");
 const crosshair = document.getElementById("crosshair-element");
+
+// Full-screen Confetti Canvas Setup
+const confettiCanvas = document.getElementById("confetti-canvas");
+const confettiCtx = confettiCanvas.getContext("2d");
 
 function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
@@ -550,7 +554,7 @@ let confettis = [];
 // Confetti particle class for victory celebrations
 class Confetti {
   constructor() {
-    this.x = Math.random() * canvas.width;
+    this.x = Math.random() * window.innerWidth;
     this.y = Math.random() * -100 - 20;
     this.size = Math.random() * 8 + 6;
     this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
@@ -797,9 +801,14 @@ function nextTiroLevel() {
 function triggerVictory() {
   isGameActive = false;
   
+  // Set up full-screen confetti canvas size and make visible
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+  confettiCanvas.style.display = "block";
+
   // Trigger spectacular confetti rain
   confettis = [];
-  for (let i = 0; i < 130; i++) {
+  for (let i = 0; i < 150; i++) {
     confettis.push(new Confetti());
   }
 
@@ -832,6 +841,8 @@ function closeAllModals() {
   document.getElementById("modal-start").classList.remove("active");
   document.getElementById("modal-victory").classList.remove("active");
   document.getElementById("modal-defeat").classList.remove("active");
+  confettis = [];
+  confettiCanvas.style.display = "none";
 }
 
 // Main Canvas Loop (60 FPS)
@@ -887,20 +898,33 @@ function drawLoop() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // Update & Draw Confetti rain on victory
-  for (let i = confettis.length - 1; i >= 0; i--) {
-    const c = confettis[i];
-    c.update();
-    c.draw();
-    if (c.y > canvas.height + 20) {
-      // Recycle confetti while the victory screen is open to keep it festive
-      if (confettis.length < 150 && Math.random() < 0.08) {
-        c.y = -20;
-        c.x = Math.random() * canvas.width;
-        c.speedY = Math.random() * 4 + 2;
-      } else {
-        confettis.splice(i, 1);
+  // Update & Draw Confetti rain on victory (rendering on the full-screen confettiCtx)
+  if (confettis.length > 0) {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    for (let i = confettis.length - 1; i >= 0; i--) {
+      const c = confettis[i];
+      c.update();
+      
+      confettiCtx.save();
+      confettiCtx.translate(c.x, c.y);
+      confettiCtx.rotate(c.rotation * Math.PI / 180);
+      confettiCtx.fillStyle = c.color;
+      confettiCtx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+      confettiCtx.restore();
+
+      if (c.y > confettiCanvas.height + 20) {
+        // Recycle confetti while the victory screen is open to keep it festive
+        if (confettis.length < 150 && !isGameActive) {
+          c.y = -20;
+          c.x = Math.random() * confettiCanvas.width;
+          c.speedY = Math.random() * 4 + 2;
+        } else {
+          confettis.splice(i, 1);
+        }
       }
+    }
+    if (confettis.length === 0) {
+      confettiCanvas.style.display = "none";
     }
   }
 
