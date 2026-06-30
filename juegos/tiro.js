@@ -64,7 +64,7 @@ function playFigureSound(figureType, callback) {
   const now = audioCtx.currentTime;
 
   if (figureType === 'negra') {
-    playPianoTone(beatDurationMs * 0.9, now);
+    playPianoTone(beatDurationMs * 0.45, now);
     setTimeout(callback, beatDurationMs);
   } else if (figureType === 'blanca') {
     playPianoTone(beatDurationMs * 1.9, now);
@@ -475,6 +475,23 @@ class Laser {
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
 
+    // 3b. Crackling lightning electrical arcs (jagged path wrapping around laser)
+    ctx.globalAlpha = this.life * 0.7;
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.9)";
+    ctx.lineWidth = 1.8 * this.life;
+    ctx.beginPath();
+    ctx.moveTo(this.startX, this.startY);
+    const dx = this.endX - this.startX;
+    const dy = this.endY - this.startY;
+    const steps = 5;
+    for (let s = 1; s < steps; s++) {
+      const px = this.startX + (dx / steps) * s + (Math.random() * 16 - 8) * this.life;
+      const py = this.startY + (dy / steps) * s + (Math.random() * 16 - 8) * this.life;
+      ctx.lineTo(px, py);
+    }
+    ctx.lineTo(this.endX, this.endY);
+    ctx.stroke();
+
     // 4. Muzzle Plasma Flare at the bottom shooter point
     const flareGrad = ctx.createRadialGradient(this.startX, this.startY, 0, this.startX, this.startY, 40 * this.life);
     flareGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
@@ -528,6 +545,36 @@ class Shockwave {
   }
 }
 let shockwaves = [];
+let confettis = [];
+
+// Confetti particle class for victory celebrations
+class Confetti {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * -100 - 20;
+    this.size = Math.random() * 8 + 6;
+    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    this.speedX = Math.random() * 4 - 2;
+    this.speedY = Math.random() * 4 + 2;
+    this.rotation = Math.random() * 360;
+    this.rotationSpeed = Math.random() * 12 - 6;
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.rotation += this.rotationSpeed;
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation * Math.PI / 180);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+    ctx.restore();
+  }
+}
 
 // Fire Laser Action
 function fireLaser(tx, ty) {
@@ -732,6 +779,7 @@ function selectTiroLevel(levelNum) {
 // Restart Level
 function restartTiroLevel() {
   closeAllModals();
+  confettis = [];
   startGame();
 }
 
@@ -748,6 +796,13 @@ function nextTiroLevel() {
 // Victory trigger
 function triggerVictory() {
   isGameActive = false;
+  
+  // Trigger spectacular confetti rain
+  confettis = [];
+  for (let i = 0; i < 130; i++) {
+    confettis.push(new Confetti());
+  }
+
   const modal = document.getElementById("modal-victory");
   
   if (currentLevel === 5) {
@@ -830,6 +885,23 @@ function drawLoop() {
     p.update();
     p.draw();
     if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  // Update & Draw Confetti rain on victory
+  for (let i = confettis.length - 1; i >= 0; i--) {
+    const c = confettis[i];
+    c.update();
+    c.draw();
+    if (c.y > canvas.height + 20) {
+      // Recycle confetti while the victory screen is open to keep it festive
+      if (confettis.length < 150 && Math.random() < 0.08) {
+        c.y = -20;
+        c.x = Math.random() * canvas.width;
+        c.speedY = Math.random() * 4 + 2;
+      } else {
+        confettis.splice(i, 1);
+      }
+    }
   }
 
   requestAnimationFrame(drawLoop);
