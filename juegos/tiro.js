@@ -708,8 +708,27 @@ function spawnBubbles() {
 function playCurrentFigureAudio() {
   if (isAudioPlaying || !isGameActive) return;
 
+  initAudio();
+  
+  // Try to resume if suspended (will succeed on click events)
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  // Double check if browser autoplay policy has blocked/suspended the AudioContext
+  if (audioCtx && audioCtx.state === 'suspended') {
+    isAudioPlaying = false;
+    const btn = document.getElementById("btn-play-prompt");
+    btn.classList.remove("playing");
+    btn.classList.add("pulse-attention");
+    btn.innerHTML = "🔊";
+    document.getElementById("sound-instructions").textContent = "¡Toca el altavoz 🔊 para activar el sonido!";
+    return;
+  }
+
   isAudioPlaying = true;
   const btn = document.getElementById("btn-play-prompt");
+  btn.classList.remove("pulse-attention");
   btn.classList.add("playing");
   btn.innerHTML = "⚡";
   
