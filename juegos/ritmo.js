@@ -824,10 +824,10 @@ function handleTapInput() {
   // Find which beat is closest to this tap
   const cfg = PHASE3_CHALLENGES[activeChallenge];
   const pattern = cfg.pattern;
-  const i = Math.round(relativeTapTime / BEAT_DURATION_MS);
+  const i = Math.round(relativeTapTime / BEAT_DURATION_MS) - 1;
   
   if (i >= 0 && i < pattern.length) {
-    const targetBeatTime = i * BEAT_DURATION_MS;
+    const targetBeatTime = (i + 1) * BEAT_DURATION_MS;
     const diff = Math.abs(relativeTapTime - targetBeatTime);
     
     // Tolerancia amplia de 250ms
