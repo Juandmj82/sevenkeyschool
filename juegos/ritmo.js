@@ -642,259 +642,163 @@ function validateDictation() {
   }
 }
 
-// --- FASE 3: SIGUE EL RITMO (TAPPING) LOGIC ---
+// --- FASE 3: SIGUE EL RITMO (LECTURA DE COMPÁS ESTÁTICO) LOGIC ---
 
-let canvas = null;
-let ctx = null;
-let tapTrackNotes = [];
 let metronomeIntervalId = null;
+let tapsReceivedInCurrentBeat = 0;
+let phase3TargetPattern = ["negra", "negra", "silencio-negra", "negra"];
+let isPreRolling = true;
+let preRollCount = 0;
 
 function setupPhase3Challenge() {
   document.getElementById("hud-challenge-desc").textContent = "Desafío Único";
   
-  canvas = document.getElementById("tap-canvas");
-  ctx = canvas.getContext("2d");
+  const container = document.getElementById("reading-slots-container");
+  container.innerHTML = "";
   
-  // Set track figures
-  const challengeNotes = PHASE3_CHALLENGES[1].notes;
-  tapTrackNotes = [];
-  
-  let currentOffsetTime = 1200; // Start delay in ms
-  challengeNotes.forEach(fig => {
-    tapTrackNotes.push({
-      type: fig,
-      time: currentOffsetTime,
-      duration: FIGURE_VALUES[fig] * BEAT_DURATION_MS,
-      tapped: false,
-      missed: false
-    });
-    currentOffsetTime += FIGURE_VALUES[fig] * BEAT_DURATION_MS;
+  // Render figures statically
+  phase3TargetPattern.forEach((fig, index) => {
+    const item = document.createElement("div");
+    item.className = "placed-note-item";
+    item.id = `reading-slot-${index}`;
+    item.innerHTML = `<span>${FIGURE_SYMBOLS[fig]}</span>`;
+    container.appendChild(item);
   });
   
-  // Add padding target at the end
-  const totalTrackDuration = currentOffsetTime + 1200;
-
+  currentBeat = -1; // Start before beat 0 (intro pre-roll)
+  tapsReceivedInCurrentBeat = 0;
+  isPreRolling = true;
+  preRollCount = 0;
   metronomeActive = true;
-  currentBeat = 0;
   
-  // Metronome visual ticks loop
+  // Reset metronome dots
+  document.querySelectorAll(".metronome-dot").forEach(d => d.classList.remove("active"));
+  
   const tickPeriod = BEAT_DURATION_MS;
-  let nextTickTime = Date.now();
   
   function metronomeTick() {
     if (!metronomeActive || !isGameActive) return;
-    const now = Date.now();
-    if (now >= nextTickTime) {
-      // Highlight dot
+    
+    if (isPreRolling) {
+      // 4 Intro clicks
+      playWoodblockTone(preRollCount === 0 ? 900 : 600, 0.03, 0.2);
+      
+      // Update visual metronome dots
+      document.querySelectorAll(".metronome-dot").forEach((d, idx) => {
+        if (idx === preRollCount) d.classList.add("active");
+        else d.classList.remove("active");
+      });
+      
+      feedbackBox.className = "feedback-box";
+      feedbackBox.textContent = `¡Sigue el pulso! Prepárate: ${4 - preRollCount}...`;
+      
+      preRollCount++;
+      if (preRollCount >= 4) {
+        isPreRolling = false;
+        currentBeat = -1; // Reset to start beat sequence on next tick
+      }
+    } else {
+      // Gameplay clicks
+      
+      // 1. Evaluate the PREVIOUS beat's taps (if we were on a valid beat)
+      if (currentBeat >= 0 && currentBeat < 4) {
+        const figType = phase3TargetPattern[currentBeat];
+        const isNote = figType !== "silencio-negra";
+        
+        if (isNote) {
+          if (tapsReceivedInCurrentBeat > 0) {
+            // Correct tap!
+            score += 25;
+            updateHUD();
+            feedbackBox.className = "feedback-box feedback-correct";
+            feedbackBox.textContent = "⭐ ¡Excelente!";
+          } else {
+            // Missed note!
+            handleTapMiss();
+            if (lives <= 0) return; // Stop if dead
+          }
+        } else {
+          // Silence
+          if (tapsReceivedInCurrentBeat > 0) {
+            // Tapped on silence!
+            handleTapMiss();
+            if (lives <= 0) return;
+          } else {
+            // Respected silence!
+            score += 15;
+            updateHUD();
+            feedbackBox.className = "feedback-box feedback-correct";
+            feedbackBox.textContent = "🤫 ¡Buen silencio!";
+          }
+        }
+      }
+      
+      // Reset tap counter
+      tapsReceivedInCurrentBeat = 0;
+      
+      // 2. Advance beat
+      if (currentBeat >= 0) {
+        // Remove highlight from previous slot
+        const prevSlot = document.getElementById(`reading-slot-${currentBeat}`);
+        if (prevSlot) prevSlot.classList.remove("highlighted");
+      }
+      
+      currentBeat++;
+      
+      if (currentBeat >= 4) {
+        // Complete!
+        stopPhase3Loop();
+        handlePhaseComplete();
+        return;
+      }
+      
+      // Highlight current slot
+      const currentSlot = document.getElementById(`reading-slot-${currentBeat}`);
+      if (currentSlot) currentSlot.classList.add("highlighted");
+      
+      // Highlight metronome dot
       document.querySelectorAll(".metronome-dot").forEach((d, idx) => {
         if (idx === currentBeat) d.classList.add("active");
         else d.classList.remove("active");
       });
       
-      // Play tick sound (Woodblock click)
-      // Highlight beat 1 with higher pitch
-      playWoodblockTone(currentBeat === 0 ? 900 : 600, 0.03, 0.2);
-      
-      currentBeat = (currentBeat + 1) % 4;
-      nextTickTime += tickPeriod;
-    }
-    metronomeIntervalId = setTimeout(metronomeTick, 10);
-  }
-  
-  metronomeTick();
-
-  // Scrolling game loop
-  const startTime = Date.now();
-  
-  function tapGameLoop() {
-    if (!isGameActive || currentPhase !== 3) return;
-    
-    const elapsed = Date.now() - startTime;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw visual tracks & scrolling figures
-    const targetLineX = 80;
-    
-    let allFinished = true;
-    
-    tapTrackNotes.forEach(note => {
-      // Position is relative to time (where X=80 is elapsed time)
-      // 0.25 pixels per millisecond speed
-      const noteX = targetLineX + (note.time - elapsed) * 0.08;
-      
-      // Only draw if within bounds
-      if (noteX > -100 && noteX < canvas.width + 100) {
-        // Draw note shape
-        ctx.beginPath();
-        let width = 50;
-        let color = "#c084fc"; // Negra color (Purple)
-        
-        if (note.type === "blanca") {
-          width = 95;
-          color = "#eab308"; // Blanca color (Gold)
-        } else if (note.type === "corcheas") {
-          width = 65;
-          color = "#6366f1"; // Corcheas color (Indigo)
-        } else if (note.type === "silencio-negra") {
-          width = 45;
-          color = "rgba(255, 255, 255, 0.18)"; // Silencio color
-        }
-        
-        // Draw shape block
-        ctx.fillStyle = color;
-        if (note.type === "silencio-negra") {
-          ctx.strokeStyle = "rgba(255,255,255,0.4)";
-          ctx.lineWidth = 2;
-          ctx.strokeRect(noteX - width/2, 20, width, 50);
-          
-          // Draw silence rest symbol
-          ctx.beginPath();
-          ctx.moveTo(noteX - 5, 30);
-          ctx.lineTo(noteX + 5, 36);
-          ctx.lineTo(noteX - 5, 44);
-          ctx.quadraticCurveTo(noteX + 5, 48, noteX + 1, 52);
-          ctx.quadraticCurveTo(noteX - 4, 56, noteX - 1, 60);
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
-        } else {
-          ctx.fillRect(noteX - width/2, 25, width, 40);
-          
-          // Draw standard note shape on top of the block
-          ctx.save();
-          if (note.type === "negra") {
-            ctx.beginPath();
-            ctx.ellipse(noteX - 5, 48, 6, 4.5, -20 * Math.PI / 180, 0, 2 * Math.PI);
-            ctx.fillStyle = "#ffffff";
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(noteX, 48);
-            ctx.lineTo(noteX, 28);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.2;
-            ctx.stroke();
-          } else if (note.type === "blanca") {
-            ctx.beginPath();
-            ctx.ellipse(noteX - 5, 48, 6, 4.5, -20 * Math.PI / 180, 0, 2 * Math.PI);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.2;
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(noteX, 48);
-            ctx.lineTo(noteX, 28);
-            ctx.stroke();
-          } else if (note.type === "corcheas") {
-            // First note
-            ctx.beginPath();
-            ctx.ellipse(noteX - 12, 48, 5, 3.8, -20 * Math.PI / 180, 0, 2 * Math.PI);
-            ctx.fillStyle = "#ffffff";
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(noteX - 7, 48);
-            ctx.lineTo(noteX - 7, 30);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.2;
-            ctx.stroke();
-            // Second note
-            ctx.beginPath();
-            ctx.ellipse(noteX + 4, 48, 5, 3.8, -20 * Math.PI / 180, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(noteX + 9, 48);
-            ctx.lineTo(noteX + 9, 30);
-            ctx.stroke();
-            // Connecting beam
-            ctx.beginPath();
-            ctx.moveTo(noteX - 7, 30);
-            ctx.lineTo(noteX + 9, 30);
-            ctx.lineWidth = 4.2;
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
-        
-        // Draw status indicators if tapped or missed
-        if (note.tapped) {
-          ctx.fillStyle = "rgba(34, 197, 94, 0.4)";
-          ctx.fillRect(noteX - width/2, 25, width, 40);
-        }
-      }
-      
-      // Detección de misses:
-      // Se marca error solo cuando el tiempo de tolerancia (180ms) expira por completo y la nota ya pasó la línea (350ms)
-      if (elapsed > note.time + 350 && !note.tapped && !note.missed && note.type !== "silencio-negra") {
-        note.missed = true;
-        handleTapMiss();
-      }
-      
-      if (!note.tapped && !note.missed) {
-        allFinished = false;
-      }
-    });
-    
-    // Check win condition
-    if (elapsed >= totalTrackDuration || allFinished) {
-      stopPhase3Loop();
-      handlePhaseComplete();
-      return;
+      // Play tick sound
+      playWoodblockTone(currentBeat === 0 ? 900 : 600, 0.05, 0.35);
     }
     
-    gameLoopTimer = requestAnimationFrame(tapGameLoop);
+    metronomeIntervalId = setTimeout(metronomeTick, tickPeriod);
   }
   
-  tapGameLoop();
+  // Start the tick loop
+  metronomeIntervalId = setTimeout(metronomeTick, 200);
 }
 
 function handleTapInput() {
   if (currentPhase !== 3 || !isGameActive) return;
   initAudio();
   
-  // Play tap monitor feedback
-  playWoodblockTone(800, 0.05, 0.35);
+  // Play click response tone
+  playWoodblockTone(850, 0.04, 0.45);
   
-  // Visual feedback on tap trigger
+  // Flash trigger button visual state
   const btn = document.getElementById("tap-pad-trigger");
   if (btn) {
     btn.classList.add("pressed");
     setTimeout(() => btn.classList.remove("pressed"), 100);
   }
   
-  const gameElapsed = Date.now() - (window.gameStartTime || Date.now());
+  if (isPreRolling) return;
   
-  let closestNote = null;
-  let minDiff = Infinity;
+  // Increment tap count for validation on tick
+  tapsReceivedInCurrentBeat++;
   
-  tapTrackNotes.forEach(note => {
-    if (note.tapped || note.missed) return;
-    const diff = Math.abs(note.time - gameElapsed);
-    if (diff < minDiff) {
-      minDiff = diff;
-      closestNote = note;
-    }
-  });
-
-  if (closestNote) {
-    if (closestNote.type === "silencio-negra") {
-      closestNote.missed = true;
-      handleTapMiss();
-      return;
-    }
-    
-    if (minDiff < 180) { // Tolerancia un poco más amplia (180ms) para mejorar la jugabilidad
-      closestNote.tapped = true;
-      score += 20;
-      updateHUD();
-      
-      feedbackBox.className = "feedback-box feedback-correct";
-      if (minDiff < 80) {
-        feedbackBox.textContent = "⭐ ¡Perfecto!";
-        playWoodblockTone(900, 0.08, 0.6);
-      } else {
-        feedbackBox.textContent = "👍 ¡Bien!";
-        playWoodblockTone(800, 0.08, 0.5);
-      }
-    }
+  // Immediate visual feedback on the slot card itself
+  const slot = document.getElementById(`reading-slot-${currentBeat}`);
+  if (slot) {
+    slot.style.transform = "scale(1.15)";
+    setTimeout(() => {
+      if (slot) slot.style.transform = "";
+    }, 120);
   }
 }
 
@@ -904,7 +808,7 @@ function handleTapMiss() {
   updateHUD();
   
   feedbackBox.className = "feedback-box feedback-wrong";
-  feedbackBox.textContent = "❌ ¡Fallo! Pierdes una vida.";
+  feedbackBox.textContent = "❌ ¡Fallo en el ritmo!";
   
   if (lives <= 0) {
     stopPhase3Loop();
@@ -917,7 +821,6 @@ function handleTapMiss() {
 function stopPhase3Loop() {
   metronomeActive = false;
   if (metronomeIntervalId) clearTimeout(metronomeIntervalId);
-  if (gameLoopTimer) cancelAnimationFrame(gameLoopTimer);
 }
 
 // --- GAME STATE HANDLERS ---
