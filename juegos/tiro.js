@@ -198,51 +198,16 @@ arenaContainer.addEventListener("mouseleave", () => {
   crosshair.style.display = "none";
 });
 
-// Charging shot state variable
-let activeChargingShot = null;
-
-// Play quick charging energy synthesizer sound
-function playChargeSound() {
-  initAudio();
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-  const now = audioCtx.currentTime;
-  const osc = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-  
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(150, now);
-  osc.frequency.exponentialRampToValueAtTime(700, now + 0.22);
-  
-  gainNode.gain.setValueAtTime(0.01, now);
-  gainNode.gain.linearRampToValueAtTime(0.18, now + 0.22);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-  
-  osc.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  osc.start(now);
-  osc.stop(now + 0.25);
-}
-
-// Click / Tap listener for shooting (charges first, then fires)
+// Click / Tap listener for shooting (instant fire)
 arenaContainer.addEventListener("pointerdown", (e) => {
-  if (!isGameActive || isAudioPlaying || activeChargingShot) return;
+  if (!isGameActive || isAudioPlaying) return;
   e.preventDefault();
 
   const rect = arenaContainer.getBoundingClientRect();
   const clickX = e.clientX - rect.left;
   const clickY = e.clientY - rect.top;
 
-  // Start charging shot
-  activeChargingShot = {
-    tx: clickX,
-    ty: clickY,
-    timeStart: Date.now(),
-    duration: 250
-  };
-
-  playChargeSound();
+  fireLaser(clickX, clickY);
 });
 
 // Configure figures database per level
@@ -888,14 +853,7 @@ function triggerDefeat() {
   document.getElementById("modal-defeat").classList.add("active");
 }
 
-// Modal closing helpers
-function closeStartModal() {
-  document.getElementById("modal-start").classList.remove("active");
-  startGame();
-}
-
 function closeAllModals() {
-  document.getElementById("modal-start").classList.remove("active");
   document.getElementById("modal-victory").classList.remove("active");
   document.getElementById("modal-defeat").classList.remove("active");
   confettis = [];
@@ -957,49 +915,19 @@ function drawLoop() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // Update and Draw Charging Shot energy flare if active
-  if (activeChargingShot) {
-    const elapsed = Date.now() - activeChargingShot.timeStart;
-    const pct = Math.min(elapsed / activeChargingShot.duration, 1.0);
-    
-    const sx = canvas.width / 2;
-    const sy = canvas.height;
-    
-    ctx.save();
-    // Glowing plasma core at shooter point
-    const chargeRadius = pct * 42;
-    const chargeGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, chargeRadius);
-    chargeGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
-    chargeGrad.addColorStop(0.35, "rgba(0, 229, 255, 0.8)");
-    chargeGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
-    ctx.fillStyle = chargeGrad;
-    ctx.beginPath();
-    ctx.arc(sx, sy, chargeRadius, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Crackling energy convergence arcs sucking power in
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.9)";
-    ctx.lineWidth = 2.5 * pct;
-    const arcCount = 4;
-    for (let a = 0; a < arcCount; a++) {
-      const angle = (a / arcCount) * Math.PI + Math.random() * 0.4;
-      const dist = 70 * (1.0 - pct) + 12;
-      const ax = sx + Math.cos(angle) * dist;
-      const ay = sy - Math.sin(angle) * dist;
-      ctx.beginPath();
-      ctx.moveTo(ax, ay);
-      ctx.quadraticCurveTo(sx + (Math.random() * 24 - 12), sy - dist / 2, sx, sy);
-      ctx.stroke();
-    }
-    ctx.restore();
-    
-    if (pct === 1.0) {
-      const tx = activeChargingShot.tx;
-      const ty = activeChargingShot.ty;
-      activeChargingShot = null;
-      fireLaser(tx, ty);
-    }
-  }
+  // Draw Permanent Laser Emitter Core Light at the center bottom
+  const sx = canvas.width / 2;
+  const sy = canvas.height;
+  ctx.save();
+  const emitterGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 35);
+  emitterGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
+  emitterGrad.addColorStop(0.3, "rgba(0, 229, 255, 0.85)");
+  emitterGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
+  ctx.fillStyle = emitterGrad;
+  ctx.beginPath();
+  ctx.arc(sx, sy, 35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
 
   // Update & Draw Confetti rain on victory (rendering on the full-screen confettiCtx overlaying the modal)
   if (confettis.length > 0 && confettiCtx && confettiCanvas) {
@@ -1033,5 +961,6 @@ function drawLoop() {
   requestAnimationFrame(drawLoop);
 }
 
-// Run the render loop
+// Run the render loop and start the game
 drawLoop();
+startGame();
