@@ -1,11 +1,53 @@
 // ================= TIRO AL BLANCO RÍTMICO GAME ENGINE =================
 
-// Audio Synthesizer via Web Audio API
+// Audio Synthesizer and Grand Piano Sample Preloading
 let audioCtx = null;
+let pianoBuffer = null;
 
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    loadPianoSample();
+  }
+}
+
+// Preload the grand piano C4 sample from acoustic soundfont repository
+function loadPianoSample() {
+  const url = "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/C4.mp3";
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error("Fetch failed");
+      return response.arrayBuffer();
+    })
+    .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+    .then(audioBuffer => {
+      pianoBuffer = audioBuffer;
+      console.log("Real grand piano sample C4 loaded successfully for Tiro al Blanco.");
+    })
+    .catch(err => {
+      console.warn("Failed to load real piano sample, using synthesizer backup.", err);
+    });
+}
+
+// Play real piano sound with a specific duration to model figures
+function playPianoTone(durationMs, startTime) {
+  if (pianoBuffer) {
+    const source = audioCtx.createBufferSource();
+    const gainNode = audioCtx.createGain();
+    source.buffer = pianoBuffer;
+    
+    gainNode.gain.setValueAtTime(0.6, startTime);
+    // Simulate key release (dampening) by fading out at the end of the duration
+    gainNode.gain.setValueAtTime(0.6, startTime + (durationMs / 1000) - 0.05);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + (durationMs / 1000));
+    
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    source.start(startTime);
+    source.stop(startTime + (durationMs / 1000));
+  } else {
+    // Backup synthetic flute-like tone at middle C (261.63 Hz)
+    playTone(261.63, durationMs, startTime);
   }
 }
 
@@ -22,17 +64,14 @@ function playFigureSound(figureType, callback) {
   const now = audioCtx.currentTime;
 
   if (figureType === 'negra') {
-    // 1 beat of a clean synth note
-    playTone(440, beatDurationMs * 0.9, now);
+    playPianoTone(beatDurationMs * 0.9, now);
     setTimeout(callback, beatDurationMs);
   } else if (figureType === 'blanca') {
-    // 2 beats of a clean synth note
-    playTone(440, beatDurationMs * 1.9, now);
+    playPianoTone(beatDurationMs * 1.9, now);
     setTimeout(callback, beatDurationMs * 2);
   } else if (figureType === 'corcheas') {
-    // Two fast eighth notes in 1 beat
-    playTone(440, beatDurationMs * 0.35, now);
-    playTone(440, beatDurationMs * 0.35, now + (beatDurationMs * 0.5) / 1000);
+    playPianoTone(beatDurationMs * 0.35, now);
+    playPianoTone(beatDurationMs * 0.35, now + (beatDurationMs * 0.5) / 1000);
     setTimeout(callback, beatDurationMs);
   } else if (figureType === 'silencio-negra') {
     // Metronome woodblock click to show a beat passed, but silence for the note
@@ -534,6 +573,9 @@ function setupNextRound() {
   
   // Prompt instructions
   document.getElementById("sound-instructions").textContent = "¡Haz clic en el altavoz para escuchar el ritmo!";
+
+  // Autoplay next sound automatically after a brief delay
+  setTimeout(playCurrentFigureAudio, 600);
 }
 
 // Ensure the target figure exists in the current floating bubble list
@@ -605,6 +647,9 @@ function startGame() {
   updateHUD();
   spawnBubbles();
   ensurePromptFigureExists();
+
+  // Autoplay the first prompt automatically after a short delay
+  setTimeout(playCurrentFigureAudio, 800);
 }
 
 // Update DOM HUD values
