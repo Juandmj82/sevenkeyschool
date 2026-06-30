@@ -8,6 +8,65 @@
   <style>
 
 
+    /* Premium Full Cover Card layout for all 9 cards */
+    .level-card.has-full-cover {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .level-card.has-full-cover .level-cover {
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .level-card.has-full-cover .level-cover img {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      object-fit: contain !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .level-card.has-full-cover:hover:not(.locked) .level-cover img {
+      transform: scale(1.05);
+    }
+    .level-card.has-full-cover .level-header-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .level-card.has-full-cover .level-header-overlay .level-status-icon {
+      background: rgba(11, 13, 25, 0.85);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .level-card.has-full-cover .level-footer {
+      padding: 1rem 1.2rem 1.2rem 1.2rem !important;
+      margin-top: auto;
+      width: 100%;
+    }
+    
+    /* Make the grid fit cards perfectly */
+    .levels-grid {
+      grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)) !important;
+      gap: 1.8rem !important;
+    }
+
     /* Dashboard Title Animation */
     @keyframes titleSlideIn {
       from {
@@ -284,14 +343,12 @@
 
     <div class="levels-grid">
       <!-- Level 1 -->
-      <div class="level-card" id="card-1" onclick="showPreview(1)">
-        <div class="level-header">
-          <span class="level-number">Nivel 1</span>
-          <span class="level-status-icon" id="status-1">🔓</span>
-        </div>
-        <div class="level-info">
-          <h2>Clave de Sol Inicial</h2>
-          <p>Aprende las notas básicas en las líneas y espacios centrales: Do, Re, Mi, Fa, Sol.</p>
+      <div class="level-card has-full-cover" id="card-1" onclick="showPreview(1)">
+        <div class="level-cover">
+          <img src="../img/cover_sol_inicial.png" alt="Clave de Sol Inicial">
+          <div class="level-header-overlay">
+            <span class="level-status-icon" id="status-1">🔓</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-1">Récord: 0</span>
@@ -300,14 +357,12 @@
       </div>
 
       <!-- Level 2 -->
-      <div class="level-card locked" id="card-2" onclick="showPreview(2)">
-        <div class="level-header">
-          <span class="level-number">Nivel 2</span>
-          <span class="level-status-icon" id="status-2">🔒</span>
-        </div>
-        <div class="level-info">
-          <h2>Clave de Sol Octava</h2>
-          <p>Amplía tu lectura cubriendo una octava completa en el pentagrama de Sol (Do4 a Do5).</p>
+      <div class="level-card locked has-full-cover" id="card-2" onclick="showPreview(2)">
+        <div class="level-cover">
+          <img src="../img/cover_sol_octava.png" alt="Clave de Sol Octava">
+          <div class="level-header-overlay">
+            <span class="level-status-icon" id="status-2">🔒</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-2">Récord: 0</span>
@@ -316,14 +371,12 @@
       </div>
 
       <!-- Level 3 -->
-      <div class="level-card locked" id="card-3" onclick="showPreview(3)">
-        <div class="level-header">
-          <span class="level-number">Nivel 3</span>
-          <span class="level-status-icon" id="status-3">🔒</span>
-        </div>
-        <div class="level-info">
-          <h2>Clave de Fa Inicial</h2>
-          <p>Entra en el registro grave. Lee las notas fundamentales del pentagrama inferior (Do3 a Sol3).</p>
+      <div class="level-card locked has-full-cover" id="card-3" onclick="showPreview(3)">
+        <div class="level-cover">
+          <img src="../img/cover_fa_inicial.png" alt="Clave de Fa Inicial">
+          <div class="level-header-overlay">
+            <span class="level-status-icon" id="status-3">🔒</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-3">Récord: 0</span>
@@ -332,14 +385,12 @@
       </div>
 
       <!-- Level 4 -->
-      <div class="level-card locked" id="card-4" onclick="showPreview(4)">
-        <div class="level-header">
-          <span class="level-number">Nivel 4</span>
-          <span class="level-status-icon" id="status-4">🔒</span>
-        </div>
-        <div class="level-info">
-          <h2>Clave de Fa Octava</h2>
-          <p>Domina completamente el registro grave con una octava completa en clave de Fa.</p>
+      <div class="level-card locked has-full-cover" id="card-4" onclick="showPreview(4)">
+        <div class="level-cover">
+          <img src="../img/cover_fa_octava.png" alt="Clave de Fa Octava">
+          <div class="level-header-overlay">
+            <span class="level-status-icon" id="status-4">🔒</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-4">Récord: 0</span>
@@ -348,14 +399,12 @@
       </div>
 
       <!-- Level 5 -->
-      <div class="level-card locked" id="card-5" onclick="showPreview(5)">
-        <div class="level-header">
-          <span class="level-number">Nivel 5</span>
-          <span class="level-status-icon" id="status-5">🔒</span>
-        </div>
-        <div class="level-info">
-          <h2>Gran Desafío Mixto</h2>
-          <p>El reto definitivo: Claves de Sol y Fa combinadas, con tiempo de respuesta limitado por nota.</p>
+      <div class="level-card locked has-full-cover" id="card-5" onclick="showPreview(5)">
+        <div class="level-cover">
+          <img src="../img/cover_desafio_mixto.png" alt="Gran Desafío Mixto">
+          <div class="level-header-overlay">
+            <span class="level-status-icon" id="status-5">🔒</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-5">Récord: 0</span>
@@ -364,14 +413,12 @@
       </div>
 
       <!-- Custom Level -->
-      <div class="level-card" id="card-custom" onclick="window.location.href='custom.html'" style="border-color: rgba(0, 229, 255, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 229, 255, 0.03) 100%);">
-        <div class="level-header">
-          <span class="level-number" style="color: var(--color-cyan);">Personalizado</span>
-          <span class="level-status-icon">⚙️</span>
-        </div>
-        <div class="level-info">
-          <h2>Práctica a tu Medida</h2>
-          <p>Elige exactamente qué notas de la Clave de Sol y de Fa deseas practicar en tu sesión.</p>
+      <div class="level-card has-full-cover" id="card-custom" onclick="window.location.href='custom.html'" style="border-color: rgba(0, 229, 255, 0.2);">
+        <div class="level-cover">
+          <img src="../img/cover_custom.png" alt="Práctica Personalizada">
+          <div class="level-header-overlay">
+            <span class="level-status-icon">⚙️</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" style="color: var(--color-cyan); border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">Modo Libre</span>
@@ -380,14 +427,12 @@
       </div>
 
       <!-- Atrapa Notas Game -->
-      <div class="level-card" id="card-atrapa" onclick="showPreview('atrapa')" style="border-color: rgba(213, 0, 249, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(213, 0, 249, 0.03) 100%);">
-        <div class="level-header">
-          <span class="level-number" style="color: var(--color-purple);">Juego Infantil</span>
-          <span class="level-status-icon">🎮</span>
-        </div>
-        <div class="level-info">
-          <h2>Atrapa Notas</h2>
-          <p>Lee las notas que se muestran en el pentagrama y explota las burbujas correctas en el teclado.</p>
+      <div class="level-card has-full-cover" id="card-atrapa" onclick="showPreview('atrapa')" style="border-color: rgba(213, 0, 249, 0.2);">
+        <div class="level-cover">
+          <img src="../img/cover_atrapa.png" alt="Atrapa Notas">
+          <div class="level-header-overlay">
+            <span class="level-status-icon">🎮</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" style="color: var(--color-purple); border-color: rgba(213, 0, 249, 0.2); background: rgba(213, 0, 249, 0.05);">¡Nuevo!</span>
@@ -396,14 +441,12 @@
       </div>
 
       <!-- Aventura Rítmica Game -->
-      <div class="level-card" id="card-ritmo" onclick="showPreview('ritmo')" style="border-color: rgba(212, 175, 55, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.03) 100%);">
-        <div class="level-header">
-          <span class="level-number" style="color: var(--color-gold);">Juego de Ritmo</span>
-          <span class="level-status-icon">🥁</span>
-        </div>
-        <div class="level-info">
-          <h2>Aventura Rítmica</h2>
-          <p>Domina las figuras de duración musical (negras, corcheas, silencios) mediante divertidos retos de oído y precisión.</p>
+      <div class="level-card has-full-cover" id="card-ritmo" onclick="showPreview('ritmo')" style="border-color: rgba(212, 175, 55, 0.2);">
+        <div class="level-cover">
+          <img src="../img/cover_ritmo.png" alt="Aventura Rítmica">
+          <div class="level-header-overlay">
+            <span class="level-status-icon">🥁</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" style="color: var(--color-gold); border-color: rgba(212, 175, 55, 0.2); background: rgba(212, 175, 55, 0.05);">¡Nuevo!</span>
@@ -412,14 +455,12 @@
       </div>
 
       <!-- Tiro al Blanco Game -->
-      <div class="level-card" id="card-tiro" onclick="showPreview('tiro')" style="border-color: rgba(0, 229, 255, 0.2); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 229, 255, 0.03) 100%);">
-        <div class="level-header">
-          <span class="level-number" style="color: #00e5ff;">Tiro al Blanco</span>
-          <span class="level-status-icon">🎯</span>
-        </div>
-        <div class="level-info">
-          <h2>Tiro al Blanco Rítmico</h2>
-          <p>Escucha el pulso de la figura y dispara a la burbuja correcta en una lluvia de figuras en movimiento.</p>
+      <div class="level-card has-full-cover" id="card-tiro" onclick="showPreview('tiro')" style="border-color: rgba(0, 229, 255, 0.2);">
+        <div class="level-cover">
+          <img src="../img/cover_tiro.png" alt="Tiro al Blanco Rítmico">
+          <div class="level-header-overlay">
+            <span class="level-status-icon">🎯</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" style="color: #00e5ff; border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">¡Nuevo!</span>
