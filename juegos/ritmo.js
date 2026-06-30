@@ -822,8 +822,8 @@ function setupPhase3Challenge() {
       }
       
       // Detección de misses:
-      // If a non-rest note crosses the target line completely without being tapped
-      if (elapsed > note.time + 150 && !note.tapped && !note.missed && note.type !== "silencio-negra") {
+      // Se marca error solo cuando el tiempo de tolerancia (180ms) expira por completo y la nota ya pasó la línea (350ms)
+      if (elapsed > note.time + 350 && !note.tapped && !note.missed && note.type !== "silencio-negra") {
         note.missed = true;
         handleTapMiss();
       }
