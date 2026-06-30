@@ -293,6 +293,10 @@ function loadPhasePreview(phaseNum) {
 function handleStartClick() {
   initAudio();
   startOverlay.style.display = "none";
+  winModal.style.display = "none";
+  loseModal.style.display = "none";
+  feedbackBox.textContent = "";
+  feedbackBox.className = "feedback-box";
   isGameActive = true;
   score = 0;
   lives = 3;
