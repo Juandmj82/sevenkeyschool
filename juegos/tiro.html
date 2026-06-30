@@ -6,6 +6,17 @@
   <title>Seven Keys School | Tiro al Blanco Rítmico</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Override viewport lock for the Tiro game to prevent canvas truncation */
+    body.game-page-layout {
+      height: auto !important;
+      max-height: none !important;
+      overflow: auto !important;
+    }
+    body.game-page-layout .game-container {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
     /* Styling for the Shooting Gallery */
     .shooting-gallery-container {
       display: flex;
@@ -115,6 +126,8 @@
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
+      max-height: 385px;
+      margin: 0 auto;
       background: #080d16;
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 12px;
