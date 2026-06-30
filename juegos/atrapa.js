@@ -259,9 +259,10 @@ function drawStaff(noteObj) {
 
   if (chosenClefSetting === "treble") {
     // Centered exactly around the SOL line (Y = 102)
-    svgContent += `<text x="30" y="126" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="165" filter="url(#neon-glow)">𝄞</text>`;
+    svgContent += `<text x="30" y="114" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="100" filter="url(#neon-glow)">𝄞</text>`;
   } else {
-    svgContent += `<text x="30" y="110" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="120" filter="url(#neon-glow)">𝄢</text>`;
+    // Centered around the FA line (Y = 58)
+    svgContent += `<text x="30" y="118" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="80" filter="url(#neon-glow)">𝄢</text>`;
   }
 
   if (noteObj) {

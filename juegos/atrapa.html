@@ -555,10 +555,17 @@
       box-shadow: 0 4px 3px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
     }
 
-    @media (max-height: 640px) {
-      .piano { height: 110px; }
-      .wkey { padding-bottom: 20px; }
-      #big-staff-svg { height: 110px; }
+    @media (max-height: 680px) or (max-width: 600px) {
+      .top-bar { padding: 6px 12px; }
+      .logo-text { font-size: 0.85rem; }
+      main { padding: 4px 8px 8px; gap: 4px; }
+      .hud { padding: 4px 8px; font-size: 0.8rem; margin-bottom: 2px; }
+      .staff-box { padding: 4px 0; }
+      #big-staff-svg { height: 95px; }
+      .canvas-wrap { min-height: 85px; }
+      .piano { height: 90px; }
+      .wkey { padding-bottom: 16px; font-size: 0.7rem; }
+      .wkey::after { width: 8px; height: 8px; bottom: 4px; }
     }
   </style>
 </head>
