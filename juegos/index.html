@@ -59,6 +59,8 @@
       padding: 1rem 1.2rem 1.2rem 1.2rem !important;
       margin-top: auto;
       width: 100%;
+      display: flex;
+      justify-content: center;
     }
     
     /* Make the grid fit cards perfectly */
@@ -337,7 +339,7 @@
       <img src="../img/profe.jpg" class="profe-avatar-welcome" alt="Teacher Juan Di">
       <div class="profe-welcome-bubble">
         <span class="profe-name">Teacher Juan Di</span>
-        <p>"¡Hola! Elige tu nivel preferido abajo para empezar a practicar. Cada juego te ayudará a leer partituras a primera vista de forma divertida. ¡Vamos con toda!"</p>
+        <p>"¡Hola! Elige tu nivel preferido abajo para empezar a practicar. Cada juego te ayudará a desarrollar tus habilidades musicales y de lectura de forma divertida. ¡Vamos con toda!"</p>
       </div>
     </div>
 
@@ -351,7 +353,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" id="score-1">Récord: 0</span>
           <button class="btn-play-level">Jugar</button>
         </div>
       </div>
@@ -365,7 +366,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" id="score-2">Récord: 0</span>
           <button class="btn-play-level" disabled>Bloqueado</button>
         </div>
       </div>
@@ -379,7 +379,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" id="score-3">Récord: 0</span>
           <button class="btn-play-level" disabled>Bloqueado</button>
         </div>
       </div>
@@ -393,7 +392,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" id="score-4">Récord: 0</span>
           <button class="btn-play-level" disabled>Bloqueado</button>
         </div>
       </div>
@@ -407,7 +405,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" id="score-5">Récord: 0</span>
           <button class="btn-play-level" disabled>Bloqueado</button>
         </div>
       </div>
@@ -421,7 +418,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" style="color: var(--color-cyan); border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">Modo Libre</span>
           <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-cyan) 0%, #00b0c4 100%); color: var(--bg-dark);">Configurar</button>
         </div>
       </div>
@@ -435,7 +431,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" style="color: var(--color-purple); border-color: rgba(213, 0, 249, 0.2); background: rgba(213, 0, 249, 0.05);">¡Nuevo!</span>
           <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-purple) 0%, #a100bc 100%); color: var(--text-main);">¡Jugar!</button>
         </div>
       </div>
@@ -449,7 +444,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" style="color: var(--color-gold); border-color: rgba(212, 175, 55, 0.2); background: rgba(212, 175, 55, 0.05);">¡Nuevo!</span>
           <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%); color: var(--bg-dark);">¡Jugar!</button>
         </div>
       </div>
@@ -463,7 +457,6 @@
           </div>
         </div>
         <div class="level-footer">
-          <span class="score-badge" style="color: #00e5ff; border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05);">¡Nuevo!</span>
           <button class="btn-play-level" style="background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%); color: var(--bg-dark);">¡Jugar!</button>
         </div>
       </div>
@@ -582,7 +575,9 @@
 
         // Highscore display
         const hs = progress.highScores[i] || 0;
-        scoreBadge.textContent = `Récord: ${hs}`;
+        if (scoreBadge) {
+          scoreBadge.textContent = `Récord: ${hs}`;
+        }
 
         if (isUnlocked) {
           card.classList.remove("locked");
