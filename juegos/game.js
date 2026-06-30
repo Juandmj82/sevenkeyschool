@@ -540,7 +540,7 @@ function showEncouragementToast() {
   if (toastTimeout) clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => {
     toast.classList.remove("show");
-  }, 2600);
+  }, 1200);
 }
 
 function createConfetti() {

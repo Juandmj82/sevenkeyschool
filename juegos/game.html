@@ -212,6 +212,20 @@
       max-width: 440px;
       padding: 16px 20px;
     }
+
+    @media (max-width: 600px) {
+      .profe-toast {
+        bottom: 145px !important;
+        right: auto !important;
+        left: 50% !important;
+        transform: translate(-50%, 80px) !important;
+        max-width: 90% !important;
+        width: 290px !important;
+      }
+      .profe-toast.show {
+        transform: translate(-50%, 0) !important;
+      }
+    }
   </style>
 </head>
 <body class="game-page-layout">
