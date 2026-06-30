@@ -167,10 +167,19 @@ const ctx = canvas.getContext("2d");
 const arenaContainer = document.getElementById("arena-container");
 const crosshair = document.getElementById("crosshair-element");
 
+// Full-screen Confetti Canvas Setup (Null-safe)
+const confettiCanvas = document.getElementById("confetti-canvas");
+const confettiCtx = confettiCanvas ? confettiCanvas.getContext("2d") : null;
+
 function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
   canvas.width = rect.width;
   canvas.height = rect.height;
+  
+  if (confettiCanvas) {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -189,16 +198,51 @@ arenaContainer.addEventListener("mouseleave", () => {
   crosshair.style.display = "none";
 });
 
-// Click / Tap listener for shooting
+// Charging shot state variable
+let activeChargingShot = null;
+
+// Play quick charging energy synthesizer sound
+function playChargeSound() {
+  initAudio();
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(150, now);
+  osc.frequency.exponentialRampToValueAtTime(700, now + 0.22);
+  
+  gainNode.gain.setValueAtTime(0.01, now);
+  gainNode.gain.linearRampToValueAtTime(0.18, now + 0.22);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+  
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.25);
+}
+
+// Click / Tap listener for shooting (charges first, then fires)
 arenaContainer.addEventListener("pointerdown", (e) => {
-  if (!isGameActive || isAudioPlaying) return;
+  if (!isGameActive || isAudioPlaying || activeChargingShot) return;
   e.preventDefault();
 
   const rect = arenaContainer.getBoundingClientRect();
   const clickX = e.clientX - rect.left;
   const clickY = e.clientY - rect.top;
 
-  fireLaser(clickX, clickY);
+  // Start charging shot
+  activeChargingShot = {
+    tx: clickX,
+    ty: clickY,
+    timeStart: Date.now(),
+    duration: 250
+  };
+
+  playChargeSound();
 });
 
 // Configure figures database per level
@@ -550,7 +594,7 @@ let confettis = [];
 // Confetti particle class for victory celebrations
 class Confetti {
   constructor() {
-    this.x = Math.random() * canvas.width;
+    this.x = Math.random() * window.innerWidth;
     this.y = Math.random() * -100 - 20;
     this.size = Math.random() * 8 + 6;
     this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
@@ -799,10 +843,12 @@ function restartWholeGame() {
 function triggerVictory() {
   isGameActive = false;
 
-  // Trigger spectacular confetti rain
+  // Trigger spectacular confetti rain ONLY at the end of Level 5
   confettis = [];
-  for (let i = 0; i < 150; i++) {
-    confettis.push(new Confetti());
+  if (currentLevel === 5) {
+    for (let i = 0; i < 180; i++) {
+      confettis.push(new Confetti());
+    }
   }
 
   const modal = document.getElementById("modal-victory");
@@ -853,6 +899,9 @@ function closeAllModals() {
   document.getElementById("modal-victory").classList.remove("active");
   document.getElementById("modal-defeat").classList.remove("active");
   confettis = [];
+  if (confettiCtx && confettiCanvas) {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  }
 }
 
 // Main Canvas Loop (60 FPS)
@@ -908,30 +957,77 @@ function drawLoop() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // Update & Draw Confetti rain on victory (rendering on the main canvas)
-  if (confettis.length > 0) {
+  // Update and Draw Charging Shot energy flare if active
+  if (activeChargingShot) {
+    const elapsed = Date.now() - activeChargingShot.timeStart;
+    const pct = Math.min(elapsed / activeChargingShot.duration, 1.0);
+    
+    const sx = canvas.width / 2;
+    const sy = canvas.height;
+    
+    ctx.save();
+    // Glowing plasma core at shooter point
+    const chargeRadius = pct * 42;
+    const chargeGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, chargeRadius);
+    chargeGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
+    chargeGrad.addColorStop(0.35, "rgba(0, 229, 255, 0.8)");
+    chargeGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
+    ctx.fillStyle = chargeGrad;
+    ctx.beginPath();
+    ctx.arc(sx, sy, chargeRadius, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Crackling energy convergence arcs sucking power in
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.9)";
+    ctx.lineWidth = 2.5 * pct;
+    const arcCount = 4;
+    for (let a = 0; a < arcCount; a++) {
+      const angle = (a / arcCount) * Math.PI + Math.random() * 0.4;
+      const dist = 70 * (1.0 - pct) + 12;
+      const ax = sx + Math.cos(angle) * dist;
+      const ay = sy - Math.sin(angle) * dist;
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.quadraticCurveTo(sx + (Math.random() * 24 - 12), sy - dist / 2, sx, sy);
+      ctx.stroke();
+    }
+    ctx.restore();
+    
+    if (pct === 1.0) {
+      const tx = activeChargingShot.tx;
+      const ty = activeChargingShot.ty;
+      activeChargingShot = null;
+      fireLaser(tx, ty);
+    }
+  }
+
+  // Update & Draw Confetti rain on victory (rendering on the full-screen confettiCtx overlaying the modal)
+  if (confettis.length > 0 && confettiCtx && confettiCanvas) {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
     for (let i = confettis.length - 1; i >= 0; i--) {
       const c = confettis[i];
       c.update();
       
-      ctx.save();
-      ctx.translate(c.x, c.y);
-      ctx.rotate(c.rotation * Math.PI / 180);
-      ctx.fillStyle = c.color;
-      ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
-      ctx.restore();
+      confettiCtx.save();
+      confettiCtx.translate(c.x, c.y);
+      confettiCtx.rotate(c.rotation * Math.PI / 180);
+      confettiCtx.fillStyle = c.color;
+      confettiCtx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+      confettiCtx.restore();
 
-      if (c.y > canvas.height + 20) {
+      if (c.y > confettiCanvas.height + 20) {
         // Recycle confetti while the victory screen is open to keep it festive
-        if (confettis.length < 150 && !isGameActive) {
+        if (confettis.length < 180 && !isGameActive) {
           c.y = -20;
-          c.x = Math.random() * canvas.width;
+          c.x = Math.random() * confettiCanvas.width;
           c.speedY = Math.random() * 4 + 2;
         } else {
           confettis.splice(i, 1);
         }
       }
     }
+  } else if (confettiCtx && confettiCanvas) {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
   }
 
   requestAnimationFrame(drawLoop);
