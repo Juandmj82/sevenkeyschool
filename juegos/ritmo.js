@@ -7,8 +7,8 @@ let isGameActive = false;
 let audioCtx = null;
 
 // Metronome & Audio engine configuration
-const TEMPO_BPM = 110; 
-const BEAT_DURATION_MS = (60 / TEMPO_BPM) * 1000; // ~545ms
+const TEMPO_BPM = 80; 
+const BEAT_DURATION_MS = (60 / TEMPO_BPM) * 1000; // ~750ms
 
 // Phase 1 (Balanza) State
 let phase1PlacedFigures = [];
@@ -718,20 +718,24 @@ function setupPhase3Challenge() {
     tapTrackNotes.forEach(note => {
       // Position is relative to time (where X=80 is elapsed time)
       // 0.25 pixels per millisecond speed
-      const noteX = targetLineX + (note.time - elapsed) * 0.22;
+      const noteX = targetLineX + (note.time - elapsed) * 0.08;
       
       // Only draw if within bounds
       if (noteX > -100 && noteX < canvas.width + 100) {
         // Draw note shape
         ctx.beginPath();
-        let width = 30;
-        let color = "#c084fc"; // Corcheas/Negra color
+        let width = 50;
+        let color = "#c084fc"; // Negra color (Purple)
         
         if (note.type === "blanca") {
-          width = 60;
-          color = "#eab308";
+          width = 95;
+          color = "#eab308"; // Blanca color (Gold)
+        } else if (note.type === "corcheas") {
+          width = 65;
+          color = "#6366f1"; // Corcheas color (Indigo)
         } else if (note.type === "silencio-negra") {
-          color = "rgba(255,255,255,0.15)";
+          width = 45;
+          color = "rgba(255, 255, 255, 0.18)"; // Silencio color
         }
         
         // Draw shape block
