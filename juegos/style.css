@@ -571,6 +571,18 @@ main {
 
 /* Responsive Customizations */
 @media (max-width: 600px) {
+  .keyboard-container {
+    overflow-x: auto !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px !important;
+  }
+  .piano-key {
+    flex-shrink: 0 !important;
+  }
   .piano-key.white {
     width: 32px;
     height: 120px;
