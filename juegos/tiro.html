@@ -6,123 +6,161 @@
   <title>Seven Keys School | Tiro al Blanco Rítmico</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Override viewport lock for the Tiro game to prevent canvas truncation */
+    /* Premium Futuristic Sci-Fi UI Overrides */
     body.game-page-layout {
       height: 100vh;
       max-height: 100vh;
       overflow: hidden !important;
+      background: radial-gradient(circle at center, #0f1524 0%, #05070c 100%);
+      font-family: var(--font-main);
     }
     body.game-page-layout .game-container {
-      max-height: calc(100vh - 40px) !important;
+      max-height: calc(100vh - 20px) !important;
       overflow: hidden !important;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0.5rem 1rem;
     }
 
-    /* Styling for the Shooting Gallery */
+    /* Container holding the console */
     .shooting-gallery-container {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
       width: 100%;
-      max-width: 820px;
+      max-width: 860px;
       margin: 0 auto;
       align-self: center;
     }
 
-    /* Target board */
+    /* Cybernetic Console Board (Glassmorphic) */
     .gallery-board {
       position: relative;
       width: 100%;
-      background: var(--bg-card);
-      border: 1px solid rgba(0, 229, 255, 0.25);
-      border-radius: 16px;
-      padding: 0.8rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.05);
+      background: rgba(16, 22, 38, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px dashed rgba(0, 229, 255, 0.35);
+      border-radius: 20px;
+      padding: 1rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 
+                  0 0 30px rgba(0, 229, 255, 0.1),
+                  inset 0 0 20px rgba(0, 229, 255, 0.05);
       text-align: center;
       overflow: hidden;
     }
 
-    /* Scoreboard HUD */
+    /* HUD Sci-Fi Panels */
     .hud-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      padding: 0 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 0.6rem;
     }
-    .hud-item {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .hud-value {
-      color: #00e5ff;
-      text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
-    }
-    .lives-container {
-      display: flex;
-      gap: 4px;
-      font-size: 1.1rem;
-    }
-    .heart-icon {
-      color: #ff1744;
-      text-shadow: 0 0 8px rgba(255, 23, 68, 0.4);
-      transition: transform 0.2s ease;
-    }
-    .heart-icon.lost {
-      color: rgba(255, 255, 255, 0.1);
-      text-shadow: none;
-      transform: scale(0.8);
-    }
-
-    /* Sound Trigger Button Area */
-    .sound-trigger-area {
+    .hud-card {
+      background: rgba(8, 12, 22, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 2px solid #00e5ff;
+      border-radius: 12px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      margin-bottom: 0.5rem;
-      padding: 0.6rem;
-      background: rgba(255, 255, 255, 0.015);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 12px;
+      gap: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .btn-play-sound {
-      background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%);
-      color: var(--bg-dark);
-      border: none;
+    .hud-label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hud-value {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #00e5ff;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+    .lives-container {
+      display: flex;
+      gap: 6px;
+    }
+    .heart-icon {
+      font-size: 1.1rem;
+      color: #ff1744;
+      text-shadow: 0 0 10px rgba(255, 23, 68, 0.6);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .heart-icon.lost {
+      color: rgba(255, 255, 255, 0.05);
+      text-shadow: none;
+      transform: scale(0.7) rotate(-15deg);
+    }
+
+    /* Sound Trigger / Radar Console */
+    .sound-trigger-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 0.6rem;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(90deg, rgba(0, 229, 255, 0.01) 0%, rgba(0, 229, 255, 0.05) 50%, rgba(0, 229, 255, 0.01) 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 229, 255, 0.08);
+      position: relative;
+    }
+
+    /* Floating radar rotating circles around play button */
+    .radar-glowing-ring {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      border: 1px solid rgba(0, 229, 255, 0.15);
       border-radius: 50%;
-      width: 58px;
-      height: 58px;
-      font-size: 1.5rem;
+      animation: rotateRadar 10s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotateRadar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-play-sound {
+      background: radial-gradient(circle, #00f0ff 0%, #008899 100%);
+      color: var(--bg-dark);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
+      font-size: 1.3rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 15px rgba(0, 229, 255, 0.35);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 5;
     }
     .btn-play-sound:hover {
       transform: scale(1.08);
-      box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
-    }
-    .btn-play-sound:active {
-      transform: scale(0.95);
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
     }
     .btn-play-sound.playing {
-      animation: pulse-cyan 1s infinite alternate;
+      animation: pulse-cyan-button 0.8s infinite alternate;
       pointer-events: none;
     }
     .sound-hint-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 500;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* Target Canvas */
+    /* Canvas Arena (Sleek Tactical Targeting Look) */
     .canvas-container {
       position: relative;
       height: 36vh;
@@ -130,11 +168,12 @@
       max-height: 295px;
       aspect-ratio: 16 / 9;
       margin: 0 auto;
-      background: #080d16;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
+      background: #040810;
+      border: 1.5px solid rgba(0, 229, 255, 0.25);
+      border-radius: 14px;
       overflow: hidden;
       cursor: crosshair;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 229, 255, 0.05);
     }
     #shooting-canvas {
       display: block;
@@ -142,71 +181,83 @@
       height: 100%;
     }
 
-    /* Mira telescópica personalizada (opcional, dibujada en canvas o CSS) */
+    /* Cybernetic HUD Brackets in Canvas corners */
+    .canvas-bracket {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #00e5ff;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .bracket-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+    .bracket-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+    .bracket-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+    .bracket-br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+    /* Custom tactical target crosshair */
     .custom-crosshair {
       position: absolute;
-      width: 40px;
-      height: 40px;
-      border: 2px solid #00e5ff;
+      width: 44px;
+      height: 44px;
+      border: 1.5px dashed #00e5ff;
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       display: none;
       z-index: 10;
-      box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+      animation: spinCrosshair 12s linear infinite;
     }
-    .custom-crosshair::before, .custom-crosshair::after {
-      content: '';
-      position: absolute;
-      background: #00e5ff;
+    @keyframes spinCrosshair {
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
     .custom-crosshair::before {
-      top: 50%;
-      left: -5px;
-      width: 50px;
-      height: 2px;
-      transform: translateY(-50%);
-    }
-    .custom-crosshair::after {
-      left: 50%;
-      top: -5px;
-      height: 50px;
-      width: 2px;
-      transform: translateX(-50%);
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 4px; height: 4px;
+      background: #00e5ff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #00e5ff;
     }
 
-    /* Level HUD selector */
+    /* Level Selector (Futuristic Capsules) */
     .level-selector-row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       justify-content: center;
       width: 100%;
     }
     .btn-level-pill {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(16, 22, 38, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-muted);
       font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .btn-level-pill:hover {
-      background: rgba(0, 229, 255, 0.05);
-      border-color: rgba(0, 229, 255, 0.25);
+      background: rgba(0, 229, 255, 0.08);
+      border-color: rgba(0, 229, 255, 0.3);
+      color: var(--text-main);
     }
     .btn-level-pill.active {
-      background: rgba(0, 229, 255, 0.1);
+      background: rgba(0, 229, 255, 0.15);
       border-color: #00e5ff;
       color: #00e5ff;
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
     }
 
-    @keyframes pulse-cyan {
-      0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
-      100% { box-shadow: 0 0 35px rgba(0, 229, 255, 0.8); }
+    /* Animated buttons and glowing definitions */
+    @keyframes pulse-cyan-button {
+      0% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); transform: scale(1); }
+      100% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.8); transform: scale(1.05); }
     }
 
     /* Modal styles */
@@ -217,8 +268,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(8, 13, 22, 0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(4, 6, 12, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -227,22 +279,22 @@
       display: flex;
     }
     .modal-card {
-      background: radial-gradient(circle at center, rgba(20, 23, 41, 0.99) 0%, rgba(10, 12, 22, 1.0) 100%);
-      border: 1.5px solid rgba(0, 229, 255, 0.3);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 229, 255, 0.15);
-      border-radius: 20px;
-      padding: 2rem;
-      width: 90%;
+      background: radial-gradient(circle at center, #141b2d 0%, #07090f 100%);
+      border: 2px solid #00e5ff;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 229, 255, 0.25);
+      border-radius: 24px;
+      padding: 2.2rem;
+      width: 92%;
       max-width: 440px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.2rem;
-      animation: modalFadeIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      gap: 1.4rem;
+      animation: modalFadeIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
     @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.9); }
+      from { opacity: 0; transform: scale(0.85); }
       to { opacity: 1; transform: scale(1); }
     }
     .modal-avatar-container {
@@ -251,7 +303,7 @@
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #00e5ff;
-      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
       flex-shrink: 0;
     }
     .modal-avatar {
@@ -261,7 +313,7 @@
       display: block;
     }
     .modal-title {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       font-weight: 800;
       background: linear-gradient(135deg, #ffffff 0%, #00e5ff 100%);
       -webkit-background-clip: text;
@@ -270,45 +322,45 @@
     }
     .modal-desc {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-muted);
+      line-height: 1.6;
+      color: #94a3b8;
       margin: 0;
     }
     .instructions-details {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       text-align: left;
       width: 100%;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 12px;
+      background: rgba(0, 229, 255, 0.03);
+      border: 1px solid rgba(0, 229, 255, 0.15);
+      border-radius: 12px;
+      padding: 14px;
     }
     .detail-item {
       font-size: 0.85rem;
-      color: var(--text-main);
+      color: #f1f5f9;
     }
     .modal-btn {
       background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%);
-      color: var(--bg-dark);
+      color: #040810;
       border: none;
       border-radius: 50px;
-      padding: 10px 24px;
+      padding: 12px 24px;
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 1rem;
       cursor: pointer;
       width: 100%;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0, 229, 255, 0.25);
+      box-shadow: 0 4px 20px rgba(0, 229, 255, 0.35);
     }
     .modal-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
+      transform: scale(1.02);
+      box-shadow: 0 6px 25px rgba(0, 229, 255, 0.5);
     }
     .modal-btn.secondary {
       background: rgba(255, 255, 255, 0.06);
-      color: var(--text-main);
+      color: #f1f5f9;
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: none;
     }
@@ -326,11 +378,11 @@
     <header class="game-header">
       <div class="back-area">
         <a href="index.html" class="btn-back">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          Volver a Juegos
+          Volver
         </a>
       </div>
       
@@ -341,14 +393,14 @@
       </div>
       
       <!-- Placeholder block to keep balance -->
-      <div style="width: 130px;"></div>
+      <div style="width: 100px;"></div>
     </header>
 
     <!-- Main Game Area -->
     <main class="game-content">
       <div class="shooting-gallery-container">
         
-        <!-- Level pills selector -->
+        <!-- Level Selector pills -->
         <div class="level-selector-row">
           <button class="btn-level-pill active" onclick="selectTiroLevel(1)">Nivel 1</button>
           <button class="btn-level-pill" onclick="selectTiroLevel(2)">Nivel 2</button>
@@ -357,23 +409,23 @@
           <button class="btn-level-pill" onclick="selectTiroLevel(5)">Nivel 5</button>
         </div>
 
-        <!-- Main board -->
+        <!-- Cybernetic Console Board -->
         <div class="gallery-board">
           
-          <!-- HUD row -->
+          <!-- HUD status row -->
           <div class="hud-row">
-            <div class="hud-item">
-              <span>Nivel:</span>
+            <div class="hud-card">
+              <span class="hud-label">Nivel Actual</span>
               <span id="display-level" class="hud-value">1</span>
             </div>
             
-            <div class="hud-item">
-              <span>Puntuación:</span>
+            <div class="hud-card">
+              <span class="hud-label">Puntuación</span>
               <span id="display-score" class="hud-value">0 / 100</span>
             </div>
             
-            <div class="hud-item">
-              <span>Vidas:</span>
+            <div class="hud-card">
+              <span class="hud-label">Vidas Restantes</span>
               <div class="lives-container" id="display-lives">
                 <span class="heart-icon">❤️</span>
                 <span class="heart-icon">❤️</span>
@@ -382,16 +434,24 @@
             </div>
           </div>
 
-          <!-- Sound trigger board -->
+          <!-- Sound trigger and Wave Pulse Radar -->
           <div class="sound-trigger-area">
+            <div class="radar-glowing-ring"></div>
             <button class="btn-play-sound" id="btn-play-prompt" onclick="playCurrentFigureAudio()">
               🔊
             </button>
-            <span class="sound-hint-text" id="sound-instructions">¡Escucha y dispara a la figura correcta!</span>
+            <span class="sound-hint-text" id="sound-instructions">¡Escuchando figura de arranque!</span>
           </div>
 
-          <!-- Canvas Arena -->
+          <!-- Canvas Target Arena -->
           <div class="canvas-container" id="arena-container">
+            <!-- Corner Brackets -->
+            <div class="canvas-bracket bracket-tl"></div>
+            <div class="canvas-bracket bracket-tr"></div>
+            <div class="canvas-bracket bracket-bl"></div>
+            <div class="canvas-bracket bracket-br"></div>
+            
+            <!-- Crosshair custom pointer -->
             <div class="custom-crosshair" id="crosshair-element"></div>
             <canvas id="shooting-canvas"></canvas>
           </div>
@@ -401,7 +461,7 @@
     </main>
   </div>
 
-  <!-- ================= MODALES DEL JUEGO ================= -->
+  <!-- ================= GAME MODALS ================= -->
 
   <!-- Modal Inicial (Instrucciones) -->
   <div class="modal-overlay active" id="modal-start">
@@ -414,13 +474,13 @@
         <p class="modal-desc">
           ¡Hola! En esta galería de tiro rítmica pondremos a prueba tu puntería y tu oído musical. 
           <br><br>
-          Presiona el botón de **🔊 reproducir sonido**, escucha con mucha atención la duración de la figura que suena y **dispara únicamente** a la burbuja que la tenga impresa en el aire.
+          Escucha con mucha atención la duración de la figura que suena y **dispara únicamente** a la burbuja que la tenga impresa en el aire.
         </p>
         
         <div class="instructions-details">
-          <div class="detail-item"><strong>Nivel 1:</strong> Solo Negra (1 tiempo) y Blanca (2 tiempos).</div>
-          <div class="detail-item"><strong>Vidas:</strong> Tienes 3 vidas. Cada disparo errado o figura incorrecta restará una.</div>
-          <div class="detail-item"><strong>Objetivo:</strong> Consigue 100 puntos para ganar.</div>
+          <div class="detail-item"><strong>🎯 Puntería:</strong> Clic/Tap sobre los globos de neón flotantes.</div>
+          <div class="detail-item"><strong>🔊 Reproducción:</strong> El sonido se toca automáticamente al iniciar cada ronda.</div>
+          <div class="detail-item"><strong>🏆 Victoria:</strong> Consigue 100 puntos sin quedarte sin vidas.</div>
         </div>
 
         <button class="modal-btn" onclick="closeStartModal()">¡Empezar Desafío!</button>
@@ -452,9 +512,9 @@
         <img src="../img/profe_sad.jpg" alt="Teacher Juan Di" class="modal-avatar">
       </div>
       <div class="modal-body">
-        <h2 class="modal-title" style="color: #ff1744;">¡Oh, no! Nos quedamos sin vidas</h2>
+        <h2 class="modal-title" style="color: #ff1744;">¡Vuelve a intentarlo!</h2>
         <p class="modal-desc">
-          ¡No te preocupes! El sentido del ritmo se construye con práctica. Vuelve a intentarlo, concéntrate en la duración de cada sonido y ¡vamos a superarlo!
+          ¡No te preocupes! El sentido del ritmo se construye con práctica. Vuelve a intentarlo, concéntrate en la duración del piano y ¡vamos a superarlo!
         </p>
         <button class="modal-btn" onclick="restartTiroLevel()">Intentar de nuevo</button>
       </div>
