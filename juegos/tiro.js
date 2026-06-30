@@ -167,19 +167,10 @@ const ctx = canvas.getContext("2d");
 const arenaContainer = document.getElementById("arena-container");
 const crosshair = document.getElementById("crosshair-element");
 
-// Full-screen Confetti Canvas Setup
-const confettiCanvas = document.getElementById("confetti-canvas");
-const confettiCtx = confettiCanvas.getContext("2d");
-
 function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
   canvas.width = rect.width;
   canvas.height = rect.height;
-  
-  if (confettiCanvas) {
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-  }
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -559,7 +550,7 @@ let confettis = [];
 // Confetti particle class for victory celebrations
 class Confetti {
   constructor() {
-    this.x = Math.random() * window.innerWidth;
+    this.x = Math.random() * canvas.width;
     this.y = Math.random() * -100 - 20;
     this.size = Math.random() * 8 + 6;
     this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
@@ -807,10 +798,6 @@ function restartWholeGame() {
 // Victory trigger
 function triggerVictory() {
   isGameActive = false;
-  
-  // Set up full-screen confetti canvas size
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
 
   // Trigger spectacular confetti rain
   confettis = [];
@@ -921,33 +908,30 @@ function drawLoop() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // Update & Draw Confetti rain on victory (rendering on the full-screen confettiCtx)
+  // Update & Draw Confetti rain on victory (rendering on the main canvas)
   if (confettis.length > 0) {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
     for (let i = confettis.length - 1; i >= 0; i--) {
       const c = confettis[i];
       c.update();
       
-      confettiCtx.save();
-      confettiCtx.translate(c.x, c.y);
-      confettiCtx.rotate(c.rotation * Math.PI / 180);
-      confettiCtx.fillStyle = c.color;
-      confettiCtx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
-      confettiCtx.restore();
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.rotate(c.rotation * Math.PI / 180);
+      ctx.fillStyle = c.color;
+      ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+      ctx.restore();
 
-      if (c.y > confettiCanvas.height + 20) {
+      if (c.y > canvas.height + 20) {
         // Recycle confetti while the victory screen is open to keep it festive
         if (confettis.length < 150 && !isGameActive) {
           c.y = -20;
-          c.x = Math.random() * confettiCanvas.width;
+          c.x = Math.random() * canvas.width;
           c.speedY = Math.random() * 4 + 2;
         } else {
           confettis.splice(i, 1);
         }
       }
     }
-  } else {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
   }
 
   requestAnimationFrame(drawLoop);
