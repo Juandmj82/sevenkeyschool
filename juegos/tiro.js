@@ -204,10 +204,10 @@ arenaContainer.addEventListener("pointerdown", (e) => {
 // Configure figures database per level
 const LEVEL_FIGURES = {
   1: ["negra", "blanca"],
-  2: ["negra", "blanca", "silencio-negra"],
-  3: ["negra", "blanca", "silencio-negra", "corcheas"],
-  4: ["negra", "blanca", "silencio-negra", "corcheas"],
-  5: ["negra", "blanca", "silencio-negra", "corcheas"]
+  2: ["negra", "blanca", "corcheas"],
+  3: ["negra", "blanca", "corcheas"],
+  4: ["negra", "blanca", "corcheas"],
+  5: ["negra", "blanca", "corcheas"]
 };
 
 // Speed setting per level
@@ -424,7 +424,7 @@ class Particle {
   }
 }
 
-// Laser Shot Line Class
+// Laser Shot Line Class (Premium Multi-Layered Plasma Laser)
 class Laser {
   constructor(startX, startY, endX, endY, color) {
     this.startX = startX;
@@ -433,7 +433,7 @@ class Laser {
     this.endY = endY;
     this.color = color;
     this.life = 1.0;
-    this.decay = 0.07;
+    this.decay = 0.08;
   }
 
   update() {
@@ -441,16 +441,60 @@ class Laser {
   }
 
   draw() {
+    if (this.life <= 0) return;
+
     ctx.save();
-    ctx.globalAlpha = this.life;
-    ctx.strokeStyle = this.color;
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = this.color;
-    ctx.lineWidth = 4 * this.life;
+    
+    // 1. Outer Glowing Energy Halo (Thick, low opacity cyan)
+    ctx.globalAlpha = this.life * 0.4;
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.3)";
+    ctx.lineWidth = 20 * this.life;
     ctx.beginPath();
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
+
+    // 2. Mid Beam (Neon Cyan)
+    ctx.globalAlpha = this.life * 0.8;
+    ctx.strokeStyle = "#00e5ff";
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#00e5ff";
+    ctx.lineWidth = 7 * this.life;
+    ctx.beginPath();
+    ctx.moveTo(this.startX, this.startY);
+    ctx.lineTo(this.endX, this.endY);
+    ctx.stroke();
+
+    // 3. Hot Inner Core (Thin, pure white)
+    ctx.globalAlpha = this.life;
+    ctx.strokeStyle = "#ffffff";
+    ctx.shadowBlur = 0;
+    ctx.lineWidth = 2.5 * this.life;
+    ctx.beginPath();
+    ctx.moveTo(this.startX, this.startY);
+    ctx.lineTo(this.endX, this.endY);
+    ctx.stroke();
+
+    // 4. Muzzle Plasma Flare at the bottom shooter point
+    const flareGrad = ctx.createRadialGradient(this.startX, this.startY, 0, this.startX, this.startY, 40 * this.life);
+    flareGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+    flareGrad.addColorStop(0.3, "rgba(0, 229, 255, 0.7)");
+    flareGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
+    ctx.fillStyle = flareGrad;
+    ctx.beginPath();
+    ctx.arc(this.startX, this.startY, 40 * this.life, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 5. Impact Plasma Flare at the target destination point
+    const hitGrad = ctx.createRadialGradient(this.endX, this.endY, 0, this.endX, this.endY, 28 * this.life);
+    hitGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+    hitGrad.addColorStop(0.4, "rgba(0, 229, 255, 0.75)");
+    hitGrad.addColorStop(1, "rgba(0, 229, 255, 0)");
+    ctx.fillStyle = hitGrad;
+    ctx.beginPath();
+    ctx.arc(this.endX, this.endY, 28 * this.life, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.restore();
   }
 }
