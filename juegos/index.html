@@ -84,6 +84,12 @@
       width: 100%;
     }
 
+    /* Grid spacing overrides to make cards wider and text readable */
+    .levels-grid {
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+      gap: 2rem !important;
+    }
+
     /* Dashboard Title Animation */
     @keyframes titleSlideIn {
       from {
