@@ -400,7 +400,7 @@ function drawStaffLines(clefType) {
     clefText.textContent = "𝄞";
   } else {
     clefText.setAttribute("x", "14");
-    clefText.setAttribute("y", "112");
+    clefText.setAttribute("y", "136");
     clefText.setAttribute("font-size", "75");
     clefText.textContent = "𝄢";
   }
