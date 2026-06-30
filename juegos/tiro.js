@@ -791,10 +791,12 @@ function restartTiroLevel() {
 function nextTiroLevel() {
   if (currentLevel < 5) {
     selectTiroLevel(currentLevel + 1);
-  } else {
-    // Already beat all levels
-    restartTiroLevel();
   }
+}
+
+// Restart entire game progression from level 1
+function restartWholeGame() {
+  selectTiroLevel(1);
 }
 
 // Victory trigger
@@ -813,13 +815,31 @@ function triggerVictory() {
   }
 
   const modal = document.getElementById("modal-victory");
+  const nextBtn = document.getElementById("btn-next-level-modal");
+  const replayBtn = document.getElementById("btn-replay-modal");
   
   if (currentLevel === 5) {
     document.getElementById("victory-message").innerHTML = `<strong>¡FELICITACIONES!</strong> Has superado el Desafío Supremo de Tiro al Blanco Rítmico de la Escuela Seven Keys. ¡Eres todo un virtuoso del ritmo!`;
-    document.getElementById("btn-next-level-modal").style.display = "none";
+    
+    // Primary action: return to home screen
+    nextBtn.innerHTML = "Ver otros juegos";
+    nextBtn.onclick = () => { window.location.href = "index.html"; };
+    nextBtn.style.display = "block";
+
+    // Secondary action: Restart from Level 1
+    replayBtn.innerHTML = "Reiniciar todo el juego";
+    replayBtn.onclick = restartWholeGame;
   } else {
     document.getElementById("victory-message").innerHTML = `¡Eso es! Conseguiste los 100 puntos en el Nivel ${currentLevel} con total precisión. ¡Vayamos por el siguiente reto!`;
-    document.getElementById("btn-next-level-modal").style.display = "block";
+    
+    // Primary action: go to next level
+    nextBtn.innerHTML = "Siguiente Nivel";
+    nextBtn.onclick = nextTiroLevel;
+    nextBtn.style.display = "block";
+
+    // Secondary action: replay current level
+    replayBtn.innerHTML = "Volver a jugar";
+    replayBtn.onclick = restartTiroLevel;
   }
   
   modal.classList.add("active");
