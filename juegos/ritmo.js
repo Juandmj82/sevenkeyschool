@@ -69,10 +69,10 @@ const FIGURE_VALUES = {
   "silencio-negra": 1
 };
 const FIGURE_SYMBOLS = {
-  "negra": "𝅘𝅥",
-  "blanca": "𝅗𝅥",
-  "corcheas": "𝅘𝅥𝅮𝅘𝅥𝅮",
-  "silencio-negra": "𝄽"
+  "negra": `<svg viewBox="0 0 24 36" width="20" height="30" style="display:block; margin:auto;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  "blanca": `<svg viewBox="0 0 24 36" width="20" height="30" style="display:block; margin:auto;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  "corcheas": `<svg viewBox="0 0 36 36" width="30" height="30" style="display:block; margin:auto;"><ellipse cx="8" cy="28" rx="6" ry="4" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M13 28 V 5" stroke="currentColor" stroke-width="2.5"/><ellipse cx="26" cy="28" rx="6" ry="4" transform="rotate(-20 26 28)" fill="currentColor"/><path d="M31 28 V 5" stroke="currentColor" stroke-width="2.5"/><path d="M13 5 L 31 5" stroke="currentColor" stroke-width="5" stroke-linecap="square"/></svg>`,
+  "silencio-negra": `<svg viewBox="0 0 24 36" width="16" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block; margin:auto;"><path d="M 6 4 L 18 10 L 6 18 C 12 22, 14 24, 12 28 C 10 32, 6 30, 8 26" /></svg>`
 };
 
 // Teacher Phrases
@@ -740,12 +740,71 @@ function setupPhase3Challenge() {
           ctx.strokeStyle = "rgba(255,255,255,0.4)";
           ctx.lineWidth = 2;
           ctx.strokeRect(noteX - width/2, 20, width, 50);
-          ctx.fillText("𝄽", noteX - 8, 52);
+          
+          // Draw silence rest symbol
+          ctx.beginPath();
+          ctx.moveTo(noteX - 5, 30);
+          ctx.lineTo(noteX + 5, 36);
+          ctx.lineTo(noteX - 5, 44);
+          ctx.quadraticCurveTo(noteX + 5, 48, noteX + 1, 52);
+          ctx.quadraticCurveTo(noteX - 4, 56, noteX - 1, 60);
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
         } else {
           ctx.fillRect(noteX - width/2, 25, width, 40);
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "bold 24px sans-serif";
-          ctx.fillText(FIGURE_SYMBOLS[note.type].slice(0, 2), noteX - 10, 52);
+          
+          // Draw standard note shape on top of the block
+          ctx.save();
+          if (note.type === "negra") {
+            ctx.beginPath();
+            ctx.ellipse(noteX - 5, 48, 6, 4.5, -20 * Math.PI / 180, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(noteX, 48);
+            ctx.lineTo(noteX, 28);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+          } else if (note.type === "blanca") {
+            ctx.beginPath();
+            ctx.ellipse(noteX - 5, 48, 6, 4.5, -20 * Math.PI / 180, 0, 2 * Math.PI);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(noteX, 48);
+            ctx.lineTo(noteX, 28);
+            ctx.stroke();
+          } else if (note.type === "corcheas") {
+            // First note
+            ctx.beginPath();
+            ctx.ellipse(noteX - 12, 48, 5, 3.8, -20 * Math.PI / 180, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(noteX - 7, 48);
+            ctx.lineTo(noteX - 7, 30);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+            // Second note
+            ctx.beginPath();
+            ctx.ellipse(noteX + 4, 48, 5, 3.8, -20 * Math.PI / 180, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(noteX + 9, 48);
+            ctx.lineTo(noteX + 9, 30);
+            ctx.stroke();
+            // Connecting beam
+            ctx.beginPath();
+            ctx.moveTo(noteX - 7, 30);
+            ctx.lineTo(noteX + 9, 30);
+            ctx.lineWidth = 4.2;
+            ctx.stroke();
+          }
+          ctx.restore();
         }
         
         // Draw status indicators if tapped or missed

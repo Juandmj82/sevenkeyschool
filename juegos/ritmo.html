@@ -6,6 +6,17 @@
   <title>Seven Keys School | Aventura Rítmica</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Override viewport lock for the Rhythm game to prevent figure cards truncation */
+    body.game-page-layout {
+      height: auto !important;
+      max-height: none !important;
+      overflow: auto !important;
+    }
+    body.game-page-layout .game-container {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
     /* Custom styles for Rhythm Game */
     .rhythm-container {
       display: flex;
@@ -685,25 +696,25 @@
             <div class="rhythm-toolbox" id="toolbox-1">
               <!-- Negra -->
               <div class="figure-card" onclick="addFigureToCompas('negra')">
-                <span class="figure-symbol">𝅘𝅥</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="20" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
                 <span class="figure-name-tag">Negra</span>
                 <span class="figure-value">1 tiempo</span>
               </div>
               <!-- Blanca -->
               <div class="figure-card" onclick="addFigureToCompas('blanca')">
-                <span class="figure-symbol">𝅗𝅥</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="20" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
                 <span class="figure-name-tag">Blanca</span>
                 <span class="figure-value">2 tiempos</span>
               </div>
               <!-- Corcheas -->
               <div class="figure-card" onclick="addFigureToCompas('corcheas')">
-                <span class="figure-symbol" style="letter-spacing: -6px; margin-right: 6px;">𝅘𝅥𝅮𝅘𝅥𝅮</span>
+                <span class="figure-symbol"><svg viewBox="0 0 36 36" width="30" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="6" ry="4" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M13 28 V 5" stroke="currentColor" stroke-width="2.5"/><ellipse cx="26" cy="28" rx="6" ry="4" transform="rotate(-20 26 28)" fill="currentColor"/><path d="M31 28 V 5" stroke="currentColor" stroke-width="2.5"/><path d="M13 5 L 31 5" stroke="currentColor" stroke-width="5" stroke-linecap="square"/></svg></span>
                 <span class="figure-name-tag">Corcheas</span>
                 <span class="figure-value">1 tiempo</span>
               </div>
               <!-- Silencio de negra -->
               <div class="figure-card" onclick="addFigureToCompas('silencio-negra')">
-                <span class="figure-symbol">𝄽</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="16" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M 6 4 L 18 10 L 6 18 C 12 22, 14 24, 12 28 C 10 32, 6 30, 8 26" /></svg></span>
                 <span class="figure-name-tag">Silencio</span>
                 <span class="figure-value">1 tiempo</span>
               </div>
@@ -744,19 +755,19 @@
             <!-- Figures Toolbox for dictation -->
             <div class="rhythm-toolbox" id="toolbox-2">
               <div class="figure-card" onclick="addFigureToDictation('negra')">
-                <span class="figure-symbol">𝅘𝅥</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="20" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
                 <span class="figure-name-tag">Negra</span>
               </div>
               <div class="figure-card" onclick="addFigureToDictation('blanca')">
-                <span class="figure-symbol">𝅗𝅥</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="20" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="7" ry="5" transform="rotate(-20 8 28)" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 28 V 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
                 <span class="figure-name-tag">Blanca</span>
               </div>
               <div class="figure-card" onclick="addFigureToDictation('corcheas')">
-                <span class="figure-symbol" style="letter-spacing: -6px; margin-right: 6px;">𝅘𝅥𝅮𝅘𝅥𝅮</span>
+                <span class="figure-symbol"><svg viewBox="0 0 36 36" width="30" height="30" style="display:block;"><ellipse cx="8" cy="28" rx="6" ry="4" transform="rotate(-20 8 28)" fill="currentColor"/><path d="M13 28 V 5" stroke="currentColor" stroke-width="2.5"/><ellipse cx="26" cy="28" rx="6" ry="4" transform="rotate(-20 26 28)" fill="currentColor"/><path d="M31 28 V 5" stroke="currentColor" stroke-width="2.5"/><path d="M13 5 L 31 5" stroke="currentColor" stroke-width="5" stroke-linecap="square"/></svg></span>
                 <span class="figure-name-tag">Corcheas</span>
               </div>
               <div class="figure-card" onclick="addFigureToDictation('silencio-negra')">
-                <span class="figure-symbol">𝄽</span>
+                <span class="figure-symbol"><svg viewBox="0 0 24 36" width="16" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M 6 4 L 18 10 L 6 18 C 12 22, 14 24, 12 28 C 10 32, 6 30, 8 26" /></svg></span>
                 <span class="figure-name-tag">Silencio</span>
               </div>
             </div>
