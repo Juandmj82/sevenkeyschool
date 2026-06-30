@@ -37,9 +37,15 @@
     .level-card.has-full-cover .level-cover {
       width: 100% !important;
       height: auto !important;
-      aspect-ratio: 1 / 1;
       margin: 0 !important;
+      overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .level-card.has-full-cover .level-cover img {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      object-fit: contain !important;
     }
     .level-card.has-full-cover .level-header-overlay {
       position: absolute;
