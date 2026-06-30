@@ -18,21 +18,121 @@
     }
 
     /* Custom styles for Rhythm Game */
-    .rhythm-container {
+    /* Main Rhythm Console Layout */
+    .rhythm-console-layout {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 1.5rem;
       width: 100%;
-      max-width: 820px;
+      max-width: 1100px;
       margin: 0 auto;
+      align-items: stretch;
+    }
+    
+    .console-sidebar {
+      width: 290px;
+      flex-shrink: 0;
+      background: rgba(16, 22, 38, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    }
+    
+    .sidebar-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .sidebar-logo {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, var(--color-gold) 0%, #fff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    /* Phase tabs selector */
-    .phase-selector {
+    .phase-selector-sidebar {
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .phase-selector-sidebar .btn-phase-tab {
       width: 100%;
-      margin-bottom: 0.5rem;
+      text-align: left;
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    /* HUD Stats in Sidebar */
+    .game-hud-sidebar {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hud-item-sidebar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .hud-item-sidebar .hud-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .hud-item-sidebar .hud-value {
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .hud-item-sidebar .hud-value.gold {
+      color: var(--color-gold);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .rhythm-console-layout {
+        flex-direction: column;
+      }
+      .console-sidebar {
+        width: 100%;
+      }
+      .phase-selector-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      .phase-selector-sidebar .btn-phase-tab {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+      }
+      .game-hud-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .hud-item-sidebar {
+        flex: 1;
+        min-width: 100px;
+        justify-content: center;
+        gap: 8px;
+      }
+      .console-sidebar .profe-sticker {
+        display: none;
+      }
     }
     .btn-phase-tab {
       flex: 1;
@@ -88,64 +188,23 @@
       width: 100%;
     }
     .balance-scale-graphic {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 40px;
       width: 100%;
+      max-width: 460px;
       height: 120px;
       position: relative;
       margin-bottom: 10px;
     }
-    /* Scale fulcrum */
-    .balance-scale-graphic::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 0 20px 40px 20px;
-      border-style: solid;
-      border-color: transparent transparent rgba(255, 255, 255, 0.15) transparent;
-      width: 0;
-      height: 0;
-    }
-    /* Beam */
-    .balance-beam {
-      position: absolute;
-      bottom: 40px;
-      left: 10%;
-      right: 10%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.3);
-      transform-origin: center;
+    #balance-beam {
+      transform-origin: 230px 70px;
       transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     }
-    .balance-plate {
-      width: 110px;
-      height: 14px;
-      background: radial-gradient(circle, #2a2456 0%, #171435 100%);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50px;
-      position: absolute;
-      bottom: 20px;
+    #balance-plate-left {
+      transform-origin: 70px 70px;
       transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
-    .balance-plate-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .balance-plate.left {
-      left: 12%;
-    }
-    .balance-plate.right {
-      right: 12%;
+    #balance-plate-right {
+      transform-origin: 390px 70px;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     }
 
     /* Compás visualization box */
@@ -177,7 +236,7 @@
       display: flex;
       gap: 8px;
       flex: 1;
-      justify-content: flex-start;
+      justify-content: space-evenly;
       align-items: center;
       min-height: 52px;
     }
@@ -483,7 +542,7 @@
     /* Modal layout overrides to match index.html styles and fix centering */
     .overlay-modal {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 50%; left: 50%;
       right: auto;
       bottom: auto;
@@ -605,45 +664,62 @@
   </header>
 
   <main>
-    <div class="rhythm-container">
-      <!-- Phase Selector Tabs -->
-      <div class="phase-selector">
-        <button class="btn-phase-tab active" id="tab-1" onclick="switchPhase(1)">Fase 1: Balanza de Tiempos</button>
-        <button class="btn-phase-tab" id="tab-2" onclick="switchPhase(2)">Fase 2: El Eco del Teacher</button>
-        <button class="btn-phase-tab" id="tab-3" onclick="switchPhase(3)">Fase 3: Sigue el Ritmo</button>
-      </div>
+    <div class="rhythm-console-layout">
+      <!-- Sidebar Panel -->
+      <aside class="console-sidebar">
+        <div class="sidebar-header">
+          <a href="index.html" class="btn-back" style="margin: 0; padding: 6px 12px; font-size: 0.8rem; font-weight:700; border-radius: 30px;">← Volver</a>
+          <span class="sidebar-logo">Aventura Rítmica</span>
+        </div>
+        
+        <!-- Phase Selector Tabs -->
+        <div class="phase-selector-sidebar">
+          <button class="btn-phase-tab active" id="tab-1" onclick="switchPhase(1)">Fase 1: Balanza</button>
+          <button class="btn-phase-tab" id="tab-2" onclick="switchPhase(2)">Fase 2: El Eco</button>
+          <button class="btn-phase-tab" id="tab-3" onclick="switchPhase(3)">Fase 3: Sigue el Ritmo</button>
+        </div>
 
-      <!-- Game Main Card -->
-      <div class="game-container">
         <!-- HUD / Stats -->
-        <div class="game-hud">
-          <div class="hud-group">
-            <div class="hud-item">
-              <span class="hud-label" id="hud-phase-name-label">Fase Actual</span>
-              <span class="hud-value gold" id="hud-phase-num">Fase 1</span>
-            </div>
-            <div class="hud-item">
-              <span class="hud-label">Reto</span>
-              <span class="hud-value" id="hud-challenge-desc">1 / 5</span>
+        <div class="game-hud-sidebar">
+          <div class="hud-item-sidebar">
+            <span class="hud-label">Fase</span>
+            <span class="hud-value gold" id="hud-phase-num">Fase 1</span>
+          </div>
+          <div class="hud-item-sidebar">
+            <span class="hud-label">Reto</span>
+            <span class="hud-value" id="hud-challenge-desc">1 / 5</span>
+          </div>
+          <div class="hud-item-sidebar">
+            <span class="hud-label">Vidas</span>
+            <div class="hearts-container" id="hearts-box">
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
             </div>
           </div>
-
-          <div class="hud-group">
-            <div class="hud-item" style="align-items: center;">
-              <span class="hud-label">Vidas</span>
-              <div class="hearts-container" id="hearts-box">
-                <span class="heart-filled">❤️</span>
-                <span class="heart-filled">❤️</span>
-                <span class="heart-filled">❤️</span>
-              </div>
-            </div>
-            <div class="hud-item" style="align-items: flex-end;">
-              <span class="hud-label">Puntaje</span>
-              <span class="hud-value" id="hud-score">0</span>
-            </div>
+          <div class="hud-item-sidebar">
+            <span class="hud-label">Puntaje</span>
+            <span class="hud-value" id="hud-score">0</span>
           </div>
         </div>
 
+        <!-- Feedback box -->
+        <div class="feedback-box" id="feedback-box" style="margin-top: 0.5rem; width: 100%;"></div>
+
+        <!-- Teacher Juan Di sticker/avatar -->
+        <div class="profe-sticker" style="max-width: 100%; margin-top: auto;">
+          <img src="../img/profe.jpg" class="profe-avatar" id="balance-profe-avatar" alt="Teacher Juan Di">
+          <div class="profe-text-box">
+            <span class="profe-name">Teacher Juan Di</span>
+            <div class="profe-bubble" id="balance-profe-bubble">
+              "Agrega figuras para alcanzar la meta y equilibrar la balanza. ¡Tú puedes!"
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Game Main Card -->
+      <div class="game-container" style="flex: 1;">
         <!-- Start Overlay Screen -->
         <div class="start-prompt" id="start-overlay" style="z-index: 80;">
           <h2 style="font-weight: 800; font-size: 1.6rem; margin-bottom: 4px;" id="overlay-phase-title">Fase 1: Balanza de Tiempos</h2>
@@ -664,18 +740,57 @@
         <!-- ================= FASE 1 BOARD ================= -->
         <div class="phase-board active" id="board-1">
           <div class="balance-wrapper">
+
             <!-- Balance scale graphic representation -->
             <div class="balance-scale-graphic">
-              <!-- Left side plate (shows active compás contents) -->
-              <div class="balance-plate left" id="balance-plate-left">
-                <span class="balance-plate-label" style="color: #6366f1;">Tu compás</span>
-              </div>
-              <!-- Right side plate (shows target weights) -->
-              <div class="balance-plate right" id="balance-plate-right">
-                <span class="balance-plate-label" style="color: var(--color-gold);">Meta</span>
-              </div>
-              <!-- Beam linking plates -->
-              <div class="balance-beam" id="balance-beam"></div>
+              <svg width="100%" height="100%" viewBox="0 0 460 120" style="display: block; overflow: visible;">
+                <defs>
+                  <radialGradient id="plateGradient" cx="50%" cy="0%" r="100%">
+                    <stop offset="0%" stop-color="#2a2456" />
+                    <stop offset="100%" stop-color="#120f2b" />
+                  </radialGradient>
+                  <linearGradient id="beamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="var(--color-cyan)" />
+                    <stop offset="50%" stop-color="var(--color-gold)" />
+                    <stop offset="100%" stop-color="#e0aaff" />
+                  </linearGradient>
+                </defs>
+                
+                <!-- Central Base Support (Pillar) -->
+                <path d="M 215,120 L 245,120 L 236,70 L 224,70 Z" fill="rgba(255, 255, 255, 0.12)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" />
+                <circle cx="230" cy="70" r="18" fill="#141729" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" />
+                <path d="M 230,70 L 230,58" stroke="var(--color-gold)" stroke-width="2" stroke-linecap="round" /> <!-- Center Needle -->
+
+                <!-- Rotating Beam -->
+                <g id="balance-beam">
+                  <rect x="66" y="67" width="328" height="6" rx="3" fill="url(#beamGradient)" />
+                  <circle cx="70" cy="70" r="5" fill="#ffffff" />
+                  <circle cx="390" cy="70" r="5" fill="#ffffff" />
+                  <!-- Hanger links -->
+                  <line x1="70" y1="70" x2="70" y2="76" stroke="#ffffff" stroke-width="2" />
+                  <line x1="390" y1="70" x2="390" y2="76" stroke="#ffffff" stroke-width="2" />
+
+                  <!-- Left Hanger & Plate (Translates vertically) -->
+                  <g id="balance-plate-left">
+                    <!-- Strings/Chains -->
+                    <line x1="70" y1="70" x2="25" y2="105" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.5" />
+                    <line x1="70" y1="70" x2="115" y2="105" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.5" />
+                    <!-- Plate Cup -->
+                    <path d="M 22,105 L 118,105 C 118,118 22,118 22,105 Z" fill="url(#plateGradient)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+                    <text x="70" y="114" fill="#a78bfa" font-size="7.5" font-weight="800" text-anchor="middle" letter-spacing="0.5">TU COMPÁS</text>
+                  </g>
+
+                  <!-- Right Hanger & Plate (Translates vertically) -->
+                  <g id="balance-plate-right">
+                    <!-- Strings/Chains -->
+                    <line x1="390" y1="70" x2="345" y2="105" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.5" />
+                    <line x1="390" y1="70" x2="435" y2="105" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.5" />
+                    <!-- Plate Cup -->
+                    <path d="M 342,105 L 438,105 C 438,118 342,118 342,105 Z" fill="url(#plateGradient)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+                    <text x="390" y="114" fill="var(--color-gold)" font-size="7.5" font-weight="800" text-anchor="middle" letter-spacing="0.5">META</text>
+                  </g>
+                </g>
+              </svg>
             </div>
 
             <!-- Target Compás display -->
@@ -729,16 +844,6 @@
         <!-- ================= FASE 2 BOARD ================= -->
         <div class="phase-board" id="board-2">
           <div class="dictation-control">
-            <div class="profe-sticker" style="max-width: 100%;">
-              <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
-              <div class="profe-text-box">
-                <span class="profe-name">Teacher Juan Di</span>
-                <div class="profe-bubble">
-                  "Escucha atentamente el ritmo que voy a tocar, y ordénalo en las casillas vacías de abajo."
-                </div>
-              </div>
-            </div>
-
             <button class="btn-play-rhythm" id="btn-play-sound" onclick="playTargetRhythm()">
               <span>🔊 Escuchar Ritmo</span>
             </button>
@@ -814,8 +919,6 @@
 
       </div>
 
-      <!-- Feedback box -->
-      <div class="feedback-box" id="feedback-box" style="margin-top: 0.5rem;"></div>
 
       <!-- Interactive Toast Alert when losing a life -->
       <div class="profe-toast" id="profe-toast">
@@ -864,6 +967,24 @@
         <div class="modal-buttons">
           <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
           <button class="btn-primary" id="btn-restart" onclick="restartGame()">Intentar de Nuevo</button>
+        </div>
+      </div>
+
+      <!-- Feedback Modal Overlay for Individual Balance Validation -->
+      <div class="overlay-modal" id="feedback-modal">
+        <div class="modal-icon" id="feedback-modal-icon">⭐</div>
+        <div class="modal-title" id="feedback-modal-title">¡Equilibrio Perfecto!</div>
+        
+        <div class="profe-showcase">
+          <img src="../img/profe_celebrate.jpg" id="feedback-modal-avatar" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large" id="feedback-modal-text">
+            ¡Eso es! El compás está correcto.
+          </div>
+        </div>
+
+        <div class="modal-buttons" style="width: 100%; display: flex; justify-content: center;">
+          <button class="btn-primary" id="feedback-modal-btn" style="width: 100%; max-width: 200px;">Continuar</button>
         </div>
       </div>
 

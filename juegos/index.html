@@ -62,6 +62,49 @@
       display: flex;
       justify-content: center;
     }
+    .level-card.level-zero-card {
+      border-color: rgba(212, 175, 55, 0.45);
+      background:
+        linear-gradient(145deg, rgba(212, 175, 55, 0.14), rgba(0, 229, 255, 0.08)),
+        var(--bg-card);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22), 0 0 24px rgba(212, 175, 55, 0.08);
+    }
+    .level-card.level-zero-card::before {
+      background: linear-gradient(180deg, var(--color-gold), var(--color-cyan));
+    }
+    .level-zero-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 11;
+      background: rgba(11, 13, 25, 0.86);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      color: var(--color-gold);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+    }
+    .floating-clef {
+      position: absolute;
+      right: 14px;
+      bottom: 8px;
+      z-index: 9;
+      color: rgba(255, 255, 255, 0.86);
+      font-family: Georgia, serif;
+      font-size: 4.8rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.55));
+      animation: clefFloat 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes clefFloat {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
     
     /* Make the grid fit cards perfectly */
     .levels-grid {
@@ -359,7 +402,7 @@
         <div><strong style="color: #a78bfa;">Objetivo:</strong> <span id="preview-target" style="color: #e2e8f0;">10 aciertos</span></div>
         <div><strong style="color: #a78bfa;">Tiempo:</strong> <span id="preview-time" style="color: #e2e8f0;">Sin límite</span></div>
         <div>
-          <strong style="color: #a78bfa; display: block; margin-bottom: 4px;">Notas a practicar:</strong>
+          <strong id="preview-notes-title" style="color: #a78bfa; display: block; margin-bottom: 4px;">Notas a practicar:</strong>
           <div id="preview-notes-container" style="display: flex; flex-wrap: wrap; gap: 6px;">
             <!-- Note badges go here -->
           </div>
@@ -411,6 +454,19 @@
         <p>Aprende de forma progresiva a leer notas en el pentagrama en clave de Sol y clave de Fa.</p>
       </div>
       <div class="levels-grid">
+        <!-- Level 0 -->
+        <div class="level-card has-full-cover level-zero-card" id="card-0" onclick="window.location.href='teoria.html'">
+          <div class="level-cover">
+            <img src="../img/fundamentos.png" alt="Nivel 0 Fundamentos del Pentagrama">
+            <div class="level-header-overlay">
+              <span class="level-status-icon">🔓</span>
+            </div>
+          </div>
+          <div class="level-footer">
+            <button class="btn-play-level">Aprender</button>
+          </div>
+        </div>
+
         <!-- Level 1 -->
         <div class="level-card has-full-cover" id="card-1" onclick="showPreview(1)">
           <div class="level-cover">
@@ -609,7 +665,7 @@
         clef: "Compases rítmicos",
         target: "Completar las 3 fases",
         time: "Tiempo real / Metrónomo",
-        notes: ["Negras (𝅘𝅥)", "Corcheas (𝅘𝅥𝅮)", "Blancas (𝅗𝅥)", "Silencios (𝄽)"],
+        notes: ["Negras", "Corcheas", "Blancas", "Silencios"],
         avatar: "../img/profe_celebrate.jpg",
         url: "ritmo.html"
       },
@@ -619,7 +675,7 @@
         clef: "Duración de figuras",
         target: "Puntuación de 100 puntos",
         time: "Lluvia de figuras",
-        notes: ["Negra (𝅘𝅥)", "Blanca (𝅗𝅥)", "Corcheas (𝅘𝅥𝅮)"],
+        notes: ["Negras", "Blancas", "Corcheas"],
         avatar: "../img/profe_celebrate.jpg",
         url: "tiro.html"
       }
@@ -771,6 +827,14 @@
       document.getElementById("preview-clef").textContent = data.clef;
       document.getElementById("preview-target").textContent = data.target;
       document.getElementById("preview-time").textContent = data.time;
+      
+      // Cambiar etiqueta según el tipo de juego (ritmo vs lectura de notas)
+      const notesTitle = document.getElementById("preview-notes-title");
+      if (levelId === "ritmo" || levelId === "tiro") {
+        notesTitle.textContent = "Figuras a practicar:";
+      } else {
+        notesTitle.textContent = "Notas a practicar:";
+      }
       
       // Generate badges
       const notesContainer = document.getElementById("preview-notes-container");

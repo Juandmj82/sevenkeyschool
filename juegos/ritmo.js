@@ -120,6 +120,13 @@ const winModal = document.getElementById("win-modal");
 const loseModal = document.getElementById("lose-modal");
 const btnNextPhase = document.getElementById("btn-next-phase");
 
+const feedbackModal = document.getElementById("feedback-modal");
+const feedbackModalTitle = document.getElementById("feedback-modal-title");
+const feedbackModalIcon = document.getElementById("feedback-modal-icon");
+const feedbackModalAvatar = document.getElementById("feedback-modal-avatar");
+const feedbackModalText = document.getElementById("feedback-modal-text");
+const feedbackModalBtn = document.getElementById("feedback-modal-btn");
+
 // --- AUDIO SYNTH ENGINE ---
 function initAudio() {
   if (!audioCtx) {
@@ -280,6 +287,21 @@ function switchPhase(phaseNum) {
   document.querySelectorAll(".phase-board").forEach(b => b.classList.remove("active"));
   document.getElementById(`board-${phaseNum}`).classList.add("active");
   
+  // Set default teacher bubble message for this phase
+  const profeBubble = document.getElementById("balance-profe-bubble");
+  const profeImg = document.getElementById("balance-profe-avatar");
+  if (profeImg) profeImg.src = "../img/profe.jpg";
+  
+  if (profeBubble) {
+    if (phaseNum === 1) {
+      profeBubble.textContent = "Agrega figuras para alcanzar la meta y equilibrar la balanza. ¡Tú puedes!";
+    } else if (phaseNum === 2) {
+      profeBubble.textContent = "Escucha atentamente el ritmo que voy a tocar, y ordénalo en las casillas vacías de abajo.";
+    } else if (phaseNum === 3) {
+      profeBubble.textContent = "Sigue la luz que recorre cada figura y presiona la barra espaciadora o el botón en el momento exacto en que se ilumine cada una.";
+    }
+  }
+  
   loadPhasePreview(phaseNum);
 }
 
@@ -301,7 +323,7 @@ function loadPhasePreview(phaseNum) {
     overlayPhaseDesc.textContent = "¡Excelente! Ahora entrenaremos tu oído. Escucha el ritmo que tocaré y arrastra las figuras en el orden correcto para repetirlo como un eco.";
   } else if (phaseNum === 3) {
     overlayPhaseTitle.textContent = "Fase 3: Sigue el Ritmo";
-    overlayPhaseDesc.textContent = "¡El desafío de precisión en tiempo real! Un metrónomo marcará el pulso y deberás presionar la barra espaciadora o el botón cuando las notas pasen por la línea azul.";
+    overlayPhaseDesc.textContent = "¡El desafío de precisión en tiempo real! Sigue la luz que recorre cada figura y presiona la barra espaciadora o el botón en el momento exacto en que se ilumine cada una.";
     hudChallengeDesc.textContent = `Desafío Único`;
   }
 }
@@ -373,6 +395,24 @@ function setupPhase1Challenge() {
   
   const cfg = PHASE1_CHALLENGES[activeChallenge];
   document.getElementById("hud-challenge-desc").textContent = `${activeChallenge} / 5`;
+  
+  // Reset Profe Avatar and Bubble
+  const profeImg = document.getElementById("balance-profe-avatar");
+  const profeBubble = document.getElementById("balance-profe-bubble");
+  if (profeImg && profeBubble) {
+    profeImg.src = "../img/profe.jpg";
+    if (activeChallenge === 1) {
+      profeBubble.textContent = "¡Hola! Vamos a empezar. Agrega figuras para sumar 4 tiempos exactos y equilibrar la balanza.";
+    } else if (activeChallenge === 2) {
+      profeBubble.textContent = "¡Buen trabajo! Ahora equilibremos un compás de 3 tiempos. ¿Qué figuras vas a usar?";
+    } else if (activeChallenge === 3) {
+      profeBubble.textContent = "¡Vas muy bien! Esta vez la meta son 2 tiempos. ¡Piénsalo bien!";
+    } else if (activeChallenge === 4) {
+      profeBubble.textContent = "¡Desafío con silencio! Suma 4 tiempos, pero asegúrate de incluir al menos un silencio.";
+    } else if (activeChallenge === 5) {
+      profeBubble.textContent = "¡Último reto! Suma 4 tiempos e incluye al menos un grupo de corcheas.";
+    }
+  }
   
   // Set fraction signature
   const sigNumerator = cfg.targetValue;
@@ -446,22 +486,16 @@ function tiltBalance(direction) {
   if (!beam || !leftPlate || !rightPlate) return;
   
   let angle = 0;
-  let leftY = 0;
-  let rightY = 0;
   
   if (direction === -1) { // Left is lighter -> tilts left UP, right DOWN
     angle = -12;
-    leftY = -25;
-    rightY = 25;
   } else if (direction === 1) { // Left is heavier -> tilts left DOWN, right UP
     angle = 12;
-    leftY = 25;
-    rightY = -25;
   }
   
   beam.style.transform = `rotate(${angle}deg)`;
-  leftPlate.style.transform = `translateY(${leftY}px)`;
-  rightPlate.style.transform = `translateY(${rightY}px)`;
+  leftPlate.style.transform = `rotate(${-angle}deg)`;
+  rightPlate.style.transform = `rotate(${-angle}deg)`;
 }
 
 function validateBalanceCompas() {
@@ -495,34 +529,59 @@ function validateBalanceCompas() {
     score += 20;
     updateHUD();
     
-    feedbackBox.className = "feedback-box feedback-correct";
-    feedbackBox.textContent = "¡Equilibrio perfecto! Compás correcto.";
-    
+    // Lanzar confeti para celebrar este compás correcto
+    createConfetti();
+    updateAndDrawConfetti();
     tiltBalance(0);
     
-    if (activeChallenge >= 5) {
-      handlePhaseComplete();
-    } else {
-      activeChallenge++;
-      setTimeout(setupPhase1Challenge, 1200);
-    }
+    // Configurar y mostrar Modal de Éxito
+    feedbackModalTitle.textContent = "¡Equilibrio Perfecto!";
+    feedbackModalIcon.textContent = "⭐";
+    feedbackModalIcon.className = "modal-icon win";
+    feedbackModalAvatar.src = "../img/profe_celebrate.jpg";
+    feedbackModalText.textContent = "¡Excelente! Lograste equilibrar el compás a la perfección.";
+    feedbackModalBtn.textContent = "Siguiente Compás";
+    
+    feedbackModalBtn.onclick = () => {
+      feedbackModal.style.display = "none";
+      if (activeChallenge >= 5) {
+        handlePhaseComplete();
+      } else {
+        activeChallenge++;
+        setupPhase1Challenge();
+      }
+    };
+    
+    feedbackModal.style.display = "flex";
   } else {
     // INCORRECT
     playErrorTone();
     lives--;
     updateHUD();
     
-    feedbackBox.className = "feedback-box feedback-wrong";
+    let errorText = "";
     if (sum !== cfg.targetValue) {
-      feedbackBox.textContent = sum < cfg.targetValue ? "¡El compás está incompleto! Falta peso." : "¡Te has pasado! El compás pesa demasiado.";
+      errorText = sum < cfg.targetValue ? "¡El compás está incompleto! Falta peso." : "¡Te has pasado! El compás pesa demasiado.";
     } else {
-      feedbackBox.textContent = customErrorMsg;
+      errorText = customErrorMsg;
     }
     
     if (lives <= 0) {
       handleLose();
     } else {
-      showEncouragementToast();
+      // Configurar y mostrar Modal de Error
+      feedbackModalTitle.textContent = "¡Casi!";
+      feedbackModalIcon.textContent = "❌";
+      feedbackModalIcon.className = "modal-icon lose";
+      feedbackModalAvatar.src = "../img/profe_sad.jpg";
+      feedbackModalText.textContent = errorText;
+      feedbackModalBtn.textContent = "Intentar de nuevo";
+      
+      feedbackModalBtn.onclick = () => {
+        feedbackModal.style.display = "none";
+      };
+      
+      feedbackModal.style.display = "flex";
     }
   }
 }
