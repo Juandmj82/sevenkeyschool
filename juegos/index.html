@@ -28,6 +28,61 @@
       transform: scale(1.05);
     }
 
+    /* Premium Full Cover Card layout */
+    .level-card.has-full-cover {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .level-card.has-full-cover .level-cover {
+      width: 100% !important;
+      height: 250px !important;
+      margin: 0 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .level-card.has-full-cover .level-header-overlay {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .level-card.has-full-cover .level-header-overlay .level-number {
+      background: rgba(11, 13, 25, 0.85);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--color-gold);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .level-card.has-full-cover .level-header-overlay .level-status-icon {
+      background: rgba(11, 13, 25, 0.85);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .level-card.has-full-cover .level-footer {
+      padding: 1.2rem 1.5rem 1.5rem 1.5rem !important;
+      margin-top: auto;
+      width: 100%;
+    }
+
     /* Dashboard Title Animation */
     @keyframes titleSlideIn {
       from {
@@ -304,17 +359,13 @@
 
     <div class="levels-grid">
       <!-- Level 1 -->
-      <div class="level-card" id="card-1" onclick="showPreview(1)">
+      <div class="level-card has-full-cover" id="card-1" onclick="showPreview(1)">
         <div class="level-cover">
           <img src="../img/nivel1.png" alt="Clave de Sol Inicial">
-        </div>
-        <div class="level-header">
-          <span class="level-number">Nivel 1</span>
-          <span class="level-status-icon" id="status-1">🔓</span>
-        </div>
-        <div class="level-info">
-          <h2>Clave de Sol Inicial</h2>
-          <p>Aprende las notas básicas en las líneas y espacios centrales: Do, Re, Mi, Fa, Sol.</p>
+          <div class="level-header-overlay">
+            <span class="level-number">Nivel 1</span>
+            <span class="level-status-icon" id="status-1">🔓</span>
+          </div>
         </div>
         <div class="level-footer">
           <span class="score-badge" id="score-1">Récord: 0</span>
