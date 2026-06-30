@@ -36,7 +36,8 @@
     }
     .level-card.has-full-cover .level-cover {
       width: 100% !important;
-      height: 250px !important;
+      height: auto !important;
+      aspect-ratio: 1 / 1;
       margin: 0 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -362,8 +363,7 @@
       <div class="level-card has-full-cover" id="card-1" onclick="showPreview(1)">
         <div class="level-cover">
           <img src="../img/niveluno.png" alt="Clave de Sol Inicial">
-          <div class="level-header-overlay">
-            <span class="level-number">Nivel 1</span>
+          <div class="level-header-overlay" style="justify-content: flex-end;">
             <span class="level-status-icon" id="status-1">🔓</span>
           </div>
         </div>
