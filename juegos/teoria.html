@@ -561,13 +561,13 @@
     function drawTrebleClef(parent, staffStartX, line2Y, lineSpacing, color = "var(--color-gold)") {
       let fontSize, x, y;
       if (lineSpacing === 16) {
-        fontSize = 100;
-        x = staffStartX + 4;
-        y = line2Y + 15.5;
+        fontSize = 72;
+        x = staffStartX + 2;
+        y = line2Y + 11.5;
       } else {
-        fontSize = 240;
-        x = staffStartX + 10;
-        y = line2Y + 37.2;
+        fontSize = 200;
+        x = staffStartX + 5;
+        y = line2Y + 28;
       }
 
       const clefText = svgEl("text", {
@@ -585,13 +585,13 @@
     function drawBassClef(parent, staffStartX, line4Y, lineSpacing, color = "var(--color-gold)") {
       let fontSize, x, y;
       if (lineSpacing === 16) {
-        fontSize = 75;
-        x = staffStartX + 4;
-        y = line4Y + 32.5;
+        fontSize = 52;
+        x = staffStartX + 2;
+        y = line4Y + 22.0;
       } else {
-        fontSize = 180;
-        x = staffStartX + 10;
-        y = line4Y + 78;
+        fontSize = 150;
+        x = staffStartX + 5;
+        y = line4Y + 62;
       }
 
       const clefText = svgEl("text", {
@@ -798,6 +798,11 @@
       selectPosition(nearest, play);
     }
 
+    staffSvg.addEventListener("pointerdown", (event) => {
+      isDragging = true;
+      dragTo(event, true);
+      staffSvg.setPointerCapture(event.pointerId);
+    });
     staffSvg.addEventListener("pointermove", (event) => {
       if (isDragging) dragTo(event, false);
     });
