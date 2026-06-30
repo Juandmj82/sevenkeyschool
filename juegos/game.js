@@ -394,14 +394,14 @@ function drawStaffLines(clefType) {
   clefText.setAttribute("font-family", "serif");
   
   if (clefType === "sol") {
-    clefText.setAttribute("x", "18");
-    clefText.setAttribute("y", "148");
-    clefText.setAttribute("font-size", "180");
+    clefText.setAttribute("x", "14");
+    clefText.setAttribute("y", "138");
+    clefText.setAttribute("font-size", "110");
     clefText.textContent = "𝄞";
   } else {
-    clefText.setAttribute("x", "18");
-    clefText.setAttribute("y", "132");
-    clefText.setAttribute("font-size", "120");
+    clefText.setAttribute("x", "14");
+    clefText.setAttribute("y", "112");
+    clefText.setAttribute("font-size", "75");
     clefText.textContent = "𝄢";
   }
   staffSvg.appendChild(clefText);
