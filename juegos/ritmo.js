@@ -244,12 +244,6 @@ function updateAndDrawConfetti() {
 // --- PHASE LOADING ---
 
 function switchPhase(phaseNum) {
-  if (phaseNum > 1) {
-    // Check if unlocked
-    const progress = JSON.parse(localStorage.getItem("sevenkeys_rhythm_progress")) || { unlockedPhases: [1] };
-    if (!progress.unlockedPhases.includes(phaseNum)) return;
-  }
-  
   // Stop active loops
   stopPhase3Loop();
   
