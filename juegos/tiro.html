@@ -290,6 +290,29 @@
       100% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.8); transform: scale(1.05); }
     }
 
+    /* CSS-based Confetti pieces falling from the top */
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      z-index: 1200;
+      pointer-events: none;
+      border-radius: 3px;
+      animation: fall-confetti linear forwards;
+    }
+    @keyframes fall-confetti {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
     /* Modal styles */
     .modal-overlay {
       display: none;
@@ -539,8 +562,7 @@
         <button class="modal-btn" onclick="restartTiroLevel()">Intentar de nuevo</button>
       </div>
     </div>
-  <!-- Full-screen Confetti Canvas for Victory Celebration -->
-  <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1100;"></canvas>
+
 
   <script src="tiro.js"></script>
 </body>

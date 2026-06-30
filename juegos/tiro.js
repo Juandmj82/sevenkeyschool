@@ -167,19 +167,10 @@ const ctx = canvas.getContext("2d");
 const arenaContainer = document.getElementById("arena-container");
 const crosshair = document.getElementById("crosshair-element");
 
-// Full-screen Confetti Canvas Setup (Null-safe)
-let confettiCanvas = document.getElementById("confetti-canvas");
-let confettiCtx = confettiCanvas ? confettiCanvas.getContext("2d") : null;
-
 function resizeCanvas() {
   const rect = arenaContainer.getBoundingClientRect();
   canvas.width = rect.width;
   canvas.height = rect.height;
-  
-  if (confettiCanvas) {
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-  }
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -554,34 +545,27 @@ class Shockwave {
   }
 }
 let shockwaves = [];
-let confettis = [];
-
-// Confetti particle class for victory celebrations
-class Confetti {
-  constructor() {
-    this.x = Math.random() * window.innerWidth;
-    this.y = Math.random() * -100 - 20;
-    this.size = Math.random() * 8 + 6;
-    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    this.speedX = Math.random() * 4 - 2;
-    this.speedY = Math.random() * 4 + 2;
-    this.rotation = Math.random() * 360;
-    this.rotationSpeed = Math.random() * 12 - 6;
-  }
-
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.rotation += this.rotationSpeed;
-  }
-
-  draw() {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.rotation * Math.PI / 180);
-    ctx.fillStyle = this.color;
-    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-    ctx.restore();
+// Launch high-reliability DOM-based confetti pieces falling from the top
+function launchDOMConfetti() {
+  const colors = ['#00e5ff', '#ff007f', '#ffd700', '#00ff66', '#ff9900', '#9900ff'];
+  const pieceCount = 180;
+  for (let i = 0; i < pieceCount; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    const size = Math.random() * 8 + 6;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
+    p.style.animationDelay = (Math.random() * 2) + 's';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    
+    document.body.appendChild(p);
+    
+    // Auto cleanup
+    setTimeout(() => p.remove(), 6000);
   }
 }
 
@@ -788,7 +772,6 @@ function selectTiroLevel(levelNum) {
 // Restart Level
 function restartTiroLevel() {
   closeAllModals();
-  confettis = [];
   startGame();
 }
 
@@ -809,23 +792,8 @@ function triggerVictory() {
   isGameActive = false;
 
   // Trigger spectacular confetti rain ONLY at the end of Level 5
-  confettis = [];
   if (currentLevel === 5) {
-    let dynCanvas = document.getElementById("confetti-canvas");
-    if (!dynCanvas) {
-      dynCanvas = document.createElement("canvas");
-      dynCanvas.id = "confetti-canvas";
-      dynCanvas.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1100;";
-      document.body.appendChild(dynCanvas);
-    }
-    dynCanvas.width = window.innerWidth;
-    dynCanvas.height = window.innerHeight;
-    confettiCanvas = dynCanvas;
-    confettiCtx = dynCanvas.getContext("2d");
-
-    for (let i = 0; i < 220; i++) {
-      confettis.push(new Confetti());
-    }
+    launchDOMConfetti();
   }
 
   const modal = document.getElementById("modal-victory");
@@ -868,10 +836,10 @@ function triggerDefeat() {
 function closeAllModals() {
   document.getElementById("modal-victory").classList.remove("active");
   document.getElementById("modal-defeat").classList.remove("active");
-  confettis = [];
-  if (confettiCtx && confettiCanvas) {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  }
+  
+  // Clean up any remaining falling DOM confetti pieces
+  const pieces = document.querySelectorAll('.confetti-piece');
+  pieces.forEach(p => p.remove());
 }
 
 // Main Canvas Loop (60 FPS)
@@ -941,34 +909,7 @@ function drawLoop() {
   ctx.fill();
   ctx.restore();
 
-  // Update & Draw Confetti rain on victory (rendering on the full-screen confettiCtx overlaying the modal)
-  if (confettis.length > 0 && confettiCtx && confettiCanvas) {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-    for (let i = confettis.length - 1; i >= 0; i--) {
-      const c = confettis[i];
-      c.update();
-      
-      confettiCtx.save();
-      confettiCtx.translate(c.x, c.y);
-      confettiCtx.rotate(c.rotation * Math.PI / 180);
-      confettiCtx.fillStyle = c.color;
-      confettiCtx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
-      confettiCtx.restore();
 
-      if (c.y > confettiCanvas.height + 20) {
-        // Recycle confetti while the victory screen is open to keep it festive
-        if (confettis.length < 180 && !isGameActive) {
-          c.y = -20;
-          c.x = Math.random() * confettiCanvas.width;
-          c.speedY = Math.random() * 4 + 2;
-        } else {
-          confettis.splice(i, 1);
-        }
-      }
-    }
-  } else if (confettiCtx && confettiCanvas) {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  }
 
   requestAnimationFrame(drawLoop);
 }
