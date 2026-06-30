@@ -157,22 +157,27 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("profe-toast").classList.remove("show");
   });
 
-  // Setup tapping pad mouse & touch events
+  // Setup tapping pad pointerdown event (unified for mouse & touch to prevent double-tap issues)
   const tapPad = document.getElementById("tap-pad-trigger");
-  tapPad.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    handleTapInput();
-  });
-  tapPad.addEventListener("touchstart", (e) => {
+  tapPad.addEventListener("pointerdown", (e) => {
     e.preventDefault();
     handleTapInput();
   });
 
-  // Spacebar tapping support
+  // Spacebar tapping support with auto-repeat prevention
+  let isSpacePressed = false;
   window.addEventListener("keydown", (e) => {
     if (e.code === "Space" && currentPhase === 3 && isGameActive) {
       e.preventDefault();
-      handleTapInput();
+      if (!isSpacePressed) {
+        isSpacePressed = true;
+        handleTapInput();
+      }
+    }
+  });
+  window.addEventListener("keyup", (e) => {
+    if (e.code === "Space") {
+      isSpacePressed = false;
     }
   });
 
@@ -846,37 +851,15 @@ function handleTapInput() {
   
   // Visual feedback on tap trigger
   const btn = document.getElementById("tap-pad-trigger");
-  btn.classList.add("pressed");
-  setTimeout(() => btn.classList.remove("pressed"), 100);
+  if (btn) {
+    btn.classList.add("pressed");
+    setTimeout(() => btn.classList.remove("pressed"), 100);
+  }
   
-  const elapsed = (Date.now() - (Date.now() - performance.now())); // normalized elapsed
-  
-  // Find closest note within active range
-  const now = Date.now();
-  
-  // Find elapsed game time: we need to find start offset
-  // We can just calculate the closest note by time difference
-  // Let's compute actual running time in game loop
-}
-
-// Simple time-matching logic
-function handleTapInput() {
-  if (currentPhase !== 3 || !isGameActive) return;
-  
-  const elapsed = Date.now() - (metronomeIntervalId ? 0 : 0); // Need to sync with startGame start offset
-  // Let's use the simplest, most robust approach: find the active note near the target line X=80
-  
-  const activeAreaLeft = 60;
-  const activeAreaRight = 104;
-  const targetX = 80;
-  
-  // In the loop, note position X is: targetX + (note.time - elapsed) * 0.22
-  // We want noteX to be close to targetX, meaning (note.time - elapsed) is close to 0
+  const gameElapsed = Date.now() - (window.gameStartTime || Date.now());
   
   let closestNote = null;
   let minDiff = Infinity;
-  
-  const gameElapsed = Date.now() - (window.gameStartTime || Date.now());
   
   tapTrackNotes.forEach(note => {
     if (note.tapped || note.missed) return;
@@ -889,19 +872,18 @@ function handleTapInput() {
 
   if (closestNote) {
     if (closestNote.type === "silencio-negra") {
-      // Tap on silence is a mistake!
       closestNote.missed = true;
       handleTapMiss();
       return;
     }
     
-    if (minDiff < 140) { // Hit window
+    if (minDiff < 180) { // Tolerancia un poco más amplia (180ms) para mejorar la jugabilidad
       closestNote.tapped = true;
       score += 20;
       updateHUD();
       
       feedbackBox.className = "feedback-box feedback-correct";
-      if (minDiff < 60) {
+      if (minDiff < 80) {
         feedbackBox.textContent = "⭐ ¡Perfecto!";
         playWoodblockTone(900, 0.08, 0.6);
       } else {
