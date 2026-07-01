@@ -11,12 +11,12 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Seven Keys School | Jardín de los Sonidos</title>
+  <title>Seven Keys School | Cielo y Tierra</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
-      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      background: #020617;
       height: 100vh;
       max-height: 100vh;
       overflow: hidden;
@@ -27,7 +27,7 @@
 
     header {
       padding: 0.8rem 1.5rem;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(8px);
       z-index: 20;
       position: relative;
@@ -115,12 +115,12 @@
     .sandbox-area {
       flex: 1;
       width: 100%;
-      background: rgba(255, 255, 255, 0.01);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 24px;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
     #effects-canvas {
@@ -133,143 +133,158 @@
       z-index: 2;
     }
 
-    /* Xylophone Mode */
-    .xylophone-grid {
+    /* Split Screen Layout (Cielo y Tierra) */
+    .split-container {
       display: flex;
+      flex-direction: column;
       width: 100%;
       height: 100%;
-      padding: 1.5rem;
-      gap: 0.75rem;
       z-index: 1;
       position: relative;
     }
 
-    .xylo-bar {
+    .zone-half {
       flex: 1;
-      height: 100%;
-      border-radius: 20px;
-      cursor: pointer;
+      width: 100%;
       position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      padding-bottom: 2rem;
-      box-shadow: 
-        0 8px 0 rgba(0,0,0,0.35),
-        inset 0 4px 0 rgba(255,255,255,0.2),
-        inset 0 -12px 20px rgba(0,0,0,0.2);
-      transition: transform 0.08s ease, box-shadow 0.08s ease;
-      touch-action: none;
-    }
-
-    .xylo-bar::after {
-      content: '';
-      position: absolute;
-      top: 15px;
-      width: 14px;
-      height: 14px;
-      background: #334155;
-      border-radius: 50%;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
-    }
-
-    .xylo-bar::before {
-      content: '';
-      position: absolute;
-      bottom: 15px;
-      width: 14px;
-      height: 14px;
-      background: #334155;
-      border-radius: 50%;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
-    }
-
-    .xylo-bar:active, .xylo-bar.active-touch {
-      transform: translateY(6px);
-      box-shadow: 
-        0 2px 0 rgba(0,0,0,0.3),
-        inset 0 4px 0 rgba(255,255,255,0.1),
-        inset 0 -4px 10px rgba(0,0,0,0.4);
-    }
-
-    .xylo-label {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #020617;
-      pointer-events: none;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.45);
-      width: 44px;
-      height: 44px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+      transition: filter 0.25s ease, background 0.3s ease;
+      touch-action: none;
     }
 
-    /* Professional Hand-drawn Vector Garden Layout */
-    .garden-view {
+    /* Cielo (High sound zone) */
+    .zone-sky-half {
+      background: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Tierra (Low sound zone) */
+    .zone-ground-half {
+      background: linear-gradient(to bottom, #3f200f 0%, #1c1917 100%);
+    }
+
+    .zone-half:hover {
+      filter: brightness(1.05);
+    }
+
+    /* High quality vector vector illustrations inside zones */
+    .zone-graphics {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, #070d1e 0%, #152216 65%, #221810 100%);
-      display: none;
+      pointer-events: none;
       z-index: 1;
     }
 
-    .toy-element {
-      position: absolute;
-      cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Core Visual Cards in Center of halves */
+    .zone-label-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      padding: 1.2rem 2.2rem;
+      border-radius: 28px;
+      pointer-events: none;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       z-index: 3;
-      touch-action: none;
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    .toy-element:active {
-      transform: scale(1.25) rotate(5deg);
+    .zone-sky-half:active .zone-label-card,
+    .zone-sky-half.active-touch .zone-label-card {
+      transform: scale(1.1);
+      border-color: #38bdf8;
     }
 
-    /* Vector SVG Sizes and Positions */
-    .toy-sun { top: 8%; right: 12%; width: 110px; height: 110px; }
-    .toy-cloud1 { top: 12%; left: 15%; width: 140px; height: 75px; }
-    .toy-cloud2 { top: 22%; left: 45%; width: 120px; height: 65px; }
-    
-    /* Big tree structure */
-    .toy-tree { top: 20%; left: 5%; width: 280px; height: 350px; }
-    .toy-bird { top: 40%; left: 16%; width: 50px; height: 50px; z-index: 4; }
-    .toy-apple1 { top: 32%; left: 11%; width: 40px; height: 40px; z-index: 4; }
-    .toy-apple2 { top: 38%; left: 22%; width: 40px; height: 40px; z-index: 4; }
+    .zone-ground-half:active .zone-label-card,
+    .zone-ground-half.active-touch .zone-label-card {
+      transform: scale(1.1);
+      border-color: #fb923c;
+    }
 
-    /* Pond and Frog */
-    .toy-pond { bottom: 5%; right: 8%; width: 220px; height: 90px; }
-    .toy-frog { bottom: 10%; right: 14%; width: 55px; height: 55px; z-index: 4; }
+    .zone-half-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
 
-    /* Floor elements */
-    .toy-mushroom1 { bottom: 10%; left: 42%; width: 45px; height: 50px; }
-    .toy-mushroom2 { bottom: 7%; left: 48%; width: 35px; height: 40px; }
-    
-    .toy-flower-red { bottom: 8%; left: 34%; width: 45px; height: 75px; }
-    .toy-flower-yellow { bottom: 10%; left: 58%; width: 45px; height: 75px; }
-    .toy-flower-blue { bottom: 6%; left: 66%; width: 45px; height: 75px; }
-    .toy-snail { bottom: 6%; left: 76%; width: 60px; height: 45px; }
+    .zone-sky-half .zone-half-title {
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
 
-    /* Star Background Decoration */
-    .glowing-bg-star {
+    .zone-ground-half .zone-half-title {
+      color: #fb923c;
+      text-shadow: 0 0 10px rgba(251, 146, 60, 0.3);
+    }
+
+    .zone-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Play button overlay for challenge mode */
+    .challenge-center-button {
       position: absolute;
-      color: rgba(255, 255, 255, 0.15);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--color-gold);
+      color: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+      z-index: 10;
+      cursor: pointer;
+      border: 4px solid #ffffff;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+      display: none;
+    }
+
+    .challenge-center-button:active {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .challenge-center-button i {
+      font-size: 2.2rem;
+    }
+
+    /* Soft pulse guidance for errors */
+    .pulse-guide {
+      animation: zonePulse 0.8s 2 ease-in-out;
+    }
+
+    @keyframes zonePulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.25); }
+    }
+
+    /* Glowing stars decoration background */
+    .bg-glowing-star {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.12);
       font-size: 0.8rem;
       pointer-events: none;
       animation: flashStar 3s infinite ease-in-out;
     }
 
     @keyframes flashStar {
-      0%, 100% { opacity: 0.15; transform: scale(0.8); }
-      50% { opacity: 0.7; transform: scale(1.25); }
+      0%, 100% { opacity: 0.1; transform: scale(0.8); }
+      50% { opacity: 0.6; transform: scale(1.2); }
     }
 
     .loading-notice {
@@ -308,6 +323,14 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Floating Game Emojis */
+    .glowing-emoji {
+      position: absolute;
+      pointer-events: none;
+      font-size: 2.5rem;
+      z-index: 4;
+    }
+
     @media (max-width: 768px) {
       .stimulation-container {
         padding: 0.5rem;
@@ -317,23 +340,23 @@
         gap: 0.6rem;
         padding: 0.6rem;
       }
-      .xylo-bar {
-        border-radius: 14px;
-        padding-bottom: 1rem;
+      .zone-label-card {
+        padding: 0.8rem 1.6rem;
+        border-radius: 20px;
       }
-      .xylo-label {
-        font-size: 1.2rem;
-        width: 32px;
-        height: 32px;
+      .zone-half-title {
+        font-size: 1.1rem;
       }
-      /* Scale down garden items on mobile */
-      .toy-sun { width: 80px; height: 80px; }
-      .toy-cloud1 { width: 90px; height: 50px; }
-      .toy-cloud2 { width: 80px; height: 45px; }
-      .toy-tree { width: 170px; height: 220px; }
-      .toy-pond { width: 140px; height: 60px; }
-      .toy-bird { width: 35px; height: 35px; }
-      .toy-frog { width: 35px; height: 35px; }
+      .zone-desc {
+        font-size: 0.75rem;
+      }
+      .challenge-center-button {
+        width: 75px;
+        height: 75px;
+      }
+      .challenge-center-button i {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
@@ -349,43 +372,28 @@
   </header>
 
   <main class="stimulation-container">
-    <!-- Scientific Early Stimulation Controls -->
+    <!-- Game Mode Controls -->
     <div class="controls-panel">
       <div class="control-group">
         <span class="control-label">Juego:</span>
         <div class="btn-toggle-group">
-          <button class="btn-toggle active" id="btn-mode-xylo" onclick="setMode('xylo')">
-            <i class="fas fa-cubes"></i> Xilófono
+          <button class="btn-toggle active" id="btn-mode-explore" onclick="setMode('explore')">
+            <i class="fas fa-hand-pointer"></i> Explorar
           </button>
-          <button class="btn-toggle" id="btn-mode-forest" onclick="setMode('forest')">
-            <i class="fas fa-leaf"></i> Jardín Sensorial
+          <button class="btn-toggle" id="btn-mode-challenge" onclick="setMode('challenge')">
+            <i class="fas fa-headphones"></i> El Reto del Oído
           </button>
         </div>
       </div>
 
       <div class="control-group">
-        <span class="control-label">Sensación:</span>
+        <span class="control-label">Sonido:</span>
         <div class="btn-toggle-group">
-          <button class="btn-toggle active" id="btn-scale-pentatonic" onclick="setScale('pentatonic')">
-            🌈 Mágico
-          </button>
-          <button class="btn-toggle" id="btn-scale-major" onclick="setScale('major')">
-            ☀️ Alegre
-          </button>
-          <button class="btn-toggle" id="btn-scale-minor" onclick="setScale('minor')">
-            🌙 Misterioso
-          </button>
-        </div>
-      </div>
-
-      <div class="control-group" id="instrument-control-group">
-        <span class="control-label">Instrumento:</span>
-        <div class="btn-toggle-group">
-          <button class="btn-toggle active" id="btn-timbre-real-xylo" onclick="setTimbre('real-xylo')">
-            🪵 Xilófono Real
-          </button>
-          <button class="btn-toggle" id="btn-timbre-bell" onclick="setTimbre('bell')">
+          <button class="btn-toggle active" id="btn-sound-chime" onclick="setSoundType('chime')">
             ✨ Campanas
+          </button>
+          <button class="btn-toggle" id="btn-sound-marimba" onclick="setSoundType('marimba')">
+            🪵 Xilófono
           </button>
         </div>
       </div>
@@ -397,265 +405,99 @@
 
       <!-- Loading notice -->
       <div class="loading-notice" id="loading-notice">
-        <p>Cargando xilófono real...</p>
+        <p>Cargando sonidos reales...</p>
         <div class="spinner"></div>
       </div>
 
-      <!-- Mode 1: Color Xylophone -->
-      <div class="xylophone-grid" id="xylo-wrapper">
-        <!-- Bars are dynamically injected based on selected scale -->
-      </div>
+      <!-- Play Button for Challenge Mode -->
+      <button class="challenge-center-button" id="btn-listen" onclick="playChallengeSound()" aria-label="Escuchar Sonido">
+        <i class="fas fa-volume-up"></i>
+      </button>
 
-      <!-- Mode 2: Professional SVG Magical Sensory Garden -->
-      <div class="garden-view" id="forest-wrapper">
-        <!-- Stars decoration -->
-        <span class="glowing-bg-star" style="top: 8%; left: 8%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 16%; left: 32%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 6%; left: 54%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 18%; left: 70%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 24%; left: 88%;">⭐</span>
+      <!-- Split Screen Layout -->
+      <div class="split-container">
+        <!-- Sky (High Note) -->
+        <div class="zone-half zone-sky-half" id="zone-sky" onmousedown="onZoneTap('sky', event)" ontouchstart="onZoneTap('sky', event)">
+          <!-- Vector background graphics -->
+          <div class="zone-graphics">
+            <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="none" opacity="0.15">
+              <path d="M0 0 L100 0 L100 90 Q 75 70, 50 90 Q 25 110, 0 90 Z" fill="#38bdf8" />
+            </svg>
+            <span class="bg-glowing-star" style="top: 15%; left: 12%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 35%; left: 45%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 20%; left: 78%;">⭐</span>
+          </div>
 
-        <!-- Sun SVG -->
-        <div class="toy-element toy-sun" onmousedown="playGardenElement('sun', event)" ontouchstart="playGardenElement('sun', event)">
-          <svg viewBox="0 0 100 100" width="100%" height="100%">
-            <circle cx="50" cy="50" r="24" fill="#fbbf24" filter="drop-shadow(0 0 12px #f59e0b)" />
-            <path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L29 29 M71 71 L80 80 M20 80 L29 71 M71 29 L80 20" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
-          </svg>
-        </div>
-
-        <!-- Clouds SVGs -->
-        <div class="toy-element toy-cloud1" onmousedown="playGardenElement('cloud1', event)" ontouchstart="playGardenElement('cloud1', event)">
-          <svg viewBox="0 0 100 60" width="100%" height="100%">
-            <path d="M10 45 A 20 20 0 0 1 35 25 A 25 25 0 0 1 75 25 A 18 18 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.9" />
-          </svg>
-        </div>
-        <div class="toy-element toy-cloud2" onmousedown="playGardenElement('cloud2', event)" ontouchstart="playGardenElement('cloud2', event)">
-          <svg viewBox="0 0 100 60" width="100%" height="100%">
-            <path d="M10 45 A 16 16 0 0 1 30 28 A 20 20 0 0 1 70 28 A 15 15 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.8" />
-          </svg>
+          <div class="zone-label-card">
+            <!-- Glowing Sun Vector -->
+            <svg viewBox="0 0 100 100" width="50" height="50">
+              <circle cx="50" cy="50" r="22" fill="#38bdf8" filter="drop-shadow(0 0 8px #38bdf8)" />
+              <path d="M50 5 L50 18 M50 82 L50 95 M5 50 L18 50 M82 50 L95 50" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" />
+            </svg>
+            <h2 class="zone-half-title">El Cielo</h2>
+            <span class="zone-desc">Sonido Agudo</span>
+          </div>
         </div>
 
-        <!-- Big Tree SVG -->
-        <div class="toy-element toy-tree" onmousedown="playGardenElement('tree', event)" ontouchstart="playGardenElement('tree', event)">
-          <svg viewBox="0 0 200 250" width="100%" height="100%">
-            <!-- Trunk -->
-            <path d="M85 250 L85 140 C85 100 60 80 50 70 L60 70 C75 85 95 100 100 130 C105 100 125 85 140 70 L150 70 C140 80 115 100 115 140 L115 250 Z" fill="#78350f" />
-            <!-- Canopy -->
-            <circle cx="65" cy="90" r="50" fill="#047857" opacity="0.95" />
-            <circle cx="135" cy="90" r="50" fill="#065f46" opacity="0.95" />
-            <circle cx="100" cy="55" r="55" fill="#059669" />
-          </svg>
-        </div>
+        <!-- Ground (Low Note) -->
+        <div class="zone-half zone-ground-half" id="zone-ground" onmousedown="onZoneTap('ground', event)" ontouchstart="onZoneTap('ground', event)">
+          <!-- Vector background graphics -->
+          <div class="zone-graphics">
+            <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="none" opacity="0.1">
+              <path d="M0 10 L100 10 L100 100 L0 100 Z" fill="#fb923c" />
+            </svg>
+            <span class="bg-glowing-star" style="bottom: 15%; left: 15%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 35%; left: 52%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 20%; left: 80%;">⭐</span>
+          </div>
 
-        <!-- Bird in the Tree SVG -->
-        <div class="toy-element toy-bird" onmousedown="playGardenElement('bird', event)" ontouchstart="playGardenElement('bird', event)">
-          <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <!-- Bird Body -->
-            <circle cx="30" cy="30" r="20" fill="#3b82f6" />
-            <circle cx="42" cy="22" r="8" fill="#60a5fa" />
-            <!-- Beak -->
-            <polygon points="48,20 56,24 48,28" fill="#f59e0b" />
-            <!-- Eye -->
-            <circle cx="42" cy="20" r="2" fill="#000" />
-            <!-- Tail Wing -->
-            <path d="M12 28 Q 6 34 12 40 Z" fill="#1d4ed8" />
-          </svg>
-        </div>
-
-        <!-- Apples SVGs -->
-        <div class="toy-element toy-apple1" onmousedown="playGardenElement('apple1', event)" ontouchstart="playGardenElement('apple1', event)">
-          <svg viewBox="0 0 40 40" width="100%" height="100%">
-            <circle cx="20" cy="22" r="15" fill="#ef4444" />
-            <path d="M20 7 Q 23 2 20 0 Q 17 2 20 7" fill="#15803d" />
-            <rect x="19" y="3" width="2" height="5" fill="#78350f" />
-          </svg>
-        </div>
-        <div class="toy-element toy-apple2" onmousedown="playGardenElement('apple2', event)" ontouchstart="playGardenElement('apple2', event)">
-          <svg viewBox="0 0 40 40" width="100%" height="100%">
-            <circle cx="20" cy="22" r="15" fill="#dc2626" />
-            <path d="M20 7 Q 23 2 20 0 Q 17 2 20 7" fill="#15803d" />
-            <rect x="19" y="3" width="2" height="5" fill="#78350f" />
-          </svg>
-        </div>
-
-        <!-- Pond SVG -->
-        <div class="toy-element toy-pond" onmousedown="playGardenElement('pond', event)" ontouchstart="playGardenElement('pond', event)">
-          <svg viewBox="0 0 200 80" width="100%" height="100%">
-            <ellipse cx="100" cy="40" rx="90" ry="35" fill="#0369a1" opacity="0.8" />
-            <ellipse cx="90" cy="38" rx="80" ry="28" fill="#0284c7" />
-          </svg>
-        </div>
-
-        <!-- Frog by the pond SVG -->
-        <div class="toy-element toy-frog" onmousedown="playGardenElement('frog', event)" ontouchstart="playGardenElement('frog', event)">
-          <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <!-- Frog head/body -->
-            <ellipse cx="30" cy="35" rx="22" ry="18" fill="#22c55e" />
-            <!-- Big Eyes -->
-            <circle cx="18" cy="18" r="8" fill="#22c55e" />
-            <circle cx="18" cy="18" r="5" fill="#fff" />
-            <circle cx="18" cy="18" r="2.5" fill="#000" />
-            <circle cx="42" cy="18" r="8" fill="#22c55e" />
-            <circle cx="42" cy="18" r="5" fill="#fff" />
-            <circle cx="42" cy="18" r="2.5" fill="#000" />
-            <!-- Smile -->
-            <path d="M20 40 Q 30 48 40 40" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round" />
-          </svg>
-        </div>
-
-        <!-- Mushrooms SVGs -->
-        <div class="toy-element toy-mushroom1" onmousedown="playGardenElement('mushroom1', event)" ontouchstart="playGardenElement('mushroom1', event)">
-          <svg viewBox="0 0 50 60" width="100%" height="100%">
-            <!-- Stem -->
-            <path d="M18 60 C18 40 32 40 32 60 Z" fill="#e2e8f0" />
-            <!-- Cap -->
-            <path d="M5 36 C5 15 45 15 45 36 Z" fill="#ef4444" />
-            <!-- Spots -->
-            <circle cx="15" cy="24" r="3" fill="#fff" />
-            <circle cx="25" cy="20" r="4" fill="#fff" />
-            <circle cx="35" cy="26" r="3" fill="#fff" />
-          </svg>
-        </div>
-        <div class="toy-element toy-mushroom2" onmousedown="playGardenElement('mushroom2', event)" ontouchstart="playGardenElement('mushroom2', event)">
-          <svg viewBox="0 0 50 60" width="100%" height="100%">
-            <path d="M18 60 C18 40 32 40 32 60 Z" fill="#cbd5e1" />
-            <path d="M5 36 C5 15 45 15 45 36 Z" fill="#f97316" />
-            <circle cx="20" cy="22" r="3" fill="#fff" />
-            <circle cx="30" cy="25" r="3" fill="#fff" />
-          </svg>
-        </div>
-
-        <!-- Flowers SVGs (Styled Custom Vectors) -->
-        <div class="toy-element toy-flower-red" onmousedown="playGardenElement('flower-red', event)" ontouchstart="playGardenElement('flower-red', event)">
-          <svg viewBox="0 0 50 80" width="100%" height="100%">
-            <rect x="23" y="35" width="4" height="45" fill="#166534" />
-            <!-- Leaves -->
-            <path d="M25 50 Q 38 45 30 40 Z" fill="#15803d" />
-            <path d="M25 60 Q 12 55 20 50 Z" fill="#15803d" />
-            <!-- Petals -->
-            <circle cx="25" cy="25" r="10" fill="#ef4444" />
-            <circle cx="15" cy="25" r="8" fill="#dc2626" />
-            <circle cx="35" cy="25" r="8" fill="#dc2626" />
-            <circle cx="25" cy="15" r="8" fill="#dc2626" />
-            <circle cx="25" cy="35" r="8" fill="#dc2626" />
-            <!-- Center -->
-            <circle cx="25" cy="25" r="5" fill="#f59e0b" />
-          </svg>
-        </div>
-
-        <div class="toy-element toy-flower-yellow" onmousedown="playGardenElement('flower-yellow', event)" ontouchstart="playGardenElement('flower-yellow', event)">
-          <svg viewBox="0 0 50 80" width="100%" height="100%">
-            <rect x="23" y="35" width="4" height="45" fill="#166534" />
-            <path d="M25 50 Q 38 45 30 40 Z" fill="#15803d" />
-            <circle cx="25" cy="25" r="12" fill="#fbbf24" />
-            <circle cx="15" cy="20" r="7" fill="#f59e0b" />
-            <circle cx="35" cy="20" r="7" fill="#f59e0b" />
-            <circle cx="15" cy="30" r="7" fill="#f59e0b" />
-            <circle cx="35" cy="30" r="7" fill="#f59e0b" />
-            <circle cx="25" cy="25" r="6" fill="#78350f" />
-          </svg>
-        </div>
-
-        <div class="toy-element toy-flower-blue" onmousedown="playGardenElement('flower-blue', event)" ontouchstart="playGardenElement('flower-blue', event)">
-          <svg viewBox="0 0 50 80" width="100%" height="100%">
-            <rect x="23" y="35" width="4" height="45" fill="#166534" />
-            <path d="M25 60 Q 12 55 20 50 Z" fill="#15803d" />
-            <!-- Tulip Petal -->
-            <path d="M12 35 C12 15 38 15 38 35 Z" fill="#0284c7" />
-            <path d="M18 35 C18 20 32 20 32 35 Z" fill="#38bdf8" />
-          </svg>
-        </div>
-
-        <!-- Snail SVG -->
-        <div class="toy-element toy-snail" onmousedown="playGardenElement('snail', event)" ontouchstart="playGardenElement('snail', event)">
-          <svg viewBox="0 0 80 60" width="100%" height="100%">
-            <!-- Body -->
-            <path d="M10 50 Q 40 45 70 50 Q 75 42 70 35 L 60 35 C 50 35 40 40 30 42 Z" fill="#d97706" />
-            <!-- Shell spiral -->
-            <circle cx="38" cy="32" r="20" fill="#c084fc" stroke="#581c87" stroke-width="2" />
-            <circle cx="38" cy="32" r="14" fill="#e9d5ff" stroke="#581c87" stroke-width="1.5" />
-            <!-- Feelers -->
-            <line x1="68" y1="36" x2="72" y2="24" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
-            <line x1="64" y1="36" x2="66" y2="22" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
-            <circle cx="72" cy="23" r="2" fill="#78350f" />
-            <circle cx="66" cy="21" r="2" fill="#78350f" />
-          </svg>
+          <div class="zone-label-card">
+            <!-- Mountain/Earth Wave Vector -->
+            <svg viewBox="0 0 100 100" width="50" height="50">
+              <path d="M10 80 L50 20 L90 80 Z" fill="none" stroke="#fb923c" stroke-width="6" stroke-linejoin="round" />
+              <circle cx="50" cy="55" r="8" fill="#fb923c" />
+            </svg>
+            <h2 class="zone-half-title">La Tierra</h2>
+            <span class="zone-desc">Sonido Grave</span>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    // --- Audio Files List (C4 to B4) ---
+    // --- Audio setup ---
     const noteFiles = [
-      '../music/xylophone/note1.wav', // DO (C4)
-      '../music/xylophone/note2.wav', // RE (D4)
-      '../music/xylophone/note3.wav', // MI (E4)
-      '../music/xylophone/note4.wav', // FA (F4)
-      '../music/xylophone/note5.wav', // SOL (G4)
-      '../music/xylophone/note6.wav', // LA (A4)
-      '../music/xylophone/note7.wav'  // SI (B4)
+      '../music/xylophone/note1.wav', // DO4 (C4) - used for Low Grave
+      '../music/xylophone/note7.wav'  // SI4 (B4) - used for High Agudo
     ];
 
     let audioCtx = null;
-    let selectedScale = 'pentatonic';
-    let selectedTimbre = 'real-xylo';
-    let currentMode = 'xylo';
+    let selectedSound = 'chime';
+    let currentMode = 'explore';
 
     const audioBuffers = {};
     let soundsLoaded = false;
     let isLoadingSounds = false;
 
-    // Frequencies and base Note index mappings
-    // NOTE COLORS (DO = RED, RE = Orange, MI = Yellow, FA = Green, SOL = Cyan, LA = Blue, SI = Purple)
-    const scales = {
-      pentatonic: [
-        { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' }, // Red
-        { note: 'RE', freq: 293.66, noteIndex: 2, pitchRate: 1.00, color: '#f97316' }, // Orange
-        { note: 'MI', freq: 329.63, noteIndex: 3, pitchRate: 1.00, color: '#eab308' }, // Yellow
-        { note: 'SOL', freq: 392.00, noteIndex: 5, pitchRate: 1.00, color: '#06b6d4' }, // Cyan
-        { note: 'LA', freq: 440.00, noteIndex: 6, pitchRate: 1.00, color: '#1d4ed8' }, // Blue
-        { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }  // Red (Agudo: C5)
-      ],
-      major: [
-        { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' },
-        { note: 'RE', freq: 293.66, noteIndex: 2, pitchRate: 1.00, color: '#f97316' },
-        { note: 'MI', freq: 329.63, noteIndex: 3, pitchRate: 1.00, color: '#eab308' },
-        { note: 'FA', freq: 349.23, noteIndex: 4, pitchRate: 1.00, color: '#22c55e' },
-        { note: 'SOL', freq: 392.00, noteIndex: 5, pitchRate: 1.00, color: '#06b6d4' },
-        { note: 'LA', freq: 440.00, noteIndex: 6, pitchRate: 1.00, color: '#1d4ed8' },
-        { note: 'SI', freq: 493.88, noteIndex: 7, pitchRate: 1.00, color: '#a855f7' },
-        { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }
-      ],
-      minor: [
-        { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' },
-        { note: 'RE', freq: 293.66, noteIndex: 2, pitchRate: 1.00, color: '#f97316' },
-        { note: 'MIb', freq: 311.13, noteIndex: 3, pitchRate: 0.9439, color: '#e1a506' },
-        { note: 'FA', freq: 349.23, noteIndex: 4, pitchRate: 1.00, color: '#22c55e' },
-        { note: 'SOL', freq: 392.00, noteIndex: 5, pitchRate: 1.00, color: '#06b6d4' },
-        { note: 'LAb', freq: 415.30, noteIndex: 6, pitchRate: 0.9439, color: '#153bb1' },
-        { note: 'SIb', freq: 466.16, noteIndex: 7, pitchRate: 0.9439, color: '#8c3fe0' },
-        { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }
-      ]
-    };
+    // Challenge variables
+    let challengeActive = false;
+    let currentTarget = null; // 'sky' or 'ground'
+    let isWaitingForAnswer = false;
 
-    // Garden Elements specific tones (frequencies / indices)
-    const gardenToys = {
-      sun: { noteIndex: 5, pitchRate: 2.0, color: '#ffd64b', emoji: '☀️' },         // C5 equivalent
-      cloud1: { noteIndex: 3, pitchRate: 2.0, color: '#38bdf8', emoji: '☁️' },
-      cloud2: { noteIndex: 6, pitchRate: 1.5, color: '#4bc5ff', emoji: '☁️' },
-      tree: { noteIndex: 1, pitchRate: 1.0, color: '#22c55e', emoji: '🌳' },
-      bird: { noteIndex: 3, pitchRate: 2.0, color: '#4ade80', emoji: '🐦' },
-      apple1: { noteIndex: 5, pitchRate: 1.0, color: '#ef4444', emoji: '🍎' },
-      apple2: { noteIndex: 6, pitchRate: 1.0, color: '#ff4b4b', emoji: '🍎' },
-      pond: { noteIndex: 1, pitchRate: 0.5, color: '#00e5ff', emoji: '🌊' },        // Low C3
-      frog: { noteIndex: 2, pitchRate: 0.5, color: '#4bff79', emoji: '🐸' },
-      mushroom1: { noteIndex: 4, pitchRate: 0.5, color: '#eab308', emoji: '🍄' },
-      mushroom2: { noteIndex: 5, pitchRate: 0.5, color: '#ff9c4b', emoji: '🍄' },
-      'flower-red': { noteIndex: 1, pitchRate: 1.0, color: '#ef4444', emoji: '🌹' },
-      'flower-yellow': { noteIndex: 3, pitchRate: 1.0, color: '#eab308', emoji: '🌻' },
-      'flower-blue': { noteIndex: 4, pitchRate: 1.0, color: '#06b6d4', emoji: '🌷' },
-      snail: { noteIndex: 7, pitchRate: 1.0, color: '#a855f7', emoji: '🐌' }
+    const zoneDetails = {
+      sky: {
+        noteIndex: 7, // SI4 (High)
+        pitchRate: 1.25, // Shift higher for clear crystal tone
+        synthFreq: 880.00, // High A5
+        color: '#38bdf8'
+      },
+      ground: {
+        noteIndex: 1, // DO4 (Low)
+        pitchRate: 0.5, // Shift down one octave for deep rumble
+        synthFreq: 130.81, // Low C3
+        color: '#fb923c'
+      }
     };
 
     function initAudio() {
@@ -674,38 +516,42 @@
       const notice = document.getElementById('loading-notice');
       notice.style.display = 'block';
 
-      for (let i = 0; i < noteFiles.length; i++) {
-        try {
-          const response = await fetch(noteFiles[i]);
-          const arrayBuffer = await response.arrayBuffer();
-          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-          audioBuffers[i + 1] = audioBuffer;
-        } catch (e) {
-          console.error("Error loading note file:", noteFiles[i], e);
-        }
+      // Load C4 and B4 notes
+      try {
+        const response1 = await fetch(noteFiles[0]);
+        const arrayBuffer1 = await response1.arrayBuffer();
+        audioBuffers[1] = await audioCtx.decodeAudioData(arrayBuffer1);
+
+        const response2 = await fetch(noteFiles[1]);
+        const arrayBuffer2 = await response2.arrayBuffer();
+        audioBuffers[7] = await audioCtx.decodeAudioData(arrayBuffer2);
+        
+        soundsLoaded = true;
+      } catch (e) {
+        console.error("Error loading note files:", e);
       }
-      soundsLoaded = true;
+
       isLoadingSounds = false;
       notice.style.display = 'none';
     }
 
-    // Play Note dispatcher
-    function playNote(noteIndex, rate, fallbackFreq) {
+    function playSound(zoneKey) {
       initAudio();
+      const details = zoneDetails[zoneKey];
 
-      if (soundsLoaded && audioBuffers[noteIndex] && selectedTimbre === 'real-xylo') {
+      // If WAV buffers are loaded and Marimba/Xilofono is selected, play them!
+      if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
         const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffers[noteIndex];
-        source.playbackRate.setValueAtTime(rate, audioCtx.currentTime);
+        source.buffer = audioBuffers[details.noteIndex];
+        source.playbackRate.setValueAtTime(details.pitchRate, audioCtx.currentTime);
         source.connect(audioCtx.destination);
         source.start(0);
       } else {
-        // Fallback to high quality synthesized chimes
-        playSynthChime(fallbackFreq);
+        // High quality synthesized chime
+        playSynthChime(details.synthFreq);
       }
     }
 
-    // Chime Synthesis
     function playSynthChime(freq) {
       const osc1 = audioCtx.createOscillator();
       const osc2 = audioCtx.createOscillator();
@@ -733,105 +579,54 @@
       
       osc1.start(now);
       osc2.start(now);
-      
       osc1.stop(now + 1.9);
       osc2.stop(now + 0.7);
     }
 
-    // --- Dynamic DOM Generation ---
-    function renderXylophone() {
-      const wrapper = document.getElementById('xylo-wrapper');
-      wrapper.innerHTML = '';
-      
-      const bars = scales[selectedScale];
-      bars.forEach((bar, index) => {
-        const barElem = document.createElement('div');
-        barElem.className = 'xylo-bar';
-        barElem.style.backgroundColor = bar.color;
+    // Success chime chord
+    function playSuccessChime() {
+      const now = audioCtx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // DO5, MI5, SOL5, DO6 (Arpeggio)
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
         
-        const heightPercent = 100 - (index * 4);
-        barElem.style.height = `${heightPercent}%`;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
         
-        const label = document.createElement('span');
-        label.className = 'xylo-label';
-        // Note: keeping DO, RE, MI visible only on the physical Xylophone bars for navigation, 
-        // but completely hidden in the free sensory garden view.
-        label.innerText = bar.note;
+        gain.gain.setValueAtTime(0.3, now + (idx * 0.08));
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8 + (idx * 0.08));
         
-        barElem.appendChild(label);
-        
-        // Touch & Mouse triggers
-        const trigger = (e) => {
-          e.preventDefault();
-          barElem.classList.add('active-touch');
-          setTimeout(() => barElem.classList.remove('active-touch'), 100);
-          
-          playNote(bar.noteIndex, bar.pitchRate, bar.freq);
-          
-          const rect = barElem.getBoundingClientRect();
-          const x = rect.left + rect.width / 2;
-          const y = rect.top + rect.height / 2;
-          spawnParticles(x, y, bar.color);
-        };
-
-        barElem.addEventListener('mousedown', trigger);
-        barElem.addEventListener('touchstart', trigger);
-
-        wrapper.appendChild(barElem);
+        osc.start(now + (idx * 0.08));
+        osc.stop(now + 0.9 + (idx * 0.08));
       });
     }
 
-    function setScale(scaleName) {
-      selectedScale = scaleName;
-      document.getElementById('btn-scale-pentatonic').classList.remove('active');
-      document.getElementById('btn-scale-major').classList.remove('active');
-      document.getElementById('btn-scale-minor').classList.remove('active');
-      document.getElementById(`btn-scale-${scaleName}`).classList.add('active');
+    // Soft wood failure chime
+    function playFailChime() {
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       
-      if (currentMode === 'xylo') {
-        renderXylophone();
-      }
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(220.00, now); // Low A3 wood block drop
+      osc.frequency.linearRampToValueAtTime(180.00, now + 0.25);
+      
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      
+      osc.start(now);
+      osc.stop(now + 0.4);
     }
 
-    function setTimbre(timbreName) {
-      selectedTimbre = timbreName;
-      document.getElementById('btn-timbre-real-xylo').classList.remove('active');
-      document.getElementById('btn-timbre-bell').classList.remove('active');
-      document.getElementById(`btn-timbre-${timbreName}`).classList.add('active');
-    }
-
-    function setMode(modeName) {
-      currentMode = modeName;
-      document.getElementById('btn-mode-xylo').classList.remove('active');
-      document.getElementById('btn-mode-forest').classList.remove('active');
-      document.getElementById(`btn-mode-${modeName}`).classList.add('active');
-
-      if (modeName === 'xylo') {
-        document.getElementById('xylo-wrapper').style.display = 'flex';
-        document.getElementById('forest-wrapper').style.display = 'none';
-        document.getElementById('instrument-control-group').style.opacity = '1';
-        document.getElementById('instrument-control-group').style.pointerEvents = 'auto';
-        renderXylophone();
-      } else {
-        document.getElementById('xylo-wrapper').style.display = 'none';
-        document.getElementById('forest-wrapper').style.display = 'block';
-        document.getElementById('instrument-control-group').style.opacity = '0.4';
-        document.getElementById('instrument-control-group').style.pointerEvents = 'none';
-        
-        initAudio();
-      }
-    }
-
-    // Play specific garden toys
-    function playGardenElement(elementKey, event) {
+    // --- Interaction Router ---
+    function onZoneTap(zone, event) {
       event.preventDefault();
-      const toy = gardenToys[elementKey];
-      if (!toy) return;
-
-      // Xylophone is forced in garden mode
-      playNote(toy.noteIndex, toy.pitchRate, 261.63 * toy.pitchRate);
-
-      // Extract coordinates
+      
       let clientX, clientY;
       if (event.touches && event.touches[0]) {
         clientX = event.touches[0].clientX;
@@ -841,18 +636,125 @@
         clientY = event.clientY;
       }
 
-      // Visual tap bounce on element
-      const el = event.currentTarget;
-      el.style.transform = 'scale(1.2) rotate(8deg)';
-      setTimeout(() => el.style.transform = 'scale(1) rotate(0deg)', 250);
+      // Add touch feedback class
+      const zoneEl = document.getElementById(`zone-${zone}`);
+      zoneEl.classList.add('active-touch');
+      setTimeout(() => zoneEl.classList.remove('active-touch'), 150);
 
-      // Spawn particles
-      spawnParticles(clientX, clientY, toy.color);
+      const details = zoneDetails[zone];
+
+      if (currentMode === 'explore') {
+        // Free exploration: play sound immediately and spawn particles
+        playSound(zone);
+        spawnParticles(clientX, clientY, details.color);
+        spawnFloatingEmoji(clientX, clientY, zone === 'sky' ? '✨' : '🌊');
+      } else {
+        // Challenge Mode Answer
+        if (!isWaitingForAnswer) return;
+        isWaitingForAnswer = false;
+
+        const btnListen = document.getElementById('btn-listen');
+
+        if (zone === currentTarget) {
+          // Success!
+          playSuccessChime();
+          
+          // Visual rewards
+          btnListen.style.background = '#10b981'; // Green
+          btnListen.querySelector('i').className = 'fas fa-check';
+          
+          spawnParticles(clientX, clientY, '#10b981');
+          for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), zone === 'sky' ? '⭐' : '🌸');
+            }, i * 50);
+          }
+
+          // Next round automatic delay
+          setTimeout(() => {
+            resetChallengeUI();
+            playChallengeSound();
+          }, 1800);
+        } else {
+          // Wrong choice - guide them without loud buzzers
+          playFailChime();
+          
+          btnListen.style.background = '#ef4444'; // Red
+          btnListen.querySelector('i').className = 'fas fa-volume-up';
+
+          // Guide them by pulsing the correct zone
+          const correctZoneEl = document.getElementById(`zone-${currentTarget}`);
+          correctZoneEl.classList.add('pulse-guide');
+          setTimeout(() => correctZoneEl.classList.remove('pulse-guide'), 1600);
+
+          // Allow them to try again after a brief pause
+          setTimeout(() => {
+            btnListen.style.background = 'var(--color-gold)';
+            isWaitingForAnswer = true;
+          }, 1200);
+        }
+      }
+    }
+
+    // --- Challenge Mode Logic ---
+    function setMode(modeName) {
+      currentMode = modeName;
+      document.getElementById('btn-mode-explore').classList.remove('active');
+      document.getElementById('btn-mode-challenge').classList.remove('active');
+      document.getElementById(`btn-mode-${modeName}`).classList.add('active');
+
+      const btnListen = document.getElementById('btn-listen');
+
+      if (modeName === 'explore') {
+        btnListen.style.display = 'none';
+        resetChallengeUI();
+      } else {
+        btnListen.style.display = 'flex';
+        resetChallengeUI();
+        initAudio(); // Warm up context
+      }
+    }
+
+    function setSoundType(soundType) {
+      selectedSound = soundType;
+      document.getElementById('btn-sound-chime').classList.remove('active');
+      document.getElementById('btn-sound-marimba').classList.remove('active');
+      document.getElementById(`btn-sound-${soundType}`).classList.add('active');
       
-      // Spawn floating emojis
-      const pool = [toy.emoji, '✨', '🎈', '🌸', '🦋'];
-      const chosenEmoji = pool[Math.floor(Math.random() * pool.length)];
-      spawnGardenEmoji(clientX, clientY, chosenEmoji);
+      initAudio(); // Warm up
+    }
+
+    function resetChallengeUI() {
+      const btnListen = document.getElementById('btn-listen');
+      btnListen.style.background = 'var(--color-gold)';
+      btnListen.querySelector('i').className = 'fas fa-volume-up';
+      btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
+      isWaitingForAnswer = false;
+      currentTarget = null;
+    }
+
+    function playChallengeSound() {
+      if (isWaitingForAnswer) {
+        // Re-play the current sound
+        playSound(currentTarget);
+        return;
+      }
+      
+      resetChallengeUI();
+      
+      // Randomize target
+      currentTarget = Math.random() > 0.5 ? 'sky' : 'ground';
+      
+      // Animate button
+      const btn = document.getElementById('btn-listen');
+      btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
+      setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
+
+      // Play target sound
+      playSound(currentTarget);
+      
+      // Enable answering
+      isWaitingForAnswer = true;
     }
 
     // --- Particle Physics Effects Engine ---
@@ -909,12 +811,9 @@
       }
     }
 
-    function spawnGardenEmoji(x, y, emoji) {
+    function spawnFloatingEmoji(x, y, emoji) {
       const el = document.createElement('div');
-      el.style.position = 'absolute';
-      el.style.pointerEvents = 'none';
-      el.style.fontSize = `${Math.random() * 1.5 + 1.8}rem`;
-      el.style.zIndex = '10';
+      el.className = 'glowing-emoji';
       el.innerText = emoji;
       
       const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
@@ -923,12 +822,12 @@
       
       document.getElementById('play-sandbox').appendChild(el);
       
-      let speedY = Math.random() * -4 - 3;
-      let speedX = Math.random() * 6 - 3;
+      let speedY = Math.random() * -3 - 2;
+      let speedX = Math.random() * 4 - 2;
       let opacity = 1;
       let scale = 1;
       let rot = 0;
-      let rotSpeed = Math.random() * 12 - 6;
+      let rotSpeed = Math.random() * 10 - 5;
       
       function step() {
         speedY += 0.08;
@@ -967,8 +866,6 @@
       requestAnimationFrame(animate);
     }
 
-    // Initialize Loops
-    renderXylophone();
     animate();
   </script>
 </body>
