@@ -147,53 +147,53 @@
       flex: 1;
       width: 100%;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: background 0.3s ease;
       touch-action: none;
     }
 
     /* Cielo (High sound zone) */
     .zone-sky-half {
-      background: linear-gradient(to bottom, #070e24 0%, #111d40 100%);
+      background: linear-gradient(to bottom, #060b18 0%, #111d40 100%);
       border-bottom: 2px solid rgba(255, 255, 255, 0.05);
     }
 
     /* Tierra (Low sound zone) */
     .zone-ground-half {
-      background: linear-gradient(to bottom, #2d160a 0%, #171514 100%);
+      background: linear-gradient(to bottom, #2b1409 0%, #131110 100%);
     }
 
-    /* Background details */
-    .zone-graphics {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.5;
-    }
-
-    /* Interactive Toy Elements */
+    /* Interactive Vector Elements */
     .toy-element {
-      position: relative;
-      width: 160px;
-      height: 160px;
+      position: absolute;
       cursor: pointer;
       z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
       touch-action: none;
     }
 
     .toy-element:hover {
-      filter: brightness(1.15);
+      filter: brightness(1.2);
     }
+
+    /* Specific element placements */
+    .toy-sun { top: 10%; right: 8%; width: 90px; height: 90px; --glow-color: rgba(251, 191, 36, 0.8); }
+    .toy-cloud1 { top: 12%; left: 10%; width: 120px; height: 65px; --glow-color: rgba(56, 189, 248, 0.6); }
+    .toy-cloud2 { top: 26%; left: 35%; width: 100px; height: 55px; --glow-color: rgba(56, 189, 248, 0.5); }
+    .toy-bird { top: 32%; left: 58%; width: 65px; height: 65px; --glow-color: rgba(96, 165, 250, 0.7); }
+    .toy-butterfly { top: 22%; right: 35%; width: 55px; height: 55px; --glow-color: rgba(232, 121, 249, 0.7); }
+    
+    /* Stars */
+    .toy-star1 { top: 8%; left: 32%; width: 45px; height: 45px; --glow-color: rgba(251, 191, 36, 0.8); }
+    .toy-star2 { top: 16%; left: 50%; width: 40px; height: 40px; --glow-color: rgba(251, 191, 36, 0.8); }
+    .toy-star3 { top: 24%; right: 24%; width: 45px; height: 45px; --glow-color: rgba(251, 191, 36, 0.8); }
+
+    /* Ground elements */
+    .toy-drum { bottom: 10%; left: 24%; width: 100px; height: 100px; --glow-color: rgba(251, 146, 60, 0.7); }
+    .toy-mushroom { bottom: 12%; left: 45%; width: 65px; height: 75px; --glow-color: rgba(239, 68, 68, 0.7); }
+    .toy-frog { bottom: 12%; right: 24%; width: 75px; height: 75px; --glow-color: rgba(34, 197, 94, 0.7); }
+    .toy-flower1 { bottom: 8%; left: 8%; width: 65px; height: 100px; --glow-color: rgba(236, 72, 153, 0.7); }
+    .toy-flower2 { bottom: 10%; right: 8%; width: 65px; height: 100px; --glow-color: rgba(6, 182, 212, 0.7); }
+    .toy-snail { bottom: 6%; left: 58%; width: 75px; height: 60px; --glow-color: rgba(168, 85, 247, 0.7); }
 
     /* Pulse animation triggered on sound (Level 1) */
     .pulse-glow-active {
@@ -211,8 +211,8 @@
         filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)) brightness(1);
       }
       50% {
-        transform: scale(1.22);
-        filter: drop-shadow(0 0 30px var(--glow-color)) brightness(1.3);
+        transform: scale(1.18);
+        filter: drop-shadow(0 0 25px var(--glow-color)) brightness(1.35);
       }
     }
 
@@ -245,21 +245,21 @@
       font-size: 2.2rem;
     }
 
-    /* Glowing background stars */
+    /* Background starry decor */
     .bg-glowing-star {
       position: absolute;
-      color: rgba(255, 255, 255, 0.12);
-      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: 0.7rem;
       pointer-events: none;
       animation: flashStar 3s infinite ease-in-out;
     }
 
     @keyframes flashStar {
       0%, 100% { opacity: 0.1; transform: scale(0.8); }
-      50% { opacity: 0.6; transform: scale(1.2); }
+      50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* Loading indicator */
+    /* Loading notice */
     .loading-notice {
       position: absolute;
       top: 50%;
@@ -296,7 +296,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Floating Game Emojis */
+    /* Floating visual effects */
     .glowing-emoji {
       position: absolute;
       pointer-events: none;
@@ -314,16 +314,17 @@
         padding: 0.6rem;
       }
       .toy-element {
-        width: 130px;
-        height: 130px;
+        transform: scale(0.75);
       }
-      .challenge-center-button {
-        width: 70px;
-        height: 70px;
+      .toy-element:hover {
+        transform: scale(0.75);
       }
-      .challenge-center-button i {
-        font-size: 1.8rem;
-      }
+      /* Individual mobile coordinates tweaks to prevent overlaps */
+      .toy-sun { top: 5%; right: 4%; }
+      .toy-cloud1 { top: 6%; left: 4%; }
+      .toy-cloud2 { top: 20%; left: 24%; }
+      .toy-drum { bottom: 6%; left: 16%; }
+      .toy-frog { bottom: 6%; right: 16%; }
     }
   </style>
 </head>
@@ -383,44 +384,147 @@
 
       <!-- Split Screen Layout -->
       <div class="split-container">
-        <!-- Sky (High Note - Star) -->
+        <!-- Sky (High Note Zone) -->
         <div class="zone-half zone-sky-half" id="zone-sky">
           <div class="zone-graphics">
-            <span class="bg-glowing-star" style="top: 15%; left: 15%;">⭐</span>
-            <span class="bg-glowing-star" style="top: 35%; left: 48%;">⭐</span>
-            <span class="bg-glowing-star" style="top: 20%; left: 82%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 15%; left: 18%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 30%; left: 40%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 22%; left: 88%;">⭐</span>
           </div>
 
-          <!-- Large Vector Star Element -->
-          <div class="toy-element" id="toy-star" style="--glow-color: rgba(56, 189, 248, 0.65);" onmousedown="onElementTap('sky', event)" ontouchstart="onElementTap('sky', event)">
+          <!-- Sun Vector -->
+          <div class="toy-element toy-sun" onmousedown="onElementTap('sky', 'sun', event)" ontouchstart="onElementTap('sky', 'sun', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
-              <!-- Glowing magical vector star -->
-              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" filter="drop-shadow(0 0 12px rgba(251, 191, 36, 0.8))" />
-              <!-- Cute baby face details without distracting text -->
-              <circle cx="40" cy="45" r="4.5" fill="#000" />
-              <circle cx="60" cy="45" r="4.5" fill="#000" />
-              <path d="M42 58 Q 50 66 58 58" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round" />
+              <circle cx="50" cy="50" r="24" fill="#fbbf24" filter="drop-shadow(0 0 12px #f59e0b)" />
+              <path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L29 29 M71 71 L80 80 M20 80 L29 71 M71 29 L80 20" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Clouds Vectors -->
+          <div class="toy-element toy-cloud1" onmousedown="onElementTap('sky', 'cloud1', event)" ontouchstart="onElementTap('sky', 'cloud1', event)">
+            <svg viewBox="0 0 100 60" width="100%" height="100%">
+              <path d="M10 45 A 20 20 0 0 1 35 25 A 25 25 0 0 1 75 25 A 18 18 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.9" />
+            </svg>
+          </div>
+          <div class="toy-element toy-cloud2" onmousedown="onElementTap('sky', 'cloud2', event)" ontouchstart="onElementTap('sky', 'cloud2', event)">
+            <svg viewBox="0 0 100 60" width="100%" height="100%">
+              <path d="M10 45 A 16 16 0 0 1 30 28 A 20 20 0 0 1 70 28 A 15 15 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.8" />
+            </svg>
+          </div>
+
+          <!-- Flying Bird -->
+          <div class="toy-element toy-bird" onmousedown="onElementTap('sky', 'bird', event)" ontouchstart="onElementTap('sky', 'bird', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <circle cx="30" cy="30" r="18" fill="#3b82f6" />
+              <circle cx="42" cy="22" r="7" fill="#60a5fa" />
+              <polygon points="48,20 56,24 48,28" fill="#f59e0b" />
+              <circle cx="42" cy="20" r="1.8" fill="#000" />
+              <path d="M12 28 Q 6 34 12 40 Z" fill="#1d4ed8" />
+            </svg>
+          </div>
+
+          <!-- Flying Butterfly -->
+          <div class="toy-element toy-butterfly" onmousedown="onElementTap('sky', 'butterfly', event)" ontouchstart="onElementTap('sky', 'butterfly', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <!-- Left Wing -->
+              <ellipse cx="20" cy="25" rx="12" ry="16" fill="#e879f9" />
+              <ellipse cx="22" cy="38" rx="8" ry="10" fill="#f472b6" />
+              <!-- Right Wing -->
+              <ellipse cx="40" cy="25" rx="12" ry="16" fill="#e879f9" />
+              <ellipse cx="38" cy="38" rx="8" ry="10" fill="#f472b6" />
+              <!-- Body -->
+              <rect x="28" y="15" width="4" height="30" rx="2" fill="#475569" />
+            </svg>
+          </div>
+
+          <!-- Star Elements -->
+          <div class="toy-element toy-star1" onmousedown="onElementTap('sky', 'star1', event)" ontouchstart="onElementTap('sky', 'star1', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="toy-element toy-star2" onmousedown="onElementTap('sky', 'star2', event)" ontouchstart="onElementTap('sky', 'star2', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="toy-element toy-star3" onmousedown="onElementTap('sky', 'star3', event)" ontouchstart="onElementTap('sky', 'star3', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
             </svg>
           </div>
         </div>
 
-        <!-- Ground (Low Note - Drum) -->
+        <!-- Ground (Low Note Zone) -->
         <div class="zone-half zone-ground-half" id="zone-ground">
           <div class="zone-graphics">
-            <span class="bg-glowing-star" style="bottom: 15%; left: 18%;">⭐</span>
-            <span class="bg-glowing-star" style="bottom: 30%; left: 52%;">⭐</span>
-            <span class="bg-glowing-star" style="bottom: 20%; left: 78%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 12%; left: 16%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 28%; left: 50%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 18%; left: 84%;">⭐</span>
           </div>
 
-          <!-- Large Vector Drum Element -->
-          <div class="toy-element" id="toy-drum" style="--glow-color: rgba(251, 146, 60, 0.65);" onmousedown="onElementTap('ground', event)" ontouchstart="onElementTap('ground', event)">
-            <svg viewBox="0 0 120 120" width="100%" height="100%">
-              <!-- Drum body vector -->
-              <path d="M20 30 L20 85 C20 105 100 105 100 85 L100 30 Z" fill="#b45309" stroke="#78350f" stroke-width="4" />
-              <!-- Native stripes decoration -->
-              <path d="M20 50 L100 50 M20 70 L100 70 M40 85 L80 85" stroke="#78350f" stroke-width="4" stroke-linecap="round" />
-              <!-- Drumhead -->
-              <ellipse cx="60" cy="30" rx="40" ry="12" fill="#fed7aa" stroke="#78350f" stroke-width="4" />
+          <!-- Drum Vector -->
+          <div class="toy-element toy-drum" onmousedown="onElementTap('ground', 'drum', event)" ontouchstart="onElementTap('ground', 'drum', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M15 25 L15 80 C15 95 85 95 85 80 L85 25 Z" fill="#b45309" stroke="#78350f" stroke-width="4" />
+              <path d="M15 45 L85 45 M15 65 L85 65" stroke="#78350f" stroke-width="4" />
+              <ellipse cx="50" cy="25" rx="35" ry="10" fill="#fed7aa" stroke="#78350f" stroke-width="4" />
+            </svg>
+          </div>
+
+          <!-- Mushroom Vector -->
+          <div class="toy-element toy-mushroom" onmousedown="onElementTap('ground', 'mushroom', event)" ontouchstart="onElementTap('ground', 'mushroom', event)">
+            <svg viewBox="0 0 50 60" width="100%" height="100%">
+              <path d="M18 60 C18 40 32 40 32 60 Z" fill="#e2e8f0" />
+              <path d="M5 36 C5 15 45 15 45 36 Z" fill="#ef4444" />
+              <circle cx="15" cy="24" r="3" fill="#fff" />
+              <circle cx="25" cy="20" r="4" fill="#fff" />
+              <circle cx="35" cy="26" r="3" fill="#fff" />
+            </svg>
+          </div>
+
+          <!-- Frog Vector -->
+          <div class="toy-element toy-frog" onmousedown="onElementTap('ground', 'frog', event)" ontouchstart="onElementTap('ground', 'frog', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <ellipse cx="30" cy="35" rx="22" ry="18" fill="#22c55e" />
+              <circle cx="18" cy="18" r="8" fill="#22c55e" />
+              <circle cx="18" cy="18" r="5" fill="#fff" />
+              <circle cx="18" cy="18" r="2.5" fill="#000" />
+              <circle cx="42" cy="18" r="8" fill="#22c55e" />
+              <circle cx="42" cy="18" r="5" fill="#fff" />
+              <circle cx="42" cy="18" r="2.5" fill="#000" />
+              <path d="M20 40 Q 30 48 40 40" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Flowers Vectors -->
+          <div class="toy-element toy-flower1" onmousedown="onElementTap('ground', 'flower1', event)" ontouchstart="onElementTap('ground', 'flower1', event)">
+            <svg viewBox="0 0 50 80" width="100%" height="100%">
+              <rect x="23" y="35" width="4" height="45" fill="#166534" />
+              <circle cx="25" cy="25" r="10" fill="#ec4899" />
+              <circle cx="15" cy="25" r="8" fill="#db2777" />
+              <circle cx="35" cy="25" r="8" fill="#db2777" />
+              <circle cx="25" cy="15" r="8" fill="#db2777" />
+              <circle cx="25" cy="35" r="8" fill="#db2777" />
+              <circle cx="25" cy="25" r="5" fill="#f59e0b" />
+            </svg>
+          </div>
+          <div class="toy-element toy-flower2" onmousedown="onElementTap('ground', 'flower2', event)" ontouchstart="onElementTap('ground', 'flower2', event)">
+            <svg viewBox="0 0 50 80" width="100%" height="100%">
+              <rect x="23" y="35" width="4" height="45" fill="#166534" />
+              <path d="M12 35 C12 15 38 15 38 35 Z" fill="#06b6d4" />
+              <path d="M18 35 C18 20 32 20 32 35 Z" fill="#22d3ee" />
+            </svg>
+          </div>
+
+          <!-- Snail Vector -->
+          <div class="toy-element toy-snail" onmousedown="onElementTap('ground', 'snail', event)" ontouchstart="onElementTap('ground', 'snail', event)">
+            <svg viewBox="0 0 80 60" width="100%" height="100%">
+              <path d="M10 50 Q 40 45 70 50 Q 75 42 70 35 L 60 35 C 50 35 40 40 30 42 Z" fill="#d97706" />
+              <circle cx="38" cy="32" r="20" fill="#a855f7" stroke="#581c87" stroke-width="2" />
+              <circle cx="38" cy="32" r="14" fill="#c084fc" stroke="#581c87" stroke-width="1.5" />
+              <line x1="68" y1="36" x2="72" y2="24" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+              <line x1="64" y1="36" x2="66" y2="22" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
             </svg>
           </div>
         </div>
@@ -431,8 +535,8 @@
   <script>
     // --- Audio setup ---
     const noteFiles = [
-      '../music/xylophone/note1.wav', // DO4 (C4) - used for Low Drum
-      '../music/xylophone/note7.wav'  // SI4 (B4) - used for High Star
+      '../music/xylophone/note1.wav', // DO4 (C4)
+      '../music/xylophone/note7.wav'  // SI4 (B4)
     ];
 
     let audioCtx = null;
@@ -443,28 +547,31 @@
     let soundsLoaded = false;
     let isLoadingSounds = false;
 
-    // Challenge & State variables
+    // Challenge / state variables
     let currentTarget = null; // 'sky' or 'ground'
     let isWaitingForAnswer = false;
-    let currentActiveTimer = null;
 
-    const elementDetails = {
+    // Configuration of heights
+    const heightDetails = {
       sky: {
         noteIndex: 7, // SI4 (High)
-        pitchRate: 1.25, // Shift higher for clear crystal tone
-        synthFreq: 880.00, // High A5
-        color: '#fbbf24', // Golden Star
-        emoji: '⭐',
-        elementId: 'toy-star'
+        pitchRate: 1.25,
+        synthFreq: 880.00,
+        color: '#fbbf24'
       },
       ground: {
         noteIndex: 1, // DO4 (Low)
-        pitchRate: 0.5, // Shift down one octave for deep rumble
-        synthFreq: 130.81, // Low C3
-        color: '#fb923c', // Warm Orange Drum
-        emoji: '🥁',
-        elementId: 'toy-drum'
+        pitchRate: 0.5,
+        synthFreq: 130.81,
+        color: '#fb923c'
       }
+    };
+
+    // Emojis mapping for element feedback
+    const elementEmojis = {
+      sun: '☀️', cloud1: '☁️', cloud2: '☁️', bird: '🐦', butterfly: '🦋',
+      star1: '⭐', star2: '⭐', star3: '⭐',
+      drum: '🥁', mushroom: '🍄', frog: '🐸', flower1: '🌸', flower2: '🌷', snail: '🐌'
     };
 
     function initAudio() {
@@ -501,9 +608,9 @@
       notice.style.display = 'none';
     }
 
-    function playSound(zoneKey) {
+    function playSound(heightKey) {
       initAudio();
-      const details = elementDetails[zoneKey];
+      const details = heightDetails[heightKey];
 
       if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
         const source = audioCtx.createBufferSource();
@@ -567,6 +674,7 @@
       });
     }
 
+    // Fail chime
     function playFailChime() {
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
@@ -585,8 +693,8 @@
       osc.stop(now + 0.4);
     }
 
-    // --- Interaction Logic ---
-    function onElementTap(zone, event) {
+    // --- Interaction Routing ---
+    function onElementTap(height, elementName, event) {
       event.preventDefault();
       
       let clientX, clientY;
@@ -598,29 +706,30 @@
         clientY = event.clientY;
       }
 
-      const details = elementDetails[zone];
-      const el = document.getElementById(details.elementId);
+      const targetEl = event.currentTarget;
       
       // Tap Animation bounce
-      el.style.transform = 'scale(1.3) rotate(8deg)';
-      setTimeout(() => el.style.transform = 'scale(1) rotate(0deg)', 250);
+      targetEl.style.transform = 'scale(1.22) rotate(8deg)';
+      setTimeout(() => targetEl.style.transform = 'scale(1) rotate(0deg)', 250);
+
+      const heightColor = heightDetails[height].color;
 
       if (currentMode === 'learn') {
-        // Nivel 1: plays sound and glows corresponding element
-        playSound(zone);
-        triggerVisualPulse(zone);
+        // Nivel 1: plays sound, glows/pulses ALL elements of that height, spawns particles
+        playSound(height);
+        triggerVisualPulse(height);
         
-        spawnParticles(clientX, clientY, details.color);
-        spawnFloatingEmoji(clientX, clientY, details.emoji);
+        spawnParticles(clientX, clientY, heightColor);
+        spawnFloatingEmoji(clientX, clientY, elementEmojis[elementName]);
       } else {
-        // Nivel 2: Guessing mode answer
+        // Nivel 2: Guessing mode active
         if (!isWaitingForAnswer) return;
         isWaitingForAnswer = false;
 
         const btnListen = document.getElementById('btn-listen');
 
-        if (zone === currentTarget) {
-          // Correct!
+        if (height === currentTarget) {
+          // Success!
           playSuccessChime();
           
           btnListen.style.background = '#10b981'; // Green
@@ -629,7 +738,7 @@
           spawnParticles(clientX, clientY, '#10b981');
           for (let i = 0; i < 6; i++) {
             setTimeout(() => {
-              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), details.emoji);
+              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), elementEmojis[elementName]);
             }, i * 50);
           }
 
@@ -639,17 +748,14 @@
             playChallengeSound();
           }, 1800);
         } else {
-          // Wrong choice - guide them visually by pulsing the CORRECT element
+          // Wrong choice - play low warning and guide them by pulsing the correct zone elements
           playFailChime();
           
           btnListen.style.background = '#ef4444'; // Red
           btnListen.querySelector('i').className = 'fas fa-volume-up';
 
-          // Guide them by pulsing the correct vector element
-          const correctDetails = elementDetails[currentTarget];
-          const correctEl = document.getElementById(correctDetails.elementId);
-          correctEl.classList.add('guide-pulse-active');
-          setTimeout(() => correctEl.classList.remove('guide-pulse-active'), 1500);
+          // Guide them by pulsing ALL correct height elements
+          triggerCorrectHeightGuide(currentTarget);
 
           // Allow retry
           setTimeout(() => {
@@ -660,15 +766,27 @@
       }
     }
 
-    // Helper to pulse element visually
-    function triggerVisualPulse(zone) {
-      const details = elementDetails[zone];
-      const el = document.getElementById(details.elementId);
-      el.classList.add('pulse-glow-active');
-      setTimeout(() => el.classList.remove('pulse-glow-active'), 800);
+    // Nivel 1 helper: pulses all elements in the corresponding height
+    function triggerVisualPulse(height) {
+      const className = height === 'sky' ? 'toy-sky' : 'toy-ground';
+      const elements = document.querySelectorAll(height === 'sky' ? '.zone-sky-half .toy-element' : '.zone-ground-half .toy-element');
+      
+      elements.forEach(el => {
+        el.classList.add('pulse-glow-active');
+        setTimeout(() => el.classList.remove('pulse-glow-active'), 800);
+      });
     }
 
-    // --- Mode Handlers ---
+    // Guide helper: pulses all correct elements to show the right answer
+    function triggerCorrectHeightGuide(height) {
+      const elements = document.querySelectorAll(height === 'sky' ? '.zone-sky-half .toy-element' : '.zone-ground-half .toy-element');
+      elements.forEach(el => {
+        el.classList.add('guide-pulse-active');
+        setTimeout(() => el.classList.remove('guide-pulse-active'), 1500);
+      });
+    }
+
+    // --- Mode Setup ---
     function setMode(modeName) {
       currentMode = modeName;
       document.getElementById('btn-mode-learn').classList.remove('active');
@@ -676,13 +794,13 @@
       document.getElementById(`btn-mode-${modeName}`).classList.add('active');
 
       const btnListen = document.getElementById('btn-listen');
-      const starEl = document.getElementById('toy-star');
-      const drumEl = document.getElementById('toy-drum');
-
-      // Clear any running timers/pulses
-      clearTimeout(currentActiveTimer);
-      starEl.classList.remove('pulse-glow-active');
-      drumEl.classList.remove('pulse-glow-active');
+      const allToys = document.querySelectorAll('.toy-element');
+      
+      // Clear pulses
+      allToys.forEach(el => {
+        el.classList.remove('pulse-glow-active');
+        el.classList.remove('guide-pulse-active');
+      });
 
       if (modeName === 'learn') {
         btnListen.style.display = 'none';
@@ -714,10 +832,10 @@
 
     function playChallengeSound() {
       if (isWaitingForAnswer) {
-        // Replay target sound
+        // Re-play sound
         playSound(currentTarget);
         
-        // In Nivel 1 (if played from challenge center), also pulse visually
+        // In Nivel 1, also pulse visually
         if (currentMode === 'learn') {
           triggerVisualPulse(currentTarget);
         }
@@ -732,15 +850,15 @@
       btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
       setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
 
-      // Play sound
+      // Play Sound
       playSound(currentTarget);
 
       if (currentMode === 'learn') {
-        // Nivel 1: Plays sound AND pulses/glows the correct element simultaneously!
+        // Nivel 1: plays sound AND pulses/glows the corresponding height group
         triggerVisualPulse(currentTarget);
         isWaitingForAnswer = false;
       } else {
-        // Nivel 2: Plays sound but DOES NOT pulse the element. Child has to guess!
+        // Nivel 2: Plays sound but nothing glows. Guessing mode active!
         isWaitingForAnswer = true;
       }
     }
