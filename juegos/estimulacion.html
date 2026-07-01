@@ -1090,7 +1090,7 @@
     const teacherMessages = {
       welcome_xylo: "¡Toca las barras de colores para crear tu propia melodía!",
       welcome_learn: "¡Toca los elementos del Cielo y la Tierra para descubrir sus sonidos!",
-      welcome_challenge: "¡El Reto! Escucha el altavoz amarillo y toca el elemento correcto.",
+      welcome_challenge: "¡El Reto! Escucha el altavoz y toca el dibujo correcto. ¡Toca el altavoz otra vez si necesitas una pista!",
       success: [
         "¡Excelente! ¡Qué gran oído!",
         "¡Estupendo! ¡Lo lograste!",
@@ -1584,7 +1584,6 @@
       }
     }
 
-    // Sound selector
     function setSoundType(soundType) {
       selectedSound = soundType;
       
@@ -1615,9 +1614,7 @@
       if (isWaitingForAnswer) {
         playElementSound(currentTargetElement);
         triggerElementAnimation(currentTargetElement);
-        if (currentMode === 'learn') {
-          triggerGuideGlow(currentTargetElement);
-        }
+        triggerGuideGlow(currentTargetElement); // Trigger glow clue in challenge mode!
         return;
       }
       
