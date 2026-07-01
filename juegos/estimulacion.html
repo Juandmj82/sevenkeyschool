@@ -716,7 +716,7 @@
       </div>
       <!-- Little parent warning trigger in header -->
       <div class="header-teacher-btn" onclick="openPedagogicalModal()" title="Consejo de Teacher Juan D">
-        <img src="../img/profe.jpg" alt="Teacher Juan D">
+        <img src="../img/profe.jpg" alt="Teacher Juan D" id="teacher-avatar">
       </div>
     </div>
     <a href="index.html" class="btn-back">
@@ -1028,6 +1028,7 @@
 
     function updateTeacherAvatar(status = 'normal') {
       const avatar = document.getElementById('teacher-avatar');
+      if (!avatar) return;
       if (status === 'success') {
         avatar.src = '../img/profe_celebrate.jpg';
         avatar.parentElement.style.transform = 'scale(1.15) rotate(5deg)';
@@ -1042,6 +1043,7 @@
 
     function resetTeacherAvatar() {
       const avatar = document.getElementById('teacher-avatar');
+      if (!avatar) return;
       avatar.src = '../img/profe.jpg';
       avatar.parentElement.style.transform = 'scale(1)';
     }
@@ -1073,7 +1075,7 @@
       if (isLoadingSounds || soundsLoaded) return;
       isLoadingSounds = true;
       const notice = document.getElementById('loading-notice');
-      notice.style.display = 'block';
+      if (notice) notice.style.display = 'block';
 
       for (let i = 0; i < noteFiles.length; i++) {
         try {
@@ -1087,7 +1089,7 @@
       }
       soundsLoaded = true;
       isLoadingSounds = false;
-      notice.style.display = 'none';
+      if (notice) notice.style.display = 'none';
     }
 
     function playNote(noteIndex, rate, fallbackFreq) {
@@ -1261,6 +1263,7 @@
     // --- Dynamic Xylophone ---
     function renderXylophone() {
       const wrapper = document.getElementById('xylo-wrapper');
+      if (!wrapper) return;
       wrapper.innerHTML = '';
       
       const bars = scaleMappings[selectedScale];
@@ -1331,8 +1334,10 @@
         if (toyKey === currentTargetElement) {
           playSuccessChime();
           
-          btnListen.style.background = '#10b981';
-          btnListen.querySelector('i').className = 'fas fa-check';
+          if (btnListen) {
+            btnListen.style.background = '#10b981';
+            btnListen.querySelector('i').className = 'fas fa-check';
+          }
           
           spawnConfettiExplosion(clientX, clientY);
           updateTeacherAvatar('success');
@@ -1351,16 +1356,20 @@
         } else {
           playFailChime();
           
-          btnListen.style.background = '#ef4444';
-          btnListen.querySelector('i').className = 'fas fa-volume-up';
+          if (btnListen) {
+            btnListen.style.background = '#ef4444';
+            btnListen.querySelector('i').className = 'fas fa-volume-up';
+          }
           updateTeacherAvatar('fail');
 
           const correctEl = document.getElementById(`toy-${currentTargetElement}`);
-          correctEl.classList.add('guide-pulse-wrong');
-          setTimeout(() => correctEl.classList.remove('guide-pulse-wrong'), 1600);
+          if (correctEl) {
+            correctEl.classList.add('guide-pulse-wrong');
+            setTimeout(() => correctEl.classList.remove('guide-pulse-wrong'), 1600);
+          }
 
           setTimeout(() => {
-            btnListen.style.background = 'var(--color-gold)';
+            if (btnListen) btnListen.style.background = 'var(--color-gold)';
             isWaitingForAnswer = true;
           }, 1500);
         }
@@ -1370,22 +1379,31 @@
     function triggerElementAnimation(toyKey) {
       const details = toyDetails[toyKey];
       const el = document.getElementById(`toy-${toyKey}`);
-      el.classList.add(details.animClass);
-      setTimeout(() => el.classList.remove(details.animClass), 600);
+      if (el) {
+        el.classList.add(details.animClass);
+        setTimeout(() => el.classList.remove(details.animClass), 600);
+      }
     }
 
     function triggerGuideGlow(toyKey) {
       const el = document.getElementById(`toy-${toyKey}`);
-      el.classList.add('glow-guide-active');
-      setTimeout(() => el.classList.remove('glow-guide-active'), 1000);
+      if (el) {
+        el.classList.add('glow-guide-active');
+        setTimeout(() => el.classList.remove('glow-guide-active'), 1000);
+      }
     }
 
     // --- Core Game Switcher ---
     function setGame(gameName) {
       currentGame = gameName;
-      document.getElementById('btn-game-xylo').classList.remove('active');
-      document.getElementById('btn-game-cielotierra').classList.remove('active');
-      document.getElementById(`btn-game-${gameName}`).classList.add('active');
+      
+      const btnXylo = document.getElementById('btn-game-xylo');
+      const btnCielo = document.getElementById('btn-game-cielotierra');
+      if (btnXylo) btnXylo.classList.remove('active');
+      if (btnCielo) btnCielo.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-game-${gameName}`);
+      if (activeBtn) activeBtn.classList.add('active');
 
       const xyloGrid = document.getElementById('xylo-wrapper');
       const splitGrid = document.getElementById('forest-wrapper');
@@ -1396,18 +1414,18 @@
       resetChallengeUI();
 
       if (gameName === 'xylo') {
-        xyloGrid.style.display = 'flex';
-        splitGrid.style.display = 'none';
-        scaleGroup.style.display = 'flex';
-        levelGroup.style.display = 'none';
-        btnListen.style.display = 'none';
+        if (xyloGrid) xyloGrid.style.display = 'flex';
+        if (splitGrid) splitGrid.style.display = 'none';
+        if (scaleGroup) scaleGroup.style.display = 'flex';
+        if (levelGroup) levelGroup.style.display = 'none';
+        if (btnListen) btnListen.style.display = 'none';
         
         renderXylophone();
       } else {
-        xyloGrid.style.display = 'none';
-        splitGrid.style.display = 'flex';
-        scaleGroup.style.display = 'none';
-        levelGroup.style.display = 'flex';
+        if (xyloGrid) xyloGrid.style.display = 'none';
+        if (splitGrid) splitGrid.style.display = 'flex';
+        if (scaleGroup) scaleGroup.style.display = 'none';
+        if (levelGroup) levelGroup.style.display = 'flex';
         
         setMode('learn'); 
         initAudio();
@@ -1417,9 +1435,14 @@
     // --- Mode Setup ---
     function setMode(modeName) {
       currentMode = modeName;
-      document.getElementById('btn-mode-learn').classList.remove('active');
-      document.getElementById('btn-mode-challenge').classList.remove('active');
-      document.getElementById(`btn-mode-${modeName}`).classList.add('active');
+      
+      const btnLearn = document.getElementById('btn-mode-learn');
+      const btnChall = document.getElementById('btn-mode-challenge');
+      if (btnLearn) btnLearn.classList.remove('active');
+      if (btnChall) btnChall.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-mode-${modeName}`);
+      if (activeBtn) activeBtn.classList.add('active');
 
       const btnListen = document.getElementById('btn-listen');
       const allToys = document.querySelectorAll('.toy-element');
@@ -1430,10 +1453,10 @@
       });
 
       if (modeName === 'learn') {
-        btnListen.style.display = 'none';
+        if (btnListen) btnListen.style.display = 'none';
         resetChallengeUI();
       } else {
-        btnListen.style.display = 'flex';
+        if (btnListen) btnListen.style.display = 'flex';
         resetChallengeUI();
         initAudio();
       }
@@ -1441,10 +1464,16 @@
 
     function setScale(scaleName) {
       selectedScale = scaleName;
-      document.getElementById('btn-scale-pentatonic').classList.remove('active');
-      document.getElementById('btn-scale-major').classList.remove('active');
-      document.getElementById('btn-scale-minor').classList.remove('active');
-      document.getElementById(`btn-scale-${scaleName}`).classList.add('active');
+      
+      const btnPent = document.getElementById('btn-scale-pentatonic');
+      const btnMaj = document.getElementById('btn-scale-major');
+      const btnMin = document.getElementById('btn-scale-minor');
+      if (btnPent) btnPent.classList.remove('active');
+      if (btnMaj) btnMaj.classList.remove('active');
+      if (btnMin) btnMin.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-scale-${scaleName}`);
+      if (activeBtn) activeBtn.classList.add('active');
       
       if (currentGame === 'xylo') {
         renderXylophone();
@@ -1453,22 +1482,25 @@
 
     function setSoundType(soundType) {
       selectedSound = soundType;
-      document.getElementById('btn-sound-chime').classList.remove('active');
-      document.getElementById('btn-sound-marimba').classList.remove('active');
       
-      if (soundType === 'marimba') {
-        document.getElementById('btn-sound-marimba').classList.add('active');
-      } else {
-        document.getElementById('btn-sound-chime').classList.add('active');
-      }
+      const btnChime = document.getElementById('btn-sound-chime');
+      const btnMari = document.getElementById('btn-sound-marimba');
+      if (btnChime) btnChime.classList.remove('active');
+      if (btnMari) btnMari.classList.remove('active');
+      
+      const activeBtn = document.getElementById(soundType === 'marimba' ? 'btn-sound-marimba' : 'btn-sound-chime');
+      if (activeBtn) activeBtn.classList.add('active');
+      
       initAudio();
     }
 
     function resetChallengeUI() {
       const btnListen = document.getElementById('btn-listen');
-      btnListen.style.background = 'var(--color-gold)';
-      btnListen.querySelector('i').className = 'fas fa-volume-up';
-      btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
+      if (btnListen) {
+        btnListen.style.background = 'var(--color-gold)';
+        btnListen.querySelector('i').className = 'fas fa-volume-up';
+        btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
+      }
       isWaitingForAnswer = false;
       currentTargetElement = null;
       resetTeacherAvatar();
@@ -1489,8 +1521,10 @@
       currentTargetElement = keys[Math.floor(Math.random() * keys.length)];
       
       const btn = document.getElementById('btn-listen');
-      btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
-      setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
+      if (btn) {
+        btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
+        setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
+      }
 
       playElementSound(currentTargetElement);
 
@@ -1511,8 +1545,10 @@
 
     function resizeCanvas() {
       const sandbox = document.getElementById('play-sandbox');
-      canvas.width = sandbox.clientWidth;
-      canvas.height = sandbox.clientHeight;
+      if (sandbox && canvas) {
+        canvas.width = sandbox.clientWidth;
+        canvas.height = sandbox.clientHeight;
+      }
     }
 
     window.addEventListener('resize', resizeCanvas);
@@ -1600,15 +1636,18 @@
     }
 
     function spawnFloatingEmoji(x, y, emoji) {
+      const sandbox = document.getElementById('play-sandbox');
+      if (!sandbox) return;
+
       const el = document.createElement('div');
       el.className = 'glowing-emoji';
       el.innerText = emoji;
       
-      const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
+      const sandboxRect = sandbox.getBoundingClientRect();
       el.style.left = `${x - sandboxRect.left}px`;
       el.style.top = `${y - sandboxRect.top}px`;
       
-      document.getElementById('play-sandbox').appendChild(el);
+      sandbox.appendChild(el);
       
       let speedY = Math.random() * -3 - 2;
       let speedX = Math.random() * 4 - 2;
@@ -1645,6 +1684,7 @@
       const isMobile = window.innerWidth <= 768;
       const isPortrait = window.innerHeight > window.innerWidth;
       const overlay = document.getElementById('rotation-overlay');
+      if (!overlay) return;
 
       if (isMobile && isPortrait) {
         overlay.style.display = 'flex';
