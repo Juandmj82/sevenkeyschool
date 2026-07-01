@@ -1070,20 +1070,23 @@
 
     // Detailed Element Configurations
     const toyDetails = {
-      sun: { height: 'sky', noteIndex: 7, pitchRate: 1.5, synthFreq: 987.77, color: '#fbbf24', emoji: '☀️', animClass: 'anim-pulse' },
-      cloud1: { height: 'sky', noteIndex: 7, pitchRate: 1.15, synthFreq: 783.99, color: '#e2e8f0', emoji: '☁️', animClass: 'anim-float' },
-      cloud2: { height: 'sky', noteIndex: 7, pitchRate: 1.25, synthFreq: 880.00, color: '#cbd5e1', emoji: '☁️', animClass: 'anim-float' },
-      bird: { height: 'sky', noteIndex: 7, pitchRate: 1.8, synthFreq: 1174.66, color: '#3b82f6', emoji: '🐦', animClass: 'anim-hop' },
-      butterfly: { height: 'sky', noteIndex: 7, pitchRate: 1.4, synthFreq: 932.33, color: '#e879f9', emoji: '🦋', animClass: 'anim-flutter' },
-      star1: { height: 'sky', noteIndex: 7, pitchRate: 1.3, synthFreq: 1046.50, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
-      star2: { height: 'sky', noteIndex: 7, pitchRate: 1.6, synthFreq: 1244.51, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
-      star3: { height: 'sky', noteIndex: 7, pitchRate: 2.0, synthFreq: 1396.91, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
-      drum: { height: 'ground', noteIndex: 1, pitchRate: 0.5, synthFreq: 130.81, color: '#fb923c', emoji: '🥁', animClass: 'anim-bounce' },
-      mushroom: { height: 'ground', noteIndex: 1, pitchRate: 0.7, synthFreq: 185.00, color: '#ef4444', emoji: '🍄', animClass: 'anim-hop' },
-      frog: { height: 'ground', noteIndex: 1, pitchRate: 0.4, synthFreq: 110.00, color: '#22c55e', emoji: '🐸', animClass: 'anim-hop' },
-      flower1: { height: 'ground', noteIndex: 1, pitchRate: 0.8, synthFreq: 220.00, color: '#ec4899', emoji: '🌸', animClass: 'anim-sway' },
-      flower2: { height: 'ground', noteIndex: 1, pitchRate: 0.9, synthFreq: 246.94, color: '#06b6d4', emoji: '🌷', animClass: 'anim-sway' },
-      snail: { height: 'ground', noteIndex: 1, pitchRate: 0.6, synthFreq: 164.81, color: '#a855f7', emoji: '🐌', animClass: 'anim-slide' }
+      // Sky (Agudos - Octava 5/6)
+      star1: { height: 'sky', synthFreq: 523.25, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // DO5
+      star2: { height: 'sky', synthFreq: 587.33, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // RE5
+      star3: { height: 'sky', synthFreq: 659.25, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // MI5
+      butterfly: { height: 'sky', synthFreq: 698.46, color: '#e879f9', emoji: '🦋', animClass: 'anim-flutter' }, // FA5
+      sun: { height: 'sky', synthFreq: 783.99, color: '#fbbf24', emoji: '☀️', animClass: 'anim-pulse' },         // SOL5
+      cloud1: { height: 'sky', synthFreq: 880.00, color: '#e2e8f0', emoji: '☁️', animClass: 'anim-float' },      // LA5
+      cloud2: { height: 'sky', synthFreq: 987.77, color: '#cbd5e1', emoji: '☁️', animClass: 'anim-float' },      // SI5
+      bird: { height: 'sky', synthFreq: 1046.50, color: '#3b82f6', emoji: '🐦', animClass: 'anim-hop' },        // DO6
+      
+      // Ground (Graves - Octava 3/4)
+      drum:    { height: 'ground', synthFreq: 261.63, color: '#fb923c', emoji: '🥁', animClass: 'anim-bounce' },  // DO3 - la más grave del grupo
+      mushroom:{ height: 'ground', synthFreq: 293.66, color: '#ef4444', emoji: '🍄', animClass: 'anim-hop' },    // RE3
+      frog:    { height: 'ground', synthFreq: 329.63, color: '#22c55e', emoji: '🐸', animClass: 'anim-hop' },    // MI3
+      flower1: { height: 'ground', synthFreq: 349.23, color: '#ec4899', emoji: '🌸', animClass: 'anim-sway' },   // FA3
+      flower2: { height: 'ground', synthFreq: 392.00, color: '#06b6d4', emoji: '🌷', animClass: 'anim-sway' },   // SOL3
+      snail:   { height: 'ground', synthFreq: 440.00, color: '#a855f7', emoji: '🐌', animClass: 'anim-slide' }   // LA3
     };
 
     // Teacher Juan Di messages database
@@ -1205,66 +1208,12 @@
       const details = toyDetails[toyKey];
       if (!details) return;
 
-      // Special organic sounds for Bird and Frog (always active in both modes)
-      if (toyKey === 'bird') {
-        const now = audioCtx.currentTime;
-        playSingleFrequency(details.synthFreq, now, 0.08);
-        playSingleFrequency(details.synthFreq * 1.15, now + 0.09, 0.12);
-        return;
-      }
-      if (toyKey === 'frog') {
-        const now = audioCtx.currentTime;
-        function makeRibbit(time) {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          const mod = audioCtx.createOscillator();
-          const modGain = audioCtx.createGain();
-          
-          mod.type = 'sine';
-          mod.frequency.setValueAtTime(25, time); 
-          modGain.gain.setValueAtTime(15, time); 
-          
-          osc.type = 'triangle'; 
-          osc.frequency.setValueAtTime(140, time);
-          osc.frequency.exponentialRampToValueAtTime(195, time + 0.07);
-          osc.frequency.exponentialRampToValueAtTime(150, time + 0.14);
-          
-          mod.connect(modGain);
-          modGain.connect(osc.frequency);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          
-          gain.gain.setValueAtTime(0.001, time);
-          gain.gain.linearRampToValueAtTime(0.3, time + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.14);
-          
-          osc.start(time);
-          mod.start(time);
-          osc.stop(time + 0.16);
-          mod.stop(time + 0.16);
-        }
-        makeRibbit(now);
-        makeRibbit(now + 0.2);
-        return;
-      }
-
-      // Cielo y Tierra: highly distinct custom-synthesized timbres for Ground vs Sky
+      // Cielo y Tierra: play high/low clean tuned musical notes
       if (currentGame === 'cielotierra') {
         if (details.height === 'sky') {
           playSynthChime(details.synthFreq);
         } else {
-          // Play unique timbres for Ground items to make them extremely easy to tell apart
-          if (toyKey === 'drum') {
-            playSynthDrum();
-          } else if (toyKey === 'mushroom') {
-            playSpringyPop();
-          } else if (toyKey === 'snail') {
-            playSnailSlide();
-          } else if (toyKey === 'flower1') {
-            playDeepGroundPluck(180, 'triangle'); // Warm cello
-          } else if (toyKey === 'flower2') {
-            playDeepGroundPluck(240, 'sine'); // Mellow hollow wood
-          }
+          playWarmGraveNote(details.synthFreq);
         }
       } else {
         // Xylophone: plays marimba WAVs or synth chime based on selections
@@ -1324,82 +1273,51 @@
       osc2.stop(now + 0.6);
     }
 
-    // Dynamic Kick/Tom hybrid thump for the Drum
-    function playSynthDrum() {
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(200, now);
-      osc.frequency.exponentialRampToValueAtTime(65, now + 0.16); // Deep thumping downward slide
-      
-      gain.gain.setValueAtTime(0.65, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-      
-      osc.start(now);
-      osc.stop(now + 0.3);
-    }
+    // Clean tuned low-register note (Octave 3) with fundamental + soft 2nd harmonic
+    function playWarmGraveNote(freq) {
+      const ctx = audioCtx;
+      const now = ctx.currentTime;
 
-    // Springy/Cartoonish bounce pop for the Mushroom
-    function playSpringyPop() {
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(150, now);
-      osc.frequency.exponentialRampToValueAtTime(290, now + 0.07); // Sudden bounce pitch slide
-      osc.frequency.exponentialRampToValueAtTime(130, now + 0.2);
-      
-      gain.gain.setValueAtTime(0.45, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-      
-      osc.start(now);
-      osc.stop(now + 0.24);
-    }
+      // --- Cuerpo principal: fundamental limpia ---
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      // Ataque instantáneo, caída lenta y cálida (1.4 s)
+      gain1.gain.setValueAtTime(0.0, now);
+      gain1.gain.linearRampToValueAtTime(0.55, now + 0.012);  // ataque rápido percusivo
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+      osc1.start(now);
+      osc1.stop(now + 1.5);
 
-    // Slow upward crawling slide sweep for the Snail
-    function playSnailSlide() {
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(115, now);
-      osc.frequency.linearRampToValueAtTime(255, now + 0.55); // Long smooth glide upwards
-      
-      gain.gain.setValueAtTime(0.4, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-      
-      osc.start(now);
-      osc.stop(now + 0.57);
-    }
+      // --- 2° armónico: le da brillo y presencia en parlantes pequeños ---
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(freq * 2.0, now);
+      // El 2° armónico decae MÁS rápido que el fundamental (como una marimba real)
+      gain2.gain.setValueAtTime(0.0, now);
+      gain2.gain.linearRampToValueAtTime(0.28, now + 0.008);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      osc2.start(now);
+      osc2.stop(now + 0.65);
 
-    function playDeepGroundPluck(freq, waveType) {
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      
-      const now = audioCtx.currentTime;
-      
-      osc.type = waveType; 
-      osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.45); 
-      
-      gainNode.gain.setValueAtTime(0.5, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-      
-      osc.start(now);
-      osc.stop(now + 0.7);
+      // --- 4° armónico muy suave: textura de percusión afinada ---
+      const osc3 = ctx.createOscillator();
+      const gain3 = ctx.createGain();
+      osc3.connect(gain3);
+      gain3.connect(ctx.destination);
+      osc3.type = 'triangle';
+      osc3.frequency.setValueAtTime(freq * 4.0, now);
+      gain3.gain.setValueAtTime(0.0, now);
+      gain3.gain.linearRampToValueAtTime(0.09, now + 0.005);
+      gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc3.start(now);
+      osc3.stop(now + 0.3);
     }
 
     function playSuccessChime() {
@@ -1817,6 +1735,7 @@
       }
     }
 
+    // Spawn regular particles
     function spawnParticles(x, y, color) {
       for (let i = 0; i < 15; i++) {
         particles.push(new Particle(x, y, color));
