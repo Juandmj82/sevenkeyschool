@@ -183,6 +183,10 @@
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
     }
 
+    .toy-element:hover {
+      filter: brightness(1.2);
+    }
+
     /* Clean coordinate distribution to prevent overlaps */
     .toy-sun { top: 8%; right: 6%; width: 85px; height: 85px; }
     .toy-cloud1 { top: 10%; left: 6%; width: 110px; height: 60px; }
@@ -202,7 +206,7 @@
     .toy-flower2 { bottom: 10%; right: 8%; width: 60px; height: 90px; }
     .toy-snail { bottom: 6%; left: 58%; width: 70px; height: 55px; }
 
-    /* --- Custom Animations triggered on Tap / Play --- */
+    /* --- Custom Animations --- */
     .anim-pulse {
       animation: spinPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -631,7 +635,7 @@
       sun: {
         height: 'sky',
         noteIndex: 7,
-        pitchRate: 1.5, // High B5/C6
+        pitchRate: 1.5,
         synthFreq: 987.77,
         color: '#fbbf24',
         emoji: '☀️',
@@ -658,7 +662,7 @@
       bird: {
         height: 'sky',
         noteIndex: 7,
-        pitchRate: 1.8, // Double chirp representation in audio logic
+        pitchRate: 1.8,
         synthFreq: 1174.66,
         color: '#3b82f6',
         emoji: '🐦',
@@ -705,7 +709,7 @@
       drum: {
         height: 'ground',
         noteIndex: 1,
-        pitchRate: 0.5, // Low bass
+        pitchRate: 0.5,
         synthFreq: 130.81,
         color: '#fb923c',
         emoji: '🥁',
@@ -723,7 +727,7 @@
       frog: {
         height: 'ground',
         noteIndex: 1,
-        pitchRate: 0.4, // Deep slide
+        pitchRate: 0.4,
         synthFreq: 110.00,
         color: '#22c55e',
         emoji: '🐸',
@@ -798,32 +802,51 @@
       const details = toyDetails[toyKey];
       if (!details) return;
 
-      // Special sound synthesis effects for animals to make them cute
       if (toyKey === 'bird') {
-        // Double chirp sound
         const now = audioCtx.currentTime;
         playSingleFrequency(details.synthFreq, now, 0.08);
         playSingleFrequency(details.synthFreq * 1.15, now + 0.09, 0.12);
         return;
       }
       if (toyKey === 'frog') {
-        // Frog croak slide
+        // High quality cute wooden conga "ribbit-ribbit" croak! (no flatulence sounds!)
         const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'sawtooth'; // raspy croak tone
-        osc.frequency.setValueAtTime(details.synthFreq * 1.5, now);
-        osc.frequency.linearRampToValueAtTime(details.synthFreq * 0.8, now + 0.22);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
-        osc.start(now);
-        osc.stop(now + 0.25);
+        
+        function makeRibbit(time) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const mod = audioCtx.createOscillator();
+          const modGain = audioCtx.createGain();
+          
+          mod.type = 'sine';
+          mod.frequency.setValueAtTime(25, time); // Throat vibrato Speed
+          modGain.gain.setValueAtTime(15, time); // vibrato depth
+          
+          osc.type = 'triangle'; // Wood/throat round sound
+          osc.frequency.setValueAtTime(140, time);
+          osc.frequency.exponentialRampToValueAtTime(195, time + 0.07);
+          osc.frequency.exponentialRampToValueAtTime(150, time + 0.14);
+          
+          mod.connect(modGain);
+          modGain.connect(osc.frequency);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(0.3, time + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.14);
+          
+          osc.start(time);
+          mod.start(time);
+          osc.stop(time + 0.16);
+          mod.stop(time + 0.16);
+        }
+        
+        makeRibbit(now);
+        makeRibbit(now + 0.2);
         return;
       }
       if (toyKey === 'snail') {
-        // Snail sliding rising pitch
         const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -839,7 +862,6 @@
         return;
       }
 
-      // Standard real marimba or synth chime playback
       if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
         const source = audioCtx.createBufferSource();
         source.buffer = audioBuffers[details.noteIndex];
@@ -1055,6 +1077,7 @@
       initAudio(); // warm context
     }
 
+    // Reset UI
     function resetChallengeUI() {
       const btnListen = document.getElementById('btn-listen');
       btnListen.style.background = 'var(--color-gold)';
@@ -1090,7 +1113,7 @@
       playElementSound(currentTargetElement);
 
       if (currentMode === 'learn') {
-        // Nivel 1: play sound, trigger custom animation and show glowing guide
+        // Nivel 1: plays sound AND triggers/glows that specific element
         triggerElementAnimation(currentTargetElement);
         triggerGuideGlow(currentTargetElement);
         isWaitingForAnswer = false;
