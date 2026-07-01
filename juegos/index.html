@@ -25,6 +25,7 @@
     /* Keep the solo estimulacion card the same size as the others */
     #card-estimulacion {
       max-width: 295px;
+      width: 100%;
     }
     .level-card.has-full-cover .level-cover {
       width: 100% !important;
@@ -120,8 +121,23 @@
     
     /* Make the grid fit cards perfectly */
     .levels-grid {
-      grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)) !important;
+      grid-template-columns: repeat(auto-fit, minmax(min(295px, 100%), 1fr)) !important;
       gap: 1.8rem !important;
+    }
+    @media (max-width: 600px) {
+      .levels-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)) !important;
+        gap: 1.2rem !important;
+      }
+      #card-estimulacion {
+        max-width: 100%;
+      }
+      .level-card.has-full-cover .level-footer {
+        padding: 0.75rem 1rem 1rem 1rem !important;
+      }
+      .section-header h2 { font-size: 1.15rem; }
+      .section-header p  { font-size: 0.82rem; }
+      .header-logo { height: 44px; }
     }
     
     /* Category Filter Switcher and Section Styles */
