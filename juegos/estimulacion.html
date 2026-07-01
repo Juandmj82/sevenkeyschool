@@ -31,6 +31,7 @@
       backdrop-filter: blur(8px);
       z-index: 20;
       position: relative;
+      transition: all 0.3s ease;
     }
 
     .header-logo {
@@ -47,6 +48,7 @@
       margin: 0 auto;
       padding: 0.5rem 1rem 1rem 1rem;
       position: relative;
+      height: calc(100vh - 80px);
     }
 
     /* Top Controls Panel */
@@ -61,6 +63,7 @@
       padding: 0.6rem 1.2rem;
       border-radius: 16px;
       z-index: 10;
+      transition: all 0.3s ease;
     }
 
     .control-group {
@@ -331,6 +334,116 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
+    /* --- Teacher Juandi Mascot Widget --- */
+    .teacher-mascot-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .teacher-avatar-wrapper {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      border: 3px solid var(--color-gold);
+      overflow: hidden;
+      background: #0f172a;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .teacher-avatar-wrapper:active {
+      transform: scale(1.1);
+    }
+
+    .teacher-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.2s ease;
+    }
+
+    .teacher-bubble {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      padding: 0.6rem 1.2rem;
+      border-radius: 18px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      max-width: 250px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      position: relative;
+      animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transform-origin: left center;
+    }
+
+    .teacher-bubble::after {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 8px 8px 8px 0;
+      border-style: solid;
+      border-color: transparent rgba(15, 23, 42, 0.95) transparent transparent;
+    }
+
+    @keyframes bubblePop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Screen Rotation Hint Overlay */
+    .rotation-hint-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #020617;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      text-align: center;
+      padding: 2rem;
+      display: none;
+    }
+
+    .rotation-hint-icon {
+      font-size: 4rem;
+      color: var(--color-gold);
+      animation: rotatePhone 2s infinite ease-in-out;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes rotatePhone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .rotation-hint-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .rotation-hint-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
     /* Loading notice */
     .loading-notice {
       position: absolute;
@@ -347,70 +460,59 @@
       display: none;
     }
 
-    .loading-notice p {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .loading-notice .spinner {
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top: 4px solid var(--color-gold);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Floating particles */
-    .glowing-emoji {
-      position: absolute;
+    /* Confetti Particle canvas structure */
+    .confetti-active {
       pointer-events: none;
-      font-size: 2.5rem;
-      z-index: 4;
     }
 
-    @media (max-width: 768px) {
-      .stimulation-container {
-        padding: 0.5rem;
+    /* --- RESPONSIVE LANDSCAPE MODE AUTO-FULLSCREEN --- */
+    @media (orientation: landscape) and (max-height: 550px) {
+      header {
+        display: none !important; /* Hide header completely in landscape to maximize height */
       }
       .controls-panel {
-        flex-direction: column;
-        gap: 0.6rem;
-        padding: 0.6rem;
+        padding: 0.3rem 1rem;
+        margin-bottom: 0.3rem;
+        border-radius: 8px;
+      }
+      .stimulation-container {
+        padding: 0.2rem;
+        height: 100vh;
+      }
+      .sandbox-area {
+        border-radius: 12px;
       }
       .toy-element {
-        transform: scale(0.72);
+        transform: scale(0.6); /* Scale down items to fit short landscape height */
       }
       .toy-element:hover {
-        transform: scale(0.72);
+        transform: scale(0.6);
       }
-      /* Mobile coordinates to prevent overlaps */
-      .toy-sun { top: 5%; right: 2%; }
-      .toy-cloud1 { top: 5%; left: 2%; }
-      .toy-cloud2 { top: 18%; left: 16%; }
-      .toy-bird { top: 6%; left: 38%; }
-      .toy-butterfly { top: 18%; right: 20%; }
-      .toy-star1 { top: 5%; left: 26%; }
-      .toy-star2 { top: 22%; left: 45%; }
-      .toy-star3 { top: 8%; right: 32%; }
-      .toy-drum { bottom: 5%; left: 15%; }
-      .toy-mushroom { bottom: 6%; left: 38%; }
-      .toy-frog { bottom: 5%; right: 15%; }
-      .toy-flower1 { bottom: 4%; left: 2%; }
-      .toy-flower2 { bottom: 6%; right: 2%; }
-      .toy-snail { bottom: 4%; left: 52%; }
+      .teacher-mascot-container {
+        bottom: 8px;
+        left: 8px;
+        transform: scale(0.75);
+        transform-origin: bottom left;
+      }
+      .challenge-center-button {
+        width: 60px;
+        height: 60px;
+      }
+      .challenge-center-button i {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
+  <!-- Rotation recommendation for phone -->
+  <div class="rotation-hint-overlay" id="rotation-overlay">
+    <i class="fas fa-mobile-alt rotation-hint-icon"></i>
+    <div class="rotation-hint-title">¡Gira tu celular!</div>
+    <div class="rotation-hint-text">Juega a pantalla completa para una mejor experiencia táctil.</div>
+  </div>
+
+  <header id="main-header">
     <div class="logo-container">
       <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
     </div>
@@ -422,7 +524,7 @@
 
   <main class="stimulation-container">
     <!-- Game Mode Controls -->
-    <div class="controls-panel">
+    <div class="controls-panel" id="main-controls">
       <div class="control-group">
         <span class="control-label">Nivel:</span>
         <div class="btn-toggle-group">
@@ -451,6 +553,16 @@
     <!-- Sandbox Play Area -->
     <div class="sandbox-area" id="play-sandbox">
       <canvas id="effects-canvas"></canvas>
+
+      <!-- Teacher Juandi Mascot Widget -->
+      <div class="teacher-mascot-container">
+        <div class="teacher-avatar-wrapper" onclick="triggerTeacherJuandiVoice()">
+          <img src="../img/profe.jpg" alt="Profe Juandi" class="teacher-avatar-img" id="teacher-avatar">
+        </div>
+        <div class="teacher-bubble" id="teacher-speech-bubble">
+          ¡Hola! Soy el Profe Juandi. ¡Toca los elementos del Cielo y la Tierra para descubrir sus sonidos!
+        </div>
+      </div>
 
       <!-- Loading notice -->
       <div class="loading-notice" id="loading-notice">
@@ -762,6 +874,65 @@
       }
     };
 
+    const elementEmojis = {
+      sun: '☀️', cloud1: '☁️', cloud2: '☁️', bird: '🐦', butterfly: '🦋',
+      star1: '⭐', star2: '⭐', star3: '⭐',
+      drum: '🥁', mushroom: '🍄', frog: '🐸', flower1: '🌸', flower2: '🌷', snail: '🐌'
+    };
+
+    // Teacher Juandi messages database
+    const teacherMessages = {
+      welcome_learn: "¡Hola! Soy el Profe Juandi. Nivel 1: ¡Toca los elementos para aprender y descubrir sus sonidos!",
+      welcome_challenge: "¡El Reto del Oído! Nivel 2: ¡Presiona el altavoz amarillo del centro, escucha con atención y adivina qué elemento sonó!",
+      success: [
+        "¡Excelente! ¡Tienes un oído espectacular!",
+        "¡Estupendo! ¡Lo has adivinado muy bien!",
+        "¡Increíble! ¡Así se hace!",
+        "¡Bravo! ¡Eres un súper músico!"
+      ],
+      fail: [
+        "¡Casi lo tienes! Escucha con atención y busca la figura que brilla.",
+        "¡Inténtalo otra vez! Tú puedes lograrlo.",
+        "No te preocupes, ¡vamos a intentarlo de nuevo!"
+      ]
+    };
+
+    function updateTeacherBubble(message, status = 'normal') {
+      const bubble = document.getElementById('teacher-speech-bubble');
+      const avatar = document.getElementById('teacher-avatar');
+      
+      bubble.innerText = message;
+      
+      // Update teacher state image
+      if (status === 'success') {
+        avatar.src = '../img/profe_celebrate.jpg';
+        avatar.parentElement.style.transform = 'scale(1.15) rotate(5deg)';
+      } else if (status === 'fail') {
+        avatar.src = '../img/profe_sad.jpg';
+        avatar.parentElement.style.transform = 'scale(0.95)';
+      } else {
+        avatar.src = '../img/profe.jpg';
+        avatar.parentElement.style.transform = 'scale(1)';
+      }
+    }
+
+    function resetTeacherAvatar() {
+      const avatar = document.getElementById('teacher-avatar');
+      avatar.src = '../img/profe.jpg';
+      avatar.parentElement.style.transform = 'scale(1)';
+    }
+
+    function triggerTeacherJuandiVoice() {
+      // Tap on teacher repeats instructions
+      initAudio();
+      if (currentMode === 'learn') {
+        updateTeacherBubble(teacherMessages.welcome_learn);
+      } else {
+        updateTeacherBubble(teacherMessages.welcome_challenge);
+      }
+      setTimeout(resetTeacherAvatar, 2000);
+    }
+
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -809,9 +980,7 @@
         return;
       }
       if (toyKey === 'frog') {
-        // High quality cute wooden conga "ribbit-ribbit" croak! (no flatulence sounds!)
         const now = audioCtx.currentTime;
-        
         function makeRibbit(time) {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -819,10 +988,10 @@
           const modGain = audioCtx.createGain();
           
           mod.type = 'sine';
-          mod.frequency.setValueAtTime(25, time); // Throat vibrato Speed
-          modGain.gain.setValueAtTime(15, time); // vibrato depth
+          mod.frequency.setValueAtTime(25, time); 
+          modGain.gain.setValueAtTime(15, time); 
           
-          osc.type = 'triangle'; // Wood/throat round sound
+          osc.type = 'triangle'; 
           osc.frequency.setValueAtTime(140, time);
           osc.frequency.exponentialRampToValueAtTime(195, time + 0.07);
           osc.frequency.exponentialRampToValueAtTime(150, time + 0.14);
@@ -841,7 +1010,6 @@
           osc.stop(time + 0.16);
           mod.stop(time + 0.16);
         }
-        
         makeRibbit(now);
         makeRibbit(now + 0.2);
         return;
@@ -974,26 +1142,31 @@
       triggerElementAnimation(toyKey);
 
       if (currentMode === 'learn') {
-        // Nivel 1: play sound, trigger animation and guide glow, spawn particles
         playElementSound(toyKey);
         triggerGuideGlow(toyKey);
         
         spawnParticles(clientX, clientY, details.color);
         spawnFloatingEmoji(clientX, clientY, details.emoji);
       } else {
-        // Nivel 2: Guessing mode
         if (!isWaitingForAnswer) return;
         isWaitingForAnswer = false;
 
         const btnListen = document.getElementById('btn-listen');
 
         if (toyKey === currentTargetElement) {
-          // Success! Matches exact sound
+          // Success!
           playSuccessChime();
           
-          btnListen.style.background = '#10b981'; // Green
+          btnListen.style.background = '#10b981';
           btnListen.querySelector('i').className = 'fas fa-check';
           
+          // Confetti!
+          spawnConfettiExplosion(clientX, clientY);
+          
+          // Teacher celebrates!
+          const rMsg = teacherMessages.success[Math.floor(Math.random() * teacherMessages.success.length)];
+          updateTeacherBubble(rMsg, 'success');
+
           spawnParticles(clientX, clientY, '#10b981');
           for (let i = 0; i < 6; i++) {
             setTimeout(() => {
@@ -1001,19 +1174,23 @@
             }, i * 50);
           }
 
-          // Next round
+          // Next round automatic
           setTimeout(() => {
             resetChallengeUI();
             playChallengeSound();
-          }, 1800);
+          }, 2400);
         } else {
-          // Wrong choice - show correct element
+          // Failure
           playFailChime();
           
-          btnListen.style.background = '#ef4444'; // Red
+          btnListen.style.background = '#ef4444';
           btnListen.querySelector('i').className = 'fas fa-volume-up';
 
-          // Pulse the CORRECT element
+          // Teacher gets sad / guides
+          const rMsg = teacherMessages.fail[Math.floor(Math.random() * teacherMessages.fail.length)];
+          updateTeacherBubble(rMsg, 'fail');
+
+          // Pulse the correct toy element
           const correctEl = document.getElementById(`toy-${currentTargetElement}`);
           correctEl.classList.add('guide-pulse-wrong');
           setTimeout(() => correctEl.classList.remove('guide-pulse-wrong'), 1600);
@@ -1022,12 +1199,12 @@
           setTimeout(() => {
             btnListen.style.background = 'var(--color-gold)';
             isWaitingForAnswer = true;
-          }, 1200);
+          }, 1500);
         }
       }
     }
 
-    // Triggers element custom animation
+    // Custom animation
     function triggerElementAnimation(toyKey) {
       const details = toyDetails[toyKey];
       const el = document.getElementById(`toy-${toyKey}`);
@@ -1035,14 +1212,14 @@
       setTimeout(() => el.classList.remove(details.animClass), 600);
     }
 
-    // Level 1 helper: glows target element
+    // Guide glow
     function triggerGuideGlow(toyKey) {
       const el = document.getElementById(`toy-${toyKey}`);
       el.classList.add('glow-guide-active');
       setTimeout(() => el.classList.remove('glow-guide-active'), 1000);
     }
 
-    // --- Mode Select ---
+    // --- Mode Setup ---
     function setMode(modeName) {
       currentMode = modeName;
       document.getElementById('btn-mode-learn').classList.remove('active');
@@ -1052,7 +1229,6 @@
       const btnListen = document.getElementById('btn-listen');
       const allToys = document.querySelectorAll('.toy-element');
       
-      // Clear glows
       allToys.forEach(el => {
         el.classList.remove('glow-guide-active');
         el.classList.remove('guide-pulse-wrong');
@@ -1061,10 +1237,12 @@
       if (modeName === 'learn') {
         btnListen.style.display = 'none';
         resetChallengeUI();
+        updateTeacherBubble(teacherMessages.welcome_learn);
       } else {
         btnListen.style.display = 'flex';
         resetChallengeUI();
-        initAudio(); // warm context
+        initAudio(); // warm
+        updateTeacherBubble(teacherMessages.welcome_challenge);
       }
     }
 
@@ -1074,10 +1252,9 @@
       document.getElementById('btn-sound-marimba').classList.remove('active');
       document.getElementById(`btn-sound-${soundType}`).classList.add('active');
       
-      initAudio(); // warm context
+      initAudio(); // warm
     }
 
-    // Reset UI
     function resetChallengeUI() {
       const btnListen = document.getElementById('btn-listen');
       btnListen.style.background = 'var(--color-gold)';
@@ -1085,11 +1262,11 @@
       btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
       isWaitingForAnswer = false;
       currentTargetElement = null;
+      resetTeacherAvatar();
     }
 
     function playChallengeSound() {
       if (isWaitingForAnswer) {
-        // Re-play sound and animation
         playElementSound(currentTargetElement);
         triggerElementAnimation(currentTargetElement);
         if (currentMode === 'learn') {
@@ -1100,33 +1277,29 @@
       
       resetChallengeUI();
       
-      // Pick a random element from all toys
       const keys = Object.keys(toyDetails);
       currentTargetElement = keys[Math.floor(Math.random() * keys.length)];
       
-      // Animate center button
       const btn = document.getElementById('btn-listen');
       btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
       setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
 
-      // Play Sound
       playElementSound(currentTargetElement);
 
       if (currentMode === 'learn') {
-        // Nivel 1: plays sound AND triggers/glows that specific element
         triggerElementAnimation(currentTargetElement);
         triggerGuideGlow(currentTargetElement);
         isWaitingForAnswer = false;
       } else {
-        // Nivel 2: guess by tapping correct element, nothing glows
         isWaitingForAnswer = true;
       }
     }
 
-    // --- Particle Physics Effects Engine ---
+    // --- Particle Physics Effects & Confetti Engine ---
     const canvas = document.getElementById('effects-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
+    let confettis = [];
 
     function resizeCanvas() {
       const sandbox = document.getElementById('play-sandbox');
@@ -1171,9 +1344,50 @@
       }
     }
 
+    class Confetti {
+      constructor(x, y) {
+        const rect = canvas.getBoundingClientRect();
+        this.x = x - rect.left;
+        this.y = y - rect.top;
+        this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        this.size = Math.random() * 8 + 6;
+        this.speedX = Math.random() * 12 - 6;
+        this.speedY = Math.random() * -12 - 5; // shoot upward
+        this.gravity = 0.22;
+        this.alpha = 1;
+        this.rotation = Math.random() * 360;
+        this.rotSpeed = Math.random() * 15 - 7.5;
+        this.decay = Math.random() * 0.01 + 0.008;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.rotation += this.rotSpeed;
+        this.alpha -= this.decay;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+
     function spawnParticles(x, y, color) {
       for (let i = 0; i < 15; i++) {
         particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function spawnConfettiExplosion(x, y) {
+      for (let i = 0; i < 60; i++) {
+        confettis.push(new Confetti(x, y));
       }
     }
 
@@ -1218,17 +1432,45 @@
       requestAnimationFrame(step);
     }
 
+    // --- Responsive Orientation Check ---
+    function checkOrientation() {
+      const isMobile = window.innerWidth <= 768;
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const overlay = document.getElementById('rotation-overlay');
+
+      if (isMobile && isPortrait) {
+        overlay.style.display = 'flex';
+      } else {
+        overlay.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('load', checkOrientation);
+    checkOrientation();
+
+    // Canvas animation loop
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      // Particles loop
       for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update();
         particles[i].draw();
-        
         if (particles[i].alpha <= 0) {
           particles.splice(i, 1);
         }
       }
+
+      // Confetti loop
+      for (let i = confettis.length - 1; i >= 0; i--) {
+        confettis[i].update();
+        confettis[i].draw();
+        if (confettis[i].alpha <= 0) {
+          confettis.splice(i, 1);
+        }
+      }
+      
       requestAnimationFrame(animate);
     }
 
