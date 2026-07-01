@@ -1205,6 +1205,7 @@
       const details = toyDetails[toyKey];
       if (!details) return;
 
+      // Special organic sounds for Bird and Frog (always active in both modes)
       if (toyKey === 'bird') {
         const now = audioCtx.currentTime;
         playSingleFrequency(details.synthFreq, now, 0.08);
@@ -1246,28 +1247,24 @@
         makeRibbit(now + 0.2);
         return;
       }
-      if (toyKey === 'snail') {
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(details.synthFreq, now);
-        osc.frequency.linearRampToValueAtTime(details.synthFreq * 1.4, now + 0.4);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-        osc.start(now);
-        osc.stop(now + 0.42);
-        return;
-      }
 
-      // Cielo y Tierra: play highly distinct audio to avoid pitch mixing
+      // Cielo y Tierra: highly distinct custom-synthesized timbres for Ground vs Sky
       if (currentGame === 'cielotierra') {
         if (details.height === 'sky') {
           playSynthChime(details.synthFreq);
         } else {
-          playDeepGroundPluck(details.synthFreq);
+          // Play unique timbres for Ground items to make them extremely easy to tell apart
+          if (toyKey === 'drum') {
+            playSynthDrum();
+          } else if (toyKey === 'mushroom') {
+            playSpringyPop();
+          } else if (toyKey === 'snail') {
+            playSnailSlide();
+          } else if (toyKey === 'flower1') {
+            playDeepGroundPluck(180, 'triangle'); // Warm cello
+          } else if (toyKey === 'flower2') {
+            playDeepGroundPluck(240, 'sine'); // Mellow hollow wood
+          }
         }
       } else {
         // Xylophone: plays marimba WAVs or synth chime based on selections
@@ -1327,7 +1324,65 @@
       osc2.stop(now + 0.6);
     }
 
-    function playDeepGroundPluck(freq) {
+    // Dynamic Kick/Tom hybrid thump for the Drum
+    function playSynthDrum() {
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.exponentialRampToValueAtTime(65, now + 0.16); // Deep thumping downward slide
+      
+      gain.gain.setValueAtTime(0.65, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+
+    // Springy/Cartoonish bounce pop for the Mushroom
+    function playSpringyPop() {
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(150, now);
+      osc.frequency.exponentialRampToValueAtTime(290, now + 0.07); // Sudden bounce pitch slide
+      osc.frequency.exponentialRampToValueAtTime(130, now + 0.2);
+      
+      gain.gain.setValueAtTime(0.45, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      
+      osc.start(now);
+      osc.stop(now + 0.24);
+    }
+
+    // Slow upward crawling slide sweep for the Snail
+    function playSnailSlide() {
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(115, now);
+      osc.frequency.linearRampToValueAtTime(255, now + 0.55); // Long smooth glide upwards
+      
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      
+      osc.start(now);
+      osc.stop(now + 0.57);
+    }
+
+    function playDeepGroundPluck(freq, waveType) {
       const osc = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
       
@@ -1336,9 +1391,9 @@
       
       const now = audioCtx.currentTime;
       
-      osc.type = 'triangle'; 
+      osc.type = waveType; 
       osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.4); 
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.45); 
       
       gainNode.gain.setValueAtTime(0.5, now);
       gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
@@ -1552,7 +1607,6 @@
         if (levelGroup) levelGroup.style.display = 'none';
         if (btnListen) btnListen.style.display = 'none';
         
-        // Show sound/instrument selection panel for Xylophone
         const instrumentGroup = document.getElementById('group-instrument');
         if (instrumentGroup) instrumentGroup.style.display = 'flex';
         
@@ -1564,7 +1618,6 @@
         if (scaleGroup) scaleGroup.style.display = 'none';
         if (levelGroup) levelGroup.style.display = 'flex';
         
-        // Hide instrument selector in Cielo y Tierra
         const instrumentGroup = document.getElementById('group-instrument');
         if (instrumentGroup) instrumentGroup.style.display = 'none';
         
