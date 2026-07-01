@@ -1220,146 +1220,58 @@
                     }
                 });
             }
+        
+            // Actualizar cada segundo
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        
+            function initAudio() {
+                const audio = document.getElementById('bgMusic');
+                const musicToggle = document.getElementById('musicToggle');
+                const musicIcon = document.getElementById('musicIcon');
 
-            // Slider de testimonios
-            const testimonialsWrapper = document.querySelector('.testimonials-wrapper');
-            const slides = document.querySelectorAll('.testimonial-slide');
-            const prevButton = document.querySelector('.prev-button');
-            const nextButton = document.querySelector('.next-button');
-            let currentSlide = 0;
+                // Configuración inicial
+                audio.volume = 0.3;
+                audio.muted = true; // Iniciar muteado
+                musicIcon.className = 'fas fa-volume-mute'; // Mostrar icono de mute inicialmente
 
-            function updateSlidePosition() {
-                if (testimonialsWrapper && slides.length > 0) {
-                    testimonialsWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+                // Función para manejar la reproducción
+                function handleAudioPlay() {
+                    if (audio.muted) {
+                        audio.muted = false;
+                        musicIcon.className = 'fas fa-volume-up';
+                    }
+                    
+                    audio.play()
+                        .then(() => {
+                            console.log("Reproducción iniciada con éxito");
+                        })
+                        .catch(error => {
+                            console.log("Error en reproducción:", error);
+                            audio.muted = true;
+                            musicIcon.className = 'fas fa-volume-mute';
+                        });
                 }
-            }
 
-            function nextSlide() {
-                if (slides.length > 0) {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    updateSlidePosition();
-                }
-            }
-
-            function prevSlide() {
-                if (slides.length > 0) {
-                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                    updateSlidePosition();
-                }
-            }
-
-            if (prevButton) {
-                prevButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    prevSlide();
-                });
-            }
-
-            if (nextButton) {
-                nextButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    nextSlide();
-                });
-            }
-
-            // Inicializar posición del slider
-            updateSlidePosition();
-
-            // Soporte para swipe en móvil
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            if (testimonialsWrapper) {
-                testimonialsWrapper.addEventListener('touchstart', (e) => {
-                    touchStartX = e.touches[0].clientX;
-                });
-
-                testimonialsWrapper.addEventListener('touchmove', (e) => {
-                    touchEndX = e.touches[0].clientX;
-                });
-
-                testimonialsWrapper.addEventListener('touchend', () => {
-                    const swipeDistance = touchEndX - touchStartX;
-                    if (Math.abs(swipeDistance) > 50) {
-                        if (swipeDistance > 0) {
-                            prevSlide();
-                        } else {
-                            nextSlide();
-                        }
+                // Toggle música solo cuando el usuario hace click en el botón
+                musicToggle.addEventListener('click', function() {
+                    if (audio.muted) {
+                        handleAudioPlay();
+                    } else {
+                        audio.muted = true;
+                        musicIcon.className = 'fas fa-volume-mute';
                     }
                 });
+
+                // Pausar música cuando se reproduce un video
+                document.querySelectorAll('iframe').forEach(iframe => {
+                    iframe.addEventListener('click', function() {
+                        audio.muted = true;
+                        musicIcon.className = 'fas fa-volume-mute';
+                    });
+                });
             }
-
-            // Funcionalidad del modal de imágenes
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            const closeBtn = document.getElementsByClassName('close')[0];
-            const zoomableImages = document.getElementsByClassName('zoomable');
-
-            // Agregar evento click a todas las imágenes zoomables
-            Array.from(zoomableImages).forEach(img => {
-                img.onclick = function() {
-                    modal.style.display = 'block';
-                    modalImg.src = this.src;
-                    modalImg.alt = this.alt;
-                    document.body.style.overflow = 'hidden'; // Prevenir scroll
-                }
-            });
-
-            // Cerrar modal al hacer click en X
-            closeBtn.onclick = closeModal;
-
-            // Cerrar modal al hacer click fuera de la imagen
-            modal.onclick = function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            }
-
-            // Función para cerrar el modal
-            function closeModal() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Restaurar scroll
-            }
-
-            // Cerrar modal con la tecla ESC
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeModal();
-                }
-            });
-        });
-    </script>
-
-    <!-- Sección de Instagram -->
-    <div id="instagram-embed-container" class="instagram-media-wrapper">
-        <blockquote 
-            class="instagram-media" 
-            data-instgrm-permalink="https://www.instagram.com/reel/C3HtIgfLkG_/?utm_source=ig_embed&amp;utm_campaign=loading" 
-            data-instgrm-version="14"
-            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; padding:0;">
-        </blockquote>
+        </script>
     </div>
-
-    <script>
-        // Función para recargar el widget de Instagram
-        function reloadInstagramEmbed() {
-            if (window.instgrm) {
-                window.instgrm.Embeds.process();
-            }
-        }
-
-        // Recargar widget cuando cambie el tamaño de la ventana
-        let resizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(reloadInstagramEmbed, 250);
-        });
-
-        // Asegurarse de que el widget se cargue correctamente
-        document.addEventListener('DOMContentLoaded', function() {
-            reloadInstagramEmbed();
-        });
-    </script>
 </body>
 </html>
