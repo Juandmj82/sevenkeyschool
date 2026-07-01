@@ -431,8 +431,8 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* Responsive adjustments for mobile screens */
-    @media (max-width: 820px) {
+    /* Responsive adjustments for mobile/tablet screens */
+    @media (max-width: 1024px) {
       body.game-page-layout {
         height: 100dvh !important;
         max-height: 100dvh !important;
@@ -496,7 +496,27 @@
         display: none !important;
       }
       .level-selector-sidebar {
+        display: flex !important;
+        flex-direction: row !important;
+        width: 100%;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-top: none !important;
+        justify-content: center;
+      }
+      .btn-level-pill {
         display: none !important;
+      }
+      .btn-level-pill.active {
+        display: block !important;
+        width: auto !important;
+        margin: 0 auto;
+        padding: 4px 10px !important;
+        font-size: 0.7rem !important;
+        background: rgba(0, 229, 255, 0.1) !important;
+        border-color: rgba(0, 229, 255, 0.3) !important;
+        color: #fff !important;
+        pointer-events: none;
       }
       .console-arena {
         flex: 1;
