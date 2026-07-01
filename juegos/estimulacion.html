@@ -221,7 +221,7 @@
       height: 100%;
       z-index: 1;
       position: relative;
-      display: none; /* Toggle visible by JS */
+      display: none;
     }
 
     .zone-half {
@@ -384,7 +384,7 @@
       cursor: pointer;
       border: 4px solid #ffffff;
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: none; /* Visible in Cielo y Tierra Nivel 2 */
+      display: none;
     }
 
     .challenge-center-button:active {
@@ -408,71 +408,132 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* Teacher Juandi Mascot Widget */
-    .teacher-mascot-container {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 15;
-      pointer-events: none;
-    }
-
-    .teacher-avatar-wrapper {
-      width: 85px;
-      height: 85px;
+    /* Floating Teacher Juandi Mascot Header Button */
+    .header-teacher-btn {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      border: 3px solid var(--color-gold);
+      border: 2px solid var(--color-gold);
       overflow: hidden;
-      background: #0f172a;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      pointer-events: auto;
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
     }
 
-    .teacher-avatar-wrapper:active {
+    .header-teacher-btn:hover {
       transform: scale(1.1);
     }
 
-    .teacher-avatar-img {
+    .header-teacher-btn img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: filter 0.2s ease;
     }
 
-    .teacher-bubble {
-      background: rgba(15, 23, 42, 0.95);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      padding: 0.6rem 1.2rem;
-      border-radius: 18px;
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 700;
-      max-width: 250px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    /* --- GORGEOUS SCIENTIFIC WARNING MODAL (Pedagogical advice) --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .pedagogical-modal {
+      background: linear-gradient(to bottom, #0f172a 0%, #020617 100%);
+      border: 2px solid var(--color-gold);
+      border-radius: 28px;
+      max-width: 600px;
+      width: 100%;
+      padding: 2.2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.15);
+      text-align: center;
       position: relative;
-      animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      transform-origin: left center;
+      animation: modalSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .teacher-bubble::after {
-      content: '';
-      position: absolute;
-      left: -8px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-width: 8px 8px 8px 0;
-      border-style: solid;
-      border-color: transparent rgba(15, 23, 42, 0.95) transparent transparent;
+    @keyframes modalSlideIn {
+      0% { transform: translateY(40px) scale(0.95); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
     }
 
-    @keyframes bubblePop {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    .modal-teacher-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3.5px solid var(--color-gold);
+      overflow: hidden;
+      margin: 0 auto 1.2rem auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .modal-teacher-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .modal-subtitle {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .modal-content p {
+      margin-bottom: 0.8rem;
+    }
+
+    .btn-modal-start {
+      background: var(--color-gold);
+      color: #020617;
+      border: none;
+      padding: 0.9rem 2.2rem;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-modal-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn-modal-start:active {
+      transform: translateY(1px);
     }
 
     /* Screen Rotation Hint Overlay */
@@ -563,7 +624,7 @@
       z-index: 4;
     }
 
-    /* --- RESPONSIVE LANDSCAPE MODE AUTO-FULLSCREEN --- */
+    /* Responsive layout tweaks */
     @media (orientation: landscape) and (max-height: 550px) {
       header {
         display: none !important;
@@ -586,12 +647,6 @@
       .toy-element:hover {
         transform: scale(0.6);
       }
-      .teacher-mascot-container {
-        bottom: 8px;
-        left: 8px;
-        transform: scale(0.7);
-        transform-origin: bottom left;
-      }
       .challenge-center-button {
         width: 60px;
         height: 60px;
@@ -612,11 +667,42 @@
         width: 26px;
         height: 26px;
       }
+      .pedagogical-modal {
+        padding: 1.2rem;
+        max-width: 500px;
+      }
+      .modal-teacher-avatar {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 0.5rem;
+      }
+      .modal-content {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Rotation hint -->
+  <!-- Pedagogical advice warning modal -->
+  <div class="modal-overlay" id="parent-modal">
+    <div class="pedagogical-modal">
+      <div class="modal-teacher-avatar">
+        <img src="../img/profe.jpg" alt="Profe Juandi">
+      </div>
+      <div class="modal-title">Mensaje del Profe Juandi</div>
+      <div class="modal-subtitle">Estimulación Musical y Salud Visual</div>
+      <div class="modal-content">
+        <p>¡Bienvenidos a la zona de estimulación musical! La música y las frecuencias auditivas tempranas son herramientas maravillosas para fortalecer las conexiones neuronales y la discriminación del oído en bebés.</p>
+        <p><strong>Nota Científica Importante:</strong> La Asociación Americana de Pediatría (AAP) advierte que la sobreexposición a pantallas a temprana edad puede afectar la capacidad de atención y alterar el ciclo de sueño. Por ello, te recomendamos usar estos juegos interactivos en <strong>sesiones muy cortas (máximo 10 minutos al día)</strong>, siempre acompañando a tu bebé y priorizando el juego físico e interactivo en el mundo real.</p>
+      </div>
+      <button class="btn-modal-start" onclick="closeModalAndPlay()">
+        <i class="fas fa-play"></i> Entendido, ¡a explorar juntos!
+      </button>
+    </div>
+  </div>
+
+  <!-- Rotation recommendation for phone -->
   <div class="rotation-hint-overlay" id="rotation-overlay">
     <i class="fas fa-mobile-alt rotation-hint-icon"></i>
     <div class="rotation-hint-title">¡Gira tu celular!</div>
@@ -624,8 +710,14 @@
   </div>
 
   <header id="main-header">
-    <div class="logo-container">
-      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div class="logo-container">
+        <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+      </div>
+      <!-- Little parent warning trigger in header -->
+      <div class="header-teacher-btn" onclick="openPedagogicalModal()" title="Consejo del Profe Juandi">
+        <img src="../img/profe.jpg" alt="Profe Juandi">
+      </div>
     </div>
     <a href="index.html" class="btn-back">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -648,7 +740,7 @@
         </div>
       </div>
 
-      <!-- Xylophone Scale / Vibe Selector (Visible only in Xylo game) -->
+      <!-- Xylophone Scale / Vibe Selector -->
       <div class="control-group" id="group-scale">
         <span class="control-label">Sensación:</span>
         <div class="btn-toggle-group">
@@ -664,7 +756,7 @@
         </div>
       </div>
 
-      <!-- Cielo y Tierra Level Selector (Visible only in Cielo y Tierra game) -->
+      <!-- Cielo y Tierra Level Selector -->
       <div class="control-group" id="group-level" style="display: none;">
         <span class="control-label">Nivel:</span>
         <div class="btn-toggle-group">
@@ -677,7 +769,7 @@
         </div>
       </div>
 
-      <!-- Instrument sound selector (Visible only in Xylo game) -->
+      <!-- Instrument sound selector -->
       <div class="control-group" id="group-instrument">
         <span class="control-label">Sonido:</span>
         <div class="btn-toggle-group">
@@ -694,16 +786,6 @@
     <!-- Sandbox Play Area -->
     <div class="sandbox-area" id="play-sandbox">
       <canvas id="effects-canvas"></canvas>
-
-      <!-- Teacher Juandi Mascot Widget -->
-      <div class="teacher-mascot-container">
-        <div class="teacher-avatar-wrapper" onclick="triggerTeacherJuandiVoice()">
-          <img src="../img/profe.jpg" alt="Profe Juandi" class="teacher-avatar-img" id="teacher-avatar">
-        </div>
-        <div class="teacher-bubble" id="teacher-speech-bubble">
-          ¡Hola! Soy el Profe Juandi. ¡Toca las barras del xilófono para crear tu propia melodía!
-        </div>
-      </div>
 
       <!-- Loading notice -->
       <div class="loading-notice" id="loading-notice">
@@ -881,10 +963,10 @@
     ];
 
     let audioCtx = null;
-    let currentGame = 'xylo'; // 'xylo' or 'cielotierra'
-    let selectedSound = 'marimba'; // 'marimba' (Xilófono Real) or 'chime' (Campanas)
+    let currentGame = 'xylo'; 
+    let selectedSound = 'marimba'; 
     let selectedScale = 'pentatonic';
-    let currentMode = 'learn'; // 'learn' or 'challenge' (for Cielo y Tierra)
+    let currentMode = 'learn'; 
 
     const audioBuffers = {};
     let soundsLoaded = false;
@@ -894,8 +976,7 @@
     let currentTargetElement = null; 
     let isWaitingForAnswer = false;
 
-    // Scale mapping for Xylophone (WAV note indices and pitch rates)
-    // NOTE COLORS (DO = RED, RE = Orange, MI = Yellow, FA = Green, SOL = Cyan, LA = Blue, SI = Purple)
+    // Scale mappings
     const scaleMappings = {
       pentatonic: [
         { note: 'DO', noteIndex: 1, pitchRate: 1.00, color: '#ef4444', freq: 261.63 },
@@ -927,167 +1008,44 @@
       ]
     };
 
-    // Detailed Element Configurations (Unique Frequencies & Animations)
+    // Detailed Element Configurations
     const toyDetails = {
-      // --- SKY (HIGH NOTES) ---
-      sun: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.5,
-        synthFreq: 987.77,
-        color: '#fbbf24',
-        emoji: '☀️',
-        animClass: 'anim-pulse'
-      },
-      cloud1: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.15,
-        synthFreq: 783.99,
-        color: '#e2e8f0',
-        emoji: '☁️',
-        animClass: 'anim-float'
-      },
-      cloud2: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.25,
-        synthFreq: 880.00,
-        color: '#cbd5e1',
-        emoji: '☁️',
-        animClass: 'anim-float'
-      },
-      bird: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.8,
-        synthFreq: 1174.66,
-        color: '#3b82f6',
-        emoji: '🐦',
-        animClass: 'anim-hop'
-      },
-      butterfly: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.4,
-        synthFreq: 932.33,
-        color: '#e879f9',
-        emoji: '🦋',
-        animClass: 'anim-flutter'
-      },
-      star1: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.3,
-        synthFreq: 1046.50,
-        color: '#fbbf24',
-        emoji: '⭐',
-        animClass: 'anim-pulse'
-      },
-      star2: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 1.6,
-        synthFreq: 1244.51,
-        color: '#fbbf24',
-        emoji: '⭐',
-        animClass: 'anim-pulse'
-      },
-      star3: {
-        height: 'sky',
-        noteIndex: 7,
-        pitchRate: 2.0,
-        synthFreq: 1396.91,
-        color: '#fbbf24',
-        emoji: '⭐',
-        animClass: 'anim-pulse'
-      },
-
-      // --- GROUND (LOW NOTES) ---
-      drum: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.5,
-        synthFreq: 130.81,
-        color: '#fb923c',
-        emoji: '🥁',
-        animClass: 'anim-bounce'
-      },
-      mushroom: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.7,
-        synthFreq: 185.00,
-        color: '#ef4444',
-        emoji: '🍄',
-        animClass: 'anim-hop'
-      },
-      frog: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.4,
-        synthFreq: 110.00,
-        color: '#22c55e',
-        emoji: '🐸',
-        animClass: 'anim-hop'
-      },
-      flower1: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.8,
-        synthFreq: 220.00,
-        color: '#ec4899',
-        emoji: '🌸',
-        animClass: 'anim-sway'
-      },
-      flower2: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.9,
-        synthFreq: 246.94,
-        color: '#06b6d4',
-        emoji: '🌷',
-        animClass: 'anim-sway'
-      },
-      snail: {
-        height: 'ground',
-        noteIndex: 1,
-        pitchRate: 0.6,
-        synthFreq: 164.81,
-        color: '#a855f7',
-        emoji: '🐌',
-        animClass: 'anim-slide'
-      }
-    };
-
-    const elementEmojis = {
-      sun: '☀️', cloud1: '☁️', cloud2: '☁️', bird: '🐦', butterfly: '🦋',
-      star1: '⭐', star2: '⭐', star3: '⭐',
-      drum: '🥁', mushroom: '🍄', frog: '🐸', flower1: '🌸', flower2: '🌷', snail: '🐌'
+      sun: { height: 'sky', noteIndex: 7, pitchRate: 1.5, synthFreq: 987.77, color: '#fbbf24', emoji: '☀️', animClass: 'anim-pulse' },
+      cloud1: { height: 'sky', noteIndex: 7, pitchRate: 1.15, synthFreq: 783.99, color: '#e2e8f0', emoji: '☁️', animClass: 'anim-float' },
+      cloud2: { height: 'sky', noteIndex: 7, pitchRate: 1.25, synthFreq: 880.00, color: '#cbd5e1', emoji: '☁️', animClass: 'anim-float' },
+      bird: { height: 'sky', noteIndex: 7, pitchRate: 1.8, synthFreq: 1174.66, color: '#3b82f6', emoji: '🐦', animClass: 'anim-hop' },
+      butterfly: { height: 'sky', noteIndex: 7, pitchRate: 1.4, synthFreq: 932.33, color: '#e879f9', emoji: '🦋', animClass: 'anim-flutter' },
+      star1: { height: 'sky', noteIndex: 7, pitchRate: 1.3, synthFreq: 1046.50, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
+      star2: { height: 'sky', noteIndex: 7, pitchRate: 1.6, synthFreq: 1244.51, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
+      star3: { height: 'sky', noteIndex: 7, pitchRate: 2.0, synthFreq: 1396.91, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },
+      drum: { height: 'ground', noteIndex: 1, pitchRate: 0.5, synthFreq: 130.81, color: '#fb923c', emoji: '🥁', animClass: 'anim-bounce' },
+      mushroom: { height: 'ground', noteIndex: 1, pitchRate: 0.7, synthFreq: 185.00, color: '#ef4444', emoji: '🍄', animClass: 'anim-hop' },
+      frog: { height: 'ground', noteIndex: 1, pitchRate: 0.4, synthFreq: 110.00, color: '#22c55e', emoji: '🐸', animClass: 'anim-hop' },
+      flower1: { height: 'ground', noteIndex: 1, pitchRate: 0.8, synthFreq: 220.00, color: '#ec4899', emoji: '🌸', animClass: 'anim-sway' },
+      flower2: { height: 'ground', noteIndex: 1, pitchRate: 0.9, synthFreq: 246.94, color: '#06b6d4', emoji: '🌷', animClass: 'anim-sway' },
+      snail: { height: 'ground', noteIndex: 1, pitchRate: 0.6, synthFreq: 164.81, color: '#a855f7', emoji: '🐌', animClass: 'anim-slide' }
     };
 
     // Teacher Juandi messages database
     const teacherMessages = {
-      welcome_xylo: "¡Toca las barras de colores del xilófono para crear tu propia música!",
-      welcome_learn: "Nivel 1: ¡Toca los elementos del Cielo y la Tierra para descubrir sus sonidos!",
-      welcome_challenge: "Nivel 2: ¡Presiona el altavoz amarillo del centro, escucha con atención y adivina quién sonó!",
+      welcome_xylo: "¡Toca las barras del xilófono para hacer música!",
+      welcome_learn: "¡Explora el Cielo y la Tierra tocando los elementos para escuchar!",
+      welcome_challenge: "¡El Reto! Escucha el sonido del altavoz y toca el dibujo correspondiente.",
       success: [
-        "¡Excelente! ¡Tienes un oído espectacular!",
-        "¡Estupendo! ¡Lo has adivinado muy bien!",
-        "¡Increíble! ¡Así se hace!",
-        "¡Bravo! ¡Eres un súper músico!"
+        "¡Excelente! ¡Qué gran oído!",
+        "¡Estupendo! ¡Lo lograste!",
+        "¡Muy bien!",
+        "¡Bravo!"
       ],
       fail: [
-        "¡Casi lo tienes! Escucha con atención y busca la figura que brilla.",
-        "¡Inténtalo otra vez! Tú puedes lograrlo.",
-        "No te preocupes, ¡vamos a intentarlo de nuevo!"
+        "¡Inténtalo otra vez! Busca el dibujo que brilla.",
+        "¡Tú puedes lograrlo!",
+        "¡Casi! Vamos de nuevo."
       ]
     };
 
     function updateTeacherBubble(message, status = 'normal') {
-      const bubble = document.getElementById('teacher-speech-bubble');
       const avatar = document.getElementById('teacher-avatar');
-      bubble.innerText = message;
       
       if (status === 'success') {
         avatar.src = '../img/profe_celebrate.jpg';
@@ -1107,16 +1065,17 @@
       avatar.parentElement.style.transform = 'scale(1)';
     }
 
+    function openPedagogicalModal() {
+      document.getElementById('parent-modal').style.display = 'flex';
+    }
+
+    function closeModalAndPlay() {
+      document.getElementById('parent-modal').style.display = 'none';
+      initAudio(); // Warm up audio context on user interaction
+    }
+
     function triggerTeacherJuandiVoice() {
-      initAudio();
-      if (currentGame === 'xylo') {
-        updateTeacherBubble(teacherMessages.welcome_xylo);
-      } else if (currentMode === 'learn') {
-        updateTeacherBubble(teacherMessages.welcome_learn);
-      } else {
-        updateTeacherBubble(teacherMessages.welcome_challenge);
-      }
-      setTimeout(resetTeacherAvatar, 2000);
+      openPedagogicalModal();
     }
 
     function initAudio() {
@@ -1150,10 +1109,8 @@
       notice.style.display = 'none';
     }
 
-    // Play specific note dispatcher
     function playNote(noteIndex, rate, fallbackFreq) {
       initAudio();
-
       if (soundsLoaded && audioBuffers[noteIndex] && selectedSound === 'marimba') {
         const source = audioCtx.createBufferSource();
         source.buffer = audioBuffers[noteIndex];
@@ -1165,7 +1122,6 @@
       }
     }
 
-    // Play specific element sound
     function playElementSound(toyKey) {
       initAudio();
       const details = toyDetails[toyKey];
@@ -1321,7 +1277,7 @@
       osc.stop(now + 0.4);
     }
 
-    // --- Dynamic Xylophone Generation ---
+    // --- Dynamic Xylophone ---
     function renderXylophone() {
       const wrapper = document.getElementById('xylo-wrapper');
       wrapper.innerHTML = '';
@@ -1398,9 +1354,7 @@
           btnListen.querySelector('i').className = 'fas fa-check';
           
           spawnConfettiExplosion(clientX, clientY);
-          
-          const rMsg = teacherMessages.success[Math.floor(Math.random() * teacherMessages.success.length)];
-          updateTeacherBubble(rMsg, 'success');
+          updateTeacherBubble('', 'success');
 
           spawnParticles(clientX, clientY, '#10b981');
           for (let i = 0; i < 6; i++) {
@@ -1418,9 +1372,7 @@
           
           btnListen.style.background = '#ef4444';
           btnListen.querySelector('i').className = 'fas fa-volume-up';
-
-          const rMsg = teacherMessages.fail[Math.floor(Math.random() * teacherMessages.fail.length)];
-          updateTeacherBubble(rMsg, 'fail');
+          updateTeacherBubble('', 'fail');
 
           const correctEl = document.getElementById(`toy-${currentTargetElement}`);
           correctEl.classList.add('guide-pulse-wrong');
@@ -1470,14 +1422,13 @@
         btnListen.style.display = 'none';
         
         renderXylophone();
-        updateTeacherBubble(teacherMessages.welcome_xylo);
       } else {
         xyloGrid.style.display = 'none';
         splitGrid.style.display = 'flex';
         scaleGroup.style.display = 'none';
         levelGroup.style.display = 'flex';
         
-        setMode('learn'); // Default mode in Cielo y Tierra
+        setMode('learn'); 
         initAudio();
       }
     }
@@ -1500,12 +1451,10 @@
       if (modeName === 'learn') {
         btnListen.style.display = 'none';
         resetChallengeUI();
-        updateTeacherBubble(teacherMessages.welcome_learn);
       } else {
         btnListen.style.display = 'flex';
         resetChallengeUI();
         initAudio();
-        updateTeacherBubble(teacherMessages.welcome_challenge);
       }
     }
 
@@ -1526,13 +1475,11 @@
       document.getElementById('btn-sound-chime').classList.remove('active');
       document.getElementById('btn-sound-marimba').classList.remove('active');
       
-      // Update active state in UI based on sound type
       if (soundType === 'marimba') {
         document.getElementById('btn-sound-marimba').classList.add('active');
       } else {
         document.getElementById('btn-sound-chime').classList.add('active');
       }
-      
       initAudio();
     }
 
@@ -1557,7 +1504,6 @@
       }
       
       resetChallengeUI();
-      
       const keys = Object.keys(toyDetails);
       currentTargetElement = keys[Math.floor(Math.random() * keys.length)];
       
@@ -1666,6 +1612,7 @@
       }
     }
 
+    // Centered confetti shower
     function spawnConfettiExplosion(x, y) {
       for (let i = 0; i < 60; i++) {
         confettis.push(new Confetti(x, y));
@@ -1730,10 +1677,11 @@
     window.addEventListener('load', checkOrientation);
     checkOrientation();
 
-    // Loop
+    // Canvas animation loop
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      // Particles loop
       for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update();
         particles[i].draw();
@@ -1742,6 +1690,7 @@
         }
       }
 
+      // Confetti loop
       for (let i = confettis.length - 1; i >= 0; i--) {
         confettis[i].update();
         confettis[i].draw();
@@ -1753,8 +1702,6 @@
       requestAnimationFrame(animate);
     }
 
-    // Initialize dynamically
-    renderXylophone();
     animate();
   </script>
 </body>
