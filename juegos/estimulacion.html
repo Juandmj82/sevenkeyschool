@@ -1199,6 +1199,7 @@
       }
     }
 
+    // Play element sound - fully isolated from user selectors in Cielo y Tierra
     function playElementSound(toyKey) {
       initAudio();
       const details = toyDetails[toyKey];
@@ -1261,14 +1262,24 @@
         return;
       }
 
-      if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
-        const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffers[details.noteIndex];
-        source.playbackRate.setValueAtTime(details.pitchRate, audioCtx.currentTime);
-        source.connect(audioCtx.destination);
-        source.start(0);
+      // Cielo y Tierra: play highly distinct audio to avoid pitch mixing
+      if (currentGame === 'cielotierra') {
+        if (details.height === 'sky') {
+          playSynthChime(details.synthFreq);
+        } else {
+          playDeepGroundPluck(details.synthFreq);
+        }
       } else {
-        playSynthChime(details.synthFreq);
+        // Xylophone: plays marimba WAVs or synth chime based on selections
+        if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffers[details.noteIndex];
+          source.playbackRate.setValueAtTime(details.pitchRate, audioCtx.currentTime);
+          source.connect(audioCtx.destination);
+          source.start(0);
+        } else {
+          playSynthChime(details.synthFreq);
+        }
       }
     }
 
@@ -1314,6 +1325,26 @@
       osc2.start(now);
       osc1.stop(now + 1.7);
       osc2.stop(now + 0.6);
+    }
+
+    function playDeepGroundPluck(freq) {
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      const now = audioCtx.currentTime;
+      
+      osc.type = 'triangle'; 
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.4); 
+      
+      gainNode.gain.setValueAtTime(0.5, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+      
+      osc.start(now);
+      osc.stop(now + 0.7);
     }
 
     function playSuccessChime() {
@@ -1521,6 +1552,10 @@
         if (levelGroup) levelGroup.style.display = 'none';
         if (btnListen) btnListen.style.display = 'none';
         
+        // Show sound/instrument selection panel for Xylophone
+        const instrumentGroup = document.getElementById('group-instrument');
+        if (instrumentGroup) instrumentGroup.style.display = 'flex';
+        
         renderXylophone();
         updateInstructionBanner(teacherMessages.welcome_xylo);
       } else {
@@ -1528,6 +1563,10 @@
         if (splitGrid) splitGrid.style.display = 'flex';
         if (scaleGroup) scaleGroup.style.display = 'none';
         if (levelGroup) levelGroup.style.display = 'flex';
+        
+        // Hide instrument selector in Cielo y Tierra
+        const instrumentGroup = document.getElementById('group-instrument');
+        if (instrumentGroup) instrumentGroup.style.display = 'none';
         
         setMode('learn'); 
         initAudio();
@@ -1614,7 +1653,7 @@
       if (isWaitingForAnswer) {
         playElementSound(currentTargetElement);
         triggerElementAnimation(currentTargetElement);
-        triggerGuideGlow(currentTargetElement); // Trigger glow clue in challenge mode!
+        triggerGuideGlow(currentTargetElement); 
         return;
       }
       
