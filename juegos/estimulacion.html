@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Microsoft Clarity Tracking Code -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xfop6mj4wx");
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Seven Keys School | Estimulación Musical</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background: #020617;
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    header {
+      padding: 0.8rem 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .header-logo {
+      height: 48px;
+      width: auto;
+    }
+
+    .stimulation-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 1rem 1rem 1rem;
+      position: relative;
+      height: calc(100vh - 80px);
+    }
+
+    /* Top Controls Panel */
+    .controls-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem 1rem;
+      margin-bottom: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.6rem 1.2rem;
+      border-radius: 16px;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .control-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .btn-toggle-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-toggle {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-toggle.active {
+      background: var(--color-gold);
+      color: #020617;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-toggle:hover:not(.active) {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Sandbox Play Area */
+    .sandbox-area {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Elegant Instruction Banner */
+    .game-instruction-banner {
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.6rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      z-index: 10;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      flex-shrink: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    #instruction-text {
+      flex: 1;
+      min-width: 0;
+      line-height: 1.4;
+    }
+
+    .instruction-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-gold);
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .instruction-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-instruction-banner .teacher-prefix {
+      color: var(--color-gold);
+      font-weight: 800;
+    }
+
+    #effects-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Xylophone Mode Container */
+    .xylophone-grid {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      padding: 1.5rem;
+      gap: 0.75rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .xylo-bar {
+      flex: 1;
+      height: 100%;
+      border-radius: 20px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: clamp(0.5rem, 3vw, 2rem);
+      box-shadow: 
+        0 8px 0 rgba(0,0,0,0.35),
+        inset 0 4px 0 rgba(255,255,255,0.2),
+        inset 0 -12px 20px rgba(0,0,0,0.2);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      touch-action: none;
+    }
+
+    .xylo-bar::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      width: 14px;
+      height: 14px;
+      background: #334155;
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .xylo-bar::before {
+      content: '';
+      position: absolute;
+      bottom: 15px;
+      width: 14px;
+      height: 14px;
+      background: #334155;
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .xylo-bar:active, .xylo-bar.active-touch {
+      transform: translateY(6px);
+      box-shadow: 
+        0 2px 0 rgba(0,0,0,0.3),
+        inset 0 4px 0 rgba(255,255,255,0.1),
+        inset 0 -4px 10px rgba(0,0,0,0.4);
+    }
+
+    .xylo-label {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #020617;
+      pointer-events: none;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.45);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Cielo y Tierra (Magical Split Screen Layout) */
+    .split-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      flex: 1;
+      z-index: 1;
+      position: relative;
+      display: none;
+    }
+
+    .zone-half {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      transition: background 0.3s ease;
+      touch-action: none;
+    }
+
+    .zone-sky-half {
+      background: linear-gradient(to bottom, #060b18 0%, #111d40 100%);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .zone-ground-half {
+      background: linear-gradient(to bottom, #2b1409 0%, #131110 100%);
+    }
+
+    /* Background graphics */
+    .zone-graphics {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.5;
+    }
+
+    /* Interactive Toy Elements */
+    .toy-element {
+      position: absolute;
+      cursor: pointer;
+      z-index: 3;
+      touch-action: none;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+
+    .toy-element:hover {
+      filter: brightness(1.2);
+    }
+
+    /* Coordinates */
+    .toy-sun { top: 8%; right: 6%; width: 85px; height: 85px; }
+    .toy-cloud1 { top: 10%; left: 6%; width: 110px; height: 60px; }
+    .toy-cloud2 { top: 24%; left: 20%; width: 95px; height: 50px; }
+    .toy-bird { top: 10%; left: 46%; width: 60px; height: 60px; }
+    .toy-butterfly { top: 22%; right: 26%; width: 55px; height: 55px; }
+    
+    .toy-star1 { top: 6%; left: 32%; width: 40px; height: 40px; }
+    .toy-star2 { top: 22%; left: 56%; width: 40px; height: 40px; }
+    .toy-star3 { top: 8%; right: 38%; width: 40px; height: 40px; }
+
+    .toy-drum { bottom: 10%; left: 24%; width: 90px; height: 90px; }
+    .toy-mushroom { bottom: 12%; left: 45%; width: 60px; height: 70px; }
+    .toy-frog { bottom: 12%; right: 24%; width: 70px; height: 70px; }
+    .toy-flower1 { bottom: 8%; left: 8%; width: 60px; height: 90px; }
+    .toy-flower2 { bottom: 10%; right: 8%; width: 60px; height: 90px; }
+    .toy-snail { bottom: 6%; left: 58%; width: 70px; height: 55px; }
+
+    /* Animations */
+    .anim-pulse {
+      animation: spinPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes spinPulse {
+      0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+      50% { transform: scale(1.25) rotate(15deg); filter: brightness(1.4); }
+      100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    }
+
+    .anim-float {
+      animation: cloudFloat 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    @keyframes cloudFloat {
+      0% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(15px) scale(1.1); filter: brightness(1.2); }
+      100% { transform: translateX(0) scale(1); }
+    }
+
+    .anim-hop {
+      animation: birdHop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes birdHop {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-25px) scale(1.2) rotate(-5deg); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .anim-flutter {
+      animation: butterflyFlutter 0.6s ease-in-out;
+    }
+    @keyframes butterflyFlutter {
+      0% { transform: scale(1) rotate(0deg); }
+      30% { transform: scale(1.2) rotate(-15deg); }
+      70% { transform: scale(1.2) rotate(15deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .anim-bounce {
+      animation: drumBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes drumBounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.2, 0.8); }
+      60% { transform: scale(0.9, 1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .anim-sway {
+      animation: flowerSway 0.6s ease-in-out;
+    }
+    @keyframes flowerSway {
+      0% { transform: rotate(0deg); }
+      33% { transform: rotate(-15deg) scale(1.1); }
+      66% { transform: rotate(15deg) scale(1.1); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .anim-slide {
+      animation: snailSlide 0.6s ease-in-out;
+    }
+    @keyframes snailSlide {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(20px) scale(1.1); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Target glows */
+    .glow-guide-active {
+      filter: drop-shadow(0 0 25px var(--glow-color)) brightness(1.3) !important;
+      transform: scale(1.15);
+    }
+
+    .guide-pulse-wrong {
+      animation: wrongPulse 0.4s 3 ease-in-out;
+    }
+    @keyframes wrongPulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.18); filter: drop-shadow(0 0 20px var(--glow-color)) brightness(1.3); }
+    }
+
+    /* Play/Listen button */
+    .challenge-center-button {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--color-gold);
+      color: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+      z-index: 10;
+      cursor: pointer;
+      border: 4px solid #ffffff;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: none;
+    }
+
+    .challenge-center-button:active {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .challenge-center-button i {
+      font-size: 2.2rem;
+    }
+
+    .bg-glowing-star {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: 0.7rem;
+      pointer-events: none;
+      animation: flashStar 3s infinite ease-in-out;
+    }
+
+    @keyframes flashStar {
+      0%, 100% { opacity: 0.1; transform: scale(0.8); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    /* Floating Teacher Juan Di Header Button */
+    .header-teacher-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--color-gold);
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .header-teacher-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .header-teacher-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --- PEDAGOGICAL ADVICE WARNING MODAL --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(0.8rem, 4vw, 1.5rem);
+      overflow-y: auto;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .pedagogical-modal {
+      background: linear-gradient(to bottom, #0f172a 0%, #020617 100%);
+      border: 2px solid var(--color-gold);
+      border-radius: 28px;
+      max-width: 600px;
+      width: 100%;
+      padding: 2.2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.15);
+      text-align: center;
+      position: relative;
+      animation: modalSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modalSlideIn {
+      0% { transform: translateY(40px) scale(0.95); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .modal-teacher-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3.5px solid var(--color-gold);
+      overflow: hidden;
+      margin: 0 auto 1.2rem auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .modal-teacher-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .modal-subtitle {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 1.8rem;
+      text-align: justify;
+    }
+
+    .modal-content p {
+      margin-bottom: 0.8rem;
+    }
+
+    .btn-modal-start {
+      background: var(--color-gold);
+      color: #020617;
+      border: none;
+      padding: 0.9rem 2.2rem;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-modal-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn-modal-start:active {
+      transform: translateY(1px);
+    }
+
+    /* Screen Rotation Hint Overlay */
+    .rotation-hint-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #020617;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      text-align: center;
+      padding: 2rem;
+      display: none;
+    }
+
+    .rotation-hint-icon {
+      font-size: 4rem;
+      color: var(--color-gold);
+      animation: rotatePhone 2s infinite ease-in-out;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes rotatePhone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .rotation-hint-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .rotation-hint-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* Loading notice */
+    .loading-notice {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1.5rem 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 100;
+      pointer-events: none;
+      display: none;
+    }
+
+    .loading-notice p {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading-notice .spinner {
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid var(--color-gold);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Floating particles */
+    .glowing-emoji {
+      position: absolute;
+      pointer-events: none;
+      font-size: 2.5rem;
+      z-index: 4;
+    }
+
+    /* =====================================================
+       RESPONSIVE — Mobile portrait  max 600px
+    ===================================================== */
+    @media (max-width: 600px) {
+      header { padding: 0.5rem 1rem; }
+      .header-logo { height: 36px; }
+      .header-teacher-btn { width: 36px; height: 36px; }
+
+      .stimulation-container {
+        padding: 0.3rem 0.4rem 0.4rem 0.4rem;
+        height: calc(100vh - 60px);
+      }
+
+      .controls-panel {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.4rem 0.6rem;
+        padding: 0.45rem 0.7rem;
+        margin-bottom: 0.4rem;
+        border-radius: 12px;
+      }
+      .control-label { font-size: 0.68rem; }
+      .btn-toggle {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        border-radius: 7px;
+      }
+
+      .sandbox-area { border-radius: 16px; }
+
+      .game-instruction-banner {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.74rem;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        text-align: left;
+      }
+      .instruction-avatar { width: 28px; height: 28px; }
+
+      .xylophone-grid { padding: 0.6rem 0.5rem; gap: 0.35rem; }
+      .xylo-bar { border-radius: 14px; padding-bottom: 0.6rem; }
+      .xylo-bar::after, .xylo-bar::before { width: 10px; height: 10px; }
+
+      /* Cielo y Tierra — elementos escalados para mobile */
+      .toy-sun       { width: 58px;  height: 58px;  top: 6%;    right: 5%; }
+      .toy-cloud1    { width: 76px;  height: 42px;  top: 8%;    left: 5%; }
+      .toy-cloud2    { width: 65px;  height: 36px;  top: 22%;   left: 18%; }
+      .toy-bird      { width: 42px;  height: 42px;  top: 8%;    left: 44%; }
+      .toy-butterfly { width: 38px;  height: 38px;  top: 20%;   right: 22%; }
+      .toy-star1     { width: 28px;  height: 28px;  top: 4%;    left: 30%; }
+      .toy-star2     { width: 28px;  height: 28px;  top: 20%;   left: 54%; }
+      .toy-star3     { width: 28px;  height: 28px;  top: 6%;    right: 35%; }
+      .toy-drum      { width: 62px;  height: 62px;  bottom: 8%;  left: 22%; }
+      .toy-mushroom  { width: 42px;  height: 50px;  bottom: 10%; left: 43%; }
+      .toy-frog      { width: 48px;  height: 48px;  bottom: 10%; right: 22%; }
+      .toy-flower1   { width: 42px;  height: 64px;  bottom: 6%;  left: 6%; }
+      .toy-flower2   { width: 42px;  height: 64px;  bottom: 8%;  right: 6%; }
+      .toy-snail     { width: 50px;  height: 38px;  bottom: 4%;  left: 56%; }
+
+      .challenge-center-button { width: 62px; height: 62px; top: 54%; }
+      .challenge-center-button i { font-size: 1.6rem; }
+
+      .pedagogical-modal { padding: 1.4rem 1.1rem; border-radius: 20px; }
+      .modal-teacher-avatar { width: 70px; height: 70px; margin-bottom: 0.8rem; }
+      .modal-title { font-size: 1.1rem; }
+      .modal-subtitle { font-size: 0.72rem; }
+      .modal-content { font-size: 0.84rem; margin-bottom: 1.1rem; }
+      .btn-modal-start { padding: 0.75rem 1.5rem; font-size: 0.88rem; }
+    }
+
+    /* =====================================================
+       RESPONSIVE — Tablet portrait  601–900px
+    ===================================================== */
+    @media (min-width: 601px) and (max-width: 900px) {
+      .controls-panel { flex-wrap: wrap; gap: 0.5rem 0.8rem; padding: 0.5rem 1rem; }
+      .toy-sun       { width: 72px;  height: 72px; }
+      .toy-cloud1    { width: 92px;  height: 52px; }
+      .toy-cloud2    { width: 78px;  height: 44px; }
+      .toy-bird      { width: 50px;  height: 50px; }
+      .toy-butterfly { width: 46px;  height: 46px; }
+      .toy-star1, .toy-star2, .toy-star3 { width: 34px; height: 34px; }
+      .toy-drum      { width: 76px;  height: 76px; }
+      .toy-mushroom  { width: 52px;  height: 60px; }
+      .toy-frog      { width: 58px;  height: 58px; }
+      .toy-flower1, .toy-flower2 { width: 52px; height: 78px; }
+      .toy-snail     { width: 60px;  height: 46px; }
+    }
+
+    /* =====================================================
+       RESPONSIVE — Landscape mobile  (altura max 550px)
+    ===================================================== */
+    @media (orientation: landscape) and (max-height: 550px) {
+      header { display: none !important; }
+      .controls-panel {
+        padding: 0.3rem 1rem;
+        margin-bottom: 0.3rem;
+        border-radius: 8px;
+      }
+      .stimulation-container { padding: 0.2rem; height: 100vh; }
+      .sandbox-area { border-radius: 12px; }
+      .game-instruction-banner { padding: 0.3rem 1rem; font-size: 0.75rem; }
+      .instruction-avatar { width: 24px; height: 24px; }
+      /* Usamos CSS custom property para escalar sin romper transform de animaciones */
+      .toy-element { --toy-scale: 0.65; font-size: calc(var(--toy-scale) * 1em); }
+      .toy-sun       { width: 55px;  height: 55px; }
+      .toy-cloud1    { width: 71px;  height: 39px; }
+      .toy-cloud2    { width: 62px;  height: 33px; }
+      .toy-bird      { width: 39px;  height: 39px; }
+      .toy-butterfly { width: 36px;  height: 36px; }
+      .toy-star1, .toy-star2, .toy-star3 { width: 26px; height: 26px; }
+      .toy-drum      { width: 59px;  height: 59px; }
+      .toy-mushroom  { width: 39px;  height: 46px; }
+      .toy-frog      { width: 46px;  height: 46px; }
+      .toy-flower1, .toy-flower2 { width: 39px; height: 59px; }
+      .toy-snail     { width: 46px;  height: 36px; }
+      .challenge-center-button { width: 52px; height: 52px; top: 55%; }
+      .challenge-center-button i { font-size: 1.3rem; }
+      .xylophone-grid { padding: 0.4rem; gap: 0.35rem; }
+      .xylo-bar { border-radius: 10px; }
+      .pedagogical-modal { padding: 1rem 1.2rem; max-width: 480px; }
+      .modal-teacher-avatar { width: 52px; height: 52px; margin-bottom: 0.4rem; }
+      .modal-title { font-size: 0.95rem; }
+      .modal-content { font-size: 0.78rem; margin-bottom: 0.5rem; }
+      .btn-modal-start { padding: 0.55rem 1.2rem; font-size: 0.82rem; }
+    }
+
+    /* =====================================================
+       RESPONSIVE — iPhone SE y pantallas muy pequeñas  max 375px
+    ===================================================== */
+    @media (max-width: 375px) {
+      .controls-panel { gap: 0.25rem 0.4rem; padding: 0.35rem 0.5rem; }
+      .btn-toggle { padding: 0.25rem 0.45rem; font-size: 0.7rem; }
+      .control-label { display: none; } /* oculta labels para ganar espacio */
+      .game-instruction-banner { font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+      .instruction-avatar { width: 24px; height: 24px; }
+      .toy-sun       { width: 48px;  height: 48px; }
+      .toy-cloud1    { width: 62px;  height: 34px; }
+      .toy-cloud2    { width: 54px;  height: 30px; }
+      .toy-bird      { width: 35px;  height: 35px; }
+      .toy-butterfly { width: 32px;  height: 32px; }
+      .toy-star1, .toy-star2, .toy-star3 { width: 22px; height: 22px; }
+      .toy-drum      { width: 52px;  height: 52px; }
+      .toy-mushroom  { width: 35px;  height: 42px; }
+      .toy-frog      { width: 40px;  height: 40px; }
+      .toy-flower1, .toy-flower2 { width: 35px; height: 54px; }
+      .toy-snail     { width: 42px;  height: 32px; }
+      .challenge-center-button { width: 54px; height: 54px; }
+      .challenge-center-button i { font-size: 1.4rem; }
+      .pedagogical-modal { padding: 1.1rem 0.9rem; }
+      .modal-teacher-avatar { width: 60px; height: 60px; }
+      .modal-title { font-size: 1rem; }
+      .modal-content { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Pedagogical advice warning modal -->
+  <div class="modal-overlay" id="parent-modal">
+    <div class="pedagogical-modal">
+      <div class="modal-teacher-avatar">
+        <img src="../img/profe.jpg" alt="Teacher Juan Di">
+      </div>
+      <div class="modal-title">Mensaje de Teacher Juan Di</div>
+      <div class="modal-subtitle">Estimulación Musical y Salud Visual</div>
+      <div class="modal-content">
+        <p>¡Bienvenidos a la zona de estimulación musical! La música y las frecuencias auditivas tempranas son herramientas maravillosas para fortalecer las conexiones neuronales y la discriminación del oído en bebés.</p>
+        <p><strong>Nota Científica Importante:</strong> La Asociación Americana de Pediatría (AAP) advierte que la sobreexposición a pantallas a temprana edad puede afectar la capacidad de atención y alterar el ciclo de sueño. Por ello, te recomendamos usar estos juegos interactivos en <strong>sesiones muy cortas (máximo 10 minutos al día)</strong>, siempre acompañando a tu bebé y priorizando el juego físico e interactivo en el mundo real.</p>
+      </div>
+      <button class="btn-modal-start" onclick="closeModalAndPlay()">
+        <i class="fas fa-play"></i> Entendido, ¡a explorar juntos!
+      </button>
+    </div>
+  </div>
+
+  <!-- Rotation recommendation for phone -->
+  <div class="rotation-hint-overlay" id="rotation-overlay">
+    <i class="fas fa-mobile-alt rotation-hint-icon"></i>
+    <div class="rotation-hint-title">¡Gira tu celular!</div>
+    <div class="rotation-hint-text">Juega a pantalla completa para una mejor experiencia táctil.</div>
+  </div>
+
+  <header id="main-header">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div class="logo-container">
+        <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+      </div>
+      <!-- Little parent warning trigger in header -->
+      <div class="header-teacher-btn" onclick="openPedagogicalModal()" title="Consejo de Teacher Juan Di">
+        <img src="../img/profe.jpg" alt="Teacher Juan Di" id="teacher-avatar">
+      </div>
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver a Juegos
+    </a>
+  </header>
+
+  <main class="stimulation-container">
+    <!-- Main Game Switcher + Sensory Options -->
+    <div class="controls-panel" id="main-controls">
+      <div class="control-group">
+        <span class="control-label">Juego:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-game-xylo" onclick="setGame('xylo')">
+            🪵 Xilófono
+          </button>
+          <button class="btn-toggle" id="btn-game-cielotierra" onclick="setGame('cielotierra')">
+            🌈 Cielo y Tierra
+          </button>
+        </div>
+      </div>
+
+      <!-- Xylophone Scale / Vibe Selector -->
+      <div class="control-group" id="group-scale">
+        <span class="control-label">Sensación:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-scale-pentatonic" onclick="setScale('pentatonic')">
+            🌈 Mágico
+          </button>
+          <button class="btn-toggle" id="btn-scale-major" onclick="setScale('major')">
+            ☀️ Alegre
+          </button>
+          <button class="btn-toggle" id="btn-scale-minor" onclick="setScale('minor')">
+            🌙 Misterioso
+          </button>
+        </div>
+      </div>
+
+      <!-- Cielo y Tierra Level Selector -->
+      <div class="control-group" id="group-level" style="display: none;">
+        <span class="control-label">Nivel:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-mode-learn" onclick="setMode('learn')">
+            👁️ Nivel 1: Descubrir
+          </button>
+          <button class="btn-toggle" id="btn-mode-challenge" onclick="setMode('challenge')">
+            ❓ Nivel 2: El Reto
+          </button>
+        </div>
+      </div>
+
+      <!-- Instrument sound selector -->
+      <div class="control-group" id="group-instrument">
+        <span class="control-label">Sonido:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-sound-marimba" onclick="setSoundType('marimba')">
+            🪵 Xilófono Real
+          </button>
+          <button class="btn-toggle" id="btn-sound-chime" onclick="setSoundType('chime')">
+            ✨ Campanas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sandbox Play Area -->
+    <div class="sandbox-area" id="play-sandbox">
+      <!-- Dynamic Instruction Banner -->
+      <div class="game-instruction-banner" id="instruction-banner">
+        <div class="instruction-avatar">
+          <img src="../img/profe.jpg" alt="Teacher Juan Di" id="instruction-teacher-avatar">
+        </div>
+        <span id="instruction-text"><span class="teacher-prefix">Teacher Juan Di:</span> ¡Toca las barras de colores para crear tu propia melodía!</span>
+      </div>
+
+      <canvas id="effects-canvas"></canvas>
+
+      <!-- Loading notice -->
+      <div class="loading-notice" id="loading-notice">
+        <p>Cargando sonidos reales...</p>
+        <div class="spinner"></div>
+      </div>
+
+      <!-- Play Button for Challenge / Listening -->
+      <button class="challenge-center-button" id="btn-listen" onclick="playChallengeSound()" aria-label="Escuchar Sonido">
+        <i class="fas fa-volume-up"></i>
+      </button>
+
+      <!-- GAME SCREEN 1: Xylophone Keys -->
+      <div class="xylophone-grid" id="xylo-wrapper">
+        <!-- Bars are dynamically injected based on selected scale -->
+      </div>
+
+      <!-- GAME SCREEN 2: Cielo y Tierra (Magical Split Screen Layout) -->
+      <div class="split-container" id="forest-wrapper">
+        <!-- Sky (High Note Zone) -->
+        <div class="zone-half zone-sky-half" id="zone-sky">
+          <div class="zone-graphics">
+            <span class="bg-glowing-star" style="top: 15%; left: 18%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 30%; left: 40%;">⭐</span>
+            <span class="bg-glowing-star" style="top: 22%; left: 88%;">⭐</span>
+          </div>
+
+          <!-- Sun Vector -->
+          <div class="toy-element toy-sun" id="toy-sun" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('sun', event)" ontouchstart="onElementTap('sun', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <circle cx="50" cy="50" r="24" fill="#fbbf24" filter="drop-shadow(0 0 12px #f59e0b)" />
+              <path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L29 29 M71 71 L80 80 M20 80 L29 71 M71 29 L80 20" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Clouds Vectors -->
+          <div class="toy-element toy-cloud1" id="toy-cloud1" style="--glow-color: rgba(56, 189, 248, 0.6);" onmousedown="onElementTap('cloud1', event)" ontouchstart="onElementTap('cloud1', event)">
+            <svg viewBox="0 0 100 60" width="100%" height="100%">
+              <path d="M10 45 A 20 20 0 0 1 35 25 A 25 25 0 0 1 75 25 A 18 18 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.9" />
+            </svg>
+          </div>
+          <div class="toy-element toy-cloud2" id="toy-cloud2" style="--glow-color: rgba(56, 189, 248, 0.5);" onmousedown="onElementTap('cloud2', event)" ontouchstart="onElementTap('cloud2', event)">
+            <svg viewBox="0 0 100 60" width="100%" height="100%">
+              <path d="M10 45 A 16 16 0 0 1 30 28 A 20 20 0 0 1 70 28 A 15 15 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.8" />
+            </svg>
+          </div>
+
+          <!-- Flying Bird -->
+          <div class="toy-element toy-bird" id="toy-bird" style="--glow-color: rgba(96, 165, 250, 0.7);" onmousedown="onElementTap('bird', event)" ontouchstart="onElementTap('bird', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <circle cx="30" cy="30" r="18" fill="#3b82f6" />
+              <circle cx="42" cy="22" r="7" fill="#60a5fa" />
+              <polygon points="48,20 56,24 48,28" fill="#f59e0b" />
+              <circle cx="42" cy="20" r="1.8" fill="#000" />
+              <path d="M12 28 Q 6 34 12 40 Z" fill="#1d4ed8" />
+            </svg>
+          </div>
+
+          <!-- Flying Butterfly -->
+          <div class="toy-element toy-butterfly" id="toy-butterfly" style="--glow-color: rgba(232, 121, 249, 0.7);" onmousedown="onElementTap('butterfly', event)" ontouchstart="onElementTap('butterfly', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <ellipse cx="20" cy="25" rx="12" ry="16" fill="#e879f9" />
+              <ellipse cx="22" cy="38" rx="8" ry="10" fill="#f472b6" />
+              <ellipse cx="40" cy="25" rx="12" ry="16" fill="#e879f9" />
+              <ellipse cx="38" cy="38" rx="8" ry="10" fill="#f472b6" />
+              <rect x="28" y="15" width="4" height="30" rx="2" fill="#475569" />
+            </svg>
+          </div>
+
+          <!-- Star Elements -->
+          <div class="toy-element toy-star1" id="toy-star1" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star1', event)" ontouchstart="onElementTap('star1', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="toy-element toy-star2" id="toy-star2" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star2', event)" ontouchstart="onElementTap('star2', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="toy-element toy-star3" id="toy-star3" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star3', event)" ontouchstart="onElementTap('star3', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Ground (Low Note Zone) -->
+        <div class="zone-half zone-ground-half" id="zone-ground">
+          <div class="zone-graphics">
+            <span class="bg-glowing-star" style="bottom: 12%; left: 16%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 28%; left: 50%;">⭐</span>
+            <span class="bg-glowing-star" style="bottom: 18%; left: 84%;">⭐</span>
+          </div>
+
+          <!-- Drum Vector -->
+          <div class="toy-element toy-drum" id="toy-drum" style="--glow-color: rgba(251, 146, 60, 0.7);" onmousedown="onElementTap('drum', event)" ontouchstart="onElementTap('drum', event)">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <path d="M15 25 L15 80 C15 95 85 95 85 80 L85 25 Z" fill="#b45309" stroke="#78350f" stroke-width="4" />
+              <path d="M15 45 L85 45 M15 65 L85 65" stroke="#78350f" stroke-width="4" />
+              <ellipse cx="50" cy="25" rx="35" ry="10" fill="#fed7aa" stroke="#78350f" stroke-width="4" />
+            </svg>
+          </div>
+
+          <!-- Mushroom Vector -->
+          <div class="toy-element toy-mushroom" id="toy-mushroom" style="--glow-color: rgba(239, 68, 68, 0.7);" onmousedown="onElementTap('mushroom', event)" ontouchstart="onElementTap('mushroom', event)">
+            <svg viewBox="0 0 50 60" width="100%" height="100%">
+              <path d="M18 60 C18 40 32 40 32 60 Z" fill="#e2e8f0" />
+              <path d="M5 36 C5 15 45 15 45 36 Z" fill="#ef4444" />
+              <circle cx="15" cy="24" r="3" fill="#fff" />
+              <circle cx="25" cy="20" r="4" fill="#fff" />
+              <circle cx="35" cy="26" r="3" fill="#fff" />
+            </svg>
+          </div>
+
+          <!-- Frog Vector -->
+          <div class="toy-element toy-frog" id="toy-frog" style="--glow-color: rgba(34, 197, 94, 0.7);" onmousedown="onElementTap('frog', event)" ontouchstart="onElementTap('frog', event)">
+            <svg viewBox="0 0 60 60" width="100%" height="100%">
+              <ellipse cx="30" cy="35" rx="22" ry="18" fill="#22c55e" />
+              <circle cx="18" cy="18" r="8" fill="#22c55e" />
+              <circle cx="18" cy="18" r="5" fill="#fff" />
+              <circle cx="18" cy="18" r="2.5" fill="#000" />
+              <circle cx="42" cy="18" r="8" fill="#22c55e" />
+              <circle cx="42" cy="18" r="5" fill="#fff" />
+              <circle cx="42" cy="18" r="2.5" fill="#000" />
+              <path d="M20 40 Q 30 48 40 40" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Flowers Vectors -->
+          <div class="toy-element toy-flower1" id="toy-flower1" style="--glow-color: rgba(236, 72, 153, 0.7);" onmousedown="onElementTap('flower1', event)" ontouchstart="onElementTap('flower1', event)">
+            <svg viewBox="0 0 50 80" width="100%" height="100%">
+              <rect x="23" y="35" width="4" height="45" fill="#166534" />
+              <circle cx="25" cy="25" r="10" fill="#ec4899" />
+              <circle cx="15" cy="25" r="8" fill="#db2777" />
+              <circle cx="35" cy="25" r="8" fill="#db2777" />
+              <circle cx="25" cy="15" r="8" fill="#db2777" />
+              <circle cx="25" cy="35" r="8" fill="#db2777" />
+              <circle cx="25" cy="25" r="5" fill="#f59e0b" />
+            </svg>
+          </div>
+          <div class="toy-element toy-flower2" id="toy-flower2" style="--glow-color: rgba(6, 182, 212, 0.7);" onmousedown="onElementTap('flower2', event)" ontouchstart="onElementTap('flower2', event)">
+            <svg viewBox="0 0 50 80" width="100%" height="100%">
+              <rect x="23" y="35" width="4" height="45" fill="#166534" />
+              <path d="M12 35 C12 15 38 15 38 35 Z" fill="#06b6d4" />
+              <path d="M18 35 C18 20 32 20 32 35 Z" fill="#22d3ee" />
+            </svg>
+          </div>
+
+          <!-- Snail Vector -->
+          <div class="toy-element toy-snail" id="toy-snail" style="--glow-color: rgba(168, 85, 247, 0.7);" onmousedown="onElementTap('snail', event)" ontouchstart="onElementTap('snail', event)">
+            <svg viewBox="0 0 80 60" width="100%" height="100%">
+              <path d="M10 50 Q 40 45 70 50 Q 75 42 70 35 L 60 35 C 50 35 40 40 30 42 Z" fill="#d97706" />
+              <circle cx="38" cy="32" r="20" fill="#a855f7" stroke="#581c87" stroke-width="2" />
+              <circle cx="38" cy="32" r="14" fill="#c084fc" stroke="#581c87" stroke-width="1.5" />
+              <line x1="68" y1="36" x2="72" y2="24" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+              <line x1="64" y1="36" x2="66" y2="22" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- Audio setup ---
+    const noteFiles = [
+      '../music/xylophone/note1.wav', // DO4 (C4)
+      '../music/xylophone/note2.wav', // RE4 (D4)
+      '../music/xylophone/note3.wav', // MI4 (E4)
+      '../music/xylophone/note4.wav', // FA4 (F4)
+      '../music/xylophone/note5.wav', // SOL4 (G4)
+      '../music/xylophone/note6.wav', // LA4 (A4)
+      '../music/xylophone/note7.wav'  // SI4 (B4)
+    ];
+
+    let audioCtx = null;
+    let currentGame = 'xylo'; 
+    let selectedSound = 'marimba'; 
+    let selectedScale = 'pentatonic';
+    let currentMode = 'learn'; 
+
+    const audioBuffers = {};
+    let soundsLoaded = false;
+    let isLoadingSounds = false;
+
+    // Challenge variables
+    let currentTargetElement = null; 
+    let isWaitingForAnswer = false;
+
+    // Scale mappings
+    const scaleMappings = {
+      pentatonic: [
+        { note: 'DO', noteIndex: 1, pitchRate: 1.00, color: '#ef4444', freq: 261.63 },
+        { note: 'RE', noteIndex: 2, pitchRate: 1.00, color: '#f97316', freq: 293.66 },
+        { note: 'MI', noteIndex: 3, pitchRate: 1.00, color: '#eab308', freq: 329.63 },
+        { note: 'SOL', noteIndex: 5, pitchRate: 1.00, color: '#06b6d4', freq: 392.00 },
+        { note: 'LA', noteIndex: 6, pitchRate: 1.00, color: '#1d4ed8', freq: 440.00 },
+        { note: 'DO', noteIndex: 1, pitchRate: 2.00, color: '#ef4444', freq: 523.25 }
+      ],
+      major: [
+        { note: 'DO', noteIndex: 1, pitchRate: 1.00, color: '#ef4444', freq: 261.63 },
+        { note: 'RE', noteIndex: 2, pitchRate: 1.00, color: '#f97316', freq: 293.66 },
+        { note: 'MI', noteIndex: 3, pitchRate: 1.00, color: '#eab308', freq: 329.63 },
+        { note: 'FA', noteIndex: 4, pitchRate: 1.00, color: '#22c55e', freq: 349.23 },
+        { note: 'SOL', noteIndex: 5, pitchRate: 1.00, color: '#06b6d4', freq: 392.00 },
+        { note: 'LA', noteIndex: 6, pitchRate: 1.00, color: '#1d4ed8', freq: 440.00 },
+        { note: 'SI', noteIndex: 7, pitchRate: 1.00, color: '#a855f7', freq: 493.88 },
+        { note: 'DO', noteIndex: 1, pitchRate: 2.00, color: '#ef4444', freq: 523.25 }
+      ],
+      minor: [
+        { note: 'DO', noteIndex: 1, pitchRate: 1.00, color: '#ef4444', freq: 261.63 },
+        { note: 'RE', noteIndex: 2, pitchRate: 1.00, color: '#f97316', freq: 293.66 },
+        { note: 'MIb', noteIndex: 3, pitchRate: 0.9439, color: '#e1a506', freq: 311.13 },
+        { note: 'FA', noteIndex: 4, pitchRate: 1.00, color: '#22c55e', freq: 349.23 },
+        { note: 'SOL', noteIndex: 5, pitchRate: 1.00, color: '#06b6d4', freq: 392.00 },
+        { note: 'LAb', noteIndex: 6, pitchRate: 0.9439, color: '#153bb1', freq: 415.30 },
+        { note: 'SIb', noteIndex: 7, pitchRate: 0.9439, color: '#8c3fe0', freq: 466.16 },
+        { note: 'DO', noteIndex: 1, pitchRate: 2.00, color: '#ef4444', freq: 523.25 }
+      ]
+    };
+
+    // Detailed Element Configurations
+    const toyDetails = {
+      // Sky (Agudos - Octava 5/6)
+      star1: { height: 'sky', synthFreq: 523.25, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // DO5
+      star2: { height: 'sky', synthFreq: 587.33, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // RE5
+      star3: { height: 'sky', synthFreq: 659.25, color: '#fbbf24', emoji: '⭐', animClass: 'anim-pulse' },       // MI5
+      butterfly: { height: 'sky', synthFreq: 698.46, color: '#e879f9', emoji: '🦋', animClass: 'anim-flutter' }, // FA5
+      sun: { height: 'sky', synthFreq: 783.99, color: '#fbbf24', emoji: '☀️', animClass: 'anim-pulse' },         // SOL5
+      cloud1: { height: 'sky', synthFreq: 880.00, color: '#e2e8f0', emoji: '☁️', animClass: 'anim-float' },      // LA5
+      cloud2: { height: 'sky', synthFreq: 987.77, color: '#cbd5e1', emoji: '☁️', animClass: 'anim-float' },      // SI5
+      bird: { height: 'sky', synthFreq: 1046.50, color: '#3b82f6', emoji: '🐦', animClass: 'anim-hop' },        // DO6
+      
+      // Ground (Graves - Octava 3/4)
+      drum:    { height: 'ground', synthFreq: 261.63, color: '#fb923c', emoji: '🥁', animClass: 'anim-bounce' },  // DO3 - la más grave del grupo
+      mushroom:{ height: 'ground', synthFreq: 293.66, color: '#ef4444', emoji: '🍄', animClass: 'anim-hop' },    // RE3
+      frog:    { height: 'ground', synthFreq: 329.63, color: '#22c55e', emoji: '🐸', animClass: 'anim-hop' },    // MI3
+      flower1: { height: 'ground', synthFreq: 349.23, color: '#ec4899', emoji: '🌸', animClass: 'anim-sway' },   // FA3
+      flower2: { height: 'ground', synthFreq: 392.00, color: '#06b6d4', emoji: '🌷', animClass: 'anim-sway' },   // SOL3
+      snail:   { height: 'ground', synthFreq: 440.00, color: '#a855f7', emoji: '🐌', animClass: 'anim-slide' }   // LA3
+    };
+
+    // Teacher Juan Di messages database
+    const teacherMessages = {
+      welcome_xylo: "¡Toca las barras de colores para crear tu propia melodía!",
+      welcome_learn: "¡Toca los elementos del Cielo y la Tierra para descubrir sus sonidos!",
+      welcome_challenge: "¡El Reto! Escucha el altavoz y toca el dibujo correcto. ¡Toca el altavoz otra vez si necesitas una pista!",
+      success: [
+        "¡Excelente! ¡Qué gran oído!",
+        "¡Estupendo! ¡Lo lograste!",
+        "¡Muy bien!",
+        "¡Bravo!"
+      ],
+      fail: [
+        "¡Inténtalo otra vez! Busca el dibujo que brilla.",
+        "¡Tú puedes lograrlo!",
+        "¡Casi! Vamos de nuevo."
+      ]
+    };
+
+    function updateInstructionBanner(message) {
+      const textContainer = document.getElementById('instruction-text');
+      if (textContainer) {
+        textContainer.innerHTML = `<span class="teacher-prefix">Teacher Juan Di:</span> ${message}`;
+      }
+    }
+
+    function updateTeacherAvatar(status = 'normal') {
+      const avatar = document.getElementById('instruction-teacher-avatar');
+      const headerAvatar = document.getElementById('teacher-avatar');
+      
+      const setAvatarSrc = (el) => {
+        if (!el) return;
+        if (status === 'success') {
+          el.src = '../img/profe_celebrate.jpg';
+        } else if (status === 'fail') {
+          el.src = '../img/profe_sad.jpg';
+        } else {
+          el.src = '../img/profe.jpg';
+        }
+      };
+
+      setAvatarSrc(avatar);
+      setAvatarSrc(headerAvatar);
+      
+      // Animate avatar bump
+      if (avatar && status !== 'normal') {
+        avatar.parentElement.style.transform = 'scale(1.2) rotate(10deg)';
+        setTimeout(() => {
+          avatar.parentElement.style.transform = 'scale(1) rotate(0deg)';
+        }, 1200);
+      }
+    }
+
+    function resetTeacherAvatar() {
+      updateTeacherAvatar('normal');
+    }
+
+    function openPedagogicalModal() {
+      document.getElementById('parent-modal').style.display = 'flex';
+    }
+
+    function closeModalAndPlay() {
+      document.getElementById('parent-modal').style.display = 'none';
+      initAudio(); 
+    }
+
+    function triggerTeacherJuandiVoice() {
+      openPedagogicalModal();
+    }
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      triggerSoundsLoading();
+    }
+
+    async function triggerSoundsLoading() {
+      if (isLoadingSounds || soundsLoaded) return;
+      isLoadingSounds = true;
+      const notice = document.getElementById('loading-notice');
+      if (notice) notice.style.display = 'block';
+
+      for (let i = 0; i < noteFiles.length; i++) {
+        try {
+          const response = await fetch(noteFiles[i]);
+          const arrayBuffer = await response.arrayBuffer();
+          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+          audioBuffers[i + 1] = audioBuffer;
+        } catch (e) {
+          console.error("Error loading note file:", noteFiles[i], e);
+        }
+      }
+      soundsLoaded = true;
+      isLoadingSounds = false;
+      if (notice) notice.style.display = 'none';
+    }
+
+    function playNote(noteIndex, rate, fallbackFreq) {
+      initAudio();
+      if (soundsLoaded && audioBuffers[noteIndex] && selectedSound === 'marimba') {
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffers[noteIndex];
+        source.playbackRate.setValueAtTime(rate, audioCtx.currentTime);
+        source.connect(audioCtx.destination);
+        source.start(0);
+      } else {
+        playSynthChime(fallbackFreq);
+      }
+    }
+
+    // Play element sound - fully isolated from user selectors in Cielo y Tierra
+    function playElementSound(toyKey) {
+      initAudio();
+      const details = toyDetails[toyKey];
+      if (!details) return;
+
+      // Cielo y Tierra: play high/low clean tuned musical notes
+      if (currentGame === 'cielotierra') {
+        if (details.height === 'sky') {
+          playSynthChime(details.synthFreq);
+        } else {
+          playWarmGraveNote(details.synthFreq);
+        }
+      } else {
+        // Xylophone: plays marimba WAVs or synth chime based on selections
+        if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffers[details.noteIndex];
+          source.playbackRate.setValueAtTime(details.pitchRate, audioCtx.currentTime);
+          source.connect(audioCtx.destination);
+          source.start(0);
+        } else {
+          playSynthChime(details.synthFreq);
+        }
+      }
+    }
+
+    function playSingleFrequency(freq, time, duration) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, time);
+      gain.gain.setValueAtTime(0.25, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + duration - 0.01);
+      osc.start(time);
+      osc.stop(time + duration);
+    }
+
+    function playSynthChime(freq) {
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      const gainNode2 = audioCtx.createGain();
+      
+      osc1.connect(gainNode);
+      osc2.connect(gainNode2);
+      gainNode.connect(audioCtx.destination);
+      gainNode2.connect(audioCtx.destination);
+      
+      const now = audioCtx.currentTime;
+      
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2.01, now);
+      
+      gainNode.gain.setValueAtTime(0.4, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+      
+      gainNode2.gain.setValueAtTime(0.1, now);
+      gainNode2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 1.7);
+      osc2.stop(now + 0.6);
+    }
+
+    // Clean tuned low-register note (Octave 3) with fundamental + soft 2nd harmonic
+    function playWarmGraveNote(freq) {
+      const ctx = audioCtx;
+      const now = ctx.currentTime;
+
+      // --- Cuerpo principal: fundamental limpia ---
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      // Ataque instantáneo, caída lenta y cálida (1.4 s)
+      gain1.gain.setValueAtTime(0.0, now);
+      gain1.gain.linearRampToValueAtTime(0.55, now + 0.012);  // ataque rápido percusivo
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+      osc1.start(now);
+      osc1.stop(now + 1.5);
+
+      // --- 2° armónico: le da brillo y presencia en parlantes pequeños ---
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(freq * 2.0, now);
+      // El 2° armónico decae MÁS rápido que el fundamental (como una marimba real)
+      gain2.gain.setValueAtTime(0.0, now);
+      gain2.gain.linearRampToValueAtTime(0.28, now + 0.008);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      osc2.start(now);
+      osc2.stop(now + 0.65);
+
+      // --- 4° armónico muy suave: textura de percusión afinada ---
+      const osc3 = ctx.createOscillator();
+      const gain3 = ctx.createGain();
+      osc3.connect(gain3);
+      gain3.connect(ctx.destination);
+      osc3.type = 'triangle';
+      osc3.frequency.setValueAtTime(freq * 4.0, now);
+      gain3.gain.setValueAtTime(0.0, now);
+      gain3.gain.linearRampToValueAtTime(0.09, now + 0.005);
+      gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc3.start(now);
+      osc3.stop(now + 0.3);
+    }
+
+    function playSuccessChime() {
+      const now = audioCtx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+        
+        gain.gain.setValueAtTime(0.3, now + (idx * 0.08));
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8 + (idx * 0.08));
+        
+        osc.start(now + (idx * 0.08));
+        osc.stop(now + 0.9 + (idx * 0.08));
+      });
+    }
+
+    function playFailChime() {
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(220.00, now);
+      osc.frequency.linearRampToValueAtTime(180.00, now + 0.25);
+      
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      
+      osc.start(now);
+      osc.stop(now + 0.4);
+    }
+
+    // --- Dynamic Xylophone ---
+    function renderXylophone() {
+      const wrapper = document.getElementById('xylo-wrapper');
+      if (!wrapper) return;
+      wrapper.innerHTML = '';
+      
+      const bars = scaleMappings[selectedScale];
+      bars.forEach((bar, index) => {
+        const barElem = document.createElement('div');
+        barElem.className = 'xylo-bar';
+        barElem.style.backgroundColor = bar.color;
+        
+        const heightPercent = 100 - (index * 4);
+        barElem.style.height = `${heightPercent}%`;
+        
+
+
+        const trigger = (e) => {
+          e.preventDefault();
+          barElem.classList.add('active-touch');
+          setTimeout(() => barElem.classList.remove('active-touch'), 100);
+          
+          playNote(bar.noteIndex, bar.pitchRate, bar.freq);
+          
+          const rect = barElem.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          spawnParticles(x, y, bar.color);
+        };
+
+        barElem.addEventListener('mousedown', trigger);
+        barElem.addEventListener('touchstart', trigger);
+
+        wrapper.appendChild(barElem);
+      });
+    }
+
+    // --- Interaction Routing for Cielo y Tierra ---
+    function onElementTap(toyKey, event) {
+      event.preventDefault();
+      
+      let clientX, clientY;
+      if (event.touches && event.touches[0]) {
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+      } else {
+        clientX = event.clientX;
+        clientY = event.clientY;
+      }
+
+      const details = toyDetails[toyKey];
+      if (!details) return;
+
+      triggerElementAnimation(toyKey);
+
+      if (currentMode === 'learn') {
+        playElementSound(toyKey);
+        triggerGuideGlow(toyKey);
+        
+        spawnParticles(clientX, clientY, details.color);
+        spawnFloatingEmoji(clientX, clientY, details.emoji);
+      } else {
+        if (!isWaitingForAnswer) return;
+        isWaitingForAnswer = false;
+
+        const btnListen = document.getElementById('btn-listen');
+
+        if (toyKey === currentTargetElement) {
+          playSuccessChime();
+          
+          if (btnListen) {
+            btnListen.style.background = '#10b981';
+            btnListen.querySelector('i').className = 'fas fa-check';
+          }
+          
+          spawnConfettiExplosion(clientX, clientY);
+          updateTeacherAvatar('success');
+          
+          const rMsg = teacherMessages.success[Math.floor(Math.random() * teacherMessages.success.length)];
+          updateInstructionBanner(rMsg);
+
+          spawnParticles(clientX, clientY, '#10b981');
+          for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), details.emoji);
+            }, i * 50);
+          }
+
+          setTimeout(() => {
+            resetChallengeUI();
+            playChallengeSound();
+          }, 2400);
+        } else {
+          playFailChime();
+          
+          if (btnListen) {
+            btnListen.style.background = '#ef4444';
+            btnListen.querySelector('i').className = 'fas fa-volume-up';
+          }
+          updateTeacherAvatar('fail');
+          
+          const rMsg = teacherMessages.fail[Math.floor(Math.random() * teacherMessages.fail.length)];
+          updateInstructionBanner(rMsg);
+
+          const correctEl = document.getElementById(`toy-${currentTargetElement}`);
+          if (correctEl) {
+            correctEl.classList.add('guide-pulse-wrong');
+            setTimeout(() => correctEl.classList.remove('guide-pulse-wrong'), 1600);
+          }
+
+          setTimeout(() => {
+            if (btnListen) btnListen.style.background = 'var(--color-gold)';
+            updateInstructionBanner(teacherMessages.welcome_challenge);
+            isWaitingForAnswer = true;
+          }, 2000);
+        }
+      }
+    }
+
+    function triggerElementAnimation(toyKey) {
+      const details = toyDetails[toyKey];
+      const el = document.getElementById(`toy-${toyKey}`);
+      if (el) {
+        el.classList.add(details.animClass);
+        setTimeout(() => el.classList.remove(details.animClass), 600);
+      }
+    }
+
+    function triggerGuideGlow(toyKey) {
+      const el = document.getElementById(`toy-${toyKey}`);
+      if (el) {
+        el.classList.add('glow-guide-active');
+        setTimeout(() => el.classList.remove('glow-guide-active'), 1000);
+      }
+    }
+
+    // --- Core Game Switcher ---
+    function setGame(gameName) {
+      currentGame = gameName;
+      
+      const btnXylo = document.getElementById('btn-game-xylo');
+      const btnCielo = document.getElementById('btn-game-cielotierra');
+      if (btnXylo) btnXylo.classList.remove('active');
+      if (btnCielo) btnCielo.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-game-${gameName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const xyloGrid = document.getElementById('xylo-wrapper');
+      const splitGrid = document.getElementById('forest-wrapper');
+      const scaleGroup = document.getElementById('group-scale');
+      const levelGroup = document.getElementById('group-level');
+      const btnListen = document.getElementById('btn-listen');
+
+      resetChallengeUI();
+
+      if (gameName === 'xylo') {
+        if (xyloGrid) xyloGrid.style.display = 'flex';
+        if (splitGrid) splitGrid.style.display = 'none';
+        if (scaleGroup) scaleGroup.style.display = 'flex';
+        if (levelGroup) levelGroup.style.display = 'none';
+        if (btnListen) btnListen.style.display = 'none';
+        
+        const instrumentGroup = document.getElementById('group-instrument');
+        if (instrumentGroup) instrumentGroup.style.display = 'flex';
+        
+        renderXylophone();
+        updateInstructionBanner(teacherMessages.welcome_xylo);
+      } else {
+        if (xyloGrid) xyloGrid.style.display = 'none';
+        if (splitGrid) splitGrid.style.display = 'flex';
+        if (scaleGroup) scaleGroup.style.display = 'none';
+        if (levelGroup) levelGroup.style.display = 'flex';
+        
+        const instrumentGroup = document.getElementById('group-instrument');
+        if (instrumentGroup) instrumentGroup.style.display = 'none';
+        
+        setMode('learn'); 
+        initAudio();
+      }
+    }
+
+    // --- Mode Setup ---
+    function setMode(modeName) {
+      currentMode = modeName;
+      
+      const btnLearn = document.getElementById('btn-mode-learn');
+      const btnChall = document.getElementById('btn-mode-challenge');
+      if (btnLearn) btnLearn.classList.remove('active');
+      if (btnChall) btnChall.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-mode-${modeName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const btnListen = document.getElementById('btn-listen');
+      const allToys = document.querySelectorAll('.toy-element');
+      
+      allToys.forEach(el => {
+        el.classList.remove('glow-guide-active');
+        el.classList.remove('guide-pulse-wrong');
+      });
+
+      if (modeName === 'learn') {
+        if (btnListen) btnListen.style.display = 'none';
+        resetChallengeUI();
+        updateInstructionBanner(teacherMessages.welcome_learn);
+      } else {
+        if (btnListen) btnListen.style.display = 'flex';
+        resetChallengeUI();
+        initAudio();
+        updateInstructionBanner(teacherMessages.welcome_challenge);
+      }
+    }
+
+    function setScale(scaleName) {
+      selectedScale = scaleName;
+      
+      const btnPent = document.getElementById('btn-scale-pentatonic');
+      const btnMaj = document.getElementById('btn-scale-major');
+      const btnMin = document.getElementById('btn-scale-minor');
+      if (btnPent) btnPent.classList.remove('active');
+      if (btnMaj) btnMaj.classList.remove('active');
+      if (btnMin) btnMin.classList.remove('active');
+      
+      const activeBtn = document.getElementById(`btn-scale-${scaleName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      if (currentGame === 'xylo') {
+        renderXylophone();
+      }
+    }
+
+    function setSoundType(soundType) {
+      selectedSound = soundType;
+      
+      const btnChime = document.getElementById('btn-sound-chime');
+      const btnMari = document.getElementById('btn-sound-marimba');
+      if (btnChime) btnChime.classList.remove('active');
+      if (btnMari) btnMari.classList.remove('active');
+      
+      const activeBtn = document.getElementById(soundType === 'marimba' ? 'btn-sound-marimba' : 'btn-sound-chime');
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      initAudio();
+    }
+
+    function resetChallengeUI() {
+      const btnListen = document.getElementById('btn-listen');
+      if (btnListen) {
+        btnListen.style.background = 'var(--color-gold)';
+        btnListen.querySelector('i').className = 'fas fa-volume-up';
+        btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
+      }
+      isWaitingForAnswer = false;
+      currentTargetElement = null;
+      resetTeacherAvatar();
+    }
+
+    function playChallengeSound() {
+      if (isWaitingForAnswer) {
+        playElementSound(currentTargetElement);
+        triggerElementAnimation(currentTargetElement);
+        triggerGuideGlow(currentTargetElement); 
+        return;
+      }
+      
+      resetChallengeUI();
+      const keys = Object.keys(toyDetails);
+      currentTargetElement = keys[Math.floor(Math.random() * keys.length)];
+      
+      const btn = document.getElementById('btn-listen');
+      if (btn) {
+        btn.style.transform = 'translate(-50%, -50%) scale(1.1)';
+        setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
+      }
+
+      playElementSound(currentTargetElement);
+
+      if (currentMode === 'learn') {
+        triggerElementAnimation(currentTargetElement);
+        triggerGuideGlow(currentTargetElement);
+        isWaitingForAnswer = false;
+      } else {
+        isWaitingForAnswer = true;
+      }
+    }
+
+    // --- Particle Physics Effects & Confetti Engine ---
+    const canvas = document.getElementById('effects-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let confettis = [];
+
+    function resizeCanvas() {
+      const sandbox = document.getElementById('play-sandbox');
+      if (sandbox && canvas) {
+        canvas.width = sandbox.clientWidth;
+        canvas.height = sandbox.clientHeight;
+      }
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 300);
+
+    class Particle {
+      constructor(x, y, color) {
+        const rect = canvas.getBoundingClientRect();
+        this.x = x - rect.left;
+        this.y = y - rect.top;
+        this.color = color;
+        this.size = Math.random() * 12 + 6;
+        this.speedX = Math.random() * 8 - 4;
+        this.speedY = Math.random() * 8 - 4;
+        this.gravity = 0.12;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.alpha -= this.decay;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class Confetti {
+      constructor(x, y) {
+        const rect = canvas.getBoundingClientRect();
+        this.x = x - rect.left;
+        this.y = y - rect.top;
+        this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        this.size = Math.random() * 8 + 6;
+        this.speedX = Math.random() * 12 - 6;
+        this.speedY = Math.random() * -12 - 5; 
+        this.gravity = 0.22;
+        this.alpha = 1;
+        this.rotation = Math.random() * 360;
+        this.rotSpeed = Math.random() * 15 - 7.5;
+        this.decay = Math.random() * 0.01 + 0.008;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.rotation += this.rotSpeed;
+        this.alpha -= this.decay;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+
+    // Spawn regular particles
+    function spawnParticles(x, y, color) {
+      for (let i = 0; i < 15; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function spawnConfettiExplosion(x, y) {
+      for (let i = 0; i < 60; i++) {
+        confettis.push(new Confetti(x, y));
+      }
+    }
+
+    function spawnFloatingEmoji(x, y, emoji) {
+      const sandbox = document.getElementById('play-sandbox');
+      if (!sandbox) return;
+
+      const el = document.createElement('div');
+      el.className = 'glowing-emoji';
+      el.innerText = emoji;
+      
+      const sandboxRect = sandbox.getBoundingClientRect();
+      el.style.left = `${x - sandboxRect.left}px`;
+      el.style.top = `${y - sandboxRect.top}px`;
+      
+      sandbox.appendChild(el);
+      
+      let speedY = Math.random() * -3 - 2;
+      let speedX = Math.random() * 4 - 2;
+      let opacity = 1;
+      let scale = 1;
+      let rot = 0;
+      let rotSpeed = Math.random() * 10 - 5;
+      
+      function step() {
+        speedY += 0.08;
+        const curTop = parseFloat(el.style.top);
+        const curLeft = parseFloat(el.style.left);
+        
+        el.style.top = `${curTop + speedY}px`;
+        el.style.left = `${curLeft + speedX}px`;
+        el.style.transform = `rotate(${rot}deg) scale(${scale})`;
+        el.style.opacity = opacity;
+        
+        rot += rotSpeed;
+        opacity -= 0.02;
+        scale -= 0.01;
+        
+        if (opacity > 0) {
+          requestAnimationFrame(step);
+        } else {
+          el.remove();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // --- Orientation Observer ---
+    function checkOrientation() {
+      const isMobile = window.innerWidth <= 768;
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const overlay = document.getElementById('rotation-overlay');
+      if (!overlay) return;
+
+      if (isMobile && isPortrait) {
+        overlay.style.display = 'flex';
+      } else {
+        overlay.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('load', checkOrientation);
+    checkOrientation();
+
+    // Canvas animation loop
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Particles loop
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].alpha <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+
+      // Confetti loop
+      for (let i = confettis.length - 1; i >= 0; i--) {
+        confettis[i].update();
+        confettis[i].draw();
+        if (confettis[i].alpha <= 0) {
+          confettis.splice(i, 1);
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      setGame('xylo'); 
+      animate();
+    });
+  </script>
+</body>
+</html>
