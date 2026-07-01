@@ -2,65 +2,18 @@
 :root {
     --primary-color: #2A4365;    /* Deep Blue */
     --secondary-color: #4299E1;  /* Modern Blue */
-    --accent-color: #d4af37;     /* Elegant Gold */
-    --text-primary: #1e293b;     /* Dark Slate Gray */
-    --text-secondary: #64748b;   /* Slate Gray */
-    --gradient-start: #1e3a8a;
-    --gradient-end: #3b82f6;
+    --accent-color: #F6AD55;     /* Warm Gold */
+    --text-primary: #2D3748;     /* Dark Gray Blue */
+    --text-secondary: #718096;   /* Medium Gray */
+    --gradient-start: #2A4365;
+    --gradient-end: #4299E1;
 }
 
 /* Base Styles */
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     color: var(--text-primary);
     line-height: 1.6;
-}
-
-/* Elegant Title Typography */
-.font-cinzel {
-    font-family: 'Cinzel', serif;
-    letter-spacing: 0.05em;
-}
-
-/* Modern Glassmorphic Cards */
-.glass-card {
-    background: rgba(255, 255, 255, 0.05) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
-}
-
-.glass-card-dark {
-    background: rgba(15, 23, 42, 0.65) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Glowing Gold Button */
-.gold-glow-button {
-    background: linear-gradient(135deg, #d4af37 0%, #f6ad55 100%) !important;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-.gold-glow-button:hover {
-    transform: translateY(-2px) scale(1.02) !important;
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5) !important;
-}
-
-/* Scroll Reveal Animations */
-.reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform, opacity;
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 /* Custom Animations */
