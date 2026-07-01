@@ -689,13 +689,13 @@
        RESPONSIVE — Mobile portrait  max 600px
     ===================================================== */
     @media (max-width: 600px) {
-      header { padding: 0.5rem 1rem; }
-      .header-logo { height: 36px; }
-      .header-teacher-btn { width: 36px; height: 36px; }
+      header { padding: 0.2rem 0.8rem; }
+      .header-logo { height: 32px; }
+      .header-teacher-btn { width: 32px; height: 32px; }
 
       .stimulation-container {
-        padding: 0.3rem 0.4rem 0.4rem 0.4rem;
-        height: calc(100vh - 60px);
+        padding: 0 0.4rem 0.4rem 0.4rem;
+        height: auto;
       }
 
       .controls-panel {
@@ -703,7 +703,7 @@
         justify-content: flex-start;
         gap: 0.4rem 0.6rem;
         padding: 0.45rem 0.7rem;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
         border-radius: 12px;
       }
       .control-label { font-size: 0.68rem; }
@@ -794,7 +794,9 @@
        RESPONSIVE — iPhone SE y pantallas muy pequeñas  max 375px
     ===================================================== */
     @media (max-width: 375px) {
-      .controls-panel { gap: 0.25rem 0.4rem; padding: 0.35rem 0.5rem; }
+      header { padding: 0.2rem 0.5rem; }
+      .stimulation-container { padding: 0 0.2rem 0.3rem 0.2rem; }
+      .controls-panel { gap: 0.25rem 0.4rem; padding: 0.35rem 0.5rem; margin-bottom: 0.2rem; }
       .btn-toggle { padding: 0.25rem 0.45rem; font-size: 0.7rem; }
       .control-label { display: none; } /* oculta labels para ganar espacio */
       .game-instruction-banner { font-size: 0.7rem; padding: 0.35rem 0.6rem; }
