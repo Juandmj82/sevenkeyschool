@@ -162,58 +162,126 @@
       background: linear-gradient(to bottom, #2b1409 0%, #131110 100%);
     }
 
-    /* Interactive Vector Elements */
+    /* Background graphics */
+    .zone-graphics {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.5;
+    }
+
+    /* Interactive Toy Elements */
     .toy-element {
       position: absolute;
       cursor: pointer;
       z-index: 3;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
       touch-action: none;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
     }
 
-    .toy-element:hover {
-      filter: brightness(1.2);
-    }
-
-    /* Specific element placements */
-    .toy-sun { top: 10%; right: 8%; width: 90px; height: 90px; --glow-color: rgba(251, 191, 36, 0.8); }
-    .toy-cloud1 { top: 12%; left: 10%; width: 120px; height: 65px; --glow-color: rgba(56, 189, 248, 0.6); }
-    .toy-cloud2 { top: 26%; left: 35%; width: 100px; height: 55px; --glow-color: rgba(56, 189, 248, 0.5); }
-    .toy-bird { top: 32%; left: 58%; width: 65px; height: 65px; --glow-color: rgba(96, 165, 250, 0.7); }
-    .toy-butterfly { top: 22%; right: 35%; width: 55px; height: 55px; --glow-color: rgba(232, 121, 249, 0.7); }
+    /* Clean coordinate distribution to prevent overlaps */
+    .toy-sun { top: 8%; right: 6%; width: 85px; height: 85px; }
+    .toy-cloud1 { top: 10%; left: 6%; width: 110px; height: 60px; }
+    .toy-cloud2 { top: 24%; left: 20%; width: 95px; height: 50px; }
+    .toy-bird { top: 10%; left: 46%; width: 60px; height: 60px; }
+    .toy-butterfly { top: 22%; right: 26%; width: 55px; height: 55px; }
     
-    /* Stars */
-    .toy-star1 { top: 8%; left: 32%; width: 45px; height: 45px; --glow-color: rgba(251, 191, 36, 0.8); }
-    .toy-star2 { top: 16%; left: 50%; width: 40px; height: 40px; --glow-color: rgba(251, 191, 36, 0.8); }
-    .toy-star3 { top: 24%; right: 24%; width: 45px; height: 45px; --glow-color: rgba(251, 191, 36, 0.8); }
+    .toy-star1 { top: 6%; left: 32%; width: 40px; height: 40px; }
+    .toy-star2 { top: 22%; left: 56%; width: 40px; height: 40px; }
+    .toy-star3 { top: 8%; right: 38%; width: 40px; height: 40px; }
 
-    /* Ground elements */
-    .toy-drum { bottom: 10%; left: 24%; width: 100px; height: 100px; --glow-color: rgba(251, 146, 60, 0.7); }
-    .toy-mushroom { bottom: 12%; left: 45%; width: 65px; height: 75px; --glow-color: rgba(239, 68, 68, 0.7); }
-    .toy-frog { bottom: 12%; right: 24%; width: 75px; height: 75px; --glow-color: rgba(34, 197, 94, 0.7); }
-    .toy-flower1 { bottom: 8%; left: 8%; width: 65px; height: 100px; --glow-color: rgba(236, 72, 153, 0.7); }
-    .toy-flower2 { bottom: 10%; right: 8%; width: 65px; height: 100px; --glow-color: rgba(6, 182, 212, 0.7); }
-    .toy-snail { bottom: 6%; left: 58%; width: 75px; height: 60px; --glow-color: rgba(168, 85, 247, 0.7); }
+    /* Ground elements coordinates */
+    .toy-drum { bottom: 10%; left: 24%; width: 90px; height: 90px; }
+    .toy-mushroom { bottom: 12%; left: 45%; width: 60px; height: 70px; }
+    .toy-frog { bottom: 12%; right: 24%; width: 70px; height: 70px; }
+    .toy-flower1 { bottom: 8%; left: 8%; width: 60px; height: 90px; }
+    .toy-flower2 { bottom: 10%; right: 8%; width: 60px; height: 90px; }
+    .toy-snail { bottom: 6%; left: 58%; width: 70px; height: 55px; }
 
-    /* Pulse animation triggered on sound (Level 1) */
-    .pulse-glow-active {
-      animation: elementPulse 0.6s infinite ease-in-out;
+    /* --- Custom Animations triggered on Tap / Play --- */
+    .anim-pulse {
+      animation: spinPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes spinPulse {
+      0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+      50% { transform: scale(1.25) rotate(15deg); filter: brightness(1.4); }
+      100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
     }
 
-    /* Pulse animation for incorrect selection guidance */
-    .guide-pulse-active {
-      animation: elementPulse 0.4s 3 ease-in-out;
+    .anim-float {
+      animation: cloudFloat 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    @keyframes cloudFloat {
+      0% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(15px) scale(1.1); filter: brightness(1.2); }
+      100% { transform: translateX(0) scale(1); }
     }
 
-    @keyframes elementPulse {
-      0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)) brightness(1);
-      }
-      50% {
-        transform: scale(1.18);
-        filter: drop-shadow(0 0 25px var(--glow-color)) brightness(1.35);
-      }
+    .anim-hop {
+      animation: birdHop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes birdHop {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-25px) scale(1.2) rotate(-5deg); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .anim-flutter {
+      animation: butterflyFlutter 0.6s ease-in-out;
+    }
+    @keyframes butterflyFlutter {
+      0% { transform: scale(1) rotate(0deg); }
+      30% { transform: scale(1.2) rotate(-15deg); }
+      70% { transform: scale(1.2) rotate(15deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .anim-bounce {
+      animation: drumBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes drumBounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.2, 0.8); } /* squash */
+      60% { transform: scale(0.9, 1.2); } /* stretch */
+      100% { transform: scale(1); }
+    }
+
+    .anim-sway {
+      animation: flowerSway 0.6s ease-in-out;
+    }
+    @keyframes flowerSway {
+      0% { transform: rotate(0deg); }
+      33% { transform: rotate(-15deg) scale(1.1); }
+      66% { transform: rotate(15deg) scale(1.1); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .anim-slide {
+      animation: snailSlide 0.6s ease-in-out;
+    }
+    @keyframes snailSlide {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(20px) scale(1.1); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Target indicator glow for Level 1 */
+    .glow-guide-active {
+      filter: drop-shadow(0 0 25px var(--glow-color)) brightness(1.3) !important;
+      transform: scale(1.15);
+    }
+
+    /* Wrong choice pulse */
+    .guide-pulse-wrong {
+      animation: wrongPulse 0.4s 3 ease-in-out;
+    }
+    @keyframes wrongPulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.18); filter: drop-shadow(0 0 20px var(--glow-color)) brightness(1.3); }
     }
 
     /* Play/Listen button in the middle */
@@ -245,7 +313,7 @@
       font-size: 2.2rem;
     }
 
-    /* Background starry decor */
+    /* Star decoration background */
     .bg-glowing-star {
       position: absolute;
       color: rgba(255, 255, 255, 0.08);
@@ -296,7 +364,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Floating visual effects */
+    /* Floating particles */
     .glowing-emoji {
       position: absolute;
       pointer-events: none;
@@ -314,17 +382,26 @@
         padding: 0.6rem;
       }
       .toy-element {
-        transform: scale(0.75);
+        transform: scale(0.72);
       }
       .toy-element:hover {
-        transform: scale(0.75);
+        transform: scale(0.72);
       }
-      /* Individual mobile coordinates tweaks to prevent overlaps */
-      .toy-sun { top: 5%; right: 4%; }
-      .toy-cloud1 { top: 6%; left: 4%; }
-      .toy-cloud2 { top: 20%; left: 24%; }
-      .toy-drum { bottom: 6%; left: 16%; }
-      .toy-frog { bottom: 6%; right: 16%; }
+      /* Mobile coordinates to prevent overlaps */
+      .toy-sun { top: 5%; right: 2%; }
+      .toy-cloud1 { top: 5%; left: 2%; }
+      .toy-cloud2 { top: 18%; left: 16%; }
+      .toy-bird { top: 6%; left: 38%; }
+      .toy-butterfly { top: 18%; right: 20%; }
+      .toy-star1 { top: 5%; left: 26%; }
+      .toy-star2 { top: 22%; left: 45%; }
+      .toy-star3 { top: 8%; right: 32%; }
+      .toy-drum { bottom: 5%; left: 15%; }
+      .toy-mushroom { bottom: 6%; left: 38%; }
+      .toy-frog { bottom: 5%; right: 15%; }
+      .toy-flower1 { bottom: 4%; left: 2%; }
+      .toy-flower2 { bottom: 6%; right: 2%; }
+      .toy-snail { bottom: 4%; left: 52%; }
     }
   </style>
 </head>
@@ -393,7 +470,7 @@
           </div>
 
           <!-- Sun Vector -->
-          <div class="toy-element toy-sun" onmousedown="onElementTap('sky', 'sun', event)" ontouchstart="onElementTap('sky', 'sun', event)">
+          <div class="toy-element toy-sun" id="toy-sun" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('sun', event)" ontouchstart="onElementTap('sun', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
               <circle cx="50" cy="50" r="24" fill="#fbbf24" filter="drop-shadow(0 0 12px #f59e0b)" />
               <path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L29 29 M71 71 L80 80 M20 80 L29 71 M71 29 L80 20" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
@@ -401,19 +478,19 @@
           </div>
 
           <!-- Clouds Vectors -->
-          <div class="toy-element toy-cloud1" onmousedown="onElementTap('sky', 'cloud1', event)" ontouchstart="onElementTap('sky', 'cloud1', event)">
+          <div class="toy-element toy-cloud1" id="toy-cloud1" style="--glow-color: rgba(56, 189, 248, 0.6);" onmousedown="onElementTap('cloud1', event)" ontouchstart="onElementTap('cloud1', event)">
             <svg viewBox="0 0 100 60" width="100%" height="100%">
               <path d="M10 45 A 20 20 0 0 1 35 25 A 25 25 0 0 1 75 25 A 18 18 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.9" />
             </svg>
           </div>
-          <div class="toy-element toy-cloud2" onmousedown="onElementTap('sky', 'cloud2', event)" ontouchstart="onElementTap('sky', 'cloud2', event)">
+          <div class="toy-element toy-cloud2" id="toy-cloud2" style="--glow-color: rgba(56, 189, 248, 0.5);" onmousedown="onElementTap('cloud2', event)" ontouchstart="onElementTap('cloud2', event)">
             <svg viewBox="0 0 100 60" width="100%" height="100%">
               <path d="M10 45 A 16 16 0 0 1 30 28 A 20 20 0 0 1 70 28 A 15 15 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.8" />
             </svg>
           </div>
 
           <!-- Flying Bird -->
-          <div class="toy-element toy-bird" onmousedown="onElementTap('sky', 'bird', event)" ontouchstart="onElementTap('sky', 'bird', event)">
+          <div class="toy-element toy-bird" id="toy-bird" style="--glow-color: rgba(96, 165, 250, 0.7);" onmousedown="onElementTap('bird', event)" ontouchstart="onElementTap('bird', event)">
             <svg viewBox="0 0 60 60" width="100%" height="100%">
               <circle cx="30" cy="30" r="18" fill="#3b82f6" />
               <circle cx="42" cy="22" r="7" fill="#60a5fa" />
@@ -424,31 +501,28 @@
           </div>
 
           <!-- Flying Butterfly -->
-          <div class="toy-element toy-butterfly" onmousedown="onElementTap('sky', 'butterfly', event)" ontouchstart="onElementTap('sky', 'butterfly', event)">
+          <div class="toy-element toy-butterfly" id="toy-butterfly" style="--glow-color: rgba(232, 121, 249, 0.7);" onmousedown="onElementTap('butterfly', event)" ontouchstart="onElementTap('butterfly', event)">
             <svg viewBox="0 0 60 60" width="100%" height="100%">
-              <!-- Left Wing -->
               <ellipse cx="20" cy="25" rx="12" ry="16" fill="#e879f9" />
               <ellipse cx="22" cy="38" rx="8" ry="10" fill="#f472b6" />
-              <!-- Right Wing -->
               <ellipse cx="40" cy="25" rx="12" ry="16" fill="#e879f9" />
               <ellipse cx="38" cy="38" rx="8" ry="10" fill="#f472b6" />
-              <!-- Body -->
               <rect x="28" y="15" width="4" height="30" rx="2" fill="#475569" />
             </svg>
           </div>
 
           <!-- Star Elements -->
-          <div class="toy-element toy-star1" onmousedown="onElementTap('sky', 'star1', event)" ontouchstart="onElementTap('sky', 'star1', event)">
+          <div class="toy-element toy-star1" id="toy-star1" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star1', event)" ontouchstart="onElementTap('star1', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
               <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
             </svg>
           </div>
-          <div class="toy-element toy-star2" onmousedown="onElementTap('sky', 'star2', event)" ontouchstart="onElementTap('sky', 'star2', event)">
+          <div class="toy-element toy-star2" id="toy-star2" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star2', event)" ontouchstart="onElementTap('star2', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
               <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
             </svg>
           </div>
-          <div class="toy-element toy-star3" onmousedown="onElementTap('sky', 'star3', event)" ontouchstart="onElementTap('sky', 'star3', event)">
+          <div class="toy-element toy-star3" id="toy-star3" style="--glow-color: rgba(251, 191, 36, 0.8);" onmousedown="onElementTap('star3', event)" ontouchstart="onElementTap('star3', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
               <path d="M50 5 L63 36 L96 38 L71 60 L78 93 L50 75 L22 93 L29 60 L4 38 L37 36 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" />
             </svg>
@@ -464,7 +538,7 @@
           </div>
 
           <!-- Drum Vector -->
-          <div class="toy-element toy-drum" onmousedown="onElementTap('ground', 'drum', event)" ontouchstart="onElementTap('ground', 'drum', event)">
+          <div class="toy-element toy-drum" id="toy-drum" style="--glow-color: rgba(251, 146, 60, 0.7);" onmousedown="onElementTap('drum', event)" ontouchstart="onElementTap('drum', event)">
             <svg viewBox="0 0 100 100" width="100%" height="100%">
               <path d="M15 25 L15 80 C15 95 85 95 85 80 L85 25 Z" fill="#b45309" stroke="#78350f" stroke-width="4" />
               <path d="M15 45 L85 45 M15 65 L85 65" stroke="#78350f" stroke-width="4" />
@@ -473,7 +547,7 @@
           </div>
 
           <!-- Mushroom Vector -->
-          <div class="toy-element toy-mushroom" onmousedown="onElementTap('ground', 'mushroom', event)" ontouchstart="onElementTap('ground', 'mushroom', event)">
+          <div class="toy-element toy-mushroom" id="toy-mushroom" style="--glow-color: rgba(239, 68, 68, 0.7);" onmousedown="onElementTap('mushroom', event)" ontouchstart="onElementTap('mushroom', event)">
             <svg viewBox="0 0 50 60" width="100%" height="100%">
               <path d="M18 60 C18 40 32 40 32 60 Z" fill="#e2e8f0" />
               <path d="M5 36 C5 15 45 15 45 36 Z" fill="#ef4444" />
@@ -484,7 +558,7 @@
           </div>
 
           <!-- Frog Vector -->
-          <div class="toy-element toy-frog" onmousedown="onElementTap('ground', 'frog', event)" ontouchstart="onElementTap('ground', 'frog', event)">
+          <div class="toy-element toy-frog" id="toy-frog" style="--glow-color: rgba(34, 197, 94, 0.7);" onmousedown="onElementTap('frog', event)" ontouchstart="onElementTap('frog', event)">
             <svg viewBox="0 0 60 60" width="100%" height="100%">
               <ellipse cx="30" cy="35" rx="22" ry="18" fill="#22c55e" />
               <circle cx="18" cy="18" r="8" fill="#22c55e" />
@@ -498,7 +572,7 @@
           </div>
 
           <!-- Flowers Vectors -->
-          <div class="toy-element toy-flower1" onmousedown="onElementTap('ground', 'flower1', event)" ontouchstart="onElementTap('ground', 'flower1', event)">
+          <div class="toy-element toy-flower1" id="toy-flower1" style="--glow-color: rgba(236, 72, 153, 0.7);" onmousedown="onElementTap('flower1', event)" ontouchstart="onElementTap('flower1', event)">
             <svg viewBox="0 0 50 80" width="100%" height="100%">
               <rect x="23" y="35" width="4" height="45" fill="#166534" />
               <circle cx="25" cy="25" r="10" fill="#ec4899" />
@@ -509,7 +583,7 @@
               <circle cx="25" cy="25" r="5" fill="#f59e0b" />
             </svg>
           </div>
-          <div class="toy-element toy-flower2" onmousedown="onElementTap('ground', 'flower2', event)" ontouchstart="onElementTap('ground', 'flower2', event)">
+          <div class="toy-element toy-flower2" id="toy-flower2" style="--glow-color: rgba(6, 182, 212, 0.7);" onmousedown="onElementTap('flower2', event)" ontouchstart="onElementTap('flower2', event)">
             <svg viewBox="0 0 50 80" width="100%" height="100%">
               <rect x="23" y="35" width="4" height="45" fill="#166534" />
               <path d="M12 35 C12 15 38 15 38 35 Z" fill="#06b6d4" />
@@ -518,7 +592,7 @@
           </div>
 
           <!-- Snail Vector -->
-          <div class="toy-element toy-snail" onmousedown="onElementTap('ground', 'snail', event)" ontouchstart="onElementTap('ground', 'snail', event)">
+          <div class="toy-element toy-snail" id="toy-snail" style="--glow-color: rgba(168, 85, 247, 0.7);" onmousedown="onElementTap('snail', event)" ontouchstart="onElementTap('snail', event)">
             <svg viewBox="0 0 80 60" width="100%" height="100%">
               <path d="M10 50 Q 40 45 70 50 Q 75 42 70 35 L 60 35 C 50 35 40 40 30 42 Z" fill="#d97706" />
               <circle cx="38" cy="32" r="20" fill="#a855f7" stroke="#581c87" stroke-width="2" />
@@ -547,31 +621,141 @@
     let soundsLoaded = false;
     let isLoadingSounds = false;
 
-    // Challenge / state variables
-    let currentTarget = null; // 'sky' or 'ground'
+    // Challenge & State variables
+    let currentTargetElement = null; // Key from toyDetails
     let isWaitingForAnswer = false;
 
-    // Configuration of heights
-    const heightDetails = {
-      sky: {
-        noteIndex: 7, // SI4 (High)
+    // Detailed Element Configurations (Unique Frequencies & Animations)
+    const toyDetails = {
+      // --- SKY (HIGH NOTES) ---
+      sun: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.5, // High B5/C6
+        synthFreq: 987.77,
+        color: '#fbbf24',
+        emoji: '☀️',
+        animClass: 'anim-pulse'
+      },
+      cloud1: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.15,
+        synthFreq: 783.99,
+        color: '#e2e8f0',
+        emoji: '☁️',
+        animClass: 'anim-float'
+      },
+      cloud2: {
+        height: 'sky',
+        noteIndex: 7,
         pitchRate: 1.25,
         synthFreq: 880.00,
-        color: '#fbbf24'
+        color: '#cbd5e1',
+        emoji: '☁️',
+        animClass: 'anim-float'
       },
-      ground: {
-        noteIndex: 1, // DO4 (Low)
-        pitchRate: 0.5,
-        synthFreq: 130.81,
-        color: '#fb923c'
-      }
-    };
+      bird: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.8, // Double chirp representation in audio logic
+        synthFreq: 1174.66,
+        color: '#3b82f6',
+        emoji: '🐦',
+        animClass: 'anim-hop'
+      },
+      butterfly: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.4,
+        synthFreq: 932.33,
+        color: '#e879f9',
+        emoji: '🦋',
+        animClass: 'anim-flutter'
+      },
+      star1: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.3,
+        synthFreq: 1046.50,
+        color: '#fbbf24',
+        emoji: '⭐',
+        animClass: 'anim-pulse'
+      },
+      star2: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 1.6,
+        synthFreq: 1244.51,
+        color: '#fbbf24',
+        emoji: '⭐',
+        animClass: 'anim-pulse'
+      },
+      star3: {
+        height: 'sky',
+        noteIndex: 7,
+        pitchRate: 2.0,
+        synthFreq: 1396.91,
+        color: '#fbbf24',
+        emoji: '⭐',
+        animClass: 'anim-pulse'
+      },
 
-    // Emojis mapping for element feedback
-    const elementEmojis = {
-      sun: '☀️', cloud1: '☁️', cloud2: '☁️', bird: '🐦', butterfly: '🦋',
-      star1: '⭐', star2: '⭐', star3: '⭐',
-      drum: '🥁', mushroom: '🍄', frog: '🐸', flower1: '🌸', flower2: '🌷', snail: '🐌'
+      // --- GROUND (LOW NOTES) ---
+      drum: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.5, // Low bass
+        synthFreq: 130.81,
+        color: '#fb923c',
+        emoji: '🥁',
+        animClass: 'anim-bounce'
+      },
+      mushroom: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.7,
+        synthFreq: 185.00,
+        color: '#ef4444',
+        emoji: '🍄',
+        animClass: 'anim-hop'
+      },
+      frog: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.4, // Deep slide
+        synthFreq: 110.00,
+        color: '#22c55e',
+        emoji: '🐸',
+        animClass: 'anim-hop'
+      },
+      flower1: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.8,
+        synthFreq: 220.00,
+        color: '#ec4899',
+        emoji: '🌸',
+        animClass: 'anim-sway'
+      },
+      flower2: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.9,
+        synthFreq: 246.94,
+        color: '#06b6d4',
+        emoji: '🌷',
+        animClass: 'anim-sway'
+      },
+      snail: {
+        height: 'ground',
+        noteIndex: 1,
+        pitchRate: 0.6,
+        synthFreq: 164.81,
+        color: '#a855f7',
+        emoji: '🐌',
+        animClass: 'anim-slide'
+      }
     };
 
     function initAudio() {
@@ -608,10 +792,54 @@
       notice.style.display = 'none';
     }
 
-    function playSound(heightKey) {
+    // Play specific element sound
+    function playElementSound(toyKey) {
       initAudio();
-      const details = heightDetails[heightKey];
+      const details = toyDetails[toyKey];
+      if (!details) return;
 
+      // Special sound synthesis effects for animals to make them cute
+      if (toyKey === 'bird') {
+        // Double chirp sound
+        const now = audioCtx.currentTime;
+        playSingleFrequency(details.synthFreq, now, 0.08);
+        playSingleFrequency(details.synthFreq * 1.15, now + 0.09, 0.12);
+        return;
+      }
+      if (toyKey === 'frog') {
+        // Frog croak slide
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth'; // raspy croak tone
+        osc.frequency.setValueAtTime(details.synthFreq * 1.5, now);
+        osc.frequency.linearRampToValueAtTime(details.synthFreq * 0.8, now + 0.22);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+        osc.start(now);
+        osc.stop(now + 0.25);
+        return;
+      }
+      if (toyKey === 'snail') {
+        // Snail sliding rising pitch
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(details.synthFreq, now);
+        osc.frequency.linearRampToValueAtTime(details.synthFreq * 1.4, now + 0.4);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.42);
+        return;
+      }
+
+      // Standard real marimba or synth chime playback
       if (soundsLoaded && audioBuffers[details.noteIndex] && selectedSound === 'marimba') {
         const source = audioCtx.createBufferSource();
         source.buffer = audioBuffers[details.noteIndex];
@@ -621,6 +849,19 @@
       } else {
         playSynthChime(details.synthFreq);
       }
+    }
+
+    function playSingleFrequency(freq, time, duration) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, time);
+      gain.gain.setValueAtTime(0.25, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + duration - 0.01);
+      osc.start(time);
+      osc.stop(time + duration);
     }
 
     function playSynthChime(freq) {
@@ -642,16 +883,16 @@
       osc2.type = 'triangle';
       osc2.frequency.setValueAtTime(freq * 2.01, now);
       
-      gainNode.gain.setValueAtTime(0.5, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+      gainNode.gain.setValueAtTime(0.4, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
       
-      gainNode2.gain.setValueAtTime(0.12, now);
-      gainNode2.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      gainNode2.gain.setValueAtTime(0.1, now);
+      gainNode2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
       
       osc1.start(now);
       osc2.start(now);
-      osc1.stop(now + 1.9);
-      osc2.stop(now + 0.7);
+      osc1.stop(now + 1.7);
+      osc2.stop(now + 0.6);
     }
 
     function playSuccessChime() {
@@ -674,7 +915,6 @@
       });
     }
 
-    // Fail chime
     function playFailChime() {
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
@@ -693,8 +933,8 @@
       osc.stop(now + 0.4);
     }
 
-    // --- Interaction Routing ---
-    function onElementTap(height, elementName, event) {
+    // --- Interaction routing ---
+    function onElementTap(toyKey, event) {
       event.preventDefault();
       
       let clientX, clientY;
@@ -706,30 +946,27 @@
         clientY = event.clientY;
       }
 
-      const targetEl = event.currentTarget;
-      
-      // Tap Animation bounce
-      targetEl.style.transform = 'scale(1.22) rotate(8deg)';
-      setTimeout(() => targetEl.style.transform = 'scale(1) rotate(0deg)', 250);
+      const details = toyDetails[toyKey];
+      if (!details) return;
 
-      const heightColor = heightDetails[height].color;
+      triggerElementAnimation(toyKey);
 
       if (currentMode === 'learn') {
-        // Nivel 1: plays sound, glows/pulses ALL elements of that height, spawns particles
-        playSound(height);
-        triggerVisualPulse(height);
+        // Nivel 1: play sound, trigger animation and guide glow, spawn particles
+        playElementSound(toyKey);
+        triggerGuideGlow(toyKey);
         
-        spawnParticles(clientX, clientY, heightColor);
-        spawnFloatingEmoji(clientX, clientY, elementEmojis[elementName]);
+        spawnParticles(clientX, clientY, details.color);
+        spawnFloatingEmoji(clientX, clientY, details.emoji);
       } else {
-        // Nivel 2: Guessing mode active
+        // Nivel 2: Guessing mode
         if (!isWaitingForAnswer) return;
         isWaitingForAnswer = false;
 
         const btnListen = document.getElementById('btn-listen');
 
-        if (height === currentTarget) {
-          // Success!
+        if (toyKey === currentTargetElement) {
+          // Success! Matches exact sound
           playSuccessChime();
           
           btnListen.style.background = '#10b981'; // Green
@@ -738,26 +975,28 @@
           spawnParticles(clientX, clientY, '#10b981');
           for (let i = 0; i < 6; i++) {
             setTimeout(() => {
-              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), elementEmojis[elementName]);
+              spawnFloatingEmoji(clientX + (Math.random() * 80 - 40), clientY + (Math.random() * 80 - 40), details.emoji);
             }, i * 50);
           }
 
-          // Next round automatically
+          // Next round
           setTimeout(() => {
             resetChallengeUI();
             playChallengeSound();
           }, 1800);
         } else {
-          // Wrong choice - play low warning and guide them by pulsing the correct zone elements
+          // Wrong choice - show correct element
           playFailChime();
           
           btnListen.style.background = '#ef4444'; // Red
           btnListen.querySelector('i').className = 'fas fa-volume-up';
 
-          // Guide them by pulsing ALL correct height elements
-          triggerCorrectHeightGuide(currentTarget);
+          // Pulse the CORRECT element
+          const correctEl = document.getElementById(`toy-${currentTargetElement}`);
+          correctEl.classList.add('guide-pulse-wrong');
+          setTimeout(() => correctEl.classList.remove('guide-pulse-wrong'), 1600);
 
-          // Allow retry
+          // Retry
           setTimeout(() => {
             btnListen.style.background = 'var(--color-gold)';
             isWaitingForAnswer = true;
@@ -766,27 +1005,22 @@
       }
     }
 
-    // Nivel 1 helper: pulses all elements in the corresponding height
-    function triggerVisualPulse(height) {
-      const className = height === 'sky' ? 'toy-sky' : 'toy-ground';
-      const elements = document.querySelectorAll(height === 'sky' ? '.zone-sky-half .toy-element' : '.zone-ground-half .toy-element');
-      
-      elements.forEach(el => {
-        el.classList.add('pulse-glow-active');
-        setTimeout(() => el.classList.remove('pulse-glow-active'), 800);
-      });
+    // Triggers element custom animation
+    function triggerElementAnimation(toyKey) {
+      const details = toyDetails[toyKey];
+      const el = document.getElementById(`toy-${toyKey}`);
+      el.classList.add(details.animClass);
+      setTimeout(() => el.classList.remove(details.animClass), 600);
     }
 
-    // Guide helper: pulses all correct elements to show the right answer
-    function triggerCorrectHeightGuide(height) {
-      const elements = document.querySelectorAll(height === 'sky' ? '.zone-sky-half .toy-element' : '.zone-ground-half .toy-element');
-      elements.forEach(el => {
-        el.classList.add('guide-pulse-active');
-        setTimeout(() => el.classList.remove('guide-pulse-active'), 1500);
-      });
+    // Level 1 helper: glows target element
+    function triggerGuideGlow(toyKey) {
+      const el = document.getElementById(`toy-${toyKey}`);
+      el.classList.add('glow-guide-active');
+      setTimeout(() => el.classList.remove('glow-guide-active'), 1000);
     }
 
-    // --- Mode Setup ---
+    // --- Mode Select ---
     function setMode(modeName) {
       currentMode = modeName;
       document.getElementById('btn-mode-learn').classList.remove('active');
@@ -796,10 +1030,10 @@
       const btnListen = document.getElementById('btn-listen');
       const allToys = document.querySelectorAll('.toy-element');
       
-      // Clear pulses
+      // Clear glows
       allToys.forEach(el => {
-        el.classList.remove('pulse-glow-active');
-        el.classList.remove('guide-pulse-active');
+        el.classList.remove('glow-guide-active');
+        el.classList.remove('guide-pulse-wrong');
       });
 
       if (modeName === 'learn') {
@@ -827,23 +1061,25 @@
       btnListen.querySelector('i').className = 'fas fa-volume-up';
       btnListen.style.transform = 'translate(-50%, -50%) scale(1)';
       isWaitingForAnswer = false;
-      currentTarget = null;
+      currentTargetElement = null;
     }
 
     function playChallengeSound() {
       if (isWaitingForAnswer) {
-        // Re-play sound
-        playSound(currentTarget);
-        
-        // In Nivel 1, also pulse visually
+        // Re-play sound and animation
+        playElementSound(currentTargetElement);
+        triggerElementAnimation(currentTargetElement);
         if (currentMode === 'learn') {
-          triggerVisualPulse(currentTarget);
+          triggerGuideGlow(currentTargetElement);
         }
         return;
       }
       
       resetChallengeUI();
-      currentTarget = Math.random() > 0.5 ? 'sky' : 'ground';
+      
+      // Pick a random element from all toys
+      const keys = Object.keys(toyDetails);
+      currentTargetElement = keys[Math.floor(Math.random() * keys.length)];
       
       // Animate center button
       const btn = document.getElementById('btn-listen');
@@ -851,14 +1087,15 @@
       setTimeout(() => btn.style.transform = 'translate(-50%, -50%) scale(1)', 200);
 
       // Play Sound
-      playSound(currentTarget);
+      playElementSound(currentTargetElement);
 
       if (currentMode === 'learn') {
-        // Nivel 1: plays sound AND pulses/glows the corresponding height group
-        triggerVisualPulse(currentTarget);
+        // Nivel 1: play sound, trigger custom animation and show glowing guide
+        triggerElementAnimation(currentTargetElement);
+        triggerGuideGlow(currentTargetElement);
         isWaitingForAnswer = false;
       } else {
-        // Nivel 2: Plays sound but nothing glows. Guessing mode active!
+        // Nivel 2: guess by tapping correct element, nothing glows
         isWaitingForAnswer = true;
       }
     }
