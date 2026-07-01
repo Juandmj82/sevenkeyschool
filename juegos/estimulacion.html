@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Microsoft Clarity Tracking Code -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xfop6mj4wx");
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Seven Keys School | Jardín de los Sonidos</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    header {
+      padding: 0.8rem 1.5rem;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .header-logo {
+      height: 48px;
+      width: auto;
+    }
+
+    .stimulation-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 1rem 1rem 1rem;
+      position: relative;
+    }
+
+    /* Top Controls Panel */
+    .controls-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.6rem 1.2rem;
+      border-radius: 16px;
+      z-index: 5;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .control-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .btn-toggle-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-toggle {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-toggle.active {
+      background: var(--color-gold);
+      color: #020617;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-toggle:hover:not(.active) {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Sandbox Play Area */
+    .sandbox-area {
+      flex: 1;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    #effects-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Xylophone Mode */
+    .xylophone-grid {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
+      gap: 0.75rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .xylo-bar {
+      flex: 1;
+      height: 100%;
+      border-radius: 20px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 2rem;
+      box-shadow: 
+        0 8px 0 rgba(0,0,0,0.35),
+        inset 0 4px 0 rgba(255,255,255,0.2),
+        inset 0 -12px 20px rgba(0,0,0,0.2);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      touch-action: none;
+    }
+
+    .xylo-bar::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      width: 14px;
+      height: 14px;
+      background: #334155;
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .xylo-bar::before {
+      content: '';
+      position: absolute;
+      bottom: 15px;
+      width: 14px;
+      height: 14px;
+      background: #334155;
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .xylo-bar:active, .xylo-bar.active-touch {
+      transform: translateY(6px);
+      box-shadow: 
+        0 2px 0 rgba(0,0,0,0.3),
+        inset 0 4px 0 rgba(255,255,255,0.1),
+        inset 0 -4px 10px rgba(0,0,0,0.4);
+    }
+
+    .xylo-label {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #020617;
+      pointer-events: none;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.45);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Forest Heights Mode */
+    .forest-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      display: none;
+    }
+
+    .forest-zone {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+      transition: background 0.2s ease;
+      touch-action: none;
+    }
+
+    .forest-zone:last-child {
+      border-bottom: none;
+    }
+
+    /* Visual styles for zones */
+    .zone-sky {
+      background: linear-gradient(to bottom, rgba(56, 189, 248, 0.06), rgba(3, 105, 161, 0.02));
+    }
+    .zone-forest {
+      background: linear-gradient(to bottom, rgba(74, 222, 128, 0.05), rgba(21, 128, 61, 0.01));
+    }
+    .zone-ground {
+      background: linear-gradient(to bottom, rgba(251, 146, 60, 0.05), rgba(124, 45, 18, 0.02));
+    }
+
+    .forest-zone:hover {
+      background-color: rgba(255, 255, 255, 0.015);
+    }
+
+    .zone-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.8rem 1.6rem;
+      border-radius: 20px;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .zone-icon {
+      font-size: 2.2rem;
+    }
+
+    .zone-sky .zone-icon { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+    .zone-forest .zone-icon { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4); }
+    .zone-ground .zone-icon { color: #fb923c; text-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
+
+    .zone-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .zone-info p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Floating Bubble Note indicator */
+    .note-bubble {
+      position: absolute;
+      background: var(--color-gold);
+      color: #020617;
+      font-weight: 800;
+      font-size: 1.4rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--color-gold-glow);
+      pointer-events: none;
+      animation: floatUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 4;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -70%) scale(1.1);
+      }
+      100% {
+        transform: translate(-50%, -130%) scale(0.9);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .stimulation-container {
+        padding: 0.5rem;
+      }
+      .controls-panel {
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 0.6rem;
+      }
+      .xylo-bar {
+        border-radius: 14px;
+        padding-bottom: 1rem;
+      }
+      .xylo-label {
+        font-size: 1.2rem;
+        width: 32px;
+        height: 32px;
+      }
+      .zone-card {
+        padding: 0.6rem 1.2rem;
+      }
+      .zone-icon {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver a Juegos
+    </a>
+  </header>
+
+  <main class="stimulation-container">
+    <!-- Scientific Early Stimulation Controls -->
+    <div class="controls-panel">
+      <div class="control-group">
+        <span class="control-label">Juego:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-mode-xylo" onclick="setMode('xylo')">
+            <i class="fas fa-cubes"></i> Xilófono
+          </button>
+          <button class="btn-toggle" id="btn-mode-forest" onclick="setMode('forest')">
+            <i class="fas fa-cloud-sun"></i> Jardín de Sonidos
+          </button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Escala (Metodología Gordon):</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-scale-pentatonic" onclick="setScale('pentatonic')">
+            Pentatónica
+          </button>
+          <button class="btn-toggle" id="btn-scale-major" onclick="setScale('major')">
+            Mayor
+          </button>
+          <button class="btn-toggle" id="btn-scale-minor" onclick="setScale('minor')">
+            Menor
+          </button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Timbre:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="btn-timbre-bell" onclick="setTimbre('bell')">
+            ✨ Campanas
+          </button>
+          <button class="btn-toggle" id="btn-timbre-wood" onclick="setTimbre('wood')">
+            🪵 Xilófono
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sandbox Play Area -->
+    <div class="sandbox-area" id="play-sandbox">
+      <canvas id="effects-canvas"></canvas>
+
+      <!-- Mode 1: Color Xylophone -->
+      <div class="xylophone-grid" id="xylo-wrapper">
+        <!-- Bars are dynamically injected based on selected scale -->
+      </div>
+
+      <!-- Mode 2: Forest Heights -->
+      <div class="forest-view" id="forest-wrapper">
+        <div class="forest-zone zone-sky" onmousedown="playZone('sky', event)" ontouchstart="playZone('sky', event)">
+          <div class="zone-card">
+            <i class="fas fa-star zone-icon"></i>
+            <div class="zone-info">
+              <h3>El Cielo Agudo</h3>
+              <p>Sonidos cristalinos y de alta frecuencia</p>
+            </div>
+          </div>
+        </div>
+        <div class="forest-zone zone-forest" onmousedown="playZone('forest', event)" ontouchstart="playZone('forest', event)">
+          <div class="zone-card">
+            <i class="fas fa-tree zone-icon"></i>
+            <div class="zone-info">
+              <h3>El Bosque Medio</h3>
+              <p>Frecuencias medias y notas amigables</p>
+            </div>
+          </div>
+        </div>
+        <div class="forest-zone zone-ground" onmousedown="playZone('ground', event)" ontouchstart="playZone('ground', event)">
+          <div class="zone-card">
+            <i class="fas fa-mountain zone-icon"></i>
+            <div class="zone-info">
+              <h3>La Tierra Grave</h3>
+              <p>Vibraciones profundas y cálidas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- Web Audio API Engine ---
+    let audioCtx = null;
+    let selectedScale = 'pentatonic';
+    let selectedTimbre = 'bell';
+    let currentMode = 'xylo';
+
+    // Frequencies and Names for scales
+    const scales = {
+      pentatonic: [
+        { note: 'DO', freq: 261.63, color: '#ff4b4b' }, // Red
+        { note: 'RE', freq: 293.66, color: '#ff9c4b' }, // Orange
+        { note: 'MI', freq: 329.63, color: '#ffd64b' }, // Yellow
+        { note: 'SOL', freq: 392.00, color: '#4bff79' }, // Green
+        { note: 'LA', freq: 440.00, color: '#4bc5ff' }, // Cyan
+        { note: 'DO', freq: 523.25, color: '#9c4bff' }  // Purple
+      ],
+      major: [
+        { note: 'DO', freq: 261.63, color: '#ff4b4b' },
+        { note: 'RE', freq: 293.66, color: '#ff9c4b' },
+        { note: 'MI', freq: 329.63, color: '#ffd64b' },
+        { note: 'FA', freq: 349.23, color: '#4bff4b' },
+        { note: 'SOL', freq: 392.00, color: '#4bffc5' },
+        { note: 'LA', freq: 440.00, color: '#4bc5ff' },
+        { note: 'SI', freq: 493.88, color: '#4b55ff' },
+        { note: 'DO', freq: 523.25, color: '#9c4bff' }
+      ],
+      minor: [
+        { note: 'DO', freq: 261.63, color: '#ff4b4b' },
+        { note: 'RE', freq: 293.66, color: '#ff9c4b' },
+        { note: 'MIb', freq: 311.13, color: '#d64bff' },
+        { note: 'FA', freq: 349.23, color: '#4bff4b' },
+        { note: 'SOL', freq: 392.00, color: '#4bffc5' },
+        { note: 'LAb', freq: 415.30, color: '#4bc5ff' },
+        { note: 'SIb', freq: 466.16, color: '#4b55ff' },
+        { note: 'DO', freq: 523.25, color: '#9c4bff' }
+      ]
+    };
+
+    // Height mode mapping
+    const forestNotes = {
+      sky: { note: 'SOL', freq: 783.99 },    // High G
+      forest: { note: 'MI', freq: 329.63 }, // Mid E
+      ground: { note: 'DO', freq: 130.81 }  // Low C
+    };
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playNote(freq) {
+      initAudio();
+      
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (selectedTimbre === 'bell') {
+        // Bell timbre (sine wave with rich harmonic frequency overlay)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        // Rich bell harmonic helper
+        const harmonicOsc = audioCtx.createOscillator();
+        const harmonicGain = audioCtx.createGain();
+        harmonicOsc.type = 'triangle';
+        harmonicOsc.frequency.setValueAtTime(freq * 2, now);
+        harmonicOsc.connect(harmonicGain);
+        harmonicGain.connect(audioCtx.destination);
+
+        gainNode.gain.setValueAtTime(0.5, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+        harmonicGain.gain.setValueAtTime(0.15, now);
+        harmonicGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+        osc.start(now);
+        osc.stop(now + 1.9);
+        harmonicOsc.start(now);
+        harmonicOsc.stop(now + 0.9);
+      } else {
+        // Wooden Xylophone timbre (short decay, triangle wave, fast decay helper)
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+
+        const transientOsc = audioCtx.createOscillator();
+        const transientGain = audioCtx.createGain();
+        transientOsc.type = 'sine';
+        transientOsc.frequency.setValueAtTime(freq * 3, now);
+        transientOsc.connect(transientGain);
+        transientGain.connect(audioCtx.destination);
+
+        gainNode.gain.setValueAtTime(0.7, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        transientGain.gain.setValueAtTime(0.3, now);
+        transientGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.start(now);
+        osc.stop(now + 0.5);
+        transientOsc.start(now);
+        transientOsc.stop(now + 0.1);
+      }
+    }
+
+    // --- Dynamic DOM Generation ---
+    function renderXylophone() {
+      const wrapper = document.getElementById('xylo-wrapper');
+      wrapper.innerHTML = '';
+      
+      const bars = scales[selectedScale];
+      bars.forEach((bar, index) => {
+        const barElem = document.createElement('div');
+        barElem.className = 'xylo-bar';
+        barElem.style.backgroundColor = bar.color;
+        
+        // Slightly decrease height for higher pitches (like a real instrument)
+        const heightPercent = 100 - (index * 4);
+        barElem.style.height = `${heightPercent}%`;
+        
+        const label = document.createElement('span');
+        label.className = 'xylo-label';
+        label.innerText = bar.note;
+        
+        barElem.appendChild(label);
+        
+        // Touch & Mouse triggers
+        const trigger = (e) => {
+          e.preventDefault();
+          barElem.classList.add('active-touch');
+          setTimeout(() => barElem.classList.remove('active-touch'), 100);
+          
+          playNote(bar.freq);
+          
+          // Capture coordinates for particles
+          const rect = barElem.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          spawnParticles(x, y, bar.color);
+          spawnNoteBubble(x, y, bar.note);
+        };
+
+        barElem.addEventListener('mousedown', trigger);
+        barElem.addEventListener('touchstart', trigger);
+
+        wrapper.appendChild(barElem);
+      });
+    }
+
+    function setScale(scaleName) {
+      selectedScale = scaleName;
+      document.getElementById('btn-scale-pentatonic').classList.remove('active');
+      document.getElementById('btn-scale-major').classList.remove('active');
+      document.getElementById('btn-scale-minor').classList.remove('active');
+      document.getElementById(`btn-scale-${scaleName}`).classList.add('active');
+      
+      if (currentMode === 'xylo') {
+        renderXylophone();
+      }
+    }
+
+    function setTimbre(timbreName) {
+      selectedTimbre = timbreName;
+      document.getElementById('btn-timbre-bell').classList.remove('active');
+      document.getElementById('btn-timbre-wood').classList.remove('active');
+      document.getElementById(`btn-timbre-${timbreName}`).classList.add('active');
+    }
+
+    function setMode(modeName) {
+      currentMode = modeName;
+      document.getElementById('btn-mode-xylo').classList.remove('active');
+      document.getElementById('btn-mode-forest').classList.remove('active');
+      document.getElementById(`btn-mode-${modeName}`).classList.add('active');
+
+      if (modeName === 'xylo') {
+        document.getElementById('xylo-wrapper').style.display = 'flex';
+        document.getElementById('forest-wrapper').style.display = 'none';
+        renderXylophone();
+      } else {
+        document.getElementById('xylo-wrapper').style.display = 'none';
+        document.getElementById('forest-wrapper').style.display = 'flex';
+      }
+    }
+
+    function playZone(zone, event) {
+      event.preventDefault();
+      const data = forestNotes[zone];
+      playNote(data.freq);
+
+      // Extract touch/mouse coords
+      let clientX, clientY;
+      if (event.touches && event.touches[0]) {
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+      } else {
+        clientX = event.clientX;
+        clientY = event.clientY;
+      }
+
+      let color = '#38bdf8'; // Sky cyan
+      if (zone === 'forest') color = '#4ade80'; // Forest green
+      if (zone === 'ground') color = '#fb923c'; // Ground orange
+
+      spawnParticles(clientX, clientY, color);
+      spawnNoteBubble(clientX, clientY, data.note);
+    }
+
+    // --- Particle Physics Effects Engine ---
+    const canvas = document.getElementById('effects-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      const sandbox = document.getElementById('play-sandbox');
+      canvas.width = sandbox.clientWidth;
+      canvas.height = sandbox.clientHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 300);
+
+    class Particle {
+      constructor(x, y, color) {
+        // Convert page coordinates to local canvas coordinates
+        const rect = canvas.getBoundingClientRect();
+        this.x = x - rect.left;
+        this.y = y - rect.top;
+        this.color = color;
+        this.size = Math.random() * 14 + 6;
+        this.speedX = Math.random() * 8 - 4;
+        this.speedY = Math.random() * 8 - 4;
+        this.gravity = 0.12;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity; // Gravity pull downwards
+        this.alpha -= this.decay;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function spawnParticles(x, y, color) {
+      for (let i = 0; i < 15; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function spawnNoteBubble(x, y, noteName) {
+      const bubble = document.createElement('div');
+      bubble.className = 'note-bubble';
+      bubble.innerText = noteName;
+      
+      const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
+      bubble.style.left = `${x - sandboxRect.left}px`;
+      bubble.style.top = `${y - sandboxRect.top}px`;
+
+      document.getElementById('play-sandbox').appendChild(bubble);
+      
+      // Auto cleanup
+      setTimeout(() => bubble.remove(), 800);
+    }
+
+    // Start Loops
+    renderXylophone();
+    animate();
+  </script>
+</body>
+</html>
