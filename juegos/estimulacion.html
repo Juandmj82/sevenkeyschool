@@ -17,12 +17,15 @@
   <style>
     body {
       background: #020617;
-      height: 100vh;
-      max-height: 100vh;
+      height: 100vh;        /* fallback */
+      height: 100dvh;       /* recalcula al rotar en iOS/Android */
+      max-height: 100dvh;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
       touch-action: manipulation;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -41,6 +44,7 @@
 
     .stimulation-container {
       flex: 1;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -48,7 +52,6 @@
       margin: 0 auto;
       padding: 0.5rem 1rem 1rem 1rem;
       position: relative;
-      height: calc(100vh - 80px);
     }
 
     /* Top Controls Panel */
@@ -769,40 +772,81 @@
 
     /* =====================================================
        RESPONSIVE — Landscape mobile  (altura max 550px)
+       Split cambia a HORIZONTAL: Cielo izquierda / Tierra derecha
     ===================================================== */
     @media (orientation: landscape) and (max-height: 550px) {
       header { display: none !important; }
-      .controls-panel {
-        padding: 0.3rem 1rem;
-        margin-bottom: 0.3rem;
-        border-radius: 8px;
+
+      .stimulation-container {
+        padding: 0.2rem 0.3rem;
       }
-      .stimulation-container { padding: 0.2rem; height: 100vh; }
-      .sandbox-area { border-radius: 12px; }
-      .game-instruction-banner { padding: 0.3rem 1rem; font-size: 0.75rem; }
-      .instruction-avatar { width: 24px; height: 24px; }
-      /* Usamos CSS custom property para escalar sin romper transform de animaciones */
-      .toy-element { --toy-scale: 0.65; font-size: calc(var(--toy-scale) * 1em); }
-      .toy-sun       { width: 55px;  height: 55px; }
-      .toy-cloud1    { width: 71px;  height: 39px; }
-      .toy-cloud2    { width: 62px;  height: 33px; }
-      .toy-bird      { width: 39px;  height: 39px; }
-      .toy-butterfly { width: 36px;  height: 36px; }
-      .toy-star1, .toy-star2, .toy-star3 { width: 26px; height: 26px; }
-      .toy-drum      { width: 59px;  height: 59px; }
-      .toy-mushroom  { width: 39px;  height: 46px; }
-      .toy-frog      { width: 46px;  height: 46px; }
-      .toy-flower1, .toy-flower2 { width: 39px; height: 59px; }
-      .toy-snail     { width: 46px;  height: 36px; }
-      .challenge-center-button { width: 52px; height: 52px; top: 55%; }
-      .challenge-center-button i { font-size: 1.3rem; }
-      .xylophone-grid { padding: 0.4rem; gap: 0.35rem; }
-      .xylo-bar { border-radius: 10px; }
-      .pedagogical-modal { padding: 1rem 1.2rem; max-width: 480px; }
-      .modal-teacher-avatar { width: 52px; height: 52px; margin-bottom: 0.4rem; }
-      .modal-title { font-size: 0.95rem; }
-      .modal-content { font-size: 0.78rem; margin-bottom: 0.5rem; }
-      .btn-modal-start { padding: 0.55rem 1.2rem; font-size: 0.82rem; }
+
+      .controls-panel {
+        padding: 0.25rem 0.8rem;
+        margin-bottom: 0.25rem;
+        border-radius: 8px;
+        gap: 0.3rem 0.6rem;
+      }
+      .btn-toggle { padding: 0.2rem 0.5rem; font-size: 0.72rem; }
+      .control-label { display: none; }
+
+      .sandbox-area { border-radius: 10px; }
+
+      .game-instruction-banner {
+        padding: 0.25rem 0.8rem;
+        font-size: 0.72rem;
+        gap: 0.4rem;
+      }
+      .instruction-avatar { width: 22px; height: 22px; }
+
+      /* ⭐ CLAVE: split horizontal en landscape */
+      .split-container {
+        flex-direction: row !important;
+      }
+      /* El borde ahora es vertical (derecha del cielo) */
+      .zone-sky-half {
+        border-bottom: none !important;
+        border-right: 2px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Reposición de elementos del CIELO para layout horizontal */
+      .toy-sun       { top: 8%;   right: 8%;   width: 50px; height: 50px; }
+      .toy-cloud1    { top: 12%;  left: 5%;    width: 70px; height: 38px; }
+      .toy-cloud2    { top: 35%;  left: 15%;   width: 60px; height: 32px; }
+      .toy-bird      { top: 10%;  left: 42%;   width: 36px; height: 36px; }
+      .toy-butterfly { top: 30%;  right: 12%;  width: 34px; height: 34px; }
+      .toy-star1     { top: 5%;   left: 28%;   width: 24px; height: 24px; }
+      .toy-star2     { top: 28%;  left: 50%;   width: 24px; height: 24px; }
+      .toy-star3     { top: 6%;   right: 30%;  width: 24px; height: 24px; }
+
+      /* Reposición de elementos de la TIERRA para layout horizontal */
+      .toy-drum      { bottom: 10%; left: 18%;  width: 54px; height: 54px; }
+      .toy-mushroom  { bottom: 12%; left: 38%;  width: 36px; height: 44px; }
+      .toy-frog      { bottom: 10%; right: 18%; width: 44px; height: 44px; }
+      .toy-flower1   { bottom: 6%;  left: 5%;   width: 36px; height: 58px; }
+      .toy-flower2   { bottom: 8%;  right: 6%;  width: 36px; height: 58px; }
+      .toy-snail     { bottom: 5%;  left: 55%;  width: 44px; height: 34px; }
+
+      /* Botón de escucha centrado en el eje vertical del split */
+      .challenge-center-button {
+        width: 50px;
+        height: 50px;
+        top: 50%;
+        left: 50%;
+      }
+      .challenge-center-button i { font-size: 1.2rem; }
+
+      /* Xilófono */
+      .xylophone-grid { padding: 0.35rem; gap: 0.3rem; }
+      .xylo-bar { border-radius: 8px; }
+
+      /* Modal compacto */
+      .pedagogical-modal { padding: 0.9rem 1rem; max-width: 460px; }
+      .modal-teacher-avatar { width: 48px; height: 48px; margin-bottom: 0.3rem; }
+      .modal-title { font-size: 0.9rem; margin-bottom: 0.4rem; }
+      .modal-subtitle { font-size: 0.68rem; margin-bottom: 0.6rem; }
+      .modal-content { font-size: 0.76rem; margin-bottom: 0.5rem; }
+      .btn-modal-start { padding: 0.5rem 1.1rem; font-size: 0.8rem; }
     }
 
     /* =====================================================
