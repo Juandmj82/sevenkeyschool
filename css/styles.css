@@ -368,3 +368,19 @@ a:focus, button:focus {
         animation: fade-in 0.3s ease-out;
     }
 }
+
+/* Pulsing Games Badge Animation */
+.animate-pulse-glow {
+    animation: nav-pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes nav-pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 4px rgba(246, 173, 85, 0.4);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 12px rgba(246, 173, 85, 0.85);
+        transform: scale(1.04);
+    }
+}

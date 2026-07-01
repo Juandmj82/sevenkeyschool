@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Microsoft Clarity Tracking Code -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xfop6mj4wx");
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Lectura de Notas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Profe styles for game.html overlays */
+    .profe-sticker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin: 8px 0;
+      width: 100%;
+      max-width: 420px;
+      text-align: left;
+    }
+    .profe-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid #a78bfa;
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+      flex-shrink: 0;
+    }
+    .profe-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .profe-name {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+    .profe-bubble {
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+    }
+
+    /* Profe Showcase Vertical Layout (Large representation for game over / win modals) */
+    .profe-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0 8px;
+      width: 100%;
+    }
+    .profe-avatar-large {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.55);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .profe-avatar-large:hover {
+      transform: scale(1.06) rotate(2deg);
+    }
+    .profe-bubble-large {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+      position: relative;
+      max-width: 410px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.02);
+    }
+    .profe-bubble-large::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 8px 8px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.07) transparent;
+    }
+
+    /* Redefine fadeIn animation to preserve centering translation */
+    @keyframes fadeInCentred {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    /* Modal layout overrides to match atrapa.html styles and fix centering */
+    .overlay-modal {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      right: auto;
+      bottom: auto;
+      transform: translate(-50%, -50%);
+      width: 95%; max-width: 480px;
+      max-height: 96dvh;
+      overflow-y: auto;
+      background: radial-gradient(circle at center, rgba(18, 15, 42, 0.99) 0%, rgba(6, 5, 20, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.15);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 24px;
+      text-align: center;
+      border-radius: 20px;
+      z-index: 100;
+      animation: fadeInCentred 0.3s ease-out forwards;
+    }
+    .modal-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      margin-bottom: 0px;
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+    }
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Profe Toast Notification for mid-game incorrect answers */
+    .profe-toast {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: radial-gradient(circle at center, rgba(30, 27, 75, 0.98) 0%, rgba(15, 12, 45, 0.99) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(239, 68, 68, 0.2);
+      border-radius: 14px;
+      padding: 10px 14px;
+      max-width: 290px;
+      z-index: 200;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    .profe-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .profe-toast-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #ef4444;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .profe-toast-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .profe-toast-name {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #f87171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profe-toast-text {
+      font-size: 0.72rem;
+      color: #f1f5f9;
+      line-height: 1.3;
+      font-style: italic;
+    }
+
+    /* Header Logo size */
+    .header-logo {
+      height: 50px;
+      width: auto;
+      display: block;
+    }
+    
+    .start-prompt {
+      width: 95%;
+      max-width: 440px;
+      padding: 16px 20px;
+    }
+
+    @media (max-width: 600px) {
+      .profe-toast {
+        bottom: 145px !important;
+        right: auto !important;
+        left: 50% !important;
+        transform: translate(-50%, 80px) !important;
+        max-width: 90% !important;
+        width: 290px !important;
+      }
+      .profe-toast.show {
+        transform: translate(-50%, 0) !important;
+      }
+    }
+  </style>
+</head>
+<body class="game-page-layout">
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Menú de Niveles
+    </a>
+  </header>
+
+  <main>
+    <div class="game-container">
+      <!-- HUD / Stats -->
+      <div class="game-hud">
+        <div class="hud-group">
+          <div class="hud-item">
+            <span class="hud-label">Nivel</span>
+            <span class="hud-value gold" id="hud-level-num">1</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">Clave</span>
+            <span class="hud-value" id="hud-clef-name">Sol</span>
+          </div>
+        </div>
+
+        <div class="hud-group">
+          <div class="hud-item" style="align-items: center;">
+            <span class="hud-label">Vidas</span>
+            <div class="hearts-container" id="hearts-box">
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
+            </div>
+          </div>
+          <div class="hud-item" style="align-items: flex-end;">
+            <span class="hud-label">Aciertos</span>
+            <span class="hud-value" id="hud-score">0 / 10</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start screen overlay with Profe speaking the instructions -->
+      <div class="start-prompt" id="start-overlay">
+        <h2 style="font-weight: 800; font-size: 1.6rem; margin-bottom: 4px;" id="overlay-level-title">Nivel 1: Clave de Sol Inicial</h2>
+        
+        <!-- Profe Sticker speaking the dynamically loaded description -->
+        <div class="profe-sticker">
+          <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
+          <div class="profe-text-box">
+            <span class="profe-name">Teacher Juan Di</span>
+            <div class="profe-bubble" id="overlay-level-desc">
+              Cargando nivel...
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-start-game" id="btn-start" style="margin-top: 4px;">Iniciar Juego</button>
+      </div>
+
+      <!-- Staff / Pentagrama Area -->
+      <div class="staff-area">
+        <!-- Dynamic SVG Staff -->
+        <svg class="staff-svg" id="staff-svg" viewBox="0 0 500 200">
+          <!-- Background staff lines will be rendered via JS -->
+        </svg>
+      </div>
+
+      <!-- Feedback box -->
+      <div class="feedback-box" id="feedback-box"></div>
+
+      <!-- Piano Keyboard Section -->
+      <div class="keyboard-section">
+        <span class="hud-label" style="margin-bottom: 5px;">Presiona la tecla correspondiente a la nota</span>
+        <div class="keyboard-container" id="piano-keyboard">
+          <!-- Piano keys generated dynamically by JS to match clef octave -->
+        </div>
+      </div>
+
+      <!-- Interactive Toast Alert when losing a life -->
+      <div class="profe-toast" id="profe-toast">
+        <img src="../img/profe_sad.jpg" class="profe-toast-avatar" alt="Teacher Juan Di">
+        <div class="profe-toast-content">
+          <span class="profe-toast-name">Teacher Juan Di</span>
+          <span class="profe-toast-text" id="profe-toast-text">"¡Tú puedes! ¡Inténtalo de nuevo!"</span>
+        </div>
+      </div>
+
+      <!-- Confetti Canvas (drawn on top of win modal inside relative container) -->
+      <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; border-radius: 24px;"></canvas>
+
+      <!-- Win Modal Overlay with Large Profe Celebrating -->
+      <div class="overlay-modal" id="win-modal">
+        <div class="modal-icon win">🏆</div>
+        <div class="modal-title">¡Nivel Completado!</div>
+        
+        <div class="profe-showcase">
+          <img src="../img/profe_celebrate.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large" id="win-message">
+            Excelente lectura de notas. ¡Has desbloqueado el siguiente nivel!
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-next-level">Siguiente Nivel</button>
+        </div>
+      </div>
+
+      <!-- Lose Modal Overlay with Large Profe Encouraging -->
+      <div class="overlay-modal" id="lose-modal">
+        <div class="modal-icon lose">❌</div>
+        <div class="modal-title">Fin del Juego</div>
+        
+        <div class="profe-showcase">
+          <img src="../img/profe_sad.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large">
+            "¡Ouch, nos quedamos sin vidas! ⚡ Pero no te preocupes, cada intento te hace mejor músico. ¿Qué te parece si lo intentamos una vez más? ¡Vamos, yo sé que tú puedes!"
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-restart">Intentar de Nuevo</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

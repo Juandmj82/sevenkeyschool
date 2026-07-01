@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Microsoft Clarity Tracking Code -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xfop6mj4wx");
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Nivel 0 Fundamentos</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 16% 10%, rgba(0, 229, 255, 0.11), transparent 28rem),
+        radial-gradient(circle at 86% 4%, rgba(212, 175, 55, 0.13), transparent 24rem),
+        var(--bg-dark);
+    }
+    .header-logo {
+      height: 54px;
+      width: auto;
+      display: block;
+    }
+    main.theory-main {
+      max-width: 1180px;
+      justify-content: flex-start;
+      gap: 1.6rem;
+      padding-top: 1.4rem;
+    }
+    .theory-hero {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
+      gap: 1.6rem;
+      align-items: stretch;
+    }
+    .theory-copy {
+      border-left: 4px solid var(--color-gold);
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 230px;
+    }
+    .eyebrow {
+      color: var(--color-gold);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+    .theory-copy h1 {
+      font-size: clamp(2rem, 5vw, 4.6rem);
+      line-height: 0.95;
+      max-width: 760px;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f8e7a7 46%, #00e5ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .theory-copy p {
+      color: #cbd5e1;
+      max-width: 650px;
+      line-height: 1.6;
+      font-size: 1.03rem;
+    }
+    .hero-art {
+      position: relative;
+      min-height: 260px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.28);
+    }
+    .hero-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.04);
+    }
+
+    .learning-shell {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.86fr) minmax(0, 1.35fr);
+      gap: 1.4rem;
+      align-items: start;
+    }
+    .lesson-panel,
+    .practice-panel {
+      min-width: 0;
+      background: rgba(20, 23, 41, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 22px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(12px);
+    }
+    .lesson-panel {
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .lesson-card {
+      min-height: 300px;
+      padding: 1.35rem;
+      border-radius: 18px;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+        rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .lesson-kicker {
+      color: var(--color-cyan);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .lesson-card h2 {
+      font-size: 1.65rem;
+      line-height: 1.06;
+    }
+    .lesson-card p {
+      color: #cbd5e1;
+      line-height: 1.55;
+      font-size: 0.98rem;
+    }
+    .mini-staff {
+      width: 100%;
+      height: 100px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+    .lesson-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .lesson-progress {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .dot.active {
+      width: 24px;
+      background: var(--color-gold);
+      border-color: var(--color-gold);
+      box-shadow: 0 0 12px var(--color-gold-glow);
+    }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: var(--transition-smooth);
+    }
+    .icon-btn:hover {
+      border-color: var(--color-gold);
+      transform: translateY(-2px);
+    }
+    .practice-panel {
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .practice-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .practice-title h2 {
+      font-size: 1.35rem;
+      margin-bottom: 0.22rem;
+    }
+    .practice-title p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+    .clef-toggle {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .clef-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.68rem 1rem;
+      color: var(--text-muted);
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .clef-btn.active {
+      background: linear-gradient(135deg, var(--color-gold), #f7d86c);
+      color: var(--bg-dark);
+      box-shadow: 0 0 14px var(--color-gold-glow);
+    }
+    .staff-stage {
+      position: relative;
+      min-height: 360px;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)),
+        rgba(0, 0, 0, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+    .theory-staff-svg {
+      width: 100%;
+      height: 360px;
+      display: block;
+      touch-action: none;
+    }
+    .note-marker {
+      cursor: grab;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.7));
+    }
+    .note-marker:active {
+      cursor: grabbing;
+    }
+    .note-overlay {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      left: auto;
+      background: rgba(11, 13, 25, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      z-index: 10;
+    }
+    .note-overlay .label {
+      color: var(--color-gold);
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .note-overlay .value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+    .note-overlay .pos {
+      color: var(--color-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .tip-overlay {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      background: rgba(11, 13, 25, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      z-index: 10;
+    }
+    .tip-overlay .label {
+      color: var(--color-gold);
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+      padding-right: 10px;
+      flex-shrink: 0;
+    }
+    .tip-overlay .text {
+      color: #cbd5e1;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+    .profe-hint {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .profe-hint img {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #a78bfa;
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.35);
+      flex-shrink: 0;
+    }
+    .profe-hint span {
+      display: block;
+      color: #c084fc;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .profe-hint p {
+      color: #e2e8f0;
+      line-height: 1.42;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+    @media (max-width: 900px) {
+      .theory-hero,
+      .learning-shell,
+      .info-strip {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-art {
+        min-height: 210px;
+      }
+    }
+    @media (max-width: 600px) {
+      header {
+        padding: 1rem;
+        gap: 1rem;
+      }
+      .btn-back {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.82rem;
+      }
+      .theory-copy {
+        min-height: auto;
+      }
+      .lesson-card {
+        min-height: 330px;
+      }
+      .practice-panel {
+        padding: 0.85rem;
+      }
+      .lesson-panel,
+      .practice-panel,
+      .practice-top,
+      .practice-title {
+        width: 100%;
+        min-width: 0;
+      }
+      .staff-stage {
+        min-height: 300px;
+      }
+      .theory-staff-svg {
+        height: 300px;
+      }
+      .clef-toggle,
+      .clef-btn {
+        width: 100%;
+      }
+      .clef-toggle {
+        border-radius: 18px;
+      }
+      .clef-btn {
+        padding: 0.75rem 0.55rem;
+      }
+      .profe-hint {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver a Juegos
+    </a>
+  </header>
+
+  <main class="theory-main">
+    <section class="theory-hero">
+      <div class="theory-copy">
+        <div class="eyebrow">Nivel 0 · Escuela de Notas</div>
+        <h1>Fundamentos del Pentagrama</h1>
+        <p>Antes de competir contra el reloj, vamos a ubicar cada nota con calma: líneas, espacios, clave de Sol, clave de Fa y el sonido que vive en cada posición.</p>
+      </div>
+      <div class="hero-art">
+        <img src="../img/fundamentos.png" alt="Fundamentos del pentagrama">
+      </div>
+    </section>
+
+    <section class="learning-shell">
+      <aside class="lesson-panel" aria-label="Lecciones paso a paso">
+        <article class="lesson-card">
+          <span class="lesson-kicker" id="lesson-kicker">Paso 1 de 4</span>
+          <h2 id="lesson-title">¿Qué es el pentagrama?</h2>
+          <p id="lesson-text">El pentagrama tiene 5 líneas y 4 espacios. En música se cuentan de abajo hacia arriba, como si subieras una escalera de sonidos.</p>
+          <svg class="mini-staff" id="mini-staff" viewBox="0 0 460 130" role="img" aria-label="Ilustración de pentagrama"></svg>
+        </article>
+        <div class="lesson-controls">
+          <button class="icon-btn" id="prev-lesson" type="button" aria-label="Lección anterior">‹</button>
+          <div class="lesson-progress" id="lesson-progress" aria-hidden="true"></div>
+          <button class="icon-btn" id="next-lesson" type="button" aria-label="Siguiente lección">›</button>
+        </div>
+      </aside>
+
+      <section class="practice-panel" aria-label="Pentagrama interactivo">
+        <div class="practice-top">
+          <div class="practice-title">
+            <h2>Explora líneas y espacios</h2>
+            <p>Haz clic, pasa el cursor o arrastra la nota cyan sobre el pentagrama.</p>
+          </div>
+          <div class="clef-toggle" role="group" aria-label="Seleccionar clave">
+            <button class="clef-btn active" type="button" data-clef="sol">𝄞 Clave de Sol</button>
+            <button class="clef-btn" type="button" data-clef="fa">𝄢 Clave de Fa</button>
+          </div>
+        </div>
+
+        <div class="staff-stage">
+          <svg class="theory-staff-svg" id="theory-staff" viewBox="0 0 760 360" role="img" aria-label="Pentagrama interactivo"></svg>
+          
+          <div class="note-overlay">
+            <span class="label">Nota actual</span>
+            <span class="value" id="note-name">Sol</span>
+            <span class="pos" id="note-position">Línea 2</span>
+          </div>
+
+          <div class="tip-overlay">
+            <span class="label">Tip</span>
+            <span class="text" id="tip-text">La clave de Sol se enrolla alrededor de la segunda línea: por eso esa línea se llama Sol.</span>
+          </div>
+        </div>
+
+        <div class="profe-hint">
+          <img src="../img/profe.jpg" alt="Teacher Juan Di">
+          <div>
+            <span>Teacher Juan Di</span>
+            <p>"Cuenta siempre desde abajo: línea 1, espacio 1, línea 2... Así el pentagrama deja de ser un misterio y se vuelve un mapa."</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const NOTE_FREQS = {
+      G2: 98.00, A2: 110.00, B2: 123.47,
+      C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46
+    };
+
+    const STAFF_POSITIONS = {
+      sol: [
+        { y: 260, kind: "linea", number: 1, note: "E4", name: "Mi", tip: "Las líneas de Sol, de abajo hacia arriba, son Mi, Sol, Si, Re, Fa." },
+        { y: 240, kind: "espacio", number: 1, note: "F4", name: "Fa", tip: "Los espacios de Sol forman Fa, La, Do, Mi: una palabra musical muy fácil de repetir." },
+        { y: 220, kind: "linea", number: 2, note: "G4", name: "Sol", tip: "La clave de Sol se enrolla alrededor de la segunda línea: por eso esa línea se llama Sol." },
+        { y: 200, kind: "espacio", number: 2, note: "A4", name: "La", tip: "Después de Sol subimos al espacio 2: La. Cuenta cada salto como un peldaño." },
+        { y: 180, kind: "linea", number: 3, note: "B4", name: "Si", tip: "La tercera línea queda justo en el centro del pentagrama: en clave de Sol es Si." },
+        { y: 160, kind: "espacio", number: 3, note: "C5", name: "Do", tip: "El tercer espacio en clave de Sol es Do agudo, una nota brillante y fácil de escuchar." },
+        { y: 140, kind: "linea", number: 4, note: "D5", name: "Re", tip: "La cuarta línea en clave de Sol es Re. Sigue alternando línea, espacio, línea, espacio." },
+        { y: 120, kind: "espacio", number: 4, note: "E5", name: "Mi", tip: "El espacio más alto del pentagrama en clave de Sol es Mi." },
+        { y: 100, kind: "linea", number: 5, note: "F5", name: "Fa", tip: "La quinta línea es Fa: es la línea superior del pentagrama." }
+      ],
+      fa: [
+        { y: 260, kind: "linea", number: 1, note: "G2", name: "Sol", tip: "Las líneas de Fa, desde abajo, son Sol, Si, Re, Fa, La." },
+        { y: 240, kind: "espacio", number: 1, note: "A2", name: "La", tip: "Los espacios de Fa, desde abajo, son La, Do, Mi, Sol." },
+        { y: 220, kind: "linea", number: 2, note: "B2", name: "Si", tip: "La segunda línea de Fa es Si. Sigue contando de abajo hacia arriba." },
+        { y: 200, kind: "espacio", number: 2, note: "C3", name: "Do", tip: "El segundo espacio de Fa es Do, muy usado para leer notas graves." },
+        { y: 180, kind: "linea", number: 3, note: "D3", name: "Re", tip: "La línea central en clave de Fa es Re." },
+        { y: 160, kind: "espacio", number: 3, note: "E3", name: "Mi", tip: "El tercer espacio en clave de Fa es Mi." },
+        { y: 140, kind: "linea", number: 4, note: "F3", name: "Fa", tip: "La clave de Fa señala la cuarta línea con sus dos puntos: por eso esa línea es Fa." },
+        { y: 120, kind: "espacio", number: 4, note: "G3", name: "Sol", tip: "El espacio superior en clave de Fa es Sol." },
+        { y: 100, kind: "linea", number: 5, note: "A3", name: "La", tip: "La quinta línea de Fa es La, el techo del pentagrama grave." }
+      ]
+    };
+
+    const LESSONS = [
+      {
+        title: "¿Qué es el pentagrama?",
+        text: "El pentagrama tiene 5 líneas y 4 espacios. En música se cuentan de abajo hacia arriba, como si subieras una escalera de sonidos.",
+        mode: "count"
+      },
+      {
+        title: "Las claves cambian el mapa",
+        text: "La clave de Sol y la clave de Fa le dicen al músico cómo se llama cada línea y cada espacio. La misma altura visual puede tener otro nombre si cambia la clave.",
+        mode: "clefs"
+      },
+      {
+        title: "Sol nace en la segunda línea",
+        text: "La clave de Sol se dibuja abrazando la segunda línea. Esa línea se convierte en Sol, y desde ahí puedes contar hacia arriba o hacia abajo.",
+        mode: "sol"
+      },
+      {
+        title: "Fa nace en la cuarta línea",
+        text: "La clave de Fa tiene dos puntos alrededor de la cuarta línea. Esa línea se convierte en Fa, el punto de referencia para las notas graves.",
+        mode: "fa"
+      },
+      {
+        title: "Líneas auxiliares y Do Central",
+        text: "Cuando las notas se salen del pentagrama (por ser muy agudas o graves), les dibujamos una pequeña línea auxiliar. ¡Es como añadir un escalón extra solo para esa nota! El Do central usa una línea abajo en clave de Sol, dejando al Re flotando encima. ¡Ese mismo Do central es la línea auxiliar arriba en clave de Fa!",
+        mode: "ledger"
+      }
+    ];
+
+    const staffSvg = document.getElementById("theory-staff");
+    const miniStaff = document.getElementById("mini-staff");
+    const noteName = document.getElementById("note-name");
+    const notePosition = document.getElementById("note-position");
+    const tipText = document.getElementById("tip-text");
+    const lessonKicker = document.getElementById("lesson-kicker");
+    const lessonTitle = document.getElementById("lesson-title");
+    const lessonText = document.getElementById("lesson-text");
+    const lessonProgress = document.getElementById("lesson-progress");
+
+    let activeClef = "sol";
+    let activeIndex = 2;
+    let currentLesson = 0;
+    let audioCtx = null;
+    let isDragging = false;
+
+    function svgEl(name, attrs = {}) {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+      return el;
+    }
+
+    function drawTrebleClef(parent, staffStartX, line2Y, lineSpacing, color = "var(--color-gold)") {
+      let fontSize, x, y;
+      if (lineSpacing === 16) {
+        fontSize = 72;
+        x = staffStartX + 2;
+        y = line2Y + 11.5;
+      } else {
+        fontSize = 160;
+        x = staffStartX + 5;
+        y = line2Y + 20;
+      }
+
+      const clefText = svgEl("text", {
+        x: x,
+        y: y,
+        fill: color,
+        "font-family": "serif",
+        "font-size": fontSize,
+        filter: "drop-shadow(0 0 8px rgba(212, 175, 55, 0.28))"
+      });
+      clefText.textContent = "𝄞";
+      parent.appendChild(clefText);
+    }
+
+    function drawBassClef(parent, staffStartX, line4Y, lineSpacing, color = "var(--color-gold)") {
+      let fontSize, x, y;
+      if (lineSpacing === 16) {
+        fontSize = 52;
+        x = staffStartX + 2;
+        y = line4Y + 34;
+      } else {
+        fontSize = 170;
+        x = staffStartX + 5;
+        y = line4Y + 115;
+      }
+
+      const clefText = svgEl("text", {
+        x: x,
+        y: y,
+        fill: color,
+        "font-family": "serif",
+        "font-size": fontSize,
+        filter: "drop-shadow(0 0 8px rgba(212, 175, 55, 0.28))"
+      });
+      clefText.textContent = "𝄢";
+      parent.appendChild(clefText);
+    }
+
+    const sampleCache = {};
+    let samplesLoadingStarted = false;
+
+    function loadPianoSamples() {
+      if (samplesLoadingStarted) return;
+      samplesLoadingStarted = true;
+      initAudio();
+
+      const notesToLoad = [
+        "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3",
+        "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"
+      ];
+
+      notesToLoad.forEach(note => {
+        const url = `https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/${note}.mp3`;
+        fetch(url)
+          .then(response => {
+            if (!response.ok) throw new Error();
+            return response.arrayBuffer();
+          })
+          .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+          .then(audioBuffer => {
+            sampleCache[note] = audioBuffer;
+          })
+          .catch(err => {
+            console.warn(`Error al cargar nota real ${note}, usando sintetizador.`, err);
+          });
+      });
+    }
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      loadPianoSamples();
+    }
+
+    function playTone(note) {
+      initAudio();
+      const buffer = sampleCache[note];
+      if (buffer) {
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start(0);
+      } else {
+        playToneFallback(note);
+      }
+    }
+
+    function playToneFallback(note) {
+      const freq = NOTE_FREQS[note];
+      if (!freq) return;
+      const now = audioCtx.currentTime;
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+      const osc = audioCtx.createOscillator();
+      const overtone = audioCtx.createOscillator();
+
+      gain.connect(audioCtx.destination);
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(freq * 4, now);
+      filter.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.45);
+      filter.connect(gain);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.32, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.82);
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+      overtone.type = "triangle";
+      overtone.frequency.setValueAtTime(freq * 2, now);
+
+      const overtoneGain = audioCtx.createGain();
+      overtoneGain.gain.setValueAtTime(0.08, now);
+      osc.connect(filter);
+      overtone.connect(overtoneGain);
+      overtoneGain.connect(filter);
+
+      osc.start(now);
+      overtone.start(now);
+      osc.stop(now + 0.86);
+      overtone.stop(now + 0.86);
+    }
+
+    function drawStaff() {
+      staffSvg.innerHTML = "";
+      const positions = STAFF_POSITIONS[activeClef];
+      const lineYs = [260, 220, 180, 140, 100];
+
+      lineYs.forEach((y, lineIndex) => {
+        const isCurrentLine = STAFF_POSITIONS[activeClef][activeIndex].kind === "linea" && 
+                              (lineIndex + 1) === STAFF_POSITIONS[activeClef][activeIndex].number;
+        staffSvg.appendChild(svgEl("line", {
+          x1: 125, y1: y, x2: 680, y2: y,
+          stroke: isCurrentLine ? "rgba(212, 175, 55, 0.95)" : "rgba(255, 255, 255, 0.32)",
+          "stroke-width": 3,
+          "stroke-linecap": "round"
+        }));
+      });
+
+      staffSvg.appendChild(svgEl("line", { x1: 125, y1: 100, x2: 125, y2: 260, stroke: "rgba(255,255,255,0.45)", "stroke-width": 4 }));
+      staffSvg.appendChild(svgEl("line", { x1: 680, y1: 100, x2: 680, y2: 260, stroke: "rgba(255,255,255,0.45)", "stroke-width": 4 }));
+
+      if (activeClef === "sol") {
+        drawTrebleClef(staffSvg, 125, 220, 40);
+      } else {
+        drawBassClef(staffSvg, 125, 140, 40);
+      }
+
+      positions.forEach((pos) => {
+        const label = svgEl("text", {
+          x: 704,
+          y: pos.y + 5,
+          fill: pos.kind === "linea" ? "rgba(248, 231, 167, 0.92)" : "rgba(125, 231, 255, 0.9)",
+          "font-size": 15,
+          "font-weight": 800
+        });
+        label.textContent = `${pos.kind === "linea" ? "L" : "E"}${pos.number}`;
+        staffSvg.appendChild(label);
+      });
+
+      positions.forEach((pos, index) => {
+        const zone = svgEl("rect", {
+          x: 120,
+          y: pos.y - 14,
+          width: 560,
+          height: 28,
+          rx: 8,
+          fill: index === activeIndex ? "rgba(0, 229, 255, 0.14)" : "rgba(255, 255, 255, 0.001)",
+          stroke: index === activeIndex ? "rgba(0, 229, 255, 0.55)" : "transparent",
+          "stroke-width": 1.5,
+          "pointer-events": "all"
+        });
+        zone.style.cursor = "pointer";
+        zone.addEventListener("mouseenter", () => selectPosition(index, false));
+        zone.addEventListener("click", () => selectPosition(index, true));
+        staffSvg.appendChild(zone);
+      });
+
+      drawNoteMarker(positions[activeIndex].y);
+    }
+
+    function drawNoteMarker(y) {
+      const group = svgEl("g", { class: "note-marker", tabindex: "0", role: "button", "aria-label": "Nota arrastrable" });
+      group.appendChild(svgEl("ellipse", {
+        cx: 435, cy: y, rx: 18, ry: 12,
+        fill: "var(--color-cyan)",
+        transform: `rotate(-20 435 ${y})`
+      }));
+      const stemUp = y >= 180;
+      group.appendChild(svgEl("line", {
+        x1: stemUp ? 451 : 419,
+        y1: stemUp ? y - 4 : y + 4,
+        x2: stemUp ? 451 : 419,
+        y2: stemUp ? y - 78 : y + 78,
+        stroke: "#ffffff",
+        "stroke-width": 3,
+        "stroke-linecap": "round"
+      }));
+      group.addEventListener("pointerdown", startDrag);
+      group.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowUp") selectPosition(Math.min(activeIndex + 1, STAFF_POSITIONS[activeClef].length - 1), true);
+        if (event.key === "ArrowDown") selectPosition(Math.max(activeIndex - 1, 0), true);
+      });
+      staffSvg.appendChild(group);
+    }
+
+    function startDrag(event) {
+      isDragging = true;
+      staffSvg.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    }
+
+    function dragTo(event, play = false) {
+      const point = staffSvg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      const svgPoint = point.matrixTransform(staffSvg.getScreenCTM().inverse());
+      const positions = STAFF_POSITIONS[activeClef];
+      let nearest = 0;
+      let nearestDistance = Infinity;
+      positions.forEach((pos, index) => {
+        const distance = Math.abs(svgPoint.y - pos.y);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearest = index;
+        }
+      });
+      selectPosition(nearest, play);
+    }
+
+    staffSvg.addEventListener("pointerdown", (event) => {
+      isDragging = true;
+      dragTo(event, true);
+      staffSvg.setPointerCapture(event.pointerId);
+    });
+    staffSvg.addEventListener("pointermove", (event) => {
+      if (isDragging) dragTo(event, false);
+    });
+    staffSvg.addEventListener("pointerup", (event) => {
+      if (!isDragging) return;
+      dragTo(event, true);
+      isDragging = false;
+    });
+    staffSvg.addEventListener("pointercancel", () => {
+      isDragging = false;
+    });
+
+    function selectPosition(index, shouldPlay, force = false) {
+      if (activeIndex === index && !shouldPlay && !force) return;
+      activeIndex = index;
+      const pos = STAFF_POSITIONS[activeClef][activeIndex];
+      noteName.textContent = pos.name;
+      notePosition.textContent = `${pos.kind === "linea" ? "Línea" : "Espacio"} ${pos.number}`;
+      tipText.textContent = pos.tip;
+      drawStaff();
+      if (shouldPlay) playTone(pos.note);
+    }
+
+    function setClef(clef) {
+      activeClef = clef;
+      activeIndex = clef === "sol" ? 2 : 6;
+      document.querySelectorAll(".clef-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.clef === clef);
+      });
+      selectPosition(activeIndex, true);
+    }
+
+    function drawMiniStaff(mode) {
+      miniStaff.innerHTML = "";
+      const lines = [97, 81, 65, 49, 33];
+      const startX = mode === "ledger" ? 15 : 76;
+      const endX = mode === "ledger" ? 160 : 394;
+      
+      // Dibujar líneas del pentagrama izquierdo
+      lines.forEach((y) => miniStaff.appendChild(svgEl("line", { x1: startX, y1: y, x2: endX, y2: y, stroke: "rgba(255,255,255,0.32)", "stroke-width": 2 })));
+      
+      // Si es modo ledger, dibujar el pentagrama derecho por separado a la derecha extrema
+      if (mode === "ledger") {
+        lines.forEach((y) => miniStaff.appendChild(svgEl("line", { x1: 300, y1: y, x2: 445, y2: y, stroke: "rgba(255,255,255,0.32)", "stroke-width": 2 })));
+      }
+
+      if (mode === "count") {
+        // Lineas (L1-L5) a la izquierda (en dorado)
+        lines.forEach((y, index) => {
+          const lineNumber = index + 1;
+          miniStaff.appendChild(svgEl("circle", { cx: 56, cy: y, r: 10, fill: "rgba(212,175,55,0.16)", stroke: "rgba(212,175,55,0.7)", "stroke-width": 1.5 }));
+          const text = svgEl("text", { x: 56, y: y + 4, fill: "var(--color-gold)", "font-size": 11, "font-weight": 800, "text-anchor": "middle" });
+          text.textContent = `L${lineNumber}`;
+          miniStaff.appendChild(text);
+        });
+        const arrowLeft = svgEl("path", { d: "M 34 101 L 34 37 M 28 43 L 34 37 L 40 43", stroke: "rgba(212,175,55,0.75)", "stroke-width": 2.5, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" });
+        miniStaff.appendChild(arrowLeft);
+
+        // Espacios (E1-E4) a la derecha (en cyan)
+        const spacesY = [89, 73, 57, 41];
+        spacesY.forEach((y, index) => {
+          const spaceNumber = index + 1;
+          miniStaff.appendChild(svgEl("circle", { cx: 414, cy: y, r: 10, fill: "rgba(0, 229, 255, 0.16)", stroke: "rgba(0, 229, 255, 0.7)", "stroke-width": 1.5 }));
+          const text = svgEl("text", { x: 414, y: y + 4, fill: "var(--color-cyan)", "font-size": 11, "font-weight": 800, "text-anchor": "middle" });
+          text.textContent = `E${spaceNumber}`;
+          miniStaff.appendChild(text);
+        });
+        const arrowRight = svgEl("path", { d: "M 436 93 L 436 37 M 430 43 L 436 37 L 442 43", stroke: "rgba(0,229,255,0.75)", "stroke-width": 2.5, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" });
+        miniStaff.appendChild(arrowRight);
+      }
+      if (mode === "clefs" || mode === "sol") {
+        drawTrebleClef(miniStaff, 76, 81, 16);
+      }
+      if (mode === "clefs" || mode === "fa") {
+        const bassStartX = mode === "clefs" ? 230 : 76;
+        drawBassClef(miniStaff, bassStartX, 49, 16, "var(--color-cyan)");
+      }
+      if (mode === "sol" || mode === "fa") {
+        const y = mode === "sol" ? 81 : 49;
+        miniStaff.appendChild(svgEl("line", { x1: 76, y1: y, x2: endX, y2: y, stroke: "rgba(212,175,55,0.95)", "stroke-width": 4, "stroke-linecap": "round" }));
+        miniStaff.appendChild(svgEl("ellipse", { cx: 305, cy: y, rx: 14, ry: 9, fill: "var(--color-cyan)", transform: `rotate(-20 305 ${y})` }));
+      }
+      if (mode === "ledger") {
+        // Clave de Sol al extremo izquierdo (startX = 15)
+        drawTrebleClef(miniStaff, 15, 81, 16);
+        // Clave de Fa al extremo derecho (startX = 300)
+        drawBassClef(miniStaff, 300, 49, 16, "var(--color-cyan)");
+
+        // --- PENTAGRAMA IZQUIERDO (SOL): Do central en línea auxiliar & Re flotando ---
+        // Línea auxiliar para Do (C4) abajo (y=113)
+        miniStaff.appendChild(svgEl("line", { x1: 70, y1: 113, x2: 100, y2: 113, stroke: "rgba(255,255,255,0.7)", "stroke-width": 1.5 }));
+        // Nota Do (dorada)
+        miniStaff.appendChild(svgEl("ellipse", { cx: 85, cy: 113, rx: 7, ry: 4.5, fill: "var(--color-gold)", transform: "rotate(-20 85 113)" }));
+        const tDoL = svgEl("text", { x: 85, y: 126, fill: "var(--color-gold)", "font-size": 9, "font-weight": 800, "text-anchor": "middle" });
+        tDoL.textContent = "Do";
+        miniStaff.appendChild(tDoL);
+
+        // Nota Re flotando justo encima del Do (y=105) - SIN línea auxiliar
+        miniStaff.appendChild(svgEl("ellipse", { cx: 120, cy: 105, rx: 7, ry: 4.5, fill: "var(--color-gold)", transform: "rotate(-20 120 105)" }));
+        const tRe = svgEl("text", { x: 120, y: 126, fill: "var(--color-gold)", "font-size": 9, "font-weight": 800, "text-anchor": "middle" });
+        tRe.textContent = "Re";
+        miniStaff.appendChild(tRe);
+
+        // --- PENTAGRAMA DERECHO (FA): Do central en línea auxiliar & Si flotando ---
+        // Línea auxiliar para Do (C4) arriba (y=17)
+        miniStaff.appendChild(svgEl("line", { x1: 395, y1: 17, x2: 425, y2: 17, stroke: "rgba(255,255,255,0.7)", "stroke-width": 1.5 }));
+        // Nota Do (cyan)
+        miniStaff.appendChild(svgEl("ellipse", { cx: 410, cy: 17, rx: 7, ry: 4.5, fill: "var(--color-cyan)", transform: "rotate(-20 410 17)" }));
+        const tDoR = svgEl("text", { x: 410, y: 126, fill: "var(--color-cyan)", "font-size": 9, "font-weight": 800, "text-anchor": "middle" });
+        tDoR.textContent = "Do";
+        miniStaff.appendChild(tDoR);
+
+        // Nota Si flotando justo debajo (y=25) - SIN línea auxiliar
+        miniStaff.appendChild(svgEl("ellipse", { cx: 370, cy: 25, rx: 7, ry: 4.5, fill: "var(--color-cyan)", transform: "rotate(-20 370 25)" }));
+        const tSi = svgEl("text", { x: 370, y: 126, fill: "var(--color-cyan)", "font-size": 9, "font-weight": 800, "text-anchor": "middle" });
+        tSi.textContent = "Si";
+        miniStaff.appendChild(tSi);
+
+        // Línea punteada de conexión (de extremo a extremo)
+        miniStaff.appendChild(svgEl("line", { x1: 85, y1: 113, x2: 410, y2: 17, stroke: "rgba(255, 255, 255, 0.45)", "stroke-width": 1.2, "stroke-dasharray": "3,3" }));
+        
+        // Etiqueta en el centro "¡Mismo Do!" (Más grande y visible para móvil)
+        const tMid = svgEl("text", { x: 230, y: 69, fill: "#ffffff", "font-size": 13, "font-weight": 800, "text-anchor": "middle" });
+        tMid.textContent = "¡Mismo Do!";
+        miniStaff.appendChild(tMid);
+      }
+    }
+
+    function renderLesson() {
+      const lesson = LESSONS[currentLesson];
+      lessonKicker.textContent = `Paso ${currentLesson + 1} de ${LESSONS.length}`;
+      lessonTitle.textContent = lesson.title;
+      lessonText.textContent = lesson.text;
+      lessonProgress.innerHTML = "";
+      LESSONS.forEach((_, index) => {
+        const dot = document.createElement("span");
+        dot.className = `dot${index === currentLesson ? " active" : ""}`;
+        lessonProgress.appendChild(dot);
+      });
+      drawMiniStaff(lesson.mode);
+    }
+
+    document.getElementById("prev-lesson").addEventListener("click", () => {
+      currentLesson = (currentLesson - 1 + LESSONS.length) % LESSONS.length;
+      renderLesson();
+    });
+    document.getElementById("next-lesson").addEventListener("click", () => {
+      currentLesson = (currentLesson + 1) % LESSONS.length;
+      renderLesson();
+    });
+    document.querySelectorAll(".clef-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setClef(btn.dataset.clef));
+    });
+
+    renderLesson();
+    selectPosition(activeIndex, false, true);
+  </script>
+</body>
+</html>
