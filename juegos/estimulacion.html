@@ -1373,12 +1373,8 @@
         const heightPercent = 100 - (index * 4);
         barElem.style.height = `${heightPercent}%`;
         
-        const label = document.createElement('span');
-        label.className = 'xylo-label';
-        label.innerText = bar.note;
-        
-        barElem.appendChild(label);
-        
+
+
         const trigger = (e) => {
           e.preventDefault();
           barElem.classList.add('active-touch');
