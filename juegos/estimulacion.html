@@ -327,8 +327,8 @@
     }
     @keyframes drumBounce {
       0% { transform: scale(1); }
-      30% { transform: scale(1.2, 0.8); } /* squash */
-      60% { transform: scale(0.9, 1.2); } /* stretch */
+      30% { transform: scale(1.2, 0.8); }
+      60% { transform: scale(0.9, 1.2); }
       100% { transform: scale(1); }
     }
 
@@ -408,7 +408,7 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* Floating Teacher Juandi Mascot Header Button */
+    /* Floating Teacher Juan D Header Button */
     .header-teacher-btn {
       width: 44px;
       height: 44px;
@@ -430,7 +430,7 @@
       object-fit: cover;
     }
 
-    /* --- GORGEOUS SCIENTIFIC WARNING MODAL (Pedagogical advice) --- */
+    /* --- PEDAGOGICAL ADVICE WARNING MODAL --- */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -688,9 +688,9 @@
   <div class="modal-overlay" id="parent-modal">
     <div class="pedagogical-modal">
       <div class="modal-teacher-avatar">
-        <img src="../img/profe.jpg" alt="Profe Juandi">
+        <img src="../img/profe.jpg" alt="Teacher Juan D">
       </div>
-      <div class="modal-title">Mensaje del Profe Juandi</div>
+      <div class="modal-title">Mensaje de Teacher Juan D</div>
       <div class="modal-subtitle">Estimulación Musical y Salud Visual</div>
       <div class="modal-content">
         <p>¡Bienvenidos a la zona de estimulación musical! La música y las frecuencias auditivas tempranas son herramientas maravillosas para fortalecer las conexiones neuronales y la discriminación del oído en bebés.</p>
@@ -715,8 +715,8 @@
         <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
       </div>
       <!-- Little parent warning trigger in header -->
-      <div class="header-teacher-btn" onclick="openPedagogicalModal()" title="Consejo del Profe Juandi">
-        <img src="../img/profe.jpg" alt="Profe Juandi">
+      <div class="header-teacher-btn" onclick="openPedagogicalModal()" title="Consejo de Teacher Juan D">
+        <img src="../img/profe.jpg" alt="Teacher Juan D">
       </div>
     </div>
     <a href="index.html" class="btn-back">
@@ -1026,27 +1026,8 @@
       snail: { height: 'ground', noteIndex: 1, pitchRate: 0.6, synthFreq: 164.81, color: '#a855f7', emoji: '🐌', animClass: 'anim-slide' }
     };
 
-    // Teacher Juandi messages database
-    const teacherMessages = {
-      welcome_xylo: "¡Toca las barras del xilófono para hacer música!",
-      welcome_learn: "¡Explora el Cielo y la Tierra tocando los elementos para escuchar!",
-      welcome_challenge: "¡El Reto! Escucha el sonido del altavoz y toca el dibujo correspondiente.",
-      success: [
-        "¡Excelente! ¡Qué gran oído!",
-        "¡Estupendo! ¡Lo lograste!",
-        "¡Muy bien!",
-        "¡Bravo!"
-      ],
-      fail: [
-        "¡Inténtalo otra vez! Busca el dibujo que brilla.",
-        "¡Tú puedes lograrlo!",
-        "¡Casi! Vamos de nuevo."
-      ]
-    };
-
-    function updateTeacherBubble(message, status = 'normal') {
+    function updateTeacherAvatar(status = 'normal') {
       const avatar = document.getElementById('teacher-avatar');
-      
       if (status === 'success') {
         avatar.src = '../img/profe_celebrate.jpg';
         avatar.parentElement.style.transform = 'scale(1.15) rotate(5deg)';
@@ -1071,7 +1052,7 @@
 
     function closeModalAndPlay() {
       document.getElementById('parent-modal').style.display = 'none';
-      initAudio(); // Warm up audio context on user interaction
+      initAudio(); 
     }
 
     function triggerTeacherJuandiVoice() {
@@ -1354,7 +1335,7 @@
           btnListen.querySelector('i').className = 'fas fa-check';
           
           spawnConfettiExplosion(clientX, clientY);
-          updateTeacherBubble('', 'success');
+          updateTeacherAvatar('success');
 
           spawnParticles(clientX, clientY, '#10b981');
           for (let i = 0; i < 6; i++) {
@@ -1372,7 +1353,7 @@
           
           btnListen.style.background = '#ef4444';
           btnListen.querySelector('i').className = 'fas fa-volume-up';
-          updateTeacherBubble('', 'fail');
+          updateTeacherAvatar('fail');
 
           const correctEl = document.getElementById(`toy-${currentTargetElement}`);
           correctEl.classList.add('guide-pulse-wrong');
@@ -1612,7 +1593,6 @@
       }
     }
 
-    // Centered confetti shower
     function spawnConfettiExplosion(x, y) {
       for (let i = 0; i < 60; i++) {
         confettis.push(new Confetti(x, y));
@@ -1702,7 +1682,11 @@
       requestAnimationFrame(animate);
     }
 
-    animate();
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      setGame('xylo'); 
+      animate();
+    });
   </script>
 </body>
 </html>
