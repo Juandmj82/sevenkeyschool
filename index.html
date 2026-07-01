@@ -1137,15 +1137,20 @@
             const handleScroll = () => {
                 const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
                 if (scrollTop > 50) {
-                    nav.classList.remove('nav-transparent');
-                    nav.classList.add('nav-scrolled');
+                    nav.style.setProperty('background-color', 'rgba(42, 67, 101, 0.95)', 'important');
+                    nav.style.setProperty('backdrop-filter', 'blur(8px)', 'important');
+                    nav.style.setProperty('-webkit-backdrop-filter', 'blur(8px)', 'important');
+                    nav.style.setProperty('box-shadow', '0 4px 20px rgba(0, 0, 0, 0.15)', 'important');
                 } else {
-                    nav.classList.remove('nav-scrolled');
-                    nav.classList.add('nav-transparent');
+                    nav.style.setProperty('background-color', 'transparent', 'important');
+                    nav.style.setProperty('backdrop-filter', 'none', 'important');
+                    nav.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+                    nav.style.setProperty('box-shadow', 'none', 'important');
                 }
             };
             window.addEventListener('scroll', handleScroll);
             document.addEventListener('scroll', handleScroll);
+            setInterval(handleScroll, 250);
             handleScroll();
 
             // Menú móvil
