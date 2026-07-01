@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
-      background: radial-gradient(circle at center, #0a0f1d 0%, #03050b 100%);
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
       height: 100vh;
       max-height: 100vh;
       overflow: hidden;
@@ -27,7 +27,7 @@
 
     header {
       padding: 0.8rem 1.5rem;
-      background: rgba(7, 9, 19, 0.6);
+      background: rgba(15, 23, 42, 0.4);
       backdrop-filter: blur(8px);
       z-index: 20;
       position: relative;
@@ -210,124 +210,68 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.15);
     }
 
-    /* Magical Sensory Garden Mode (Interactive Toy Landscape) */
+    /* Professional Hand-drawn Vector Garden Layout */
     .garden-view {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, #0c152b 0%, #1a2f1b 60%, #292015 100%);
+      background: linear-gradient(to bottom, #070d1e 0%, #152216 65%, #221810 100%);
       display: none;
       z-index: 1;
     }
 
-    /* Interactive Toy Elements */
     .toy-element {
       position: absolute;
       cursor: pointer;
-      font-size: 3.5rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       touch-action: none;
     }
 
     .toy-element:active {
-      transform: scale(1.4) rotate(10deg);
+      transform: scale(1.25) rotate(5deg);
     }
 
-    /* Labels for the elements inside bubbles for babies */
-    .toy-label {
-      font-size: 0.75rem;
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      padding: 0.15rem 0.5rem;
-      border-radius: 8px;
-      margin-top: 0.2rem;
-      font-weight: 700;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    /* Specific element placements */
-    .toy-sun { top: 12%; left: 75%; font-size: 4.8rem; }
-    .toy-cloud1 { top: 10%; left: 15%; font-size: 4rem; opacity: 0.95; }
-    .toy-cloud2 { top: 22%; left: 45%; font-size: 3.8rem; opacity: 0.95; }
-    .toy-tree { top: 24%; left: 8%; font-size: 8rem; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6)); }
+    /* Vector SVG Sizes and Positions */
+    .toy-sun { top: 8%; right: 12%; width: 110px; height: 110px; }
+    .toy-cloud1 { top: 12%; left: 15%; width: 140px; height: 75px; }
+    .toy-cloud2 { top: 22%; left: 45%; width: 120px; height: 65px; }
     
-    /* Apples hanging from tree canopy */
-    .toy-apple1 { top: 38%; left: 16%; font-size: 2.2rem; }
-    .toy-apple2 { top: 48%; left: 24%; font-size: 2.2rem; }
-    .toy-bird { top: 46%; left: 12%; font-size: 2.4rem; z-index: 4; }
+    /* Big tree structure */
+    .toy-tree { top: 20%; left: 5%; width: 280px; height: 350px; }
+    .toy-bird { top: 40%; left: 16%; width: 50px; height: 50px; z-index: 4; }
+    .toy-apple1 { top: 32%; left: 11%; width: 40px; height: 40px; z-index: 4; }
+    .toy-apple2 { top: 38%; left: 22%; width: 40px; height: 40px; z-index: 4; }
 
-    /* Ground elements */
-    .toy-pond { bottom: 8%; right: 10%; font-size: 6rem; opacity: 0.85; }
-    .toy-frog { bottom: 12%; right: 18%; font-size: 2.6rem; z-index: 4; }
-    .toy-mushroom1 { bottom: 12%; left: 45%; font-size: 2.8rem; }
-    .toy-mushroom2 { bottom: 8%; left: 52%; font-size: 2.2rem; }
+    /* Pond and Frog */
+    .toy-pond { bottom: 5%; right: 8%; width: 220px; height: 90px; }
+    .toy-frog { bottom: 10%; right: 14%; width: 55px; height: 55px; z-index: 4; }
+
+    /* Floor elements */
+    .toy-mushroom1 { bottom: 10%; left: 42%; width: 45px; height: 50px; }
+    .toy-mushroom2 { bottom: 7%; left: 48%; width: 35px; height: 40px; }
     
-    /* Flowers */
-    .toy-flower-red { bottom: 10%; left: 32%; font-size: 2.5rem; }
-    .toy-flower-yellow { bottom: 12%; left: 65%; font-size: 2.5rem; }
-    .toy-flower-blue { bottom: 7%; left: 74%; font-size: 2.5rem; }
-    .toy-snail { bottom: 6%; left: 84%; font-size: 2.4rem; }
+    .toy-flower-red { bottom: 8%; left: 34%; width: 45px; height: 75px; }
+    .toy-flower-yellow { bottom: 10%; left: 58%; width: 45px; height: 75px; }
+    .toy-flower-blue { bottom: 6%; left: 66%; width: 45px; height: 75px; }
+    .toy-snail { bottom: 6%; left: 76%; width: 60px; height: 45px; }
 
-    /* Glowing stars background */
+    /* Star Background Decoration */
     .glowing-bg-star {
       position: absolute;
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.15);
       font-size: 0.8rem;
       pointer-events: none;
       animation: flashStar 3s infinite ease-in-out;
     }
 
     @keyframes flashStar {
-      0%, 100% { opacity: 0.2; transform: scale(0.8); }
-      50% { opacity: 0.8; transform: scale(1.2); }
+      0%, 100% { opacity: 0.15; transform: scale(0.8); }
+      50% { opacity: 0.7; transform: scale(1.25); }
     }
 
-    /* Floating Bubble Note indicator */
-    .note-bubble {
-      position: absolute;
-      background: #ffffff;
-      color: #020617;
-      font-weight: 800;
-      font-size: 1.5rem;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
-      pointer-events: none;
-      animation: floatUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 10;
-      border: 3px solid;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-        transform: translate(-50%, -70%) scale(1.25);
-      }
-      100% {
-        transform: translate(-50%, -140%) scale(0.9);
-        opacity: 0;
-      }
-    }
-
-    /* Loading alert */
     .loading-notice {
       position: absolute;
       top: 50%;
@@ -364,7 +308,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .stimulation-container {
         padding: 0.5rem;
@@ -383,13 +326,14 @@
         width: 32px;
         height: 32px;
       }
-      /* Reduce size of garden elements on mobile */
-      .toy-element { font-size: 2.2rem; }
-      .toy-sun { font-size: 3.2rem; }
-      .toy-cloud1 { font-size: 2.5rem; }
-      .toy-cloud2 { font-size: 2.5rem; }
-      .toy-tree { font-size: 5.5rem; }
-      .toy-pond { font-size: 4rem; }
+      /* Scale down garden items on mobile */
+      .toy-sun { width: 80px; height: 80px; }
+      .toy-cloud1 { width: 90px; height: 50px; }
+      .toy-cloud2 { width: 80px; height: 45px; }
+      .toy-tree { width: 170px; height: 220px; }
+      .toy-pond { width: 140px; height: 60px; }
+      .toy-bird { width: 35px; height: 35px; }
+      .toy-frog { width: 35px; height: 35px; }
     }
   </style>
 </head>
@@ -451,9 +395,9 @@
     <div class="sandbox-area" id="play-sandbox">
       <canvas id="effects-canvas"></canvas>
 
-      <!-- Loading notice for audio buffers -->
+      <!-- Loading notice -->
       <div class="loading-notice" id="loading-notice">
-        <p>Cargando sonidos reales...</p>
+        <p>Cargando xilófono real...</p>
         <div class="spinner"></div>
       </div>
 
@@ -462,93 +406,180 @@
         <!-- Bars are dynamically injected based on selected scale -->
       </div>
 
-      <!-- Mode 2: Magical Sensory Garden (Interactive Toy Landscape) -->
+      <!-- Mode 2: Professional SVG Magical Sensory Garden -->
       <div class="garden-view" id="forest-wrapper">
-        <!-- Starry background decoration -->
-        <span class="glowing-bg-star" style="top: 8%; left: 5%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 18%; left: 35%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 5%; left: 52%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 15%; left: 68%;">⭐</span>
-        <span class="glowing-bg-star" style="top: 25%; left: 90%;">⭐</span>
+        <!-- Stars decoration -->
+        <span class="glowing-bg-star" style="top: 8%; left: 8%;">⭐</span>
+        <span class="glowing-bg-star" style="top: 16%; left: 32%;">⭐</span>
+        <span class="glowing-bg-star" style="top: 6%; left: 54%;">⭐</span>
+        <span class="glowing-bg-star" style="top: 18%; left: 70%;">⭐</span>
+        <span class="glowing-bg-star" style="top: 24%; left: 88%;">⭐</span>
 
-        <!-- Sun -->
+        <!-- Sun SVG -->
         <div class="toy-element toy-sun" onmousedown="playGardenElement('sun', event)" ontouchstart="playGardenElement('sun', event)">
-          ☀️
-          <span class="toy-label">Sol</span>
+          <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="24" fill="#fbbf24" filter="drop-shadow(0 0 12px #f59e0b)" />
+            <path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L29 29 M71 71 L80 80 M20 80 L29 71 M71 29 L80 20" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
+          </svg>
         </div>
 
-        <!-- Clouds -->
+        <!-- Clouds SVGs -->
         <div class="toy-element toy-cloud1" onmousedown="playGardenElement('cloud1', event)" ontouchstart="playGardenElement('cloud1', event)">
-          ☁️
-          <span class="toy-label">Nube</span>
+          <svg viewBox="0 0 100 60" width="100%" height="100%">
+            <path d="M10 45 A 20 20 0 0 1 35 25 A 25 25 0 0 1 75 25 A 18 18 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.9" />
+          </svg>
         </div>
         <div class="toy-element toy-cloud2" onmousedown="playGardenElement('cloud2', event)" ontouchstart="playGardenElement('cloud2', event)">
-          ☁️
-          <span class="toy-label">Nube</span>
+          <svg viewBox="0 0 100 60" width="100%" height="100%">
+            <path d="M10 45 A 16 16 0 0 1 30 28 A 20 20 0 0 1 70 28 A 15 15 0 0 1 90 45 Z" fill="#e2e8f0" opacity="0.8" />
+          </svg>
         </div>
 
-        <!-- Big Tree -->
+        <!-- Big Tree SVG -->
         <div class="toy-element toy-tree" onmousedown="playGardenElement('tree', event)" ontouchstart="playGardenElement('tree', event)">
-          🌳
-          <span class="toy-label">Árbol</span>
+          <svg viewBox="0 0 200 250" width="100%" height="100%">
+            <!-- Trunk -->
+            <path d="M85 250 L85 140 C85 100 60 80 50 70 L60 70 C75 85 95 100 100 130 C105 100 125 85 140 70 L150 70 C140 80 115 100 115 140 L115 250 Z" fill="#78350f" />
+            <!-- Canopy -->
+            <circle cx="65" cy="90" r="50" fill="#047857" opacity="0.95" />
+            <circle cx="135" cy="90" r="50" fill="#065f46" opacity="0.95" />
+            <circle cx="100" cy="55" r="55" fill="#059669" />
+          </svg>
         </div>
 
-        <!-- Bird in the Tree -->
+        <!-- Bird in the Tree SVG -->
         <div class="toy-element toy-bird" onmousedown="playGardenElement('bird', event)" ontouchstart="playGardenElement('bird', event)">
-          🐦
-          <span class="toy-label">Pajarito</span>
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <!-- Bird Body -->
+            <circle cx="30" cy="30" r="20" fill="#3b82f6" />
+            <circle cx="42" cy="22" r="8" fill="#60a5fa" />
+            <!-- Beak -->
+            <polygon points="48,20 56,24 48,28" fill="#f59e0b" />
+            <!-- Eye -->
+            <circle cx="42" cy="20" r="2" fill="#000" />
+            <!-- Tail Wing -->
+            <path d="M12 28 Q 6 34 12 40 Z" fill="#1d4ed8" />
+          </svg>
         </div>
 
-        <!-- Apples in the Tree -->
+        <!-- Apples SVGs -->
         <div class="toy-element toy-apple1" onmousedown="playGardenElement('apple1', event)" ontouchstart="playGardenElement('apple1', event)">
-          🍎
-          <span class="toy-label">Manzana</span>
+          <svg viewBox="0 0 40 40" width="100%" height="100%">
+            <circle cx="20" cy="22" r="15" fill="#ef4444" />
+            <path d="M20 7 Q 23 2 20 0 Q 17 2 20 7" fill="#15803d" />
+            <rect x="19" y="3" width="2" height="5" fill="#78350f" />
+          </svg>
         </div>
         <div class="toy-element toy-apple2" onmousedown="playGardenElement('apple2', event)" ontouchstart="playGardenElement('apple2', event)">
-          🍎
-          <span class="toy-label">Manzana</span>
+          <svg viewBox="0 0 40 40" width="100%" height="100%">
+            <circle cx="20" cy="22" r="15" fill="#dc2626" />
+            <path d="M20 7 Q 23 2 20 0 Q 17 2 20 7" fill="#15803d" />
+            <rect x="19" y="3" width="2" height="5" fill="#78350f" />
+          </svg>
         </div>
 
-        <!-- Pond -->
+        <!-- Pond SVG -->
         <div class="toy-element toy-pond" onmousedown="playGardenElement('pond', event)" ontouchstart="playGardenElement('pond', event)">
-          🌊
-          <span class="toy-label">Estanque</span>
+          <svg viewBox="0 0 200 80" width="100%" height="100%">
+            <ellipse cx="100" cy="40" rx="90" ry="35" fill="#0369a1" opacity="0.8" />
+            <ellipse cx="90" cy="38" rx="80" ry="28" fill="#0284c7" />
+          </svg>
         </div>
 
-        <!-- Frog by the pond -->
+        <!-- Frog by the pond SVG -->
         <div class="toy-element toy-frog" onmousedown="playGardenElement('frog', event)" ontouchstart="playGardenElement('frog', event)">
-          🐸
-          <span class="toy-label">Ranita</span>
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <!-- Frog head/body -->
+            <ellipse cx="30" cy="35" rx="22" ry="18" fill="#22c55e" />
+            <!-- Big Eyes -->
+            <circle cx="18" cy="18" r="8" fill="#22c55e" />
+            <circle cx="18" cy="18" r="5" fill="#fff" />
+            <circle cx="18" cy="18" r="2.5" fill="#000" />
+            <circle cx="42" cy="18" r="8" fill="#22c55e" />
+            <circle cx="42" cy="18" r="5" fill="#fff" />
+            <circle cx="42" cy="18" r="2.5" fill="#000" />
+            <!-- Smile -->
+            <path d="M20 40 Q 30 48 40 40" stroke="#15803d" stroke-width="3" fill="none" stroke-linecap="round" />
+          </svg>
         </div>
 
-        <!-- Mushrooms -->
+        <!-- Mushrooms SVGs -->
         <div class="toy-element toy-mushroom1" onmousedown="playGardenElement('mushroom1', event)" ontouchstart="playGardenElement('mushroom1', event)">
-          🍄
-          <span class="toy-label">Hongo</span>
+          <svg viewBox="0 0 50 60" width="100%" height="100%">
+            <!-- Stem -->
+            <path d="M18 60 C18 40 32 40 32 60 Z" fill="#e2e8f0" />
+            <!-- Cap -->
+            <path d="M5 36 C5 15 45 15 45 36 Z" fill="#ef4444" />
+            <!-- Spots -->
+            <circle cx="15" cy="24" r="3" fill="#fff" />
+            <circle cx="25" cy="20" r="4" fill="#fff" />
+            <circle cx="35" cy="26" r="3" fill="#fff" />
+          </svg>
         </div>
         <div class="toy-element toy-mushroom2" onmousedown="playGardenElement('mushroom2', event)" ontouchstart="playGardenElement('mushroom2', event)">
-          🍄
-          <span class="toy-label">Hongo</span>
+          <svg viewBox="0 0 50 60" width="100%" height="100%">
+            <path d="M18 60 C18 40 32 40 32 60 Z" fill="#cbd5e1" />
+            <path d="M5 36 C5 15 45 15 45 36 Z" fill="#f97316" />
+            <circle cx="20" cy="22" r="3" fill="#fff" />
+            <circle cx="30" cy="25" r="3" fill="#fff" />
+          </svg>
         </div>
 
-        <!-- Ground Flowers -->
+        <!-- Flowers SVGs (Styled Custom Vectors) -->
         <div class="toy-element toy-flower-red" onmousedown="playGardenElement('flower-red', event)" ontouchstart="playGardenElement('flower-red', event)">
-          🌹
-          <span class="toy-label">Flor roja</span>
-        </div>
-        <div class="toy-element toy-flower-yellow" onmousedown="playGardenElement('flower-yellow', event)" ontouchstart="playGardenElement('flower-yellow', event)">
-          🌻
-          <span class="toy-label">Girasol</span>
-        </div>
-        <div class="toy-element toy-flower-blue" onmousedown="playGardenElement('flower-blue', event)" ontouchstart="playGardenElement('flower-blue', event)">
-          🌷
-          <span class="toy-label">Flor azul</span>
+          <svg viewBox="0 0 50 80" width="100%" height="100%">
+            <rect x="23" y="35" width="4" height="45" fill="#166534" />
+            <!-- Leaves -->
+            <path d="M25 50 Q 38 45 30 40 Z" fill="#15803d" />
+            <path d="M25 60 Q 12 55 20 50 Z" fill="#15803d" />
+            <!-- Petals -->
+            <circle cx="25" cy="25" r="10" fill="#ef4444" />
+            <circle cx="15" cy="25" r="8" fill="#dc2626" />
+            <circle cx="35" cy="25" r="8" fill="#dc2626" />
+            <circle cx="25" cy="15" r="8" fill="#dc2626" />
+            <circle cx="25" cy="35" r="8" fill="#dc2626" />
+            <!-- Center -->
+            <circle cx="25" cy="25" r="5" fill="#f59e0b" />
+          </svg>
         </div>
 
-        <!-- Snail -->
+        <div class="toy-element toy-flower-yellow" onmousedown="playGardenElement('flower-yellow', event)" ontouchstart="playGardenElement('flower-yellow', event)">
+          <svg viewBox="0 0 50 80" width="100%" height="100%">
+            <rect x="23" y="35" width="4" height="45" fill="#166534" />
+            <path d="M25 50 Q 38 45 30 40 Z" fill="#15803d" />
+            <circle cx="25" cy="25" r="12" fill="#fbbf24" />
+            <circle cx="15" cy="20" r="7" fill="#f59e0b" />
+            <circle cx="35" cy="20" r="7" fill="#f59e0b" />
+            <circle cx="15" cy="30" r="7" fill="#f59e0b" />
+            <circle cx="35" cy="30" r="7" fill="#f59e0b" />
+            <circle cx="25" cy="25" r="6" fill="#78350f" />
+          </svg>
+        </div>
+
+        <div class="toy-element toy-flower-blue" onmousedown="playGardenElement('flower-blue', event)" ontouchstart="playGardenElement('flower-blue', event)">
+          <svg viewBox="0 0 50 80" width="100%" height="100%">
+            <rect x="23" y="35" width="4" height="45" fill="#166534" />
+            <path d="M25 60 Q 12 55 20 50 Z" fill="#15803d" />
+            <!-- Tulip Petal -->
+            <path d="M12 35 C12 15 38 15 38 35 Z" fill="#0284c7" />
+            <path d="M18 35 C18 20 32 20 32 35 Z" fill="#38bdf8" />
+          </svg>
+        </div>
+
+        <!-- Snail SVG -->
         <div class="toy-element toy-snail" onmousedown="playGardenElement('snail', event)" ontouchstart="playGardenElement('snail', event)">
-          🐌
-          <span class="toy-label">Caracol</span>
+          <svg viewBox="0 0 80 60" width="100%" height="100%">
+            <!-- Body -->
+            <path d="M10 50 Q 40 45 70 50 Q 75 42 70 35 L 60 35 C 50 35 40 40 30 42 Z" fill="#d97706" />
+            <!-- Shell spiral -->
+            <circle cx="38" cy="32" r="20" fill="#c084fc" stroke="#581c87" stroke-width="2" />
+            <circle cx="38" cy="32" r="14" fill="#e9d5ff" stroke="#581c87" stroke-width="1.5" />
+            <!-- Feelers -->
+            <line x1="68" y1="36" x2="72" y2="24" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+            <line x1="64" y1="36" x2="66" y2="22" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+            <circle cx="72" cy="23" r="2" fill="#78350f" />
+            <circle cx="66" cy="21" r="2" fill="#78350f" />
+          </svg>
         </div>
       </div>
     </div>
@@ -575,9 +606,8 @@
     let soundsLoaded = false;
     let isLoadingSounds = false;
 
-    // Frequencies, base Note index mappings, and color variables
-    // noteIndex maps to 1..7 (note1.wav to note7.wav)
-    // pitchRate maps playback rate relative to that base file
+    // Frequencies and base Note index mappings
+    // NOTE COLORS (DO = RED, RE = Orange, MI = Yellow, FA = Green, SOL = Cyan, LA = Blue, SI = Purple)
     const scales = {
       pentatonic: [
         { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' }, // Red
@@ -585,7 +615,7 @@
         { note: 'MI', freq: 329.63, noteIndex: 3, pitchRate: 1.00, color: '#eab308' }, // Yellow
         { note: 'SOL', freq: 392.00, noteIndex: 5, pitchRate: 1.00, color: '#06b6d4' }, // Cyan
         { note: 'LA', freq: 440.00, noteIndex: 6, pitchRate: 1.00, color: '#1d4ed8' }, // Blue
-        { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }  // Red (Agudo: C5 = C4 * 2)
+        { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }  // Red (Agudo: C5)
       ],
       major: [
         { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' },
@@ -600,32 +630,32 @@
       minor: [
         { note: 'DO', freq: 261.63, noteIndex: 1, pitchRate: 1.00, color: '#ef4444' },
         { note: 'RE', freq: 293.66, noteIndex: 2, pitchRate: 1.00, color: '#f97316' },
-        { note: 'MIb', freq: 311.13, noteIndex: 3, pitchRate: 0.9439, color: '#e1a506' }, // Pitch shift MI down a half step
+        { note: 'MIb', freq: 311.13, noteIndex: 3, pitchRate: 0.9439, color: '#e1a506' },
         { note: 'FA', freq: 349.23, noteIndex: 4, pitchRate: 1.00, color: '#22c55e' },
         { note: 'SOL', freq: 392.00, noteIndex: 5, pitchRate: 1.00, color: '#06b6d4' },
-        { note: 'LAb', freq: 415.30, noteIndex: 6, pitchRate: 0.9439, color: '#153bb1' }, // Pitch shift LA down
-        { note: 'SIb', freq: 466.16, noteIndex: 7, pitchRate: 0.9439, color: '#8c3fe0' }, // Pitch shift SI down
+        { note: 'LAb', freq: 415.30, noteIndex: 6, pitchRate: 0.9439, color: '#153bb1' },
+        { note: 'SIb', freq: 466.16, noteIndex: 7, pitchRate: 0.9439, color: '#8c3fe0' },
         { note: 'DO', freq: 523.25, noteIndex: 1, pitchRate: 2.00, color: '#ef4444' }
       ]
     };
 
-    // Garden Elements specific tones
+    // Garden Elements specific tones (frequencies / indices)
     const gardenToys = {
-      sun: { note: 'SOL', noteIndex: 5, pitchRate: 2.0, color: '#ffd64b', emoji: '☀️' },         // C5 equivalent (or high G5)
-      cloud1: { note: 'MI', noteIndex: 3, pitchRate: 2.0, color: '#38bdf8', emoji: '☁️' },
-      cloud2: { note: 'LA', noteIndex: 6, pitchRate: 1.5, color: '#4bc5ff', emoji: '☁️' },
-      tree: { note: 'DO', noteIndex: 1, pitchRate: 1.0, color: '#22c55e', emoji: '🌳' },
-      bird: { note: 'MI', noteIndex: 3, pitchRate: 2.0, color: '#4ade80', emoji: '🐦' },
-      apple1: { note: 'SOL', noteIndex: 5, pitchRate: 1.0, color: '#ef4444', emoji: '🍎' },
-      apple2: { note: 'LA', noteIndex: 6, pitchRate: 1.0, color: '#ff4b4b', emoji: '🍎' },
-      pond: { note: 'DO', noteIndex: 1, pitchRate: 0.5, color: '#00e5ff', emoji: '🌊' },        // Low C3
-      frog: { note: 'RE', noteIndex: 2, pitchRate: 0.5, color: '#4bff79', emoji: '🐸' },
-      mushroom1: { note: 'FA', noteIndex: 4, pitchRate: 0.5, color: '#eab308', emoji: '🍄' },
-      mushroom2: { note: 'SOL', noteIndex: 5, pitchRate: 0.5, color: '#ff9c4b', emoji: '🍄' },
-      'flower-red': { note: 'DO', noteIndex: 1, pitchRate: 1.0, color: '#ef4444', emoji: '🌹' },
-      'flower-yellow': { note: 'MI', noteIndex: 3, pitchRate: 1.0, color: '#eab308', emoji: '🌻' },
-      'flower-blue': { note: 'FA', noteIndex: 4, pitchRate: 1.0, color: '#06b6d4', emoji: '🌷' },
-      snail: { note: 'SI', noteIndex: 7, pitchRate: 1.0, color: '#a855f7', emoji: '🐌' }
+      sun: { noteIndex: 5, pitchRate: 2.0, color: '#ffd64b', emoji: '☀️' },         // C5 equivalent
+      cloud1: { noteIndex: 3, pitchRate: 2.0, color: '#38bdf8', emoji: '☁️' },
+      cloud2: { noteIndex: 6, pitchRate: 1.5, color: '#4bc5ff', emoji: '☁️' },
+      tree: { noteIndex: 1, pitchRate: 1.0, color: '#22c55e', emoji: '🌳' },
+      bird: { noteIndex: 3, pitchRate: 2.0, color: '#4ade80', emoji: '🐦' },
+      apple1: { noteIndex: 5, pitchRate: 1.0, color: '#ef4444', emoji: '🍎' },
+      apple2: { noteIndex: 6, pitchRate: 1.0, color: '#ff4b4b', emoji: '🍎' },
+      pond: { noteIndex: 1, pitchRate: 0.5, color: '#00e5ff', emoji: '🌊' },        // Low C3
+      frog: { noteIndex: 2, pitchRate: 0.5, color: '#4bff79', emoji: '🐸' },
+      mushroom1: { noteIndex: 4, pitchRate: 0.5, color: '#eab308', emoji: '🍄' },
+      mushroom2: { noteIndex: 5, pitchRate: 0.5, color: '#ff9c4b', emoji: '🍄' },
+      'flower-red': { noteIndex: 1, pitchRate: 1.0, color: '#ef4444', emoji: '🌹' },
+      'flower-yellow': { noteIndex: 3, pitchRate: 1.0, color: '#eab308', emoji: '🌻' },
+      'flower-blue': { noteIndex: 4, pitchRate: 1.0, color: '#06b6d4', emoji: '🌷' },
+      snail: { noteIndex: 7, pitchRate: 1.0, color: '#a855f7', emoji: '🐌' }
     };
 
     function initAudio() {
@@ -660,10 +690,9 @@
     }
 
     // Play Note dispatcher
-    function playSound(noteIndex, rate, fallbackFreq) {
+    function playNote(noteIndex, rate, fallbackFreq) {
       initAudio();
 
-      // If sounds are loaded, play the real xylophone audio sample!
       if (soundsLoaded && audioBuffers[noteIndex] && selectedTimbre === 'real-xylo') {
         const source = audioCtx.createBufferSource();
         source.buffer = audioBuffers[noteIndex];
@@ -676,7 +705,7 @@
       }
     }
 
-    // High quality chime synthesis
+    // Chime Synthesis
     function playSynthChime(freq) {
       const osc1 = audioCtx.createOscillator();
       const osc2 = audioCtx.createOscillator();
@@ -720,12 +749,13 @@
         barElem.className = 'xylo-bar';
         barElem.style.backgroundColor = bar.color;
         
-        // Slightly decrease height for higher pitches (like a real instrument)
         const heightPercent = 100 - (index * 4);
         barElem.style.height = `${heightPercent}%`;
         
         const label = document.createElement('span');
         label.className = 'xylo-label';
+        // Note: keeping DO, RE, MI visible only on the physical Xylophone bars for navigation, 
+        // but completely hidden in the free sensory garden view.
         label.innerText = bar.note;
         
         barElem.appendChild(label);
@@ -736,14 +766,12 @@
           barElem.classList.add('active-touch');
           setTimeout(() => barElem.classList.remove('active-touch'), 100);
           
-          playSound(bar.noteIndex, bar.pitchRate, bar.freq);
+          playNote(bar.noteIndex, bar.pitchRate, bar.freq);
           
-          // Capture coordinates for particles
           const rect = barElem.getBoundingClientRect();
           const x = rect.left + rect.width / 2;
           const y = rect.top + rect.height / 2;
           spawnParticles(x, y, bar.color);
-          spawnNoteBubble(x, y, bar.note, bar.color);
         };
 
         barElem.addEventListener('mousedown', trigger);
@@ -790,7 +818,6 @@
         document.getElementById('instrument-control-group').style.opacity = '0.4';
         document.getElementById('instrument-control-group').style.pointerEvents = 'none';
         
-        // Force loading real sounds if they switch to garden
         initAudio();
       }
     }
@@ -802,9 +829,9 @@
       if (!toy) return;
 
       // Xylophone is forced in garden mode
-      playSound(toy.noteIndex, toy.pitchRate, 261.63 * toy.pitchRate);
+      playNote(toy.noteIndex, toy.pitchRate, 261.63 * toy.pitchRate);
 
-      // Extract touch/mouse coords
+      // Extract coordinates
       let clientX, clientY;
       if (event.touches && event.touches[0]) {
         clientX = event.touches[0].clientX;
@@ -816,12 +843,11 @@
 
       // Visual tap bounce on element
       const el = event.currentTarget;
-      el.style.transform = 'scale(1.4) rotate(15deg)';
-      setTimeout(() => el.style.transform = 'scale(1) rotate(0deg)', 300);
+      el.style.transform = 'scale(1.2) rotate(8deg)';
+      setTimeout(() => el.style.transform = 'scale(1) rotate(0deg)', 250);
 
-      // Spawn elements based on tapped object
+      // Spawn particles
       spawnParticles(clientX, clientY, toy.color);
-      spawnNoteBubble(clientX, clientY, toy.note, toy.color);
       
       // Spawn floating emojis
       const pool = [toy.emoji, '✨', '🎈', '🌸', '🦋'];
@@ -881,20 +907,6 @@
       for (let i = 0; i < 15; i++) {
         particles.push(new Particle(x, y, color));
       }
-    }
-
-    function spawnNoteBubble(x, y, noteName, noteColor) {
-      const bubble = document.createElement('div');
-      bubble.className = 'note-bubble';
-      bubble.style.borderColor = noteColor;
-      bubble.innerText = noteName;
-      
-      const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
-      bubble.style.left = `${x - sandboxRect.left}px`;
-      bubble.style.top = `${y - sandboxRect.top}px`;
-
-      document.getElementById('play-sandbox').appendChild(bubble);
-      setTimeout(() => bubble.remove(), 800);
     }
 
     function spawnGardenEmoji(x, y, emoji) {
