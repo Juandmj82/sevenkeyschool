@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
-      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      background: radial-gradient(circle at center, #070913 0%, #020307 100%);
       height: 100vh;
       max-height: 100vh;
       overflow: hidden;
@@ -27,7 +27,7 @@
 
     header {
       padding: 0.8rem 1.5rem;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(7, 9, 19, 0.6);
       backdrop-filter: blur(8px);
       z-index: 10;
     }
@@ -137,7 +137,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      padding: 1rem;
+      padding: 1.5rem;
       gap: 0.75rem;
       z-index: 1;
       position: relative;
@@ -209,7 +209,7 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.15);
     }
 
-    /* Forest Heights Mode */
+    /* Forest Heights Mode (Sensory Garden) */
     .forest-view {
       position: absolute;
       top: 0;
@@ -229,77 +229,92 @@
       justify-content: center;
       position: relative;
       cursor: pointer;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
-      transition: background 0.2s ease;
+      overflow: hidden;
       touch-action: none;
+      transition: filter 0.2s ease;
     }
 
-    .forest-zone:last-child {
-      border-bottom: none;
+    .forest-zone:hover {
+      filter: brightness(1.08);
     }
 
     /* Visual styles for zones */
     .zone-sky {
-      background: linear-gradient(to bottom, rgba(56, 189, 248, 0.06), rgba(3, 105, 161, 0.02));
+      background: linear-gradient(to bottom, #1e293b 0%, #0f172a 100%);
+      box-shadow: inset 0 -20px 30px rgba(0, 0, 0, 0.2);
     }
     .zone-forest {
-      background: linear-gradient(to bottom, rgba(74, 222, 128, 0.05), rgba(21, 128, 61, 0.01));
+      background: linear-gradient(to bottom, #064e3b 0%, #022c22 100%);
+      box-shadow: inset 0 20px 30px rgba(0, 0, 0, 0.15), inset 0 -20px 30px rgba(0, 0, 0, 0.15);
     }
     .zone-ground {
-      background: linear-gradient(to bottom, rgba(251, 146, 60, 0.05), rgba(124, 45, 18, 0.02));
+      background: linear-gradient(to bottom, #451a03 0%, #1c1917 100%);
+      box-shadow: inset 0 20px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .forest-zone:hover {
-      background-color: rgba(255, 255, 255, 0.015);
+    /* Floating Garden Illustrations (SVGs) */
+    .garden-bg-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
     }
 
     .zone-card {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      gap: 1.2rem;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 0.8rem 1.6rem;
-      border-radius: 20px;
+      border-radius: 24px;
       pointer-events: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      z-index: 3;
+      backdrop-filter: blur(4px);
     }
 
     .zone-icon {
-      font-size: 2.2rem;
+      font-size: 2.5rem;
     }
 
-    .zone-sky .zone-icon { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-    .zone-forest .zone-icon { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4); }
-    .zone-ground .zone-icon { color: #fb923c; text-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
+    .zone-sky .zone-icon { color: #38bdf8; text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+    .zone-forest .zone-icon { color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
+    .zone-ground .zone-icon { color: #fb923c; text-shadow: 0 0 15px rgba(251, 146, 60, 0.5); }
 
     .zone-info h3 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       margin-bottom: 0.15rem;
+      font-weight: 800;
     }
 
     .zone-info p {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
     /* Floating Bubble Note indicator */
     .note-bubble {
       position: absolute;
-      background: var(--color-gold);
+      background: #ffffff;
       color: #020617;
       font-weight: 800;
-      font-size: 1.4rem;
-      width: 50px;
-      height: 50px;
+      font-size: 1.5rem;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 15px var(--color-gold-glow);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
       pointer-events: none;
       animation: floatUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 4;
+      border: 3px solid;
     }
 
     @keyframes floatUp {
@@ -309,12 +324,23 @@
       }
       20% {
         opacity: 1;
-        transform: translate(-50%, -70%) scale(1.1);
+        transform: translate(-50%, -70%) scale(1.25);
       }
       100% {
-        transform: translate(-50%, -130%) scale(0.9);
+        transform: translate(-50%, -140%) scale(0.9);
         opacity: 0;
       }
+    }
+
+    /* Animated Garden Particles (glowing objects) */
+    .glowing-foliage {
+      position: absolute;
+      font-size: 2.8rem;
+      pointer-events: none;
+      opacity: 0.75;
+      z-index: 1;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+      transition: transform 0.4s ease;
     }
 
     /* Responsive adjustments */
@@ -366,34 +392,34 @@
             <i class="fas fa-cubes"></i> Xilófono
           </button>
           <button class="btn-toggle" id="btn-mode-forest" onclick="setMode('forest')">
-            <i class="fas fa-cloud-sun"></i> Jardín de Sonidos
+            <i class="fas fa-leaf"></i> Jardín Sensorial
           </button>
         </div>
       </div>
 
       <div class="control-group">
-        <span class="control-label">Escala (Metodología Gordon):</span>
+        <span class="control-label">Escala / Sonido:</span>
         <div class="btn-toggle-group">
           <button class="btn-toggle active" id="btn-scale-pentatonic" onclick="setScale('pentatonic')">
-            Pentatónica
+            🌈 Mágico
           </button>
           <button class="btn-toggle" id="btn-scale-major" onclick="setScale('major')">
-            Mayor
+            ☀️ Alegre
           </button>
           <button class="btn-toggle" id="btn-scale-minor" onclick="setScale('minor')">
-            Menor
+            🌙 Misterioso
           </button>
         </div>
       </div>
 
       <div class="control-group">
-        <span class="control-label">Timbre:</span>
+        <span class="control-label">Instrumento:</span>
         <div class="btn-toggle-group">
-          <button class="btn-toggle active" id="btn-timbre-bell" onclick="setTimbre('bell')">
-            ✨ Campanas
+          <button class="btn-toggle active" id="btn-timbre-wood" onclick="setTimbre('wood')">
+            🪵 Marimba
           </button>
-          <button class="btn-toggle" id="btn-timbre-wood" onclick="setTimbre('wood')">
-            🪵 Xilófono
+          <button class="btn-toggle" id="btn-timbre-bell" onclick="setTimbre('bell')">
+            ✨ Campanas
           </button>
         </div>
       </div>
@@ -408,32 +434,57 @@
         <!-- Bars are dynamically injected based on selected scale -->
       </div>
 
-      <!-- Mode 2: Forest Heights -->
+      <!-- Mode 2: Forest Heights (The Sensorial Garden) -->
       <div class="forest-view" id="forest-wrapper">
+        <!-- Sky Zone -->
         <div class="forest-zone zone-sky" onmousedown="playZone('sky', event)" ontouchstart="playZone('sky', event)">
+          <div class="garden-bg-elements">
+            <!-- Floating Sky stars/moons -->
+            <span class="glowing-foliage" style="top: 15%; left: 10%;">☁️</span>
+            <span class="glowing-foliage" style="top: 25%; left: 45%;">🌙</span>
+            <span class="glowing-foliage" style="top: 10%; left: 80%;">☁️</span>
+          </div>
           <div class="zone-card">
             <i class="fas fa-star zone-icon"></i>
             <div class="zone-info">
               <h3>El Cielo Agudo</h3>
-              <p>Sonidos cristalinos y de alta frecuencia</p>
+              <p>Sonidos altos de estrellas y nubes</p>
             </div>
           </div>
         </div>
+
+        <!-- Forest/Tree Zone -->
         <div class="forest-zone zone-forest" onmousedown="playZone('forest', event)" ontouchstart="playZone('forest', event)">
+          <div class="garden-bg-elements">
+            <!-- Forest foliage & flowers -->
+            <span class="glowing-foliage" style="top: 20%; left: 15%;">🌳</span>
+            <span class="glowing-foliage" style="top: 50%; left: 48%;">🌳</span>
+            <span class="glowing-foliage" style="top: 15%; left: 75%;">🌳</span>
+            <span class="glowing-foliage" style="top: 40%; left: 85%;">🍎</span>
+          </div>
           <div class="zone-card">
             <i class="fas fa-tree zone-icon"></i>
             <div class="zone-info">
               <h3>El Bosque Medio</h3>
-              <p>Frecuencias medias y notas amigables</p>
+              <p>Sonidos de árboles, hojas y pajaritos</p>
             </div>
           </div>
         </div>
+
+        <!-- Ground/Earth Zone -->
         <div class="forest-zone zone-ground" onmousedown="playZone('ground', event)" ontouchstart="playZone('ground', event)">
+          <div class="garden-bg-elements">
+            <!-- Earth mushrooms & flowers -->
+            <span class="glowing-foliage" style="top: 30%; left: 8%;">🍄</span>
+            <span class="glowing-foliage" style="top: 55%; left: 22%;">🌻</span>
+            <span class="glowing-foliage" style="top: 20%; left: 78%;">🍄</span>
+            <span class="glowing-foliage" style="top: 60%; left: 65%;">🌷</span>
+          </div>
           <div class="zone-card">
             <i class="fas fa-mountain zone-icon"></i>
             <div class="zone-info">
               <h3>La Tierra Grave</h3>
-              <p>Vibraciones profundas y cálidas</p>
+              <p>Vibraciones profundas de la tierra</p>
             </div>
           </div>
         </div>
@@ -445,46 +496,47 @@
     // --- Web Audio API Engine ---
     let audioCtx = null;
     let selectedScale = 'pentatonic';
-    let selectedTimbre = 'bell';
+    let selectedTimbre = 'wood';
     let currentMode = 'xylo';
 
     // Frequencies and Names for scales
+    // NOTE COLORS (DO = RED in all games, RE = Orange, MI = Yellow, FA = Green, SOL = Cyan, LA = Blue, SI = Purple)
     const scales = {
       pentatonic: [
-        { note: 'DO', freq: 261.63, color: '#ff4b4b' }, // Red
-        { note: 'RE', freq: 293.66, color: '#ff9c4b' }, // Orange
-        { note: 'MI', freq: 329.63, color: '#ffd64b' }, // Yellow
-        { note: 'SOL', freq: 392.00, color: '#4bff79' }, // Green
-        { note: 'LA', freq: 440.00, color: '#4bc5ff' }, // Cyan
-        { note: 'DO', freq: 523.25, color: '#9c4bff' }  // Purple
+        { note: 'DO', freq: 261.63, color: '#ef4444' }, // Red
+        { note: 'RE', freq: 293.66, color: '#f97316' }, // Orange
+        { note: 'MI', freq: 329.63, color: '#eab308' }, // Yellow
+        { note: 'SOL', freq: 392.00, color: '#06b6d4' }, // Cyan
+        { note: 'LA', freq: 440.00, color: '#1d4ed8' }, // Blue
+        { note: 'DO', freq: 523.25, color: '#ef4444' }  // Red (agudo)
       ],
       major: [
-        { note: 'DO', freq: 261.63, color: '#ff4b4b' },
-        { note: 'RE', freq: 293.66, color: '#ff9c4b' },
-        { note: 'MI', freq: 329.63, color: '#ffd64b' },
-        { note: 'FA', freq: 349.23, color: '#4bff4b' },
-        { note: 'SOL', freq: 392.00, color: '#4bffc5' },
-        { note: 'LA', freq: 440.00, color: '#4bc5ff' },
-        { note: 'SI', freq: 493.88, color: '#4b55ff' },
-        { note: 'DO', freq: 523.25, color: '#9c4bff' }
+        { note: 'DO', freq: 261.63, color: '#ef4444' },
+        { note: 'RE', freq: 293.66, color: '#f97316' },
+        { note: 'MI', freq: 329.63, color: '#eab308' },
+        { note: 'FA', freq: 349.23, color: '#22c55e' },
+        { note: 'SOL', freq: 392.00, color: '#06b6d4' },
+        { note: 'LA', freq: 440.00, color: '#1d4ed8' },
+        { note: 'SI', freq: 493.88, color: '#a855f7' },
+        { note: 'DO', freq: 523.25, color: '#ef4444' }
       ],
       minor: [
-        { note: 'DO', freq: 261.63, color: '#ff4b4b' },
-        { note: 'RE', freq: 293.66, color: '#ff9c4b' },
-        { note: 'MIb', freq: 311.13, color: '#d64bff' },
-        { note: 'FA', freq: 349.23, color: '#4bff4b' },
-        { note: 'SOL', freq: 392.00, color: '#4bffc5' },
-        { note: 'LAb', freq: 415.30, color: '#4bc5ff' },
-        { note: 'SIb', freq: 466.16, color: '#4b55ff' },
-        { note: 'DO', freq: 523.25, color: '#9c4bff' }
+        { note: 'DO', freq: 261.63, color: '#ef4444' },
+        { note: 'RE', freq: 293.66, color: '#f97316' },
+        { note: 'MIb', freq: 311.13, color: '#e1a506' }, // Flat yellow
+        { note: 'FA', freq: 349.23, color: '#22c55e' },
+        { note: 'SOL', freq: 392.00, color: '#06b6d4' },
+        { note: 'LAb', freq: 415.30, color: '#153bb1' }, // Flat blue
+        { note: 'SIb', freq: 466.16, color: '#8c3fe0' }, // Flat purple
+        { note: 'DO', freq: 523.25, color: '#ef4444' }
       ]
     };
 
     // Height mode mapping
     const forestNotes = {
-      sky: { note: 'SOL', freq: 783.99 },    // High G
-      forest: { note: 'MI', freq: 329.63 }, // Mid E
-      ground: { note: 'DO', freq: 130.81 }  // Low C
+      sky: { note: 'SOL', freq: 783.99, color: '#38bdf8' },    // High G
+      forest: { note: 'MI', freq: 329.63, color: '#4ade80' }, // Mid E
+      ground: { note: 'DO', freq: 130.81, color: '#fb923c' }  // Low C
     };
 
     function initAudio() {
@@ -516,13 +568,13 @@
         const harmonicOsc = audioCtx.createOscillator();
         const harmonicGain = audioCtx.createGain();
         harmonicOsc.type = 'triangle';
-        harmonicOsc.frequency.setValueAtTime(freq * 2, now);
+        harmonicOsc.frequency.setValueAtTime(freq * 2.02, now); // slightly detuned for organic vibe
         harmonicOsc.connect(harmonicGain);
         harmonicGain.connect(audioCtx.destination);
 
         gainNode.gain.setValueAtTime(0.5, now);
         gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-        harmonicGain.gain.setValueAtTime(0.15, now);
+        harmonicGain.gain.setValueAtTime(0.12, now);
         harmonicGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
 
         osc.start(now);
@@ -530,26 +582,41 @@
         harmonicOsc.start(now);
         harmonicOsc.stop(now + 0.9);
       } else {
-        // Wooden Xylophone timbre (short decay, triangle wave, fast decay helper)
-        osc.type = 'triangle';
+        // Wooden Xylophone/Marimba timbre (authentic wooden strike)
+        osc.type = 'triangle'; // Wood mallet strike uses triangle wave
         osc.frequency.setValueAtTime(freq, now);
 
-        const transientOsc = audioCtx.createOscillator();
-        const transientGain = audioCtx.createGain();
-        transientOsc.type = 'sine';
-        transientOsc.frequency.setValueAtTime(freq * 3, now);
-        transientOsc.connect(transientGain);
-        transientGain.connect(audioCtx.destination);
+        // Octave + fifth harmonic ratio tuned in wooden bars (approx 2.98 ratio)
+        const woodHarmonicOsc = audioCtx.createOscillator();
+        const woodHarmonicGain = audioCtx.createGain();
+        woodHarmonicOsc.type = 'sine';
+        woodHarmonicOsc.frequency.setValueAtTime(freq * 2.98, now);
+        woodHarmonicOsc.connect(woodHarmonicGain);
+        woodHarmonicGain.connect(audioCtx.destination);
 
-        gainNode.gain.setValueAtTime(0.7, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-        transientGain.gain.setValueAtTime(0.3, now);
-        transientGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        // Mallet strike clack (very short high frequency burst)
+        const malletClackOsc = audioCtx.createOscillator();
+        const malletClackGain = audioCtx.createGain();
+        malletClackOsc.type = 'sine';
+        malletClackOsc.frequency.setValueAtTime(freq * 4.2, now);
+        malletClackOsc.connect(malletClackGain);
+        malletClackGain.connect(audioCtx.destination);
+
+        gainNode.gain.setValueAtTime(0.85, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.32); // fast wood decay
+        
+        woodHarmonicGain.gain.setValueAtTime(0.35, now);
+        woodHarmonicGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18); // faster ring decay
+        
+        malletClackGain.gain.setValueAtTime(0.5, now);
+        malletClackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025); // extreme quick click
 
         osc.start(now);
-        osc.stop(now + 0.5);
-        transientOsc.start(now);
-        transientOsc.stop(now + 0.1);
+        osc.stop(now + 0.4);
+        woodHarmonicOsc.start(now);
+        woodHarmonicOsc.stop(now + 0.25);
+        malletClackOsc.start(now);
+        malletClackOsc.stop(now + 0.08);
       }
     }
 
@@ -587,7 +654,7 @@
           const x = rect.left + rect.width / 2;
           const y = rect.top + rect.height / 2;
           spawnParticles(x, y, bar.color);
-          spawnNoteBubble(x, y, bar.note);
+          spawnNoteBubble(x, y, bar.note, bar.color);
         };
 
         barElem.addEventListener('mousedown', trigger);
@@ -647,12 +714,30 @@
         clientY = event.clientY;
       }
 
-      let color = '#38bdf8'; // Sky cyan
-      if (zone === 'forest') color = '#4ade80'; // Forest green
-      if (zone === 'ground') color = '#fb923c'; // Ground orange
+      // Animating the background elements on tap
+      const parent = event.currentTarget;
+      const foliage = parent.querySelectorAll('.glowing-foliage');
+      foliage.forEach(elem => {
+        elem.style.transform = `scale(1.3) rotate(${Math.random() * 40 - 20}deg)`;
+        setTimeout(() => elem.style.transform = 'scale(1) rotate(0deg)', 400);
+      });
 
-      spawnParticles(clientX, clientY, color);
-      spawnNoteBubble(clientX, clientY, data.note);
+      // Spawn visual objects in the garden depending on the zone!
+      let gardenEmoji = '✨';
+      if (zone === 'sky') {
+        const emojis = ['⭐', '✨', '☁️', '🎈'];
+        gardenEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      } else if (zone === 'forest') {
+        const emojis = ['🦋', '🌸', '🍃', '🍎', '🐤'];
+        gardenEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      } else if (zone === 'ground') {
+        const emojis = ['🍄', '🌱', '🐞', '🌷', '🐌'];
+        gardenEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      }
+
+      spawnParticles(clientX, clientY, data.color);
+      spawnNoteBubble(clientX, clientY, data.note, data.color);
+      spawnGardenEmoji(clientX, clientY, gardenEmoji);
     }
 
     // --- Particle Physics Effects Engine ---
@@ -671,7 +756,6 @@
 
     class Particle {
       constructor(x, y, color) {
-        // Convert page coordinates to local canvas coordinates
         const rect = canvas.getBoundingClientRect();
         this.x = x - rect.left;
         this.y = y - rect.top;
@@ -687,7 +771,7 @@
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        this.speedY += this.gravity; // Gravity pull downwards
+        this.speedY += this.gravity;
         this.alpha -= this.decay;
       }
 
@@ -710,9 +794,10 @@
       }
     }
 
-    function spawnNoteBubble(x, y, noteName) {
+    function spawnNoteBubble(x, y, noteName, noteColor) {
       const bubble = document.createElement('div');
       bubble.className = 'note-bubble';
+      bubble.style.borderColor = noteColor;
       bubble.innerText = noteName;
       
       const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
@@ -721,8 +806,66 @@
 
       document.getElementById('play-sandbox').appendChild(bubble);
       
-      // Auto cleanup
       setTimeout(() => bubble.remove(), 800);
+    }
+
+    function spawnGardenEmoji(x, y, emoji) {
+      const el = document.createElement('div');
+      el.style.position = 'absolute';
+      el.style.pointerEvents = 'none';
+      el.style.fontSize = `${Math.random() * 1.5 + 1.5}rem`;
+      el.style.zIndex = '3';
+      el.innerText = emoji;
+      
+      const sandboxRect = document.getElementById('play-sandbox').getBoundingClientRect();
+      el.style.left = `${x - sandboxRect.left}px`;
+      el.style.top = `${y - sandboxRect.top}px`;
+      
+      document.getElementById('play-sandbox').appendChild(el);
+      
+      // Floating animation physics in JS
+      let speedY = Math.random() * -3 - 2;
+      let speedX = Math.random() * 4 - 2;
+      let opacity = 1;
+      let scale = 1;
+      let rot = 0;
+      let rotSpeed = Math.random() * 10 - 5;
+      
+      function step() {
+        speedY += 0.08; // slightly affected by gravity
+        const curTop = parseFloat(el.style.top);
+        const curLeft = parseFloat(el.style.left);
+        
+        el.style.top = `${curTop + speedY}px`;
+        el.style.left = `${curLeft + speedX}px`;
+        el.style.transform = `rotate(${rot}deg) scale(${scale})`;
+        el.style.opacity = opacity;
+        
+        rot += rotSpeed;
+        opacity -= 0.02;
+        scale -= 0.01;
+        
+        if (opacity > 0) {
+          requestAnimationFrame(step);
+        } else {
+          el.remove();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        
+        if (particles[i].alpha <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+      requestAnimationFrame(animate);
     }
 
     // Start Loops
