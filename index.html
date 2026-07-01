@@ -1119,6 +1119,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Navigation Scroll Effect
+            const nav = document.querySelector('nav');
+            const handleScroll = () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('nav-scrolled');
+                } else {
+                    nav.classList.remove('nav-scrolled');
+                }
+            };
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+
             // Menú móvil
             const menuButton = document.getElementById('menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
