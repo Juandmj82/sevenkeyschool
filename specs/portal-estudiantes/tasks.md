@@ -39,9 +39,9 @@
 **Goal**: Permitir que el estudiante agregue comentarios de progreso sobre cada video y que el bot los vuelque en Obsidian.
 **Independent Test**: Seguir el escenario de pruebas #2 en `quickstart.md`.
 
-- [ ] T011 [US2] Diseñar la sección y formulario de comentarios/bitácora para cada video en `estudiantes/index.html`.
-- [ ] T012 [US2] Implementar la lógica JS para registrar notas de práctica en la tabla `bitacoras` de Supabase vinculadas al alumno.
-- [ ] T013 [US2] Extender el script de Python `sync_portal.py` para consultar las nuevas notas no sincronizadas de Supabase y anexarlas automáticamente a los expedientes en Obsidian.
+- [x] T011 [US2] Diseñar la sección y formulario de comentarios/bitácora para cada video en `estudiantes/index.html`.
+- [x] T012 [US2] Implementar la lógica JS para registrar notas de práctica en la tabla `bitacoras` de Supabase vinculadas al alumno.
+- [x] T013 [US2] Extender el script de Python `sync_portal.py` para consultar las nuevas notas no sincronizadas de Supabase y anexarlas automáticamente a los expedientes en Obsidian.
 
 ---
 
@@ -49,12 +49,12 @@
 **Goal**: Saludo personalizado con avatar de Teacher Juan Di, subida de foto de perfil y consejo rítmico/práctica aleatorio dinámico.
 **Independent Test**: Acceder con diferentes cuentas y comprobar saludos dinámicos y frases motivadoras.
 
-- [ ] T014 [US3] Agregar sección de edición de perfil (cambiar nombre y URL de foto) en el portal de estudiantes.
-- [ ] T015 [US3] Crear una lista en JavaScript de consejos motivadores y renderizar aleatoriamente uno en el portal al cargar, junto con el avatar de Teacher Juan Di.
+- [x] T014 [US3] Agregar sección de edición de perfil (cambiar nombre y URL de foto) en el portal de estudiantes.
+- [x] T015 [US3] Crear una lista en JavaScript de consejos motivadores y renderizar aleatoriamente uno en el portal al cargar, junto con el avatar de Teacher Juan Di.
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
-- [ ] T016 [P] Asegurar coherencia tipográfica de fuentes Cinzel y Plus Jakarta Sans en todo el portal.
-- [ ] T017 Probar el comportamiento responsivo en móviles verticales y asegurar la no existencia de scrolls horizontales o elementos cortados.
-- [ ] T018 Ejecutar todas las pruebas del documento `quickstart.md`.
+- [x] T016 [P] Asegurar coherencia tipográfica de fuentes Cinzel y Plus Jakarta Sans en todo el portal.
+- [x] T017 Probar el comportamiento responsivo en móviles verticales y asegurar la no existencia de scrolls horizontales o elementos cortados.
+- [x] T018 Ejecutar todas las pruebas del documento `quickstart.md`.
