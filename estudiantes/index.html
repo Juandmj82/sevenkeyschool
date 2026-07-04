@@ -340,7 +340,7 @@
 
     // Helper to format date strings into "Mes Año"
     function getMonthYearLabel(dateStr) {
-      // dateStr: YYYY-MM-DD
+      if (!dateStr) return "Otro";
       const parts = dateStr.split('-');
       if (parts.length < 2) return "Otro";
       const year = parts[0];
@@ -355,11 +355,15 @@
 
       if (!history || history.length === 0) return;
 
-      // Extract unique months
+      // Extract unique months and group by year
       const monthsSet = new Set();
+      const yearsSet = new Set();
+      
       history.forEach(item => {
         if (item.date) {
           monthsSet.add(getMonthYearLabel(item.date));
+          const year = item.date.split('-')[0];
+          yearsSet.add(year);
         }
       });
 
@@ -374,21 +378,38 @@
       allBtn.onclick = () => selectMonthFilter("all");
       pillsContainer.appendChild(allBtn);
 
-      // Add each month button
-      monthsSet.forEach(monthLabel => {
-        const count = history.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
-        const btn = document.createElement('button');
-        btn.className = "pdf-btn";
-        btn.style.margin = "0";
-        btn.style.padding = "6px 12px";
-        btn.style.borderRadius = "50px";
-        btn.style.background = "rgba(255,255,255,0.03)";
-        btn.style.color = "var(--text-muted)";
-        btn.style.borderColor = "rgba(255,255,255,0.08)";
-        btn.id = `pill-${monthLabel.replace(/\s+/g, '-')}`;
-        btn.innerText = `${monthLabel} (${count})`;
-        btn.onclick = () => selectMonthFilter(monthLabel);
-        pillsContainer.appendChild(btn);
+      // Sort years descending
+      const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+
+      sortedYears.forEach(year => {
+        // Group label if multiple years exist
+        if (sortedYears.length > 1) {
+          const yearDivider = document.createElement('span');
+          yearDivider.style.color = "var(--accent-gold)";
+          yearDivider.style.fontSize = "0.8rem";
+          yearDivider.style.fontWeight = "800";
+          yearDivider.style.margin = "0 6px";
+          yearDivider.innerText = `${year}:`;
+          pillsContainer.appendChild(yearDivider);
+        }
+
+        // Add months for this year
+        const monthsForYear = Array.from(monthsSet).filter(m => m.endsWith(year));
+        monthsForYear.forEach(monthLabel => {
+          const count = history.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
+          const btn = document.createElement('button');
+          btn.className = "pdf-btn";
+          btn.style.margin = "0";
+          btn.style.padding = "6px 12px";
+          btn.style.borderRadius = "50px";
+          btn.style.background = "rgba(255,255,255,0.03)";
+          btn.style.color = "var(--text-muted)";
+          btn.style.borderColor = "rgba(255,255,255,0.08)";
+          btn.id = `pill-${monthLabel.replace(/\s+/g, '-')}`;
+          btn.innerText = `${monthLabel} (${count})`;
+          btn.onclick = () => selectMonthFilter(monthLabel);
+          pillsContainer.appendChild(btn);
+        });
       });
 
       updatePillStyles();
@@ -419,16 +440,27 @@
 
     function filterClasses() {
       const query = document.getElementById('class-search-input').value.toLowerCase().trim();
+      
+      // If user is searching text, ignore month filter to make the search global and easy to find
+      if (query !== "" && selectedMonthFilter !== "all") {
+        selectedMonthFilter = "all";
+        updatePillStyles();
+      }
+
       const filtered = globalClassesHistory.filter(item => {
         // Month Match
         const monthLabel = getMonthYearLabel(item.date);
         const matchesMonth = (selectedMonthFilter === "all" || monthLabel === selectedMonthFilter);
 
         // Search Match
+        const nameVal = (item.name || "").toLowerCase();
+        const dateVal = (item.date || "");
+        const detailsVal = (item.details || []).join(" ").toLowerCase();
+
         const matchesSearch = !query || 
-          item.name.toLowerCase().includes(query) || 
-          item.date.includes(query) || 
-          (item.details || []).some(line => line.toLowerCase().includes(query));
+          nameVal.includes(query) || 
+          dateVal.includes(query) || 
+          detailsVal.includes(query);
 
         return matchesMonth && matchesSearch;
       });
