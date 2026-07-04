@@ -37,3 +37,20 @@ CREATE TABLE public.bitacoras (
     sincronizado BOOLEAN DEFAULT false NOT NULL
 );
 ```
+
+### Tabla: `estudiante_videos` (Asignación Individualizada)
+```sql
+CREATE TABLE public.estudiante_videos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    estudiante_id UUID NOT NULL REFERENCES public.estudiantes(id) ON DELETE CASCADE,
+    video_id UUID NOT NULL REFERENCES public.videos(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(estudiante_id, video_id)
+);
+```
+
+## 2. Reglas de RLS (Row Level Security) Documentadas
+- `estudiantes`: `auth.uid() = id` (Solo lectura de perfil propio).
+- `videos`: `authenticated` (Lectura general para enlazar si está asignado).
+- `estudiante_videos`: `auth.uid() = estudiante_id` (Solo lectura de asignaciones propias).
+- `bitacoras`: `auth.uid() = estudiante_id` (Lectura e inserción propia).
