@@ -38,14 +38,14 @@ specs/portal-estudiantes/
 
 ### Source Code
 ```text
-juegos/
-├── tutoriales.html      # [NEW] Interfaz del portal del estudiante
-├── css/
-│   └── tutoriales.css   # [NEW] Estilos responsivos del portal
+estudiantes/
+├── index.html           # [NEW] Interfaz del portal del estudiante
+└── css/
+    └── tutoriales.css   # [NEW] Estilos responsivos del portal
 /Users/juand/Developer/Asistente/
 ├── sync_portal.py       # [NEW] Script del bot de Python para sincronizar Obsidian -> Supabase
 ├── credentials.json
 └── .env
 ```
 
-**Structure Decision**: El portal web se implementará como una página nueva independiente en la carpeta `juegos/`, consumiendo Supabase mediante JS. El bot de sincronización residirá en la carpeta del asistente local.
+**Structure Decision**: El portal web se implementará como una página nueva independiente en la carpeta `/estudiantes/`, consumiendo Supabase mediante JS. El bot de sincronización residirá en la carpeta del asistente local.

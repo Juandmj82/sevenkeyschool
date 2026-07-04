@@ -12,15 +12,15 @@
 
 ## Phase 1: Setup (Shared Infrastructure)
 - [x] T001 Inicializar tablas y esquemas relacionales en PostgreSQL de Supabase ejecutando las sentencias DDL definidas en `specs/portal-estudiantes/data-model.md`.
-- [x] T002 Crear la estructura de archivos en la web: `juegos/tutoriales.html` y `juegos/css/tutoriales.css`.
+- [x] T002 Crear la estructura de archivos en la web: `estudiantes/index.html` y `estudiantes/css/tutoriales.css`.
 - [x] T003 Configurar variables de entorno en el bot de Python local (`/Users/juand/Developer/Asistente/.env`) para incluir las credenciales de Supabase y el Gmail de la escuela.
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
-- [x] T004 Configurar e inicializar el cliente JS de Supabase en `juegos/tutoriales.html` usando la CDN oficial y claves públicas anonimizadas.
-- [x] T005 Implementar la lógica del formulario de inicio de sesión (`Supabase Auth`) en `juegos/tutoriales.html` para validar correos y contraseñas.
-- [x] T006 [P] Diseñar los estilos CSS base de marca unificada (Premium Dark Gold) con tipografías **Cinzel** y **Plus Jakarta Sans** en `juegos/css/tutoriales.css`.
+- [x] T004 Configurar e inicializar el cliente JS de Supabase en `estudiantes/index.html` usando la CDN oficial y claves públicas anonimizadas.
+- [x] T005 Implementar la lógica del formulario de inicio de sesión (`Supabase Auth`) en `estudiantes/index.html` para validar correos y contraseñas.
+- [x] T006 [P] Diseñar los estilos CSS base de marca unificada (Premium Dark Gold) con tipografías **Cinzel** y **Plus Jakarta Sans** en `estudiantes/css/tutoriales.css`.
 
 ---
 
@@ -28,7 +28,7 @@
 **Goal**: Permitir a los alumnos loguearse, filtrar sus videos por instrumento e incrustarlos de forma dinámica con iframe de Drive con descargas desactivadas.
 **Independent Test**: Seguir el escenario de pruebas #1 en `quickstart.md`.
 
-- [x] T007 [P] [US1] Desarrollar la maquetación HTML/CSS responsiva de la vista principal del estudiante en `juegos/tutoriales.html`.
+- [x] T007 [P] [US1] Desarrollar la maquetación HTML/CSS responsiva de la vista principal del estudiante en `estudiantes/index.html`.
 - [x] T008 [US1] Implementar la función de consulta a la base de datos de Supabase para obtener las IDs de los videos de Google Drive del instrumento del alumno tras un login exitoso.
 - [x] T009 [US1] Crear el renderizado dinámico en JavaScript para inyectar los iframes de Google Drive (visualización privada) en el contenedor seguro.
 - [x] T010 [US1] Crear script básico de sincronización de estudiantes en el asistente local (`/Users/juand/Developer/Asistente/sync_portal.py`) para dar de alta/baja cuentas desde Obsidian.
@@ -39,7 +39,7 @@
 **Goal**: Permitir que el estudiante agregue comentarios de progreso sobre cada video y que el bot los vuelque en Obsidian.
 **Independent Test**: Seguir el escenario de pruebas #2 en `quickstart.md`.
 
-- [ ] T011 [US2] Diseñar la sección y formulario de comentarios/bitácora para cada video en `juegos/tutoriales.html`.
+- [ ] T011 [US2] Diseñar la sección y formulario de comentarios/bitácora para cada video en `estudiantes/index.html`.
 - [ ] T012 [US2] Implementar la lógica JS para registrar notas de práctica en la tabla `bitacoras` de Supabase vinculadas al alumno.
 - [ ] T013 [US2] Extender el script de Python `sync_portal.py` para consultar las nuevas notas no sincronizadas de Supabase y anexarlas automáticamente a los expedientes en Obsidian.
 
