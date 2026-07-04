@@ -28,10 +28,10 @@
 **Goal**: Permitir a los alumnos loguearse, filtrar sus videos por instrumento e incrustarlos de forma dinámica con iframe de Drive con descargas desactivadas.
 **Independent Test**: Seguir el escenario de pruebas #1 en `quickstart.md`.
 
-- [ ] T007 [P] [US1] Desarrollar la maquetación HTML/CSS responsiva de la vista principal del estudiante en `juegos/tutoriales.html`.
-- [ ] T008 [US1] Implementar la función de consulta a la base de datos de Supabase para obtener las IDs de los videos de Google Drive del instrumento del alumno tras un login exitoso.
-- [ ] T009 [US1] Crear el renderizado dinámico en JavaScript para inyectar los iframes de Google Drive (visualización privada) en el contenedor seguro.
-- [ ] T010 [US1] Crear script básico de sincronización de estudiantes en el asistente local (`/Users/juand/Developer/Asistente/sync_portal.py`) para dar de alta/baja cuentas desde Obsidian.
+- [x] T007 [P] [US1] Desarrollar la maquetación HTML/CSS responsiva de la vista principal del estudiante en `juegos/tutoriales.html`.
+- [x] T008 [US1] Implementar la función de consulta a la base de datos de Supabase para obtener las IDs de los videos de Google Drive del instrumento del alumno tras un login exitoso.
+- [x] T009 [US1] Crear el renderizado dinámico en JavaScript para inyectar los iframes de Google Drive (visualización privada) en el contenedor seguro.
+- [x] T010 [US1] Crear script básico de sincronización de estudiantes en el asistente local (`/Users/juand/Developer/Asistente/sync_portal.py`) para dar de alta/baja cuentas desde Obsidian.
 
 ---
 
