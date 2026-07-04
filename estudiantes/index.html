@@ -132,8 +132,23 @@
       </div>
 
       <!-- Tab Content 1: Clases Tomadas Accordion -->
-      <div id="tab-classes-content" class="history-container" style="display: flex; flex-direction: column;">
-        <!-- Dynamic classes history list in accordion style -->
+      <div id="tab-classes-content" class="history-container" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Buscador y Filtro por meses -->
+        <div class="search-filter-bar" style="display: flex; flex-direction: column; gap: 0.8rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); padding: 1rem; border-radius: 14px;">
+          <div style="position: relative; display: flex; align-items: center;">
+            <i class="fas fa-search" style="position: absolute; left: 1rem; color: var(--accent-gold); font-size: 0.9rem;"></i>
+            <input type="text" id="class-search-input" onkeyup="filterClasses()" placeholder="Buscar clase por tema, canción, calentamiento..." style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-family: var(--font-family); font-size: 0.9rem; outline: none; transition: var(--transition-smooth);">
+          </div>
+          <!-- Fila de meses dinámicos -->
+          <div id="month-filter-pills" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <!-- Month pills injected here -->
+          </div>
+        </div>
+        
+        <!-- Accordion container -->
+        <div id="classes-accordion-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <!-- Dynamic classes history list in accordion style -->
+        </div>
       </div>
 
       <!-- Tab Content 2: Tutoriales (Grid) -->
@@ -292,7 +307,9 @@
         }
 
         // Render Classes History (Accordion style)
-        renderClassesHistory(profile.clases_historial);
+        globalClassesHistory = profile.clases_historial || [];
+        setupMonthFilters(globalClassesHistory);
+        renderClassesHistory(globalClassesHistory);
 
         // Fetch assigned videos for this specific student using the intermediate table
         const { data: assignedRelation, error: vErr } = await supabaseClient
@@ -318,12 +335,113 @@
       }
     }
 
-    function renderClassesHistory(history) {
-      const container = document.getElementById('tab-classes-content');
+    let globalClassesHistory = [];
+    let selectedMonthFilter = "all";
+
+    // Helper to format date strings into "Mes Año"
+    function getMonthYearLabel(dateStr) {
+      // dateStr: YYYY-MM-DD
+      const parts = dateStr.split('-');
+      if (parts.length < 2) return "Otro";
+      const year = parts[0];
+      const monthNum = parseInt(parts[1], 10);
+      const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+      return `${months[monthNum - 1]} ${year}`;
+    }
+
+    function setupMonthFilters(history) {
+      const pillsContainer = document.getElementById('month-filter-pills');
+      pillsContainer.innerHTML = "";
+
+      if (!history || history.length === 0) return;
+
+      // Extract unique months
+      const monthsSet = new Set();
+      history.forEach(item => {
+        if (item.date) {
+          monthsSet.add(getMonthYearLabel(item.date));
+        }
+      });
+
+      // Create "Todos" button
+      const allBtn = document.createElement('button');
+      allBtn.className = "pdf-btn";
+      allBtn.style.margin = "0";
+      allBtn.style.padding = "6px 12px";
+      allBtn.style.borderRadius = "50px";
+      allBtn.id = "pill-all";
+      allBtn.innerText = `Todos (${history.length})`;
+      allBtn.onclick = () => selectMonthFilter("all");
+      pillsContainer.appendChild(allBtn);
+
+      // Add each month button
+      monthsSet.forEach(monthLabel => {
+        const count = history.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
+        const btn = document.createElement('button');
+        btn.className = "pdf-btn";
+        btn.style.margin = "0";
+        btn.style.padding = "6px 12px";
+        btn.style.borderRadius = "50px";
+        btn.style.background = "rgba(255,255,255,0.03)";
+        btn.style.color = "var(--text-muted)";
+        btn.style.borderColor = "rgba(255,255,255,0.08)";
+        btn.id = `pill-${monthLabel.replace(/\s+/g, '-')}`;
+        btn.innerText = `${monthLabel} (${count})`;
+        btn.onclick = () => selectMonthFilter(monthLabel);
+        pillsContainer.appendChild(btn);
+      });
+
+      updatePillStyles();
+    }
+
+    function selectMonthFilter(monthLabel) {
+      selectedMonthFilter = monthLabel;
+      updatePillStyles();
+      filterClasses();
+    }
+
+    function updatePillStyles() {
+      const pillsContainer = document.getElementById('month-filter-pills');
+      const buttons = pillsContainer.getElementsByTagName('button');
+      
+      for (let btn of buttons) {
+        if (btn.id === `pill-${selectedMonthFilter.replace(/\s+/g, '-')}`) {
+          btn.style.background = "var(--accent-gold)";
+          btn.style.color = "var(--primary-color)";
+          btn.style.borderColor = "var(--accent-gold)";
+        } else {
+          btn.style.background = "rgba(255,255,255,0.03)";
+          btn.style.color = "var(--text-muted)";
+          btn.style.borderColor = "rgba(255,255,255,0.08)";
+        }
+      }
+    }
+
+    function filterClasses() {
+      const query = document.getElementById('class-search-input').value.toLowerCase().trim();
+      const filtered = globalClassesHistory.filter(item => {
+        // Month Match
+        const monthLabel = getMonthYearLabel(item.date);
+        const matchesMonth = (selectedMonthFilter === "all" || monthLabel === selectedMonthFilter);
+
+        // Search Match
+        const matchesSearch = !query || 
+          item.name.toLowerCase().includes(query) || 
+          item.date.includes(query) || 
+          (item.details || []).some(line => line.toLowerCase().includes(query));
+
+        return matchesMonth && matchesSearch;
+      });
+
+      renderClassesHistory(filtered, true);
+    }
+
+    function renderClassesHistory(history, isFilteredView = false) {
+      const container = document.getElementById('classes-accordion-list');
       container.innerHTML = "";
 
       if (!history || history.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay clases registradas en tu historial aún.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No se encontraron clases coincidentes.</p>`;
         return;
       }
 
@@ -368,8 +486,9 @@
           detailsHtml += `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">${pdfButtons}</div>`;
         }
 
-        // Open the most recent class by default
-        if (index === 0) accordionItem.classList.add('active');
+        // Open the most recent class by default only if not in filtered view
+        if (index === 0 && !isFilteredView) accordionItem.classList.add('active');
+        if (isFilteredView) accordionItem.classList.add('active'); // Open matches in search view by default
 
         accordionItem.innerHTML = `
           <div class="accordion-header" onclick="toggleAccordion(this)">
