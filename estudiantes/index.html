@@ -46,31 +46,56 @@
 
     <!-- 2. Dashboard View -->
     <div id="dashboard-view" style="display: none; flex-direction: column; gap: 1.5rem;">
-      <!-- Profile Header Centered -->
-      <div class="profile-section-centered">
-        <div class="avatar-container-large">
-          <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img-large">
-          <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: var(--accent-gold); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; border: 2px solid #fff;">
-            <i class="fas fa-camera"></i>
-          </label>
-          <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+      
+      <!-- Facebook-Style Profile Card -->
+      <div class="facebook-profile-card">
+        <!-- Cover Photo Banner -->
+        <div class="fb-cover-photo"></div>
+        
+        <!-- Profile details wrapper -->
+        <div class="fb-profile-content">
+          <div class="avatar-container-fb">
+            <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img-fb">
+            <label for="avatar-upload" class="upload-avatar-overlay">
+              <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+          </div>
+          
+          <div class="fb-user-details">
+            <h1 class="student-name-fb">
+              <span id="student-name">Cargando...</span>
+              <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem;"><i class="fas fa-edit"></i></button>
+            </h1>
+            <div class="fb-instrument-badges">
+              <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
+            </div>
+          </div>
+          
+          <div class="profile-actions-fb">
+            <button class="btn-back" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="togglePasswordForm()">
+              <i class="fas fa-key"></i> Contraseña
+            </button>
+            <button class="btn-logout" onclick="handleLogout()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar
+            </button>
+          </div>
         </div>
         
-        <div>
-          <h1 class="student-name-text-large">
-            <span id="student-name">Cargando...</span>
-            <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;"><i class="fas fa-edit"></i></button>
-          </h1>
-          <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
-        </div>
-        
-        <div class="profile-actions-bar">
-          <button class="btn-back" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="togglePasswordForm()">
-            <i class="fas fa-key"></i> Contraseña
-          </button>
-          <button class="btn-logout" onclick="handleLogout()">
-            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-          </button>
+        <!-- Account and payment metadata grid -->
+        <div class="fb-meta-grid">
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Horario asignado</span>
+            <span class="fb-meta-value" id="meta-schedule">Sábados 10:00 am</span>
+          </div>
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Inicio de clases</span>
+            <span class="fb-meta-value" id="meta-start">01-03-2026</span>
+          </div>
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Estado de pago</span>
+            <span class="fb-meta-value status-success" id="meta-payment">Al día</span>
+          </div>
         </div>
       </div>
 
@@ -106,9 +131,9 @@
         </button>
       </div>
 
-      <!-- Tab Content 1: Clases Tomadas -->
+      <!-- Tab Content 1: Clases Tomadas Accordion -->
       <div id="tab-classes-content" class="history-container" style="display: flex;">
-        <!-- Dynamic classes history list -->
+        <!-- Dynamic classes history list in accordion style -->
       </div>
 
       <!-- Tab Content 2: Tutoriales -->
@@ -180,6 +205,12 @@
       }
     }
 
+    // Toggle accordion state
+    function toggleAccordion(headerElement) {
+      const parent = headerElement.parentElement;
+      parent.classList.toggle('active');
+    }
+
     async function loadStudentDashboard(user) {
       currentUser = user;
       document.getElementById('auth-view').style.display = 'none';
@@ -215,7 +246,20 @@
           return;
         }
 
-        // Render Classes History
+        // Render profile metadata card
+        const meta = profile.metadata || {};
+        document.getElementById('meta-schedule').innerText = meta.horario || "Sin asignar";
+        document.getElementById('meta-start').innerText = meta.inicio_clases || "Sin definir";
+        
+        const paymentEl = document.getElementById('meta-payment');
+        paymentEl.innerText = meta.pago || "Al día";
+        if (meta.pago && meta.pago.toLowerCase().includes("pendiente")) {
+          paymentEl.className = "fb-meta-value status-warning";
+        } else {
+          paymentEl.className = "fb-meta-value status-success";
+        }
+
+        // Render Classes History (Accordion style)
         renderClassesHistory(profile.clases_historial);
 
         // Fetch assigned videos for this specific student using the intermediate table
@@ -242,7 +286,6 @@
       }
     }
 
-    // Helper to find and match text for creating custom PDF buttons
     function renderClassesHistory(history) {
       const container = document.getElementById('tab-classes-content');
       container.innerHTML = "";
@@ -252,9 +295,9 @@
         return;
       }
 
-      history.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'history-card';
+      history.forEach((item, index) => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'accordion-item';
         
         let detailsHtml = "";
         item.details.forEach(line => {
@@ -270,16 +313,26 @@
           detailsHtml += `<div class="history-detail-item">${lineHtml}</div>`;
         });
 
-        card.innerHTML = `
-          <div class="history-header">
-            <h3 class="history-title">${item.status} ${item.name}</h3>
-            <span class="history-date"><i class="fas fa-calendar-day"></i> ${item.date}</span>
+        // Set the first class as active/open by default
+        if (index === 0) {
+          accordionItem.className += " active";
+        }
+
+        accordionItem.innerHTML = `
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="history-title">${item.status} ${item.name}</span>
+            <span class="history-date">
+              <i class="fas fa-calendar-day"></i> ${item.date} &nbsp;&nbsp;
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </span>
           </div>
-          <div>
-            ${detailsHtml}
+          <div class="accordion-body">
+            <div class="accordion-content-inner">
+              ${detailsHtml}
+            </div>
           </div>
         `;
-        container.appendChild(card);
+        container.appendChild(accordionItem);
       });
     }
 
