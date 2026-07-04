@@ -11,16 +11,16 @@
 ---
 
 ## Phase 1: Setup (Shared Infrastructure)
-- [ ] T001 Inicializar tablas y esquemas relacionales en PostgreSQL de Supabase ejecutando las sentencias DDL definidas en `specs/portal-estudiantes/data-model.md`.
-- [ ] T002 Crear la estructura de archivos en la web: `juegos/tutoriales.html` y `juegos/css/tutoriales.css`.
-- [ ] T003 Configurar variables de entorno en el bot de Python local (`/Users/juand/Developer/Asistente/.env`) para incluir las credenciales de Supabase y el Gmail de la escuela.
+- [x] T001 Inicializar tablas y esquemas relacionales en PostgreSQL de Supabase ejecutando las sentencias DDL definidas en `specs/portal-estudiantes/data-model.md`.
+- [x] T002 Crear la estructura de archivos en la web: `juegos/tutoriales.html` y `juegos/css/tutoriales.css`.
+- [x] T003 Configurar variables de entorno en el bot de Python local (`/Users/juand/Developer/Asistente/.env`) para incluir las credenciales de Supabase y el Gmail de la escuela.
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
-- [ ] T004 Configurar e inicializar el cliente JS de Supabase en `juegos/tutoriales.html` usando la CDN oficial y claves públicas anonimizadas.
-- [ ] T005 Implementar la lógica del formulario de inicio de sesión (`Supabase Auth`) en `juegos/tutoriales.html` para validar correos y contraseñas.
-- [ ] T006 [P] Diseñar los estilos CSS base de marca unificada (Premium Dark Gold) con tipografías **Cinzel** y **Plus Jakarta Sans** en `juegos/css/tutoriales.css`.
+- [x] T004 Configurar e inicializar el cliente JS de Supabase en `juegos/tutoriales.html` usando la CDN oficial y claves públicas anonimizadas.
+- [x] T005 Implementar la lógica del formulario de inicio de sesión (`Supabase Auth`) en `juegos/tutoriales.html` para validar correos y contraseñas.
+- [x] T006 [P] Diseñar los estilos CSS base de marca unificada (Premium Dark Gold) con tipografías **Cinzel** y **Plus Jakarta Sans** en `juegos/css/tutoriales.css`.
 
 ---
 
