@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Estudiantes — Seven Keys School</title>
+  <link rel="stylesheet" href="css/tutoriales.css">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <header id="main-header">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Volver a Juegos
+    </a>
+  </header>
+
+  <main class="portal-container">
+    <!-- 1. Authentication View -->
+    <div id="auth-view" class="auth-wrapper">
+      <div class="auth-card">
+        <h1 class="auth-title">Portal de Estudio</h1>
+        <p class="auth-subtitle">Ingresa tus credenciales autorizadas por la escuela para acceder a tus videos.</p>
+        
+        <div class="form-group">
+          <label class="form-label" for="login-email">Correo Electrónico</label>
+          <input class="form-input" type="email" id="login-email" placeholder="ejemplo@correo.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña / Código</label>
+          <input class="form-input" type="password" id="login-password" placeholder="••••••••">
+        </div>
+
+        <button class="btn-primary" onclick="handleLogin()">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Dashboard View (Hidden by default) -->
+    <div id="dashboard-view" style="display: none; flex-direction: column; gap: 1.5rem;">
+      <!-- Profile and Account header -->
+      <div class="profile-section">
+        <div class="student-info">
+          <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img">
+          <div>
+            <div id="student-name" class="student-name-text">Cargando...</div>
+            <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="handleLogout()">
+          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+      </div>
+
+      <!-- Teacher Juan Di quote dynamic header -->
+      <div class="teacher-banner">
+        <img src="../img/profe.jpg" alt="Teacher Juan Di" class="teacher-avatar">
+        <div class="teacher-bubble">
+          <div class="teacher-title">Teacher Juan Di dice:</div>
+          <div id="teacher-quote" class="teacher-quote">"La constancia en la práctica diaria es la llave para dominar tu instrumento."</div>
+        </div>
+      </div>
+
+      <!-- Videos Feed -->
+      <h2 style="font-family: var(--font-title); margin-top: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+        Mis Tutoriales y Clases
+      </h2>
+      <div id="videos-list" class="videos-container">
+        <!-- Videos will be dynamically rendered here -->
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast-msg">Mensaje informativo</div>
+
+  <script>
+    // Configuración real del proyecto de la escuela
+    const SUPABASE_URL = "https://iqknbmwdgqbfnhrdcnbl.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxa25ibXdkZ3FiZm5ocmRjbmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNjg1NjAsImV4cCI6MjA5ODc0NDU2MH0.Usqt87i8Xxahu5ocZWKWibEd17axb7Rg1JnBx5ik43w";
+    let supabaseClient = null;
+    let currentUser = null;
+    let studentProfile = null;
+
+    const MOTIVATIONAL_QUOTES = [
+      "\"La práctica no hace la perfección, la práctica hace al maestro.\"",
+      "\"Cada 10 minutos de estudio enfocado te acercan un paso más a la maestría musical.\"",
+      "\"Aprender un instrumento es un viaje de paciencia. Disfruta el sonido de cada nota hoy.\"",
+      "\"Tu instrumento es tu voz. Practica con calma y escucha lo que tienes para decir.\"",
+      "\"La música requiere corazón y disciplina. ¡Buen trabajo por dedicarle tiempo hoy!\""
+    ];
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    function initSupabase() {
+      if (SUPABASE_URL && SUPABASE_KEY) {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Check current active session
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if (session) {
+            loadStudentDashboard(session.user);
+          } else {
+            showAuthView();
+          }
+        });
+      }
+    }
+
+    function showAuthView() {
+      document.getElementById('auth-view').style.display = 'flex';
+      document.getElementById('dashboard-view').style.display = 'none';
+    }
+
+    async function loadStudentDashboard(user) {
+      currentUser = user;
+      document.getElementById('auth-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'flex';
+
+      // Set random teacher quote
+      const randQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+      document.getElementById('teacher-quote').innerText = randQuote;
+
+      try {
+        // Fetch profile
+        const { data: profile, error } = await supabaseClient
+          .from('estudiantes')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error || !profile) {
+          showToast("Error al obtener perfil.");
+          return;
+        }
+
+        studentProfile = profile;
+        document.getElementById('student-name').innerText = profile.nombre;
+        document.getElementById('student-instrument').innerText = profile.instrumento;
+
+        if (profile.estado !== 'activo') {
+          showToast("Tu cuenta está inactiva. Contacta al Teacher.");
+          handleLogout();
+          return;
+        }
+
+        // Fetch videos matching instrument
+        const { data: videos, error: vErr } = await supabaseClient
+          .from('videos')
+          .select('*')
+          .eq('instrumento', profile.instrumento)
+          .order('orden', { ascending: true });
+
+        if (vErr) {
+          showToast("Error al cargar tutoriales.");
+          return;
+        }
+
+        renderVideos(videos);
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderVideos(videos) {
+      const container = document.getElementById('videos-list');
+      container.innerHTML = "";
+
+      if (!videos || videos.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay tutoriales asignados para tu instrumento aún.</p>`;
+        return;
+      }
+
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+          <div class="video-player-wrapper">
+            <iframe src="https://drive.google.com/file/d/${video.drive_id}/preview" allow="autoplay" allowfullscreen></iframe>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">${video.title}</h3>
+            
+            <div class="practice-note-section">
+              <span class="practice-note-label">Mi Bitácora de Práctica</span>
+              <textarea class="practice-note-textarea" id="note-${video.id}" placeholder="¿Qué practicaste hoy? ¿Qué te costó trabajo? Escríbelo aquí para tu bitácora..."></textarea>
+              <button class="btn-save-note" onclick="savePracticeNote('${video.id}')">
+                <i class="fas fa-save"></i> Guardar Nota de Estudio
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+        loadExistingNote(video.id);
+      });
+    }
+
+    async function loadExistingNote(videoId) {
+      if (!supabaseClient || !currentUser) return;
+      const { data, error } = await supabaseClient
+        .from('bitacoras')
+        .select('nota')
+        .eq('estudiante_id', currentUser.id)
+        .eq('video_id', videoId)
+        .order('fecha', { ascending: false })
+        .limit(1);
+
+      if (data && data.length > 0) {
+        document.getElementById(`note-${videoId}`).value = data[0].nota;
+      }
+    }
+
+    async function savePracticeNote(videoId) {
+      const noteText = document.getElementById(`note-${videoId}`).value.trim();
+      if (!noteText) {
+        showToast("Escribe algo antes de guardar.");
+        return;
+      }
+
+      try {
+        const { error } = await supabaseClient
+          .from('bitacoras')
+          .insert({
+            estudiante_id: currentUser.id,
+            video_id: videoId,
+            nota: noteText,
+            sincronizado: false
+          });
+
+        if (error) {
+          showToast("Error al guardar la nota.");
+        } else {
+          showToast("¡Nota de práctica guardada con éxito!");
+        }
+      } catch (e) {
+        showToast("Error al conectar con la base de datos.");
+      }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (!email || !password) {
+        showToast("Ingresa correo y contraseña.");
+        return;
+      }
+
+      if (!supabaseClient) {
+        showToast("Supabase no configurado aún.");
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        showToast("Credenciales inválidas.");
+      } else {
+        showToast("¡Bienvenido de vuelta!");
+      }
+    }
+
+    async function handleLogout() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+      currentUser = null;
+      studentProfile = null;
+      showAuthView();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSupabase();
+    });
+  </script>
+</body>
+</html>
