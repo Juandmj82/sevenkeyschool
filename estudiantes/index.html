@@ -132,7 +132,7 @@
       </div>
 
       <!-- Tab Content 1: Clases Tomadas Accordion -->
-      <div id="tab-classes-content" class="history-container" style="display: flex;">
+      <div id="tab-classes-content" class="history-container" style="display: flex; flex-direction: column;">
         <!-- Dynamic classes history list in accordion style -->
       </div>
 
@@ -295,40 +295,61 @@
         return;
       }
 
+      // PDF slug → display name + url map
+      const PDF_MAP = {
+        'chaparralito': { label: 'Guía PDF — Chaparralito Llanero', url: '../recursos/pdf/chaparralito_llanero_guia.pdf' },
+        'martirios':    { label: 'Guía PDF — Mis Martirios', url: '../recursos/pdf/mis_martirios_guia.pdf' }
+      };
+
       history.forEach((item, index) => {
         const accordionItem = document.createElement('div');
         accordionItem.className = 'accordion-item';
-        
-        let detailsHtml = "";
-        item.details.forEach(line => {
-          let lineHtml = line;
-          
-          // Match and link PDFs
-          if (line.toLowerCase().includes("chaparralito")) {
-            lineHtml += ` <a href="../recursos/pdf/chaparralito_llanero_guia.pdf" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> Ver Guía PDF</a>`;
-          } else if (line.toLowerCase().includes("martirios")) {
-            lineHtml += ` <a href="../recursos/pdf/mis_martirios_guia.pdf" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> Ver Guía PDF</a>`;
-          }
-          
-          detailsHtml += `<div class="history-detail-item">${lineHtml}</div>`;
-        });
 
-        // Set the first class as active/open by default
-        if (index === 0) {
-          accordionItem.className += " active";
+        // Collect which PDFs this class references
+        const pdfsReferenced = [];
+        const cleanDetails = (item.details || []).map(line => {
+          // Remove markdown bold markers **text**
+          let clean = line.replace(/\*\*/g, '').trim();
+          // Strip bare PDF filenames from the text (e.g. chaparralito_llanero_guia.pdf)
+          clean = clean.replace(/\S+\.pdf/gi, '').replace(/\s{2,}/g, ' ').trim();
+          // Remove leading colon or asterisk
+          clean = clean.replace(/^[:\-\*]+\s*/, '').trim();
+          // Check for PDF references
+          for (const [key, info] of Object.entries(PDF_MAP)) {
+            if (line.toLowerCase().includes(key) && !pdfsReferenced.find(p => p.key === key)) {
+              pdfsReferenced.push({ key, ...info });
+            }
+          }
+          return clean;
+        }).filter(l => l.length > 1 && !l.toLowerCase().startsWith('temática'));
+
+        // Build detail items HTML
+        let detailsHtml = cleanDetails
+          .map(line => `<div class="history-detail-item">${line}</div>`)
+          .join('');
+
+        // Append PDF buttons in a row at the bottom of the card body
+        if (pdfsReferenced.length > 0) {
+          const pdfButtons = pdfsReferenced
+            .map(p => `<a href="${p.url}" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> ${p.label}</a>`)
+            .join('');
+          detailsHtml += `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">${pdfButtons}</div>`;
         }
+
+        // Open the most recent class by default
+        if (index === 0) accordionItem.classList.add('active');
 
         accordionItem.innerHTML = `
           <div class="accordion-header" onclick="toggleAccordion(this)">
             <span class="history-title">${item.status} ${item.name}</span>
             <span class="history-date">
-              <i class="fas fa-calendar-day"></i> ${item.date} &nbsp;&nbsp;
-              <i class="fas fa-chevron-down accordion-icon"></i>
+              <i class="fas fa-calendar-day" style="margin-right:4px;"></i>${item.date}
+              <i class="fas fa-chevron-down accordion-icon" style="margin-left:10px;"></i>
             </span>
           </div>
           <div class="accordion-body">
             <div class="accordion-content-inner">
-              ${detailsHtml}
+              ${detailsHtml || '<p style="color:var(--text-muted); font-style:italic;">Sin detalles registrados.</p>'}
             </div>
           </div>
         `;
