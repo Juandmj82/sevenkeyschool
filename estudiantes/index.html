@@ -46,26 +46,25 @@
 
     <!-- 2. Dashboard View -->
     <div id="dashboard-view" style="display: none; flex-direction: column; gap: 1.5rem;">
-      <!-- Profile and Account header -->
-      <div class="profile-section">
-        <div class="student-info">
-          <div style="position: relative; display: inline-block;">
-            <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img">
-            <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: var(--color-gold); color: #000; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; cursor: pointer; border: 1px solid #fff;">
-              <i class="fas fa-camera"></i>
-            </label>
-            <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
-          </div>
-          <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span id="student-name" class="student-name-text">Cargando...</span>
-              <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem;"><i class="fas fa-edit"></i></button>
-            </div>
-            <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
-          </div>
+      <!-- Profile Header Centered -->
+      <div class="profile-section-centered">
+        <div class="avatar-container-large">
+          <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img-large">
+          <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: var(--accent-gold); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; border: 2px solid #fff;">
+            <i class="fas fa-camera"></i>
+          </label>
+          <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
         </div>
         
-        <div style="display: flex; gap: 10px;">
+        <div>
+          <h1 class="student-name-text-large">
+            <span id="student-name">Cargando...</span>
+            <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;"><i class="fas fa-edit"></i></button>
+          </h1>
+          <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
+        </div>
+        
+        <div class="profile-actions-bar">
           <button class="btn-back" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="togglePasswordForm()">
             <i class="fas fa-key"></i> Contraseña
           </button>
@@ -76,8 +75,8 @@
       </div>
 
       <!-- Password Change form (Hidden by default) -->
-      <div id="password-form-section" style="display: none; background: var(--bg-card); border: 1px solid var(--color-gold-border); padding: 1.2rem; border-radius: 16px; flex-direction: column; gap: 0.8rem;">
-        <h3 style="font-family: var(--font-title); font-size: 1rem; color: var(--color-gold);">Cambiar Contraseña</h3>
+      <div id="password-form-section" style="display: none; background: var(--bg-card); border: 1px solid var(--accent-gold); padding: 1.2rem; border-radius: 16px; flex-direction: column; gap: 0.8rem;">
+        <h3 style="font-family: var(--font-family); font-size: 1rem; color: var(--accent-gold); font-weight: 700;">Cambiar Contraseña</h3>
         <div class="form-group">
           <label class="form-label">Nueva Contraseña</label>
           <input class="form-input" type="password" id="new-password" placeholder="Mínimo 6 caracteres">
@@ -97,12 +96,26 @@
         </div>
       </div>
 
-      <!-- Videos Feed -->
-      <h2 style="font-family: var(--font-title); margin-top: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
-        Mis Tutoriales y Clases
-      </h2>
-      <div id="videos-list" class="videos-container">
-        <!-- Videos will be dynamically rendered here -->
+      <!-- Navigation Tabs -->
+      <div class="portal-tabs">
+        <button id="tab-classes" class="portal-tab-btn active" onclick="switchTab('classes')">
+          <i class="fas fa-calendar-alt"></i> Clases Tomadas
+        </button>
+        <button id="tab-videos" class="portal-tab-btn" onclick="switchTab('videos')">
+          <i class="fas fa-video"></i> Tutoriales y Material
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Clases Tomadas -->
+      <div id="tab-classes-content" class="history-container" style="display: flex;">
+        <!-- Dynamic classes history list -->
+      </div>
+
+      <!-- Tab Content 2: Tutoriales -->
+      <div id="tab-videos-content" class="videos-container" style="display: none;">
+        <div id="videos-list" class="videos-container">
+          <!-- Videos will be dynamically rendered here -->
+        </div>
       </div>
     </div>
   </main>
@@ -153,6 +166,20 @@
       document.getElementById('dashboard-view').style.display = 'none';
     }
 
+    function switchTab(tabName) {
+      if (tabName === 'classes') {
+        document.getElementById('tab-classes').classList.add('active');
+        document.getElementById('tab-videos').classList.remove('active');
+        document.getElementById('tab-classes-content').style.display = 'flex';
+        document.getElementById('tab-videos-content').style.display = 'none';
+      } else {
+        document.getElementById('tab-classes').classList.remove('active');
+        document.getElementById('tab-videos').classList.add('active');
+        document.getElementById('tab-classes-content').style.display = 'none';
+        document.getElementById('tab-videos-content').style.display = 'flex';
+      }
+    }
+
     async function loadStudentDashboard(user) {
       currentUser = user;
       document.getElementById('auth-view').style.display = 'none';
@@ -188,6 +215,9 @@
           return;
         }
 
+        // Render Classes History
+        renderClassesHistory(profile.clases_historial);
+
         // Fetch assigned videos for this specific student using the intermediate table
         const { data: assignedRelation, error: vErr } = await supabaseClient
           .from('estudiante_videos')
@@ -212,12 +242,53 @@
       }
     }
 
+    // Helper to find and match text for creating custom PDF buttons
+    function renderClassesHistory(history) {
+      const container = document.getElementById('tab-classes-content');
+      container.innerHTML = "";
+
+      if (!history || history.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay clases registradas en tu historial aún.</p>`;
+        return;
+      }
+
+      history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+        
+        let detailsHtml = "";
+        item.details.forEach(line => {
+          let lineHtml = line;
+          
+          // Match and link PDFs
+          if (line.toLowerCase().includes("chaparralito")) {
+            lineHtml += ` <a href="../recursos/pdf/chaparralito_llanero_guia.pdf" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> Ver Guía PDF</a>`;
+          } else if (line.toLowerCase().includes("martirios")) {
+            lineHtml += ` <a href="../recursos/pdf/mis_martirios_guia.pdf" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> Ver Guía PDF</a>`;
+          }
+          
+          detailsHtml += `<div class="history-detail-item">${lineHtml}</div>`;
+        });
+
+        card.innerHTML = `
+          <div class="history-header">
+            <h3 class="history-title">${item.status} ${item.name}</h3>
+            <span class="history-date"><i class="fas fa-calendar-day"></i> ${item.date}</span>
+          </div>
+          <div>
+            ${detailsHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     function renderVideos(videos) {
       const container = document.getElementById('videos-list');
       container.innerHTML = "";
 
       if (!videos || videos.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay tutoriales asignados para tu instrumento aún.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay clases con tutoriales asignados aún.</p>`;
         return;
       }
 
@@ -226,7 +297,7 @@
         card.className = 'video-card';
         card.innerHTML = `
           <div class="video-player-wrapper">
-            <iframe src="https://drive.google.com/file/d/${video.drive_id}/preview" allow="autoplay" allowfullscreen></iframe>
+            <iframe src="https://docs.google.com/viewer?srcid=${video.drive_id}&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allow="autoplay" allowfullscreen></iframe>
           </div>
           <div class="video-info">
             <h3 class="video-title">${video.title}</h3>
