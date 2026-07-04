@@ -157,17 +157,22 @@
           return;
         }
 
-        // Fetch videos matching instrument
-        const { data: videos, error: vErr } = await supabaseClient
-          .from('videos')
-          .select('*')
-          .eq('instrumento', profile.instrumento)
-          .order('orden', { ascending: true });
+        // Fetch assigned videos for this specific student using the intermediate table
+        const { data: assignedRelation, error: vErr } = await supabaseClient
+          .from('estudiante_videos')
+          .select('videos (*)')
+          .eq('estudiante_id', user.id);
 
         if (vErr) {
-          showToast("Error al cargar tutoriales.");
+          showToast("Error al cargar tus clases.");
           return;
         }
+
+        // Extract and sort the videos
+        const videos = assignedRelation
+          .map(item => item.videos)
+          .filter(Boolean)
+          .sort((a, b) => a.orden - b.orden);
 
         renderVideos(videos);
 
