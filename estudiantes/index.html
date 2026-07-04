@@ -226,7 +226,7 @@
         card.className = 'video-card';
         card.innerHTML = `
           <div class="video-player-wrapper">
-            <iframe src="https://drive.google.com/file/d/${video.drive_id}/preview" allow="autoplay" allowfullscreen></iframe>
+            <iframe src="https://docs.google.com/viewer?srcid=${video.drive_id}&pid=explorer&efh=false&a=v&chrome=false&embedded=true" allow="autoplay" allowfullscreen></iframe>
           </div>
           <div class="video-info">
             <h3 class="video-title">${video.title}</h3>

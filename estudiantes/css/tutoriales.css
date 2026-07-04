@@ -1,16 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
 
 :root {
-  --bg-dark: #07060f;
-  --bg-card: rgba(255, 255, 255, 0.02);
-  --color-gold: #d4af37;
-  --color-gold-glow: rgba(212, 175, 55, 0.15);
-  --color-gold-border: rgba(212, 175, 55, 0.3);
+  --primary-color: #2A4365;    /* Deep Blue de la Landing */
+  --secondary-color: #4299E1;  /* Modern Blue */
+  --accent-gold: #F6AD55;      /* Warm Gold de la Landing */
+  --bg-dark: #1A2639;          /* Fondo oscuro azulado templado */
+  --bg-card: rgba(255, 255, 255, 0.04);
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-muted: #cbd5e1;
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-title: 'Cinzel', serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-family: 'Inter', sans-serif;
 }
 
 * {
@@ -20,8 +19,8 @@
 }
 
 body {
-  background: var(--bg-dark);
-  font-family: var(--font-body);
+  background: linear-gradient(135deg, var(--primary-color) 0%, #1A202C 100%);
+  font-family: var(--font-family);
   color: var(--text-main);
   min-height: 100vh;
   min-height: 100dvh;
@@ -31,28 +30,28 @@ body {
 }
 
 header {
-  padding: 0.8rem 1.5rem;
-  background: rgba(15, 23, 42, 0.6);
+  padding: 1rem 1.5rem;
+  background: rgba(42, 67, 101, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 20;
   position: relative;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .header-logo {
-  height: 40px;
+  height: 50px;
   width: auto;
 }
 
 .btn-back {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-main);
-  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  padding: 0.5rem 1.2rem;
   border-radius: 50px;
   font-weight: 700;
   font-size: 0.85rem;
@@ -64,36 +63,39 @@ header {
 }
 
 .btn-back:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--accent-gold);
+  color: var(--primary-color);
   transform: translateY(-2px);
 }
 
 .portal-container {
   flex: 1;
-  max-width: 1000px;
+  max-width: 900px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Authentication Box (Glassmorphism) */
+/* Authentication Card */
 .auth-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.5rem;
+  padding: 2rem 1rem;
 }
 
 .auth-card {
-  background: radial-gradient(circle at center, rgba(20, 16, 48, 0.99) 0%, rgba(8, 7, 24, 1.0) 100%);
-  border: 1px solid var(--color-gold-border);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--color-gold-glow);
-  border-radius: 24px;
-  padding: 2.5rem 2rem;
+  background: rgba(26, 32, 44, 0.85);
+  border: 1px solid rgba(246, 173, 85, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  border-radius: 20px;
+  padding: 3rem 2rem;
   max-width: 420px;
   width: 100%;
   text-align: center;
@@ -103,130 +105,178 @@ header {
 }
 
 .auth-title {
-  font-family: var(--font-title);
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  font-weight: 800;
   color: #fff;
-  letter-spacing: 1px;
+  letter-spacing: -0.5px;
 }
 
 .auth-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   text-align: left;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .form-label {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-gold);
+  color: var(--accent-gold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .form-input {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  font-family: var(--font-body);
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-family: var(--font-family);
   font-size: 0.95rem;
   transition: var(--transition-smooth);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 10px var(--color-gold-glow);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(246, 173, 85, 0.2);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-gold) 0%, #b49020 100%);
-  color: #020617;
+  background: var(--accent-gold);
+  color: var(--primary-color);
   border: none;
-  padding: 0.85rem;
-  border-radius: 12px;
+  padding: 0.9rem;
+  border-radius: 10px;
   font-size: 0.95rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 12px rgba(246, 173, 85, 0.2);
   transition: var(--transition-smooth);
 }
 
 .btn-primary:hover {
+  background: #fff;
+  color: var(--primary-color);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
 }
 
-/* Dashboard Styles */
+/* Profile Section Dashboard */
+.profile-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.2rem;
+  border-radius: 16px;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-gold);
+}
+
+.student-name-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.student-instrument-badge {
+  font-size: 0.75rem;
+  background: rgba(246, 173, 85, 0.15);
+  color: var(--accent-gold);
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #fc8181;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-logout:hover {
+  text-decoration: underline;
+}
+
+/* Teacher Banner */
 .teacher-banner {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
   padding: 1.2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .teacher-avatar {
-  width: 76px;
-  height: 76px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  border: 3px solid var(--color-gold);
-  box-shadow: 0 0 15px var(--color-gold-glow);
+  border: 2px solid var(--accent-gold);
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 .teacher-bubble {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.2rem;
 }
 
 .teacher-title {
-  font-family: var(--font-title);
-  font-size: 1.1rem;
-  color: var(--color-gold);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-gold);
 }
 
 .teacher-quote {
-  font-size: 0.9rem;
-  color: #cbd5e1;
+  font-size: 0.95rem;
+  color: var(--text-muted);
   font-style: italic;
-  line-height: 1.4;
 }
 
-/* Videos Grid */
-.videos-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
+/* Videos List Card */
 .video-card {
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: var(--transition-smooth);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .video-player-wrapper {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  padding-bottom: 56.25%;
   height: 0;
   background: #000;
 }
@@ -241,21 +291,21 @@ header {
 }
 
 .video-info {
-  padding: 1.2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
 }
 
 .video-title {
-  font-family: var(--font-title);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #fff;
 }
 
-/* Bitacora Form */
+/* Practice Note Section */
 .practice-note-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -265,35 +315,34 @@ header {
 .practice-note-label {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-gold);
+  color: var(--accent-gold);
   text-transform: uppercase;
 }
 
 .practice-note-textarea {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
   color: #fff;
   padding: 0.8rem;
-  font-family: var(--font-body);
+  font-family: var(--font-family);
   font-size: 0.9rem;
   resize: vertical;
-  min-height: 60px;
-  transition: var(--transition-smooth);
+  min-height: 80px;
 }
 
 .practice-note-textarea:focus {
   outline: none;
-  border-color: var(--color-gold);
+  border-color: var(--accent-gold);
 }
 
 .btn-save-note {
   align-self: flex-end;
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid var(--color-gold);
-  color: var(--color-gold);
-  padding: 0.4rem 1.2rem;
-  border-radius: 30px;
+  background: rgba(246, 173, 85, 0.1);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
@@ -301,63 +350,8 @@ header {
 }
 
 .btn-save-note:hover {
-  background: var(--color-gold);
-  color: #000;
-  transform: translateY(-1px);
-}
-
-/* Profiles & Footers */
-.profile-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0.8rem 1.2rem;
-  border-radius: 16px;
-}
-
-.student-info {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.student-avatar-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--color-gold);
-}
-
-.student-name-text {
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.student-instrument-badge {
-  font-size: 0.75rem;
-  background: rgba(212, 175, 55, 0.15);
-  color: var(--color-gold);
-  padding: 2px 8px;
-  border-radius: 50px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.btn-logout {
-  background: transparent;
-  border: none;
-  color: #ef4444;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.btn-logout:hover {
-  opacity: 0.8;
+  background: var(--accent-gold);
+  color: var(--primary-color);
 }
 
 /* Toast Message */
@@ -365,22 +359,16 @@ header {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid var(--color-gold-border);
+  background: var(--primary-color);
+  border: 1px solid var(--accent-gold);
   color: #fff;
   padding: 0.8rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 700;
   font-size: 0.85rem;
   z-index: 100;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   display: none;
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 @media (max-width: 600px) {
