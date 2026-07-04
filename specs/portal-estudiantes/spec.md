@@ -36,7 +36,7 @@ Como estudiante, quiero ver mi propio nombre y foto de perfil en mi página de i
 
 ### Functional Requirements
 - **FR-001**: La plataforma DEBE proveer un formulario de autenticación para los alumnos.
-- **FR-002**: El sistema DEBE filtrar los videos mostrados de acuerdo al instrumento que estudia el alumno (ej. Arpa para Juan Clavijo, Piano para Gabriel Clavijo).
+- **FR-002**: El sistema DEBE filtrar y mostrar a cada alumno únicamente los videos de las canciones del repertorio que le han sido asignadas individualmente en su expediente de Obsidian a través del campo `repertorio_asignado`.
 - **FR-003**: Los enlaces a los videos de Google Drive o el almacenamiento de videos DEBEN estar protegidos contra descargas e inspección fácil de código.
 - **FR-004**: Los administradores (Teacher Juan Di) DEBEN poder revocar el acceso a un alumno (por ejemplo, si deja de pagar sus mensualidades).
 - **FR-005**: La autenticación del usuario y la validación de permisos se DEBE procesar mediante la API de Supabase Auth y base de datos relacional Supabase.
