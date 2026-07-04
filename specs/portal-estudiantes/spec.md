@@ -26,6 +26,12 @@ Como estudiante, quiero añadir anotaciones o reportar avances en cada video del
 **Why this priority**: Permite que el estudio sea interactivo y que el profesor sepa el avance del alumno antes de la clase.
 **Independent Test**: Agregar una anotación en un video del portal; verificar que se guarda en la web y que, al correr el bot, aparece en el archivo del estudiante en Obsidian.
 
+### User Story 3 - Personalización y Mensajes del Profe (Priority: P3)
+Como estudiante, quiero ver mi propio nombre y foto de perfil en mi página de inicio del portal, además de un consejo dinámico sobre la práctica diaria presentado por el Teacher para sentirme motivado a seguir estudiando.
+
+**Why this priority**: Mejora la experiencia y el compromiso del alumno con la identidad del proyecto Seven Keys.
+**Independent Test**: Entrar al portal con diferentes alumnos, verificar que los nombres y fotos correspondan y que la frase motivadora al lado del avatar del Teacher cambie dinámicamente al refrescar.
+
 ## Requirements
 
 ### Functional Requirements
@@ -39,6 +45,8 @@ Como estudiante, quiero añadir anotaciones o reportar avances en cada video del
 - **FR-008**: El estudiante DEBE poder cambiar su contraseña desde un panel de perfil en la web de manera segura.
 - **FR-009**: El sistema DEBE permitir al estudiante guardar comentarios/notas de progreso por video, almacenándolos en Supabase.
 - **FR-010**: El bot local de Python DEBE leer periódicamente las notas de progreso de Supabase y anexarlas automáticamente al archivo `.md` de cada estudiante en Obsidian bajo la sección `## 📝 Bitácora de práctica del alumno`.
+- **FR-011**: El portal del estudiante DEBE presentar un saludo con el avatar de **Teacher Juan Di** y una frase de motivación musical obtenida de un listado dinámico.
+- **FR-012**: El estudiante DEBE poder subir y cambiar su foto de perfil y editar su nombre de visualización dentro de su área de cuenta.
 
 ## Success Criteria
 
