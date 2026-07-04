@@ -44,20 +44,48 @@
       </div>
     </div>
 
-    <!-- 2. Dashboard View (Hidden by default) -->
+    <!-- 2. Dashboard View -->
     <div id="dashboard-view" style="display: none; flex-direction: column; gap: 1.5rem;">
       <!-- Profile and Account header -->
       <div class="profile-section">
         <div class="student-info">
-          <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img">
+          <div style="position: relative; display: inline-block;">
+            <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img">
+            <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: var(--color-gold); color: #000; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; cursor: pointer; border: 1px solid #fff;">
+              <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+          </div>
           <div>
-            <div id="student-name" class="student-name-text">Cargando...</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="student-name" class="student-name-text">Cargando...</span>
+              <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem;"><i class="fas fa-edit"></i></button>
+            </div>
             <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
           </div>
         </div>
-        <button class="btn-logout" onclick="handleLogout()">
-          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-        </button>
+        
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-back" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="togglePasswordForm()">
+            <i class="fas fa-key"></i> Contraseña
+          </button>
+          <button class="btn-logout" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </button>
+        </div>
+      </div>
+
+      <!-- Password Change form (Hidden by default) -->
+      <div id="password-form-section" style="display: none; background: var(--bg-card); border: 1px solid var(--color-gold-border); padding: 1.2rem; border-radius: 16px; flex-direction: column; gap: 0.8rem;">
+        <h3 style="font-family: var(--font-title); font-size: 1rem; color: var(--color-gold);">Cambiar Contraseña</h3>
+        <div class="form-group">
+          <label class="form-label">Nueva Contraseña</label>
+          <input class="form-input" type="password" id="new-password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="btn-back" style="font-size: 0.75rem;" onclick="togglePasswordForm()">Cancelar</button>
+          <button class="btn-save-note" style="align-self: auto;" onclick="updatePassword()">Guardar Contraseña</button>
+        </div>
       </div>
 
       <!-- Teacher Juan Di quote dynamic header -->
@@ -150,6 +178,9 @@
         studentProfile = profile;
         document.getElementById('student-name').innerText = profile.nombre;
         document.getElementById('student-instrument').innerText = profile.instrumento;
+        if (profile.avatar_url) {
+          document.getElementById('student-avatar').src = profile.avatar_url;
+        }
 
         if (profile.estado !== 'activo') {
           showToast("Tu cuenta está inactiva. Contacta al Teacher.");
@@ -253,6 +284,92 @@
         }
       } catch (e) {
         showToast("Error al conectar con la base de datos.");
+      }
+    }
+
+    // --- Profile Editing and Photo Uploading ---
+    async function editName() {
+      const newName = prompt("Ingresa tu nombre completo:", studentProfile.nombre);
+      if (newName && newName.trim() !== studentProfile.nombre) {
+        const { error } = await supabaseClient
+          .from('estudiantes')
+          .update({ nombre: newName.trim() })
+          .eq('id', currentUser.id);
+
+        if (error) {
+          showToast("Error al actualizar nombre.");
+        } else {
+          showToast("Nombre actualizado.");
+          document.getElementById('student-name').innerText = newName.trim();
+          studentProfile.nombre = newName.trim();
+        }
+      }
+    }
+
+    async function uploadAvatar() {
+      const fileInput = document.getElementById('avatar-upload');
+      if (fileInput.files.length === 0) return;
+
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${currentUser.id}-${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      showToast("Subiendo foto de perfil...");
+
+      const { data, error } = await supabaseClient.storage
+        .from('student-avatars')
+        .upload(filePath, file);
+
+      if (error) {
+        showToast("Error al subir imagen.");
+        return;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabaseClient.storage
+        .from('student-avatars')
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Update in profile table
+      const { error: updateErr } = await supabaseClient
+        .from('estudiantes')
+        .update({ avatar_url: publicUrl })
+        .eq('id', currentUser.id);
+
+      if (updateErr) {
+        showToast("Error al vincular imagen a tu perfil.");
+      } else {
+        showToast("Foto de perfil actualizada.");
+        document.getElementById('student-avatar').src = publicUrl;
+        studentProfile.avatar_url = publicUrl;
+      }
+    }
+
+    function togglePasswordForm() {
+      const form = document.getElementById('password-form-section');
+      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function updatePassword() {
+      const newPassword = document.getElementById('new-password').value.trim();
+      if (newPassword.length < 6) {
+        showToast("La contraseña debe tener mínimo 6 caracteres.");
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        showToast("Error al cambiar contraseña.");
+      } else {
+        showToast("Contraseña cambiada con éxito.");
+        document.getElementById('new-password').value = "";
+        togglePasswordForm();
       }
     }
 
