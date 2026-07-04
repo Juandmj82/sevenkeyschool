@@ -136,14 +136,46 @@
         <!-- Dynamic classes history list in accordion style -->
       </div>
 
-      <!-- Tab Content 2: Tutoriales -->
-      <div id="tab-videos-content" class="videos-container" style="display: none;">
-        <div id="videos-list" class="videos-container">
-          <!-- Videos will be dynamically rendered here -->
+      <!-- Tab Content 2: Tutoriales (Grid) -->
+      <div id="tab-videos-content" style="display: none; flex-direction: column; gap: 1.5rem;">
+        <div id="videos-list" class="tutorials-grid">
+          <!-- Tutorial cards rendered here -->
         </div>
       </div>
     </div>
   </main>
+
+  <!-- ===== VIDEO MODAL (opens inline, no external link) ===== -->
+  <div id="video-modal" class="video-modal-overlay" onclick="closeVideoModal(event)">
+    <div class="video-modal-card">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <h2 id="modal-video-title" class="modal-title">Cargando...</h2>
+      <div class="modal-body">
+        <!-- Left: video -->
+        <div class="modal-video-col">
+          <div class="modal-player-wrapper">
+            <iframe id="modal-iframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+          </div>
+        </div>
+        <!-- Right: bitácora -->
+        <div class="modal-note-col">
+          <div class="modal-note-inner">
+            <div class="practice-note-label" style="margin-bottom: 0.5rem;">
+              <i class="fas fa-book-open" style="margin-right: 6px; color: var(--accent-gold);"></i>
+              Mi Bitácora de Práctica
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem; line-height: 1.5;">
+              Escribe lo que practicaste, lo que te costó y tus avances. Tu teacher lo verá en Obsidian.
+            </p>
+            <textarea id="modal-note-textarea" class="practice-note-textarea" style="flex: 1; min-height: 200px;" placeholder="¿Qué practicaste hoy? ¿Qué lograste? ¿Qué te costó?"></textarea>
+            <button class="btn-save-note" style="margin-top: 0.8rem; width: 100%; justify-content: center;" onclick="saveModalNote()">
+              <i class="fas fa-save"></i> Guardar Nota de Estudio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="toast" class="toast-msg">Mensaje informativo</div>
 
@@ -357,79 +389,85 @@
       });
     }
 
+    let activeVideoId = null;
+
     function renderVideos(videos) {
       const container = document.getElementById('videos-list');
-      container.innerHTML = "";
+      container.innerHTML = '';
 
       if (!videos || videos.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay clases con tutoriales asignados aún.</p>`;
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem; grid-column: 1/-1;">No hay tutoriales asignados aún.</p>`;
         return;
       }
 
       videos.forEach(video => {
         const card = document.createElement('div');
-        card.className = 'video-card';
+        card.className = 'tutorial-card';
+        card.onclick = () => openVideoModal(video);
+
+        const thumbUrl = `https://drive.google.com/thumbnail?id=${video.drive_id}&sz=w400`;
+
         card.innerHTML = `
-          <div class="video-player-wrapper">
-            <iframe src="https://drive.google.com/file/d/${video.drive_id}/preview" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="video-info">
-            <h3 class="video-title">${video.title}</h3>
-            
-            <div class="practice-note-section">
-              <span class="practice-note-label">Mi Bitácora de Práctica</span>
-              <textarea class="practice-note-textarea" id="note-${video.id}" placeholder="¿Qué practicaste hoy? ¿Qué te costó trabajo? Escríbelo aquí para tu bitácora..."></textarea>
-              <button class="btn-save-note" onclick="savePracticeNote('${video.id}')">
-                <i class="fas fa-save"></i> Guardar Nota de Estudio
-              </button>
+          <div class="tutorial-thumb">
+            <img src="${thumbUrl}" alt="${video.title}" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><i class=\'fas fa-play-circle\'></i></div>'">
+            <div class="tutorial-play-overlay">
+              <i class="fas fa-play"></i>
             </div>
+          </div>
+          <div class="tutorial-card-info">
+            <h3 class="tutorial-card-title">${video.title}</h3>
+            <span class="tutorial-card-hint"><i class="fas fa-hand-pointer"></i> Toca para ver</span>
           </div>
         `;
         container.appendChild(card);
-        loadExistingNote(video.id);
       });
     }
 
-    async function loadExistingNote(videoId) {
+    function openVideoModal(video) {
+      activeVideoId = video.id;
+      document.getElementById('modal-video-title').innerText = video.title;
+      document.getElementById('modal-iframe').src = `https://drive.google.com/file/d/${video.drive_id}/preview`;
+      document.getElementById('video-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Load existing note for this video
+      loadModalNote(video.id);
+    }
+
+    async function loadModalNote(videoId) {
+      document.getElementById('modal-note-textarea').value = '';
       if (!supabaseClient || !currentUser) return;
-      const { data, error } = await supabaseClient
+      const { data } = await supabaseClient
         .from('bitacoras')
         .select('nota')
         .eq('estudiante_id', currentUser.id)
         .eq('video_id', videoId)
         .order('fecha', { ascending: false })
         .limit(1);
-
       if (data && data.length > 0) {
-        document.getElementById(`note-${videoId}`).value = data[0].nota;
+        document.getElementById('modal-note-textarea').value = data[0].nota;
       }
     }
 
-    async function savePracticeNote(videoId) {
-      const noteText = document.getElementById(`note-${videoId}`).value.trim();
-      if (!noteText) {
-        showToast("Escribe algo antes de guardar.");
-        return;
-      }
+    async function saveModalNote() {
+      if (!activeVideoId) return;
+      const noteText = document.getElementById('modal-note-textarea').value.trim();
+      if (!noteText) { showToast('Escribe algo antes de guardar.'); return; }
+      const { error } = await supabaseClient
+        .from('bitacoras')
+        .insert({ estudiante_id: currentUser.id, video_id: activeVideoId, nota: noteText, sincronizado: false });
+      if (error) { showToast('Error al guardar la nota.'); }
+      else { showToast('¡Nota guardada con éxito! 🎵'); }
+    }
 
-      try {
-        const { error } = await supabaseClient
-          .from('bitacoras')
-          .insert({
-            estudiante_id: currentUser.id,
-            video_id: videoId,
-            nota: noteText,
-            sincronizado: false
-          });
+    function closeModal() {
+      document.getElementById('video-modal').classList.remove('active');
+      document.getElementById('modal-iframe').src = '';
+      document.body.style.overflow = '';
+      activeVideoId = null;
+    }
 
-        if (error) {
-          showToast("Error al guardar la nota.");
-        } else {
-          showToast("¡Nota de práctica guardada con éxito!");
-        }
-      } catch (e) {
-        showToast("Error al conectar con la base de datos.");
-      }
+    function closeVideoModal(e) {
+      if (e.target === document.getElementById('video-modal')) closeModal();
     }
 
     // --- Profile Editing and Photo Uploading ---
