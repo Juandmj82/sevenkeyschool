@@ -732,6 +732,18 @@ header {
   border: none;
 }
 
+/* Invisible blocker overlay to prevent clicking Google Drive popout icon */
+.video-popout-blocker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 55px;
+  background: transparent;
+  z-index: 10;
+  cursor: default;
+}
+
 .modal-note-col {
   display: flex;
   flex-direction: column;
