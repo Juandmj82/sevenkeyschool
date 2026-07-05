@@ -1,0 +1,60 @@
+# Feature Specification: Portal de Tutoriales Protegidos para Estudiantes
+
+**Feature Branch**: `master`
+**Created**: 2026-07-04
+**Status**: Approved (Completed & Deployed)
+
+## Clarifications
+### Session 2026-07-04
+- Q: ¿Qué nivel de seguridad y complejidad de infraestructura prefieres implementar en esta primera iteración? → A: Opción A (Supabase - Serverless).
+- Q: ¿Cómo deseas integrar los videos de Google Drive para proteger los enlaces y la reproducción? → A: Opción A (Google Drive Iframe Dinámico, guardando IDs en Supabase y cargando los iframes mediante renderizado dinámico en JS).
+- Q: ¿Cómo planeas gestionar el alta de nuevos alumnos y la asignación/bloqueo de accesos de manera cómoda? → A: Opción A (Sincronización automática a través de tu bot de Python existente).
+- Q: ¿Cómo obtendrán los alumnos su contraseña/código de acceso y cómo se maneja la seguridad/cambios? → A: Opción A híbrida (Bot genera contraseña segura, envía correo automático desde el Gmail de la escuela, y notifica por Telegram al Teacher con enlace pre-redactado de WhatsApp. El alumno puede cambiar la contraseña en la web, pero el Teacher mantiene control desactivando la cuenta desde Obsidian).
+- Q: ¿Deseas incluir la característica de "Bitácora de Práctica del Alumno" en la primera versión? → A: Opción A (Sí, incluir Bitácora en v1: el alumno escribe notas por video en la web y el bot de Python las lee de Supabase y las escribe en el expediente de Obsidian).
+
+## User Scenarios & Testing
+
+### User Story 1 - Acceso Protegido por Alumno (Priority: P1)
+Como estudiante activo de arpa o piano, quiero ingresar mis credenciales de acceso (correo y contraseña/código) en un portal seguro para ver la lista de tutoriales y videos exclusivos asociados a mi instrumento sin que personas externas puedan acceder a ellos.
+
+**Why this priority**: Es la necesidad de negocio principal y el control de acceso a los videos.
+**Independent Test**: Intentar acceder a la página de tutoriales sin ingresar credenciales válidas debe denegar el acceso. Al ingresar credenciales correctas, debe mostrarse la lista de videos correspondientes al instrumento del alumno.
+
+### User Story 2 - Registro de Notas de Práctica (Priority: P2)
+Como estudiante, quiero añadir anotaciones o reportar avances en cada video del tutorial para llevar un registro de lo que he estudiado y las dificultades que he tenido.
+
+**Why this priority**: Permite que el estudio sea interactivo y que el profesor sepa el avance del alumno antes de la clase.
+**Independent Test**: Agregar una anotación en un video del portal; verificar que se guarda en la web y que, al correr el bot, aparece en el archivo del estudiante en Obsidian.
+
+### User Story 3 - Personalización y Mensajes del Profe (Priority: P3)
+Como estudiante, quiero ver mi propio nombre y foto de perfil en mi página de inicio del portal, además de un consejo dinámico sobre la práctica diaria presentado por el Teacher para sentirme motivado a seguir estudiando.
+
+**Why this priority**: Mejora la experiencia y el compromiso del alumno con la identidad del proyecto Seven Keys.
+**Independent Test**: Entrar al portal con diferentes alumnos, verificar que los nombres y fotos correspondan y que la frase motivadora al lado del avatar del Teacher cambie dinámicamente al refrescar.
+
+## Requirements
+
+### Functional Requirements
+- **FR-001**: La plataforma DEBE proveer un formulario de autenticación para los alumnos.
+- **FR-002**: El sistema DEBE filtrar y mostrar a cada alumno únicamente los videos de las canciones del repertorio que le han sido asignadas individualmente en su expediente de Obsidian a través del campo `repertorio_asignado`.
+- **FR-003**: Los enlaces a los videos de Google Drive o el almacenamiento de videos DEBEN estar protegidos contra descargas e inspección fácil de código.
+- **FR-004**: Los administradores (Teacher Juan Di) DEBEN poder revocar el acceso a un alumno (por ejemplo, si deja de pagar sus mensualidades).
+- **FR-005**: La autenticación del usuario y la validación de permisos se DEBE procesar mediante la API de Supabase Auth y base de datos relacional Supabase.
+- **FR-006**: Las IDs de los videos de Google Drive DEBEN estar almacenadas en una tabla de base de datos segura en Supabase y ser consultadas dinámicamente solo tras confirmar una sesión válida del estudiante.
+- **FR-007**: El estado de cuenta y accesos del alumno en Supabase DEBEN ser sincronizados por el script del bot local de Python leyendo los expedientes del Obsidian local (`Estado: Activo` o `Inactivo`).
+- **FR-008**: El estudiante DEBE poder cambiar su contraseña desde un panel de perfil en la web de manera segura.
+- **FR-009**: El sistema DEBE permitir al estudiante guardar comentarios/notas de progreso por video, almacenándolos en Supabase.
+- **FR-010**: El bot local de Python DEBE leer periódicamente las notas de progreso de Supabase y anexarlas automáticamente al archivo `.md` de cada estudiante en Obsidian bajo la sección `## 📝 Bitácora de práctica del alumno`.
+- **FR-011**: El portal del estudiante DEBE presentar un saludo con el avatar de **Teacher Juan Di** y una frase de motivación musical obtenida de un listado dinámico.
+- **FR-012**: El estudiante DEBE poder subir y cambiar su foto de perfil y editar su nombre de visualización dentro de su área de cuenta.
+- **FR-013**: El header del portal DEBE centrar absolutamente la marca animada de "Seven Keys" con un revelado letra por letra y ocultarse responsivamente en dispositivos pequeños.
+- **FR-014**: Si el estudiante no tiene cargada una foto de perfil, el sistema DEBE autogenerar un avatar SVG dinámico basado en las iniciales de su nombre y con fondo de degradado estético.
+- **FR-015**: Los videos integrados DEBEN bloquear cualquier intento de apertura externa mediante un overlay transparente situado sobre la barra superior para asegurar una experiencia estrictamente contenida dentro del portal.
+- **FR-016**: La interfaz DEBE seguir pautas de UI/UX Pro Max, incluyendo transiciones fluidas en hover para acordeones, cursores interactivos consistentes y control estricto de contrastes.
+
+## Success Criteria
+
+### Measurable Outcomes
+- **SC-001**: Ningún usuario no autenticado debe ser capaz de reproducir o ver los enlaces de los videos.
+- **SC-002**: El portal debe cargar y validar las credenciales del alumno en menos de 1.5 segundos.
+- **SC-003**: El bot debe poder sincronizar las notas de práctica hacia Obsidian en menos de 10 segundos al ejecutarse.

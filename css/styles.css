@@ -7,6 +7,13 @@
     --text-secondary: #718096;   /* Medium Gray */
     --gradient-start: #2A4365;
     --gradient-end: #4299E1;
+    --bg-track: #f1f1f1;
+    --bg-light: #f7fafc;
+}
+
+/* Global Interactive Indicators (UX Pro Max) */
+.btn, .button, .clickable, .accordion-toggle, .slider-button, .dot-button {
+    cursor: pointer;
 }
 
 /* Base Styles */
@@ -259,7 +266,7 @@ section {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--bg-track);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -297,7 +304,7 @@ a:focus, button:focus {
 
 /* Founder Section Styles */
 #equipo {
-    background: linear-gradient(to bottom, var(--primary-color) 0%, var(--primary-color) 30%, #f7fafc 30%, #f7fafc 100%);
+    background: linear-gradient(to bottom, var(--primary-color) 0%, var(--primary-color) 30%, var(--bg-light) 30%, var(--bg-light) 100%);
 }
 
 #equipo .bg-white {
@@ -384,3 +391,19 @@ a:focus, button:focus {
         transform: scale(1.04);
     }
 }
+
+/* Portal Estudiantes Navigation Button Style Fixes (Pro Max Contrast) */
+.btn-nav-portal {
+    border: 1.5px solid var(--accent-color) !important;
+    color: var(--accent-color) !important;
+    background: transparent !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-nav-portal:hover {
+    background: var(--accent-color) !important;
+    color: #1A202C !important; /* Dark charcoal text for superb contrast on gold background */
+    box-shadow: 0 0 15px rgba(246, 173, 85, 0.4) !important;
+    transform: translateY(-1px);
+}
+

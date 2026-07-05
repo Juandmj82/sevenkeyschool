@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Estudiantes — Seven Keys School</title>
+  <link rel="stylesheet" href="css/tutoriales.css?v=1.0.9">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <header id="main-header">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <div class="header-title-wrapper">
+      <span class="header-title-reveal">
+        <span style="--i:1">S</span>
+        <span style="--i:2">e</span>
+        <span style="--i:3">v</span>
+        <span style="--i:4">e</span>
+        <span style="--i:5">n</span>
+        <span style="margin-right: 12px;"></span>
+        <span style="--i:6">K</span>
+        <span style="--i:7">e</span>
+        <span style="--i:8">y</span>
+        <span style="--i:9">s</span>
+      </span>
+    </div>
+    <a href="../index.html" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Volver al Inicio
+    </a>
+  </header>
+
+  <main class="portal-container">
+    <!-- 1. Authentication View -->
+    <div id="auth-view" class="auth-wrapper">
+      <div class="auth-card">
+        <h1 class="auth-title">Portal de Estudio</h1>
+        <p class="auth-subtitle">Ingresa tus credenciales autorizadas por la escuela para acceder a tus videos.</p>
+        
+        <div class="form-group">
+          <label class="form-label" for="login-email">Correo Electrónico</label>
+          <input class="form-input" type="email" id="login-email" placeholder="ejemplo@correo.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña / Código</label>
+          <input class="form-input" type="password" id="login-password" placeholder="••••••••">
+        </div>
+
+        <button class="btn-primary" onclick="handleLogin()">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Dashboard View -->
+    <div id="dashboard-view" style="display: none; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Facebook-Style Profile Card -->
+      <div class="facebook-profile-card">
+        <!-- Cover Photo Banner -->
+        <div class="fb-cover-photo"></div>
+        
+        <!-- Profile details wrapper -->
+        <div class="fb-profile-content">
+          <div class="avatar-container-fb">
+            <img src="../img/profe.jpg" alt="Avatar" id="student-avatar" class="student-avatar-img-fb">
+            <label for="avatar-upload" class="upload-avatar-overlay">
+              <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+          </div>
+          
+          <div class="fb-user-details">
+            <h1 class="student-name-fb">
+              <span id="student-name">Cargando...</span>
+              <button onclick="editName()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem;"><i class="fas fa-edit"></i></button>
+            </h1>
+            <div class="fb-instrument-badges">
+              <span id="student-instrument" class="student-instrument-badge">Instrumento</span>
+            </div>
+          </div>
+          
+          <div class="profile-actions-fb">
+            <button class="btn-back" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;" onclick="togglePasswordForm()">
+              <i class="fas fa-key"></i> Contraseña
+            </button>
+            <button class="btn-logout" onclick="handleLogout()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Account and payment metadata grid -->
+        <div class="fb-meta-grid">
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Horario asignado</span>
+            <span class="fb-meta-value" id="meta-schedule">Sábados 10:00 am</span>
+          </div>
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Inicio de clases</span>
+            <span class="fb-meta-value" id="meta-start">01-03-2026</span>
+          </div>
+          <div class="fb-meta-item">
+            <span class="fb-meta-label">Estado de pago</span>
+            <span class="fb-meta-value status-success" id="meta-payment">Al día</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Change form (Hidden by default) -->
+      <div id="password-form-section" style="display: none; background: var(--bg-card); border: 1px solid var(--accent-gold); padding: 1.2rem; border-radius: 16px; flex-direction: column; gap: 0.8rem;">
+        <h3 style="font-family: var(--font-family); font-size: 1rem; color: var(--accent-gold); font-weight: 700;">Cambiar Contraseña</h3>
+        <div class="form-group">
+          <label class="form-label">Nueva Contraseña</label>
+          <input class="form-input" type="password" id="new-password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="btn-back" style="font-size: 0.75rem;" onclick="togglePasswordForm()">Cancelar</button>
+          <button class="btn-save-note" style="align-self: auto;" onclick="updatePassword()">Guardar Contraseña</button>
+        </div>
+      </div>
+
+      <!-- Teacher Juan Di quote dynamic header -->
+      <div class="teacher-banner">
+        <img src="../img/profe.jpg" alt="Teacher Juan Di" class="teacher-avatar">
+        <div class="teacher-bubble">
+          <div class="teacher-title">Teacher Juan Di dice:</div>
+          <div id="teacher-quote" class="teacher-quote">"La constancia en la práctica diaria es la llave para dominar tu instrumento."</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="portal-tabs">
+        <button id="tab-classes" class="portal-tab-btn active" onclick="switchTab('classes')">
+          <i class="fas fa-calendar-alt"></i> Clases Tomadas
+        </button>
+        <button id="tab-videos" class="portal-tab-btn" onclick="switchTab('videos')">
+          <i class="fas fa-video"></i> Tutoriales y Material
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Clases Tomadas Accordion -->
+      <div id="tab-classes-content" class="history-container" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Buscador y Filtro por meses -->
+        <div class="search-filter-bar" style="display: flex; flex-direction: column; gap: 0.8rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); padding: 1rem; border-radius: 14px;">
+          <div style="position: relative; display: flex; align-items: center;">
+            <i class="fas fa-search" style="position: absolute; left: 1rem; color: var(--accent-gold); font-size: 0.9rem;"></i>
+            <input type="text" id="class-search-input" onkeyup="filterClasses()" placeholder="Buscar clase por tema, canción, calentamiento..." style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-family: var(--font-family); font-size: 0.9rem; outline: none; transition: var(--transition-smooth);">
+          </div>
+          <!-- Fila de meses dinámicos -->
+          <div id="month-filter-pills" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <!-- Month pills injected here -->
+          </div>
+        </div>
+        
+        <!-- Accordion container -->
+        <div id="classes-accordion-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <!-- Dynamic classes history list in accordion style -->
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Tutoriales (Grid) -->
+      <div id="tab-videos-content" style="display: none; flex-direction: column; gap: 1.5rem;">
+        <div id="videos-list" class="tutorials-grid">
+          <!-- Tutorial cards rendered here -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== VIDEO MODAL (opens inline, no external link) ===== -->
+  <div id="video-modal" class="video-modal-overlay" onclick="closeVideoModal(event)">
+    <div class="video-modal-card">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <h2 id="modal-video-title" class="modal-title">Cargando...</h2>
+      <div class="modal-body">
+        <!-- Left: video -->
+        <div class="modal-video-col">
+          <div class="modal-player-wrapper" style="position: relative;">
+            <iframe id="modal-iframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <!-- Invisible overlay blocker covering the top bar to disable popout/title clicks -->
+            <div class="video-top-bar-blocker"></div>
+          </div>
+        </div>
+        <!-- Right: bitácora -->
+        <div class="modal-note-col">
+          <div class="modal-note-inner">
+            <div class="practice-note-label" style="margin-bottom: 0.5rem;">
+              <i class="fas fa-book-open" style="margin-right: 6px; color: var(--accent-gold);"></i>
+              Mi Bitácora de Práctica
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.8rem; line-height: 1.5;">
+              Escribe lo que practicaste, lo que te costó y tus avances. Tu teacher lo verá en Obsidian.
+            </p>
+            <textarea id="modal-note-textarea" class="practice-note-textarea" style="flex: 1; min-height: 200px;" placeholder="¿Qué practicaste hoy? ¿Qué lograste? ¿Qué te costó?"></textarea>
+            <button class="btn-save-note" style="margin-top: 0.8rem; width: 100%; justify-content: center;" onclick="saveModalNote()">
+              <i class="fas fa-save"></i> Guardar Nota de Estudio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast-msg">Mensaje informativo</div>
+
+  <script>
+    // Configuración real del proyecto de la escuela
+    const SUPABASE_URL = "https://iqknbmwdgqbfnhrdcnbl.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxa25ibXdkZ3FiZm5ocmRjbmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNjg1NjAsImV4cCI6MjA5ODc0NDU2MH0.Usqt87i8Xxahu5ocZWKWibEd17axb7Rg1JnBx5ik43w";
+    let supabaseClient = null;
+    let currentUser = null;
+    let studentProfile = null;
+
+    const MOTIVATIONAL_QUOTES = [
+      "\"La práctica no hace la perfección, la práctica hace al maestro.\"",
+      "\"Cada 10 minutos de estudio enfocado te acercan un paso más a la maestría musical.\"",
+      "\"Aprender un instrumento es un viaje de paciencia. Disfruta el sonido de cada nota hoy.\"",
+      "\"Tu instrumento es tu voz. Practica con calma y escucha lo que tienes para decir.\"",
+      "\"La música requiere corazón y disciplina. ¡Buen trabajo por dedicarle tiempo hoy!\""
+    ];
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    function initSupabase() {
+      if (SUPABASE_URL && SUPABASE_KEY) {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Check current active session
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if (session) {
+            loadStudentDashboard(session.user);
+          } else {
+            showAuthView();
+          }
+        });
+      }
+    }
+
+    function showAuthView() {
+      document.getElementById('auth-view').style.display = 'flex';
+      document.getElementById('dashboard-view').style.display = 'none';
+    }
+
+    function switchTab(tabName) {
+      if (tabName === 'classes') {
+        document.getElementById('tab-classes').classList.add('active');
+        document.getElementById('tab-videos').classList.remove('active');
+        document.getElementById('tab-classes-content').style.display = 'flex';
+        document.getElementById('tab-videos-content').style.display = 'none';
+      } else {
+        document.getElementById('tab-classes').classList.remove('active');
+        document.getElementById('tab-videos').classList.add('active');
+        document.getElementById('tab-classes-content').style.display = 'none';
+        document.getElementById('tab-videos-content').style.display = 'flex';
+      }
+    }
+
+    // Toggle accordion state
+    function toggleAccordion(headerElement) {
+      const parent = headerElement.parentElement;
+      parent.classList.toggle('active');
+    }
+
+    async function loadStudentDashboard(user) {
+      currentUser = user;
+      document.getElementById('auth-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'flex';
+
+      // Set random teacher quote
+      const randQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+      document.getElementById('teacher-quote').innerText = randQuote;
+
+      try {
+        // Fetch profile
+        const { data: profile, error } = await supabaseClient
+          .from('estudiantes')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error || !profile) {
+          showToast("Error al obtener perfil.");
+          return;
+        }
+
+        studentProfile = profile;
+        document.getElementById('student-name').innerText = profile.nombre;
+        document.getElementById('student-instrument').innerText = profile.instrumento;
+        if (profile.avatar_url) {
+          document.getElementById('student-avatar').src = profile.avatar_url;
+        } else {
+          const names = (profile.nombre || "Estudiante").split(' ');
+          const initials = (names[0] ? names[0].charAt(0) : '') + (names[1] ? names[1].charAt(0) : '');
+          const svgHtml = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <circle cx="50" cy="50" r="48" fill="#4299E1" stroke="#FFFFFF" stroke-width="2"/>
+              <text x="50%" y="54%" font-family="'Inter', sans-serif" font-weight="bold" font-size="36" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">${initials.toUpperCase()}</text>
+            </svg>
+          `;
+          document.getElementById('student-avatar').src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgHtml);
+        }
+
+        if (profile.estado !== 'activo') {
+          showToast("Tu cuenta está inactiva. Contacta al Teacher.");
+          handleLogout();
+          return;
+        }
+
+        // Render profile metadata card
+        const meta = profile.metadata || {};
+        document.getElementById('meta-schedule').innerText = meta.horario || "Sin asignar";
+        document.getElementById('meta-start').innerText = meta.inicio_clases || "Sin definir";
+        
+        const paymentEl = document.getElementById('meta-payment');
+        paymentEl.innerText = meta.pago || "Al día";
+        if (meta.pago && meta.pago.toLowerCase().includes("pendiente")) {
+          paymentEl.className = "fb-meta-value status-warning";
+        } else {
+          paymentEl.className = "fb-meta-value status-success";
+        }
+
+        // Render Classes History (Accordion style)
+        globalClassesHistory = profile.clases_historial || [];
+        setupMonthFilters(globalClassesHistory);
+        renderClassesHistory(globalClassesHistory);
+
+        // Fetch assigned videos for this specific student using the intermediate table
+        const { data: assignedRelation, error: vErr } = await supabaseClient
+          .from('estudiante_videos')
+          .select('videos (*)')
+          .eq('estudiante_id', user.id);
+
+        if (vErr) {
+          showToast("Error al cargar tus clases.");
+          return;
+        }
+
+        // Extract and sort the videos
+        const videos = assignedRelation
+          .map(item => item.videos)
+          .filter(Boolean)
+          .sort((a, b) => a.orden - b.orden);
+
+        renderVideos(videos);
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    let globalClassesHistory = [];
+    let selectedMonthFilter = "all";
+
+    // Helper to format date strings into "Mes Año"
+    function getMonthYearLabel(dateStr) {
+      if (!dateStr) return "Otro";
+      const parts = dateStr.split('-');
+      if (parts.length < 2) return "Otro";
+      const year = parts[0];
+      const monthNum = parseInt(parts[1], 10);
+      const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+      return `${months[monthNum - 1]} ${year}`;
+    }
+
+    function setupMonthFilters(history) {
+      const pillsContainer = document.getElementById('month-filter-pills');
+      pillsContainer.innerHTML = "";
+
+      if (!history || history.length === 0) return;
+
+      // Extract unique months and group by year
+      const monthsSet = new Set();
+      const yearsSet = new Set();
+      
+      history.forEach(item => {
+        if (item.date) {
+          monthsSet.add(getMonthYearLabel(item.date));
+          const year = item.date.split('-')[0];
+          yearsSet.add(year);
+        }
+      });
+
+      // Create "Todos" button
+      const allBtn = document.createElement('button');
+      allBtn.className = "pdf-btn";
+      allBtn.style.margin = "0";
+      allBtn.style.padding = "6px 12px";
+      allBtn.style.borderRadius = "50px";
+      allBtn.id = "pill-all";
+      allBtn.innerText = `Todos (${history.length})`;
+      allBtn.onclick = () => selectMonthFilter("all");
+      pillsContainer.appendChild(allBtn);
+
+      // Sort years descending
+      const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+
+      sortedYears.forEach(year => {
+        // Group label if multiple years exist
+        if (sortedYears.length > 1) {
+          const yearDivider = document.createElement('span');
+          yearDivider.style.color = "var(--accent-gold)";
+          yearDivider.style.fontSize = "0.8rem";
+          yearDivider.style.fontWeight = "800";
+          yearDivider.style.margin = "0 6px";
+          yearDivider.innerText = `${year}:`;
+          pillsContainer.appendChild(yearDivider);
+        }
+
+        // Add months for this year
+        const monthsForYear = Array.from(monthsSet).filter(m => m.endsWith(year));
+        monthsForYear.forEach(monthLabel => {
+          const count = history.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
+          const btn = document.createElement('button');
+          btn.className = "pdf-btn";
+          btn.style.margin = "0";
+          btn.style.padding = "6px 12px";
+          btn.style.borderRadius = "50px";
+          btn.style.background = "rgba(255,255,255,0.03)";
+          btn.style.color = "var(--text-muted)";
+          btn.style.borderColor = "rgba(255,255,255,0.08)";
+          btn.id = `pill-${monthLabel.replace(/\s+/g, '-')}`;
+          btn.innerText = `${monthLabel} (${count})`;
+          btn.onclick = () => selectMonthFilter(monthLabel);
+          pillsContainer.appendChild(btn);
+        });
+      });
+
+      updatePillStyles();
+    }
+
+    function selectMonthFilter(monthLabel) {
+      selectedMonthFilter = monthLabel;
+      updatePillStyles();
+      filterClasses();
+    }
+
+    function updatePillStyles() {
+      const pillsContainer = document.getElementById('month-filter-pills');
+      const buttons = pillsContainer.getElementsByTagName('button');
+      
+      for (let btn of buttons) {
+        if (btn.id === `pill-${selectedMonthFilter.replace(/\s+/g, '-')}`) {
+          btn.style.background = "var(--accent-gold)";
+          btn.style.color = "var(--primary-color)";
+          btn.style.borderColor = "var(--accent-gold)";
+        } else {
+          btn.style.background = "rgba(255,255,255,0.03)";
+          btn.style.color = "var(--text-muted)";
+          btn.style.borderColor = "rgba(255,255,255,0.08)";
+        }
+      }
+    }
+
+    function filterClasses() {
+      const query = document.getElementById('class-search-input').value.toLowerCase().trim();
+      
+      // If user is searching text, ignore month filter to make the search global and easy to find
+      if (query !== "" && selectedMonthFilter !== "all") {
+        selectedMonthFilter = "all";
+        updatePillStyles();
+      }
+
+      const filtered = globalClassesHistory.filter(item => {
+        // Month Match
+        const monthLabel = getMonthYearLabel(item.date);
+        const matchesMonth = (selectedMonthFilter === "all" || monthLabel === selectedMonthFilter);
+
+        // Search Match
+        const nameVal = (item.name || "").toLowerCase();
+        const dateVal = (item.date || "");
+        const detailsVal = (item.details || []).join(" ").toLowerCase();
+
+        const matchesSearch = !query || 
+          nameVal.includes(query) || 
+          dateVal.includes(query) || 
+          detailsVal.includes(query);
+
+        return matchesMonth && matchesSearch;
+      });
+
+      renderClassesHistory(filtered, true);
+    }
+
+    function renderClassesHistory(history, isFilteredView = false) {
+      const container = document.getElementById('classes-accordion-list');
+      container.innerHTML = "";
+
+      if (!history || history.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No se encontraron clases coincidentes.</p>`;
+        return;
+      }
+
+      // PDF slug → display name + url map
+      const PDF_MAP = {
+        'chaparralito': { label: 'Guía PDF — Chaparralito Llanero', url: '../recursos/pdf/chaparralito_llanero_guia.pdf' },
+        'martirios':    { label: 'Guía PDF — Mis Martirios', url: '../recursos/pdf/mis_martirios_guia.pdf' },
+        'posicion':     { label: 'Guía PDF — Posiciones del Arpa', url: '../recursos/pdf/posiciones_del_arpa_guia.pdf' }
+      };
+
+      history.forEach((item, index) => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'accordion-item';
+
+        // Collect which PDFs this class references
+        const pdfsReferenced = [];
+        const cleanDetails = (item.details || []).map(line => {
+          // Remove markdown bold markers **text**
+          let clean = line.replace(/\*\*/g, '').trim();
+          // Strip bare PDF filenames from the text (e.g. chaparralito_llanero_guia.pdf)
+          clean = clean.replace(/\S+\.pdf/gi, '').replace(/\s{2,}/g, ' ').trim();
+          // Remove leading colon or asterisk
+          clean = clean.replace(/^[:\-\*]+\s*/, '').trim();
+          // Check for PDF references
+          for (const [key, info] of Object.entries(PDF_MAP)) {
+            if (line.toLowerCase().includes(key) && !pdfsReferenced.find(p => p.key === key)) {
+              pdfsReferenced.push({ key, ...info });
+            }
+          }
+          return clean;
+        }).filter(l => l.length > 1 && !l.toLowerCase().startsWith('temática'));
+
+        // Build detail items HTML
+        let detailsHtml = cleanDetails
+          .map(line => `<div class="history-detail-item">${line}</div>`)
+          .join('');
+
+        // Append PDF buttons in a row at the bottom of the card body
+        if (pdfsReferenced.length > 0) {
+          const pdfButtons = pdfsReferenced
+            .map(p => `<a href="${p.url}" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> ${p.label}</a>`)
+            .join('');
+          detailsHtml += `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">${pdfButtons}</div>`;
+        }
+
+        // Open the most recent class by default only if not in filtered view
+        if (index === 0 && !isFilteredView) accordionItem.classList.add('active');
+        if (isFilteredView) accordionItem.classList.add('active'); // Open matches in search view by default
+
+        accordionItem.innerHTML = `
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span class="history-title">${item.status} ${item.name}</span>
+            <span class="history-date">
+              <i class="fas fa-calendar-day" style="margin-right:4px;"></i>${item.date}
+              <i class="fas fa-chevron-down accordion-icon" style="margin-left:10px;"></i>
+            </span>
+          </div>
+          <div class="accordion-body">
+            <div class="accordion-content-inner">
+              ${detailsHtml || '<p style="color:var(--text-muted); font-style:italic;">Sin detalles registrados.</p>'}
+            </div>
+          </div>
+        `;
+        container.appendChild(accordionItem);
+      });
+    }
+
+    let activeVideoId = null;
+
+    function renderVideos(videos) {
+      const container = document.getElementById('videos-list');
+      container.innerHTML = '';
+
+      if (!videos || videos.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem; grid-column: 1/-1;">No hay tutoriales asignados aún.</p>`;
+        return;
+      }
+
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'tutorial-card';
+        card.onclick = () => openVideoModal(video);
+
+        const thumbUrl = `https://drive.google.com/thumbnail?id=${video.drive_id}&sz=w400`;
+
+        card.innerHTML = `
+          <div class="tutorial-thumb">
+            <img src="${thumbUrl}" alt="${video.title}" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><i class=\'fas fa-play-circle\'></i></div>'">
+            <div class="tutorial-play-overlay">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="tutorial-card-info">
+            <h3 class="tutorial-card-title">${video.title}</h3>
+            <span class="tutorial-card-hint"><i class="fas fa-hand-pointer"></i> Toca para ver</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openVideoModal(video) {
+      activeVideoId = video.id;
+      document.getElementById('modal-video-title').innerText = video.title;
+      document.getElementById('modal-iframe').src = `https://drive.google.com/file/d/${video.drive_id}/preview`;
+      document.getElementById('video-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Load existing note for this video
+      loadModalNote(video.id);
+    }
+
+    async function loadModalNote(videoId) {
+      document.getElementById('modal-note-textarea').value = '';
+      if (!supabaseClient || !currentUser) return;
+      const { data } = await supabaseClient
+        .from('bitacoras')
+        .select('nota')
+        .eq('estudiante_id', currentUser.id)
+        .eq('video_id', videoId)
+        .order('fecha', { ascending: false })
+        .limit(1);
+      if (data && data.length > 0) {
+        document.getElementById('modal-note-textarea').value = data[0].nota;
+      }
+    }
+
+    async function saveModalNote() {
+      if (!activeVideoId) return;
+      const noteText = document.getElementById('modal-note-textarea').value.trim();
+      if (!noteText) { showToast('Escribe algo antes de guardar.'); return; }
+      const { error } = await supabaseClient
+        .from('bitacoras')
+        .insert({ estudiante_id: currentUser.id, video_id: activeVideoId, nota: noteText, sincronizado: false });
+      if (error) { showToast('Error al guardar la nota.'); }
+      else { showToast('¡Nota guardada con éxito! 🎵'); }
+    }
+
+    function closeModal() {
+      document.getElementById('video-modal').classList.remove('active');
+      document.getElementById('modal-iframe').src = '';
+      document.body.style.overflow = '';
+      activeVideoId = null;
+    }
+
+    function closeVideoModal(e) {
+      if (e.target === document.getElementById('video-modal')) closeModal();
+    }
+
+    // --- Profile Editing and Photo Uploading ---
+    async function editName() {
+      const newName = prompt("Ingresa tu nombre completo:", studentProfile.nombre);
+      if (newName && newName.trim() !== studentProfile.nombre) {
+        const { error } = await supabaseClient
+          .from('estudiantes')
+          .update({ nombre: newName.trim() })
+          .eq('id', currentUser.id);
+
+        if (error) {
+          showToast("Error al actualizar nombre.");
+        } else {
+          showToast("Nombre actualizado.");
+          document.getElementById('student-name').innerText = newName.trim();
+          studentProfile.nombre = newName.trim();
+        }
+      }
+    }
+
+    async function uploadAvatar() {
+      const fileInput = document.getElementById('avatar-upload');
+      if (fileInput.files.length === 0) return;
+
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${currentUser.id}-${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      showToast("Subiendo foto de perfil...");
+
+      const { data, error } = await supabaseClient.storage
+        .from('student-avatars')
+        .upload(filePath, file);
+
+      if (error) {
+        showToast("Error al subir imagen.");
+        return;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabaseClient.storage
+        .from('student-avatars')
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Update in profile table
+      const { error: updateErr } = await supabaseClient
+        .from('estudiantes')
+        .update({ avatar_url: publicUrl })
+        .eq('id', currentUser.id);
+
+      if (updateErr) {
+        showToast("Error al vincular imagen a tu perfil.");
+      } else {
+        showToast("Foto de perfil actualizada.");
+        document.getElementById('student-avatar').src = publicUrl;
+        studentProfile.avatar_url = publicUrl;
+      }
+    }
+
+    function togglePasswordForm() {
+      const form = document.getElementById('password-form-section');
+      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function updatePassword() {
+      const newPassword = document.getElementById('new-password').value.trim();
+      if (newPassword.length < 6) {
+        showToast("La contraseña debe tener mínimo 6 caracteres.");
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        showToast("Error al cambiar contraseña.");
+      } else {
+        showToast("Contraseña cambiada con éxito.");
+        document.getElementById('new-password').value = "";
+        togglePasswordForm();
+      }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (!email || !password) {
+        showToast("Ingresa correo y contraseña.");
+        return;
+      }
+
+      if (!supabaseClient) {
+        showToast("Supabase no configurado aún.");
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        showToast("Credenciales inválidas.");
+      } else {
+        showToast("¡Bienvenido de vuelta!");
+      }
+    }
+
+    async function handleLogout() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+      currentUser = null;
+      studentProfile = null;
+      showAuthView();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSupabase();
+    });
+  </script>
+</body>
+</html>
