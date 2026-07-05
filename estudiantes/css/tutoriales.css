@@ -787,9 +787,12 @@ header {
 
 /* Header Center Title Impactful Reveal Animation */
 .header-title-wrapper {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   padding: 0 10px;
+  z-index: 5;
 }
 
 .header-title-reveal {
