@@ -634,7 +634,7 @@ header {
   border-radius: 8px;
   font-weight: 700;
   font-size: 0.85rem;
-  z-index: 100;
+  z-index: 300;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   display: none;
 }
