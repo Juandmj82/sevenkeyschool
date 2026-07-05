@@ -7,6 +7,8 @@
     --text-secondary: #718096;   /* Medium Gray */
     --gradient-start: #2A4365;
     --gradient-end: #4299E1;
+    --bg-track: #f1f1f1;
+    --bg-light: #f7fafc;
 }
 
 /* Base Styles */
@@ -259,7 +261,7 @@ section {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--bg-track);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -297,7 +299,7 @@ a:focus, button:focus {
 
 /* Founder Section Styles */
 #equipo {
-    background: linear-gradient(to bottom, var(--primary-color) 0%, var(--primary-color) 30%, #f7fafc 30%, #f7fafc 100%);
+    background: linear-gradient(to bottom, var(--primary-color) 0%, var(--primary-color) 30%, var(--bg-light) 30%, var(--bg-light) 100%);
 }
 
 #equipo .bg-white {

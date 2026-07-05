@@ -59,6 +59,7 @@ header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
   transition: var(--transition-smooth);
 }
 
@@ -318,6 +319,7 @@ header {
   cursor: pointer;
   user-select: none;
   font-weight: 700;
+  transition: var(--transition-smooth);
 }
 
 .accordion-header:hover {
