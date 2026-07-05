@@ -727,23 +727,38 @@ header {
 
 .modal-player-wrapper iframe {
   position: absolute;
-  top: 0;
+  top: -46px; /* Crop top header of Drive on PC */
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 46px); /* Compensate top crop */
   border: none;
 }
 
-/* Invisible overlay blocker covering the top bar to disable popout/title clicks */
+/* Invisible overlay blocker covering the top-right corner on PC */
 .video-top-bar-blocker {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 52px;
+  right: 0;
+  width: 60px;
+  height: 55px;
   background: transparent;
   z-index: 10;
   cursor: default;
+}
+
+/* Responsive adjustments for video iframe on mobiles */
+@media (max-width: 720px) {
+  .modal-player-wrapper iframe {
+    top: 0 !important; /* Do not crop on mobile to prevent controls cut-off */
+    height: 100% !important; /* Full height */
+  }
+  
+  .video-top-bar-blocker {
+    left: 0 !important;
+    right: auto !important;
+    width: 100% !important; /* Full width top bar block on mobile */
+    height: 52px !important;
+  }
 }
 
 .modal-note-col {
