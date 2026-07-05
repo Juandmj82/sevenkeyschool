@@ -727,20 +727,20 @@ header {
 
 .modal-player-wrapper iframe {
   position: absolute;
-  top: -46px; /* Shift the top header of Google Drive out of bounds */
+  top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% + 46px); /* Extend height to compensate the vertical shift */
+  height: 100%;
   border: none;
 }
 
-/* Invisible blocker overlay to prevent clicking Google Drive popout icon */
-.video-popout-blocker {
+/* Invisible overlay blocker covering the top bar to disable popout/title clicks */
+.video-top-bar-blocker {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 60px;
-  height: 55px;
+  left: 0;
+  width: 100%;
+  height: 52px;
   background: transparent;
   z-index: 10;
   cursor: default;

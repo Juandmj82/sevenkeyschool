@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal de Estudiantes — Seven Keys School</title>
-  <link rel="stylesheet" href="css/tutoriales.css?v=1.0.6">
+  <link rel="stylesheet" href="css/tutoriales.css?v=1.0.7">
   <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <!-- Supabase JS SDK -->
@@ -184,8 +184,8 @@
         <div class="modal-video-col">
           <div class="modal-player-wrapper" style="position: relative;">
             <iframe id="modal-iframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            <!-- Invisible overlay blocker to prevent clicking Google Drive external link icon -->
-            <div class="video-popout-blocker"></div>
+            <!-- Invisible overlay blocker covering the top bar to disable popout/title clicks -->
+            <div class="video-top-bar-blocker"></div>
           </div>
         </div>
         <!-- Right: bitácora -->
