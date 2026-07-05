@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal de Estudiantes — Seven Keys School</title>
-  <link rel="stylesheet" href="css/tutoriales.css?v=1.0.5">
+  <link rel="stylesheet" href="css/tutoriales.css?v=1.0.6">
   <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <!-- Supabase JS SDK -->
@@ -604,7 +604,7 @@
     function openVideoModal(video) {
       activeVideoId = video.id;
       document.getElementById('modal-video-title').innerText = video.title;
-      document.getElementById('modal-iframe').src = `https://drive.google.com/video/layout?id=${video.drive_id}`;
+      document.getElementById('modal-iframe').src = `https://drive.google.com/file/d/${video.drive_id}/preview`;
       document.getElementById('video-modal').classList.add('active');
       document.body.style.overflow = 'hidden';
       // Load existing note for this video
