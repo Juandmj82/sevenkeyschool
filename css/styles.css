@@ -11,6 +11,11 @@
     --bg-light: #f7fafc;
 }
 
+/* Global Interactive Indicators (UX Pro Max) */
+.btn, .button, .clickable, .accordion-toggle, .slider-button, .dot-button {
+    cursor: pointer;
+}
+
 /* Base Styles */
 body {
     font-family: 'Inter', sans-serif;
