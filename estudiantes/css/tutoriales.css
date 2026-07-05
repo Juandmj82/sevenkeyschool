@@ -749,8 +749,8 @@ header {
 /* Responsive adjustments for video iframe on mobiles */
 @media (max-width: 720px) {
   .modal-player-wrapper {
-    padding-bottom: 0 !important; /* Disable ratio padding */
-    height: 220px !important;     /* Fixed comfortable physical height for phone screens */
+    padding-bottom: 56.25% !important; /* 16:9 aspect ratio */
+    height: 0 !important;
   }
 
   .modal-player-wrapper iframe {
@@ -763,6 +763,8 @@ header {
     right: auto !important;
     width: 100% !important; /* Full width top bar block on mobile */
     height: 52px !important;
+    background: #000 !important; /* Hide Drive title header */
+    pointer-events: none !important; /* Do not block player controls underneath */
   }
 }
 
