@@ -748,6 +748,11 @@ header {
 
 /* Responsive adjustments for video iframe on mobiles */
 @media (max-width: 720px) {
+  .modal-player-wrapper {
+    padding-bottom: 0 !important; /* Disable ratio padding */
+    height: 220px !important;     /* Fixed comfortable physical height for phone screens */
+  }
+
   .modal-player-wrapper iframe {
     top: 0 !important; /* Do not crop on mobile to prevent controls cut-off */
     height: 100% !important; /* Full height */
