@@ -2,7 +2,7 @@
 
 **Feature Branch**: `master`
 **Created**: 2026-07-04
-**Status**: Draft
+**Status**: Approved (Completed & Deployed)
 
 ## Clarifications
 ### Session 2026-07-04
@@ -47,6 +47,10 @@ Como estudiante, quiero ver mi propio nombre y foto de perfil en mi página de i
 - **FR-010**: El bot local de Python DEBE leer periódicamente las notas de progreso de Supabase y anexarlas automáticamente al archivo `.md` de cada estudiante en Obsidian bajo la sección `## 📝 Bitácora de práctica del alumno`.
 - **FR-011**: El portal del estudiante DEBE presentar un saludo con el avatar de **Teacher Juan Di** y una frase de motivación musical obtenida de un listado dinámico.
 - **FR-012**: El estudiante DEBE poder subir y cambiar su foto de perfil y editar su nombre de visualización dentro de su área de cuenta.
+- **FR-013**: El header del portal DEBE centrar absolutamente la marca animada de "Seven Keys" con un revelado letra por letra y ocultarse responsivamente en dispositivos pequeños.
+- **FR-014**: Si el estudiante no tiene cargada una foto de perfil, el sistema DEBE autogenerar un avatar SVG dinámico basado en las iniciales de su nombre y con fondo de degradado estético.
+- **FR-015**: Los videos integrados DEBEN bloquear cualquier intento de apertura externa mediante un overlay transparente situado sobre la barra superior para asegurar una experiencia estrictamente contenida dentro del portal.
+- **FR-016**: La interfaz DEBE seguir pautas de UI/UX Pro Max, incluyendo transiciones fluidas en hover para acordeones, cursores interactivos consistentes y control estricto de contrastes.
 
 ## Success Criteria
 
