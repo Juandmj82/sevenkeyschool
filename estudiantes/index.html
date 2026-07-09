@@ -512,12 +512,18 @@
         'fisher':       { label: 'Método PDF — Jazz Guitar (Jody Fisher)', url: '../recursos/pdf/metodo_jody_fisher.pdf' }
       };
 
+      // Song name → YouTube link map for auto-linking songs in class logs
+      const SONG_URL_MAP = {
+        "your way's better": "https://www.youtube.com/watch?v=pqG6Pr-8h2s",
+        "your ways better": "https://www.youtube.com/watch?v=pqG6Pr-8h2s",
+        "miracle worker": "https://www.youtube.com/watch?v=v9Kbx9qtN2k"
+      };
+
       history.forEach((item, index) => {
         const accordionItem = document.createElement('div');
         accordionItem.className = 'accordion-item';
 
         // Collect which PDFs this class references
-        const pdfsReferenced = [];
         const cleanDetails = (item.details || []).map(line => {
           // Remove markdown bold markers **text**
           let clean = line.replace(/\*\*/g, '').trim();
@@ -537,15 +543,21 @@
           if (!hasYoutube) {
               const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w\-]+)(?:[^\s<>]*))/gi;
               clean = clean.replace(ytRegex, (match, url, videoId) => {
+                  hasYoutube = true;
                   return `<a href="${url}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`;
               });
           }
 
-          // Check for PDF references (prevent duplicate URLs)
-          for (const [key, info] of Object.entries(PDF_MAP)) {
-            if (line.toLowerCase().includes(key) && !pdfsReferenced.find(p => p.url === info.url)) {
-              pdfsReferenced.push({ key, ...info });
-            }
+          // 3. Auto-link songs if mentioned and no YouTube link was found on the line
+          if (!hasYoutube) {
+              for (const [songName, url] of Object.entries(SONG_URL_MAP)) {
+                  const songRegex = new RegExp(`(${songName})`, "gi");
+                  if (songRegex.test(clean)) {
+                      clean = clean.replace(songRegex, `$1 <a href="${url}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`);
+                      hasYoutube = true;
+                      break;
+                  }
+              }
           }
           
           return clean;
@@ -555,35 +567,6 @@
         let detailsHtml = cleanDetails
           .map(d => `<div class="history-detail-item">${d}</div>`)
           .join('');
-
-        // Append PDF buttons in a row at the bottom of the card body
-        if (pdfsReferenced.length > 0) {
-          const pdfButtons = pdfsReferenced
-            .map(p => {
-                // Read anchor page parameter from clean details if it exists
-                // The URL mapped already is ../recursos/pdf/metodo_jody_fisher.pdf
-                // We want to preserve anchor pages if the obsidian wikilink has it
-                // sync_portal converts obsidian links to: <a href="../recursos/pdf/metodo_jody_fisher.pdf#page=23" ...
-                // So if the details have an anchor, let's extract it
-                let pageAnchor = "";
-                const pageMatch = d => d.includes(p.url) && d.match(/#page=\d+/);
-                // Search in item.details for this specific PDF URL's anchor
-                for (let detail of item.details) {
-                    if (detail.includes(p.url)) {
-                        const m = detail.match(/#page=\d+/);
-                        if (m) {
-                            pageAnchor = m[0];
-                            break;
-                        }
-                    }
-                }
-                const finalUrl = p.url + pageAnchor;
-                const pageLabel = pageAnchor ? ` (Pág. ${pageAnchor.split("=")[1]})` : "";
-                return `<a href="${finalUrl}" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> ${p.label}${pageLabel}</a>`;
-            })
-            .join('');
-          detailsHtml += `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">${pdfButtons}</div>`;
-        }
 
         // Open the most recent class by default only if not in filtered view
         if (index === 0 && !isFilteredView) accordionItem.classList.add('active');
