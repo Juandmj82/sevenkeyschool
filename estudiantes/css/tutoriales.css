@@ -889,4 +889,51 @@ header {
   }
 }
 
+/* Estilos para enlaces y recursos interactivos de bitácora */
+.pdf-link-inline, .yt-link-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(246, 173, 85, 0.08);
+  border: 1px solid rgba(246, 173, 85, 0.3);
+  color: var(--accent-gold) !important;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 2px 4px;
+  transition: var(--transition-smooth);
+}
+
+.pdf-link-inline:hover {
+  background: var(--accent-gold);
+  color: var(--primary-color) !important;
+  box-shadow: 0 4px 10px rgba(246, 173, 85, 0.2);
+  transform: translateY(-1px);
+}
+
+.yt-link-inline {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5 !important;
+}
+
+.yt-link-inline:hover {
+  background: #ef4444;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+  transform: translateY(-1px);
+}
+
+.yt-embed-wrapper {
+  margin: 12px 0;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+
 
