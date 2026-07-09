@@ -153,8 +153,12 @@
             <i class="fas fa-search" style="position: absolute; left: 1rem; color: var(--accent-gold); font-size: 0.9rem;"></i>
             <input type="text" id="class-search-input" onkeyup="filterClasses()" placeholder="Buscar clase por tema, canción, calentamiento..." style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-family: var(--font-family); font-size: 0.9rem; outline: none; transition: var(--transition-smooth);">
           </div>
+          <!-- Fila de años dinámicos -->
+          <div id="year-filter-pills" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <!-- Year pills injected here -->
+          </div>
           <!-- Fila de meses dinámicos -->
-          <div id="month-filter-pills" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <div id="month-filter-pills" style="display: none; gap: 8px; flex-wrap: wrap; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
             <!-- Month pills injected here -->
           </div>
         </div>
@@ -375,84 +379,141 @@
       return `${months[monthNum - 1]} ${year}`;
     }
 
+    let selectedYearFilter = "all";
+    let selectedMonthFilter = "all";
+
     function setupMonthFilters(history) {
-      const pillsContainer = document.getElementById('month-filter-pills');
-      pillsContainer.innerHTML = "";
+      const yearContainer = document.getElementById('year-filter-pills');
+      const monthContainer = document.getElementById('month-filter-pills');
+      yearContainer.innerHTML = "";
+      monthContainer.innerHTML = "";
 
       if (!history || history.length === 0) return;
 
-      // Extract unique months and group by year
-      const monthsSet = new Set();
+      // Extract unique years
       const yearsSet = new Set();
-      
       history.forEach(item => {
         if (item.date) {
-          monthsSet.add(getMonthYearLabel(item.date));
           const year = item.date.split('-')[0];
           yearsSet.add(year);
         }
       });
 
-      // Create "Todos" button
+      // Create "Todos" year button
       const allBtn = document.createElement('button');
       allBtn.className = "pdf-btn";
       allBtn.style.margin = "0";
       allBtn.style.padding = "6px 12px";
       allBtn.style.borderRadius = "50px";
-      allBtn.id = "pill-all";
+      allBtn.id = "year-pill-all";
       allBtn.innerText = `Todos (${history.length})`;
-      allBtn.onclick = () => selectMonthFilter("all");
-      pillsContainer.appendChild(allBtn);
+      allBtn.onclick = () => selectYearFilter("all");
+      yearContainer.appendChild(allBtn);
 
       // Sort years descending
       const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
-
       sortedYears.forEach(year => {
-        // Group label if multiple years exist
-        if (sortedYears.length > 1) {
-          const yearDivider = document.createElement('span');
-          yearDivider.style.color = "var(--accent-gold)";
-          yearDivider.style.fontSize = "0.8rem";
-          yearDivider.style.fontWeight = "800";
-          yearDivider.style.margin = "0 6px";
-          yearDivider.innerText = `${year}:`;
-          pillsContainer.appendChild(yearDivider);
-        }
-
-        // Add months for this year
-        const monthsForYear = Array.from(monthsSet).filter(m => m.endsWith(year));
-        monthsForYear.forEach(monthLabel => {
-          const count = history.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
-          const btn = document.createElement('button');
-          btn.className = "pdf-btn";
-          btn.style.margin = "0";
-          btn.style.padding = "6px 12px";
-          btn.style.borderRadius = "50px";
-          btn.style.background = "rgba(255,255,255,0.03)";
-          btn.style.color = "var(--text-muted)";
-          btn.style.borderColor = "rgba(255,255,255,0.08)";
-          btn.id = `pill-${monthLabel.replace(/\s+/g, '-')}`;
-          btn.innerText = `${monthLabel} (${count})`;
-          btn.onclick = () => selectMonthFilter(monthLabel);
-          pillsContainer.appendChild(btn);
-        });
+        const count = history.filter(item => item.date && item.date.startsWith(year)).length;
+        const btn = document.createElement('button');
+        btn.className = "pdf-btn";
+        btn.style.margin = "0";
+        btn.style.padding = "6px 12px";
+        btn.style.borderRadius = "50px";
+        btn.id = `year-pill-${year}`;
+        btn.innerText = `${year} (${count})`;
+        btn.onclick = () => selectYearFilter(year);
+        yearContainer.appendChild(btn);
       });
 
-      updatePillStyles();
+      updateYearMonthFiltersUI();
+    }
+
+    function selectYearFilter(year) {
+      selectedYearFilter = year;
+      selectedMonthFilter = "all"; // Reset month on year change
+      updateYearMonthFiltersUI();
+      filterClasses();
     }
 
     function selectMonthFilter(monthLabel) {
       selectedMonthFilter = monthLabel;
-      updatePillStyles();
+      updateYearMonthFiltersUI();
       filterClasses();
     }
 
-    function updatePillStyles() {
-      const pillsContainer = document.getElementById('month-filter-pills');
-      const buttons = pillsContainer.getElementsByTagName('button');
+    function updateYearMonthFiltersUI() {
+      // 1. Update Year Pills styling
+      const yearContainer = document.getElementById('year-filter-pills');
+      const yearButtons = yearContainer.getElementsByTagName('button');
+      for (let btn of yearButtons) {
+        if (btn.id === `year-pill-${selectedYearFilter}`) {
+          btn.style.background = "var(--accent-gold)";
+          btn.style.color = "var(--primary-color)";
+          btn.style.borderColor = "var(--accent-gold)";
+        } else {
+          btn.style.background = "rgba(255,255,255,0.03)";
+          btn.style.color = "var(--text-muted)";
+          btn.style.borderColor = "rgba(255,255,255,0.08)";
+        }
+      }
+
+      // 2. Populate and show/hide Month Pills
+      const monthContainer = document.getElementById('month-filter-pills');
       
-      for (let btn of buttons) {
-        if (btn.id === `pill-${selectedMonthFilter.replace(/\s+/g, '-')}`) {
+      if (selectedYearFilter === "all") {
+        monthContainer.style.display = "none";
+        monthContainer.innerHTML = "";
+        return;
+      }
+
+      monthContainer.style.display = "flex";
+      monthContainer.innerHTML = "";
+
+      // Extract unique months for selected year
+      const monthsSet = new Set();
+      globalClassesHistory.forEach(item => {
+        if (item.date && item.date.startsWith(selectedYearFilter)) {
+          monthsSet.add(getMonthYearLabel(item.date));
+        }
+      });
+
+      // Add "Ver todo el año" button
+      const allMonthBtn = document.createElement('button');
+      allMonthBtn.className = "pdf-btn";
+      allMonthBtn.style.margin = "0";
+      allMonthBtn.style.padding = "6px 12px";
+      allMonthBtn.style.borderRadius = "50px";
+      allMonthBtn.id = "month-pill-all";
+      allMonthBtn.innerText = `Todo el año`;
+      allMonthBtn.onclick = () => selectMonthFilter("all");
+      monthContainer.appendChild(allMonthBtn);
+
+      // Sort months chronologically or reverse
+      const monthsOrder = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+      const sortedMonths = Array.from(monthsSet).sort((a, b) => {
+        const indexA = monthsOrder.indexOf(a.split(" ")[0]);
+        const indexB = monthsOrder.indexOf(b.split(" ")[0]);
+        return indexB - indexA; // Descending
+      });
+
+      sortedMonths.forEach(monthLabel => {
+        const count = globalClassesHistory.filter(item => getMonthYearLabel(item.date) === monthLabel).length;
+        const btn = document.createElement('button');
+        btn.className = "pdf-btn";
+        btn.style.margin = "0";
+        btn.style.padding = "6px 12px";
+        btn.style.borderRadius = "50px";
+        btn.id = `month-pill-${monthLabel.replace(/\s+/g, '-')}`;
+        btn.innerText = `${monthLabel.split(" ")[0]} (${count})`;
+        btn.onclick = () => selectMonthFilter(monthLabel);
+        monthContainer.appendChild(btn);
+      });
+
+      // Update Month Pills styling
+      const monthButtons = monthContainer.getElementsByTagName('button');
+      const targetId = selectedMonthFilter === "all" ? "month-pill-all" : `month-pill-${selectedMonthFilter.replace(/\s+/g, '-')}`;
+      for (let btn of monthButtons) {
+        if (btn.id === targetId) {
           btn.style.background = "var(--accent-gold)";
           btn.style.color = "var(--primary-color)";
           btn.style.borderColor = "var(--accent-gold)";
@@ -467,13 +528,20 @@
     function filterClasses() {
       const query = document.getElementById('class-search-input').value.toLowerCase().trim();
       
-      // If user is searching text, ignore month filter to make the search global and easy to find
-      if (query !== "" && selectedMonthFilter !== "all") {
+      // If user is searching text, ignore month/year filter to make the search global
+      if (query !== "" && (selectedYearFilter !== "all" || selectedMonthFilter !== "all")) {
+        selectedYearFilter = "all";
         selectedMonthFilter = "all";
-        updatePillStyles();
+        updateYearMonthFiltersUI();
       }
 
       const filtered = globalClassesHistory.filter(item => {
+        if (!item.date) return false;
+        
+        // Year Match
+        const itemYear = item.date.split('-')[0];
+        const matchesYear = (selectedYearFilter === "all" || itemYear === selectedYearFilter);
+
         // Month Match
         const monthLabel = getMonthYearLabel(item.date);
         const matchesMonth = (selectedMonthFilter === "all" || monthLabel === selectedMonthFilter);
@@ -488,7 +556,7 @@
           dateVal.includes(query) || 
           detailsVal.includes(query);
 
-        return matchesMonth && matchesSearch;
+        return matchesYear && matchesMonth && matchesSearch;
       });
 
       renderClassesHistory(filtered, true);
