@@ -635,7 +635,7 @@
 
           // 4. Auto-link Jody Fisher PDF page 23 if mentioned in text and not already linked
           if (!clean.includes('class="pdf-link-inline"')) {
-              const jodyPageRegex = /(jody\s+fisher|tr[íi]adas).*?p[áa]g(?:ina|\.)?\s*(\d+)/i;
+              const jodyPageRegex = /(jody\s+fisher|tr[íi]adas).*?p[áa]g(?:ina|\.)?\s*(\d+)\)?/i;
               const jodyMatch = jodyPageRegex.exec(clean);
               if (jodyMatch) {
                   const pageNum = jodyMatch[2];
