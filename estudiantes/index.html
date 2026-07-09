@@ -508,8 +508,8 @@
         'chaparralito': { label: 'Guía PDF — Chaparralito Llanero', url: '../recursos/pdf/chaparralito_llanero_guia.pdf' },
         'martirios':    { label: 'Guía PDF — Mis Martirios', url: '../recursos/pdf/mis_martirios_guia.pdf' },
         'posicion':     { label: 'Guía PDF — Posiciones del Arpa', url: '../recursos/pdf/posiciones_del_arpa_guia.pdf' },
-        'jody':         { label: 'Método PDF — Jazz Guitar (Jody Fisher, pág. 23)', url: '../recursos/pdf/jody_fisher_pag23.pdf' },
-        'fisher':       { label: 'Método PDF — Jazz Guitar (Jody Fisher, pág. 23)', url: '../recursos/pdf/jody_fisher_pag23.pdf' }
+        'jody':         { label: 'Método PDF — Jazz Guitar (Jody Fisher)', url: '../recursos/pdf/metodo_jody_fisher.pdf' },
+        'fisher':       { label: 'Método PDF — Jazz Guitar (Jody Fisher)', url: '../recursos/pdf/metodo_jody_fisher.pdf' }
       };
 
       history.forEach((item, index) => {
@@ -524,17 +524,21 @@
           // Remove leading colon, dash or asterisk
           clean = clean.replace(/^[:\-\*]+\s*/, '').trim();
           
-          // Detect if line has a YouTube link
-          const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w\-]+)(?:[^\s<>]*))/gi;
+          // 1. Detect if line has a markdown YouTube link: [Text](youtube_url)
+          const ytMdRegex = /\[([^\]]+)\]\((https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w\-]+)(?:[^\s<>]*))\)/gi;
+          let hasYoutube = false;
           
-          const match = ytRegex.exec(clean);
-          if (match) {
-              const fullUrl = match[1];
-              const videoId = match[2];
-              
-              // Replace raw link with a styled inline button
-              const ytButton = `<a href="${fullUrl}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`;
-              clean = clean.replace(fullUrl, ytButton);
+          clean = clean.replace(ytMdRegex, (match, text, url, videoId) => {
+              hasYoutube = true;
+              return `${text} <a href="${url}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`;
+          });
+          
+          // 2. Detect if line has a raw YouTube link (if not already replaced by markdown link regex)
+          if (!hasYoutube) {
+              const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w\-]+)(?:[^\s<>]*))/gi;
+              clean = clean.replace(ytRegex, (match, url, videoId) => {
+                  return `<a href="${url}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`;
+              });
           }
 
           // Check for PDF references (prevent duplicate URLs)
@@ -555,7 +559,28 @@
         // Append PDF buttons in a row at the bottom of the card body
         if (pdfsReferenced.length > 0) {
           const pdfButtons = pdfsReferenced
-            .map(p => `<a href="${p.url}" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> ${p.label}</a>`)
+            .map(p => {
+                // Read anchor page parameter from clean details if it exists
+                // The URL mapped already is ../recursos/pdf/metodo_jody_fisher.pdf
+                // We want to preserve anchor pages if the obsidian wikilink has it
+                // sync_portal converts obsidian links to: <a href="../recursos/pdf/metodo_jody_fisher.pdf#page=23" ...
+                // So if the details have an anchor, let's extract it
+                let pageAnchor = "";
+                const pageMatch = d => d.includes(p.url) && d.match(/#page=\d+/);
+                // Search in item.details for this specific PDF URL's anchor
+                for (let detail of item.details) {
+                    if (detail.includes(p.url)) {
+                        const m = detail.match(/#page=\d+/);
+                        if (m) {
+                            pageAnchor = m[0];
+                            break;
+                        }
+                    }
+                }
+                const finalUrl = p.url + pageAnchor;
+                const pageLabel = pageAnchor ? ` (Pág. ${pageAnchor.split("=")[1]})` : "";
+                return `<a href="${finalUrl}" target="_blank" class="pdf-btn"><i class="fas fa-file-pdf"></i> ${p.label}${pageLabel}</a>`;
+            })
             .join('');
           detailsHtml += `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">${pdfButtons}</div>`;
         }
