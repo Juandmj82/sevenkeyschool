@@ -366,6 +366,7 @@
     }
 
     let globalClassesHistory = [];
+    let selectedYearFilter = "all";
     let selectedMonthFilter = "all";
 
     // Helper to format date strings into "Mes Año"
@@ -378,9 +379,6 @@
       const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
       return `${months[monthNum - 1]} ${year}`;
     }
-
-    let selectedYearFilter = "all";
-    let selectedMonthFilter = "all";
 
     function setupMonthFilters(history) {
       const yearContainer = document.getElementById('year-filter-pills');
