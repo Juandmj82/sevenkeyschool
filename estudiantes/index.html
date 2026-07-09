@@ -508,8 +508,8 @@
         'chaparralito': { label: 'Guía PDF — Chaparralito Llanero', url: '../recursos/pdf/chaparralito_llanero_guia.pdf' },
         'martirios':    { label: 'Guía PDF — Mis Martirios', url: '../recursos/pdf/mis_martirios_guia.pdf' },
         'posicion':     { label: 'Guía PDF — Posiciones del Arpa', url: '../recursos/pdf/posiciones_del_arpa_guia.pdf' },
-        'jody':         { label: 'Método PDF — Jazz Guitar (Jody Fisher)', url: '../recursos/pdf/metodo_jody_fisher.pdf' },
-        'fisher':       { label: 'Método PDF — Jazz Guitar (Jody Fisher)', url: '../recursos/pdf/metodo_jody_fisher.pdf' }
+        'jody':         { label: 'Método PDF — Jazz Guitar (Jody Fisher, pág. 23)', url: '../recursos/pdf/jody_fisher_pag23.pdf' },
+        'fisher':       { label: 'Método PDF — Jazz Guitar (Jody Fisher, pág. 23)', url: '../recursos/pdf/jody_fisher_pag23.pdf' }
       };
 
       history.forEach((item, index) => {
@@ -526,46 +526,30 @@
           
           // Detect if line has a YouTube link
           const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w\-]+)(?:[^\s<>]*))/gi;
-          let ytEmbedUrl = null;
           
           const match = ytRegex.exec(clean);
           if (match) {
               const fullUrl = match[1];
               const videoId = match[2];
-              ytEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
               
               // Replace raw link with a styled inline button
-              const ytButton = `<a href="${fullUrl}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video</a>`;
+              const ytButton = `<a href="${fullUrl}" target="_blank" class="yt-link-inline"><i class="fab fa-youtube"></i> Ver Video en YouTube</a>`;
               clean = clean.replace(fullUrl, ytButton);
           }
 
-          // Check for PDF references
+          // Check for PDF references (prevent duplicate URLs)
           for (const [key, info] of Object.entries(PDF_MAP)) {
-            if (line.toLowerCase().includes(key) && !pdfsReferenced.find(p => p.key === key)) {
+            if (line.toLowerCase().includes(key) && !pdfsReferenced.find(p => p.url === info.url)) {
               pdfsReferenced.push({ key, ...info });
             }
           }
           
-          return {
-              text: clean,
-              embed: ytEmbedUrl
-          };
-        }).filter(d => d.text.length > 1 && !d.text.toLowerCase().startsWith('temática'));
+          return clean;
+        }).filter(l => l.length > 1 && !l.toLowerCase().startsWith('temática'));
 
         // Build detail items HTML
         let detailsHtml = cleanDetails
-          .map(d => {
-              let html = `<div class="history-detail-item">${d.text}</div>`;
-              if (d.embed) {
-                  html += `
-                  <div class="yt-embed-wrapper">
-                      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-                          <iframe src="${d.embed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-                      </div>
-                  </div>`;
-              }
-              return html;
-          })
+          .map(d => `<div class="history-detail-item">${d}</div>`)
           .join('');
 
         // Append PDF buttons in a row at the bottom of the card body
