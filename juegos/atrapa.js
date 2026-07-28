@@ -258,11 +258,11 @@ function drawStaff(noteObj) {
   `;
 
   if (chosenClefSetting === "treble") {
-    // Centered exactly around the SOL line (Y = 102)
-    svgContent += `<text x="30" y="118" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="92" filter="url(#neon-glow)">𝄞</text>`;
+    // Spiral centered on the SOL line (Y = 102)
+    svgContent += `<text x="30" y="126" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="121" filter="url(#neon-glow)">𝄞</text>`;
   } else {
-    // Centered around the FA line (Y = 58)
-    svgContent += `<text x="30" y="118" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="80" filter="url(#neon-glow)">𝄢</text>`;
+    // Dots straddling the FA line (Y = 58)
+    svgContent += `<text x="30" y="128" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="83" filter="url(#neon-glow)">𝄢</text>`;
   }
 
   if (noteObj) {
