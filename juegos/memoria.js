@@ -260,11 +260,20 @@ function handlePadClick(index) {
   }
 }
 
+const correctPhrases = [
+  "¡Correcto!",
+  "¡Así se hace!",
+  "¡Perfecto!",
+  "¡Excelente memoria!",
+  "¡Vas genial!"
+];
+
 function handleRoundComplete() {
   setPadsEnabled(false);
   feedbackBox.className = "feedback-box feedback-correct";
-  feedbackBox.textContent = "¡Correcto!";
+  feedbackBox.textContent = correctPhrases[Math.floor(Math.random() * correctPhrases.length)];
 
+  const completedRound = round;
   round++;
   hudRound.textContent = round;
 
@@ -279,8 +288,42 @@ function handleRoundComplete() {
     return;
   }
 
+  const milestoneDelay = showMilestoneToastIfApplicable(completedRound) ? 1900 : 900;
   addNoteToSequence();
-  setTimeout(playSequence, 900);
+  setTimeout(playSequence, milestoneDelay);
+}
+
+const MILESTONE_MESSAGES = {
+  3: "¡Ya llevas 3 rondas! Tu oído y tu memoria están conectando súper bien 🎧",
+  5: "¡5 rondas! Estás a mitad de camino de la meta. ¡Sigue así, campeón! ⭐",
+  7: "¡7 rondas! Esto ya es nivel avanzado, muy pocos llegan tan lejos 🔥",
+  9: "¡9 rondas! Solo una más para la meta... ¡Concéntrate, tú puedes! 🏁"
+};
+
+function showMilestoneToastIfApplicable(completedRound) {
+  const message = MILESTONE_MESSAGES[completedRound];
+  if (!message) return false;
+
+  const toast = document.getElementById("profe-toast");
+  const toastText = document.getElementById("profe-toast-text");
+  const toastAvatar = document.querySelector(".profe-toast-avatar");
+  if (!toast || !toastText) return false;
+
+  toast.classList.add("positive");
+  if (toastAvatar) toastAvatar.src = "../img/profe_celebrate.jpg";
+  toastText.textContent = `"${message}"`;
+  toast.classList.add("show");
+
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      toast.classList.remove("positive");
+      if (toastAvatar) toastAvatar.src = "../img/profe_sad.jpg";
+    }, 400);
+  }, 2200);
+
+  return true;
 }
 
 function handleMistake() {
