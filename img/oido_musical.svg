@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483 362" width="483" height="362">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141729"/>
+      <stop offset="100%" stop-color="#0b0d19"/>
+    </linearGradient>
+    <linearGradient id="earGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="483" height="362" fill="url(#bg)"/>
+  <circle cx="241" cy="181" r="150" fill="url(#glow)"/>
+
+  <!-- Floating music notes -->
+  <g fill="#d4af37" opacity="0.55" font-family="Georgia, serif">
+    <text x="70" y="90" font-size="34">♪</text>
+    <text x="360" y="70" font-size="28">♫</text>
+    <text x="385" y="270" font-size="30">♪</text>
+    <text x="60" y="280" font-size="26">♬</text>
+  </g>
+
+  <!-- Sound waves -->
+  <g stroke="#00e5ff" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85">
+    <path d="M 300 181 Q 320 150 340 181 Q 360 212 380 181"/>
+    <path d="M 300 181 Q 330 120 360 181 Q 390 242 420 181"/>
+  </g>
+
+  <!-- Stylized ear -->
+  <path d="M195 120
+           C 150 120 130 165 140 205
+           C 148 238 175 255 190 240
+           C 200 230 192 218 205 210
+           C 225 197 230 175 215 158
+           C 205 146 210 132 195 120 Z"
+        fill="none" stroke="url(#earGrad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M188 165 C 178 172 176 190 190 198"
+        fill="none" stroke="url(#earGrad)" stroke-width="8" stroke-linecap="round"/>
+
+  <text x="241" y="330" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="22" fill="#f1f5f9">Entrenamiento Auditivo</text>
+</svg>

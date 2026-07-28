@@ -640,6 +640,19 @@
             <button class="btn-play-level" style="background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%); color: var(--bg-dark);">¡Jugar!</button>
           </div>
         </div>
+
+        <!-- Entrenamiento Auditivo Game -->
+        <div class="level-card has-full-cover" id="card-oido" onclick="showPreview('oido')" style="border-color: rgba(212, 175, 55, 0.2);">
+          <div class="level-cover">
+            <img src="../img/oido_musical.svg" alt="Entrenamiento Auditivo">
+            <div class="level-header-overlay">
+              <span class="level-status-icon">👂</span>
+            </div>
+          </div>
+          <div class="level-footer">
+            <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%); color: var(--bg-dark);">¡Jugar!</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -748,6 +761,16 @@
         notes: ["Negras", "Blancas", "Corcheas"],
         avatar: "../img/profe_celebrate.jpg",
         url: "tiro.html"
+      },
+      "oido": {
+        title: "Entrenamiento Auditivo",
+        description: `"¡Vamos a afinar el oído! Escucharás sonidos y deberás identificar si suben o bajan, qué intervalo forman, si son Mayores o Menores, y hasta cuántas notas suenan a la vez. 5 fases progresivas de puro entrenamiento auditivo."`,
+        clef: "5 fases progresivas",
+        target: "8-12 aciertos por fase",
+        time: "Sin límite (Fase 5: contrarreloj)",
+        notes: ["Sube/Baja", "Intervalos", "Mayor/Menor", "Conteo de notas"],
+        avatar: "../img/profe.jpg",
+        url: "oido.html"
       }
     };
 
@@ -908,6 +931,8 @@
       const notesTitle = document.getElementById("preview-notes-title");
       if (levelId === "ritmo" || levelId === "tiro") {
         notesTitle.textContent = "Figuras a practicar:";
+      } else if (levelId === "oido") {
+        notesTitle.textContent = "Habilidades a practicar:";
       } else {
         notesTitle.textContent = "Notas a practicar:";
       }
