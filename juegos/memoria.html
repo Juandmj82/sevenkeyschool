@@ -148,7 +148,13 @@
 
     .header-logo { height: 50px; width: auto; display: block; }
 
-    .start-prompt { width: 95%; max-width: 460px; padding: 16px 20px; }
+    .start-prompt {
+      width: 95%;
+      max-width: 460px;
+      padding: 16px 20px;
+      max-height: 100%;
+      overflow-y: auto;
+    }
 
     /* --- Settings chips (difficulty / speed), reused pattern from atrapa.html --- */
     .setting-group { width: 100%; margin-top: 6px; }
@@ -307,7 +313,7 @@
       </div>
 
       <!-- Pad board area -->
-      <div class="staff-area" style="height: auto; padding: 18px 0;">
+      <div class="staff-area" style="height: auto; min-height: 440px; padding: 18px 0;">
         <div class="pad-board" id="pad-board">
           <!-- Pads generated dynamically by JS -->
         </div>
