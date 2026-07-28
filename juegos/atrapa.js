@@ -1,4 +1,16 @@
 // --- DATA & CONFIG ---
+
+// Real vector clef glyphs from the Bravura (SMuFL) music font, so the clef
+// renders identically on every device instead of depending on whichever
+// serif font a browser/OS happens to substitute for the Unicode symbol.
+// Each glyph's origin (0,0) sits on its reference staff line per the SMuFL
+// spec: gClef's curl wraps the 2nd line from the bottom (Sol), fClef's dots
+// straddle the 4th line from the bottom (Fa).
+const GCLEF_PATH = "M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z";
+const FCLEF_PATH = "M252 262c173 0 279 -116 279 -290c0 -304 -260 -482 -506 -602c-6 -3 -12 -5 -17 -5c-9 0 -13 6 -13 12c0 8 6 13 15 18c233 133 371 289 371 568c0 157 -46 261 -152 261c-102 0 -162 -73 -162 -113c0 -10 3 -18 16 -18s23 7 50 7c49 0 96 -40 96 -104c0 -62 -43 -106 -106 -106c-81 0 -123 69 -123 149c0 96 78 223 252 223zM629 180c31 0 55 -24 55 -55s-24 -55 -55 -55s-55 24 -55 55s24 55 55 55zM630 -71c31 0 54 -23 54 -54s-23 -54 -54 -54s-54 23 -54 54s23 54 54 54z";
+// SMuFL glyphs are drawn on a 1000-unit em where 1 staff space = 250 units.
+const CLEF_GLYPH_SCALE = 22 / 250; // our staff line spacing is 22px
+
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 
@@ -258,11 +270,11 @@ function drawStaff(noteObj) {
   `;
 
   if (chosenClefSetting === "treble") {
-    // Spiral centered on the SOL line (Y = 102, 2nd line from bottom)
-    svgContent += `<text x="30" y="134" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="121" filter="url(#neon-glow)">𝄞</text>`;
+    // Origin pinned to the SOL line (Y = 102, 2nd line from bottom)
+    svgContent += `<g transform="translate(58, 102) scale(${CLEF_GLYPH_SCALE})" filter="url(#neon-glow)"><g transform="scale(1,-1)"><path fill="var(--color-gold, #d4af37)" d="${GCLEF_PATH}" /></g></g>`;
   } else {
-    // Dots straddling the FA line (Y = 58, 4th line from bottom)
-    svgContent += `<text x="30" y="105" fill="var(--color-gold, #d4af37)" font-family="serif" font-size="83" filter="url(#neon-glow)">𝄢</text>`;
+    // Origin pinned to the FA line (Y = 58, 4th line from bottom)
+    svgContent += `<g transform="translate(58, 58) scale(${CLEF_GLYPH_SCALE})" filter="url(#neon-glow)"><g transform="scale(1,-1)"><path fill="var(--color-gold, #d4af37)" d="${FCLEF_PATH}" /></g></g>`;
   }
 
   if (noteObj) {
