@@ -644,13 +644,26 @@
         <!-- Entrenamiento Auditivo Game -->
         <div class="level-card has-full-cover" id="card-oido" onclick="showPreview('oido')" style="border-color: rgba(212, 175, 55, 0.2);">
           <div class="level-cover">
-            <img src="../img/oido_musical.svg" alt="Entrenamiento Auditivo">
+            <img src="../img/entrenamiento_auditivo.png" alt="Entrenamiento Auditivo">
             <div class="level-header-overlay">
               <span class="level-status-icon">👂</span>
             </div>
           </div>
           <div class="level-footer">
             <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-gold) 0%, #b89327 100%); color: var(--bg-dark);">¡Jugar!</button>
+          </div>
+        </div>
+
+        <!-- Memoria Musical Game -->
+        <div class="level-card has-full-cover" id="card-memoria" onclick="showPreview('memoria')" style="border-color: rgba(213, 0, 249, 0.2);">
+          <div class="level-cover">
+            <img src="../img/memoria_musical.svg" alt="Memoria Musical">
+            <div class="level-header-overlay">
+              <span class="level-status-icon">🧠</span>
+            </div>
+          </div>
+          <div class="level-footer">
+            <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-purple) 0%, #a100bc 100%); color: var(--text-main);">¡Jugar!</button>
           </div>
         </div>
       </div>
@@ -771,6 +784,16 @@
         notes: ["Sube/Baja", "Intervalos", "Mayor/Menor", "Conteo de notas"],
         avatar: "../img/profe.jpg",
         url: "oido.html"
+      },
+      "memoria": {
+        title: "Memoria Musical",
+        description: `"¡Escucha y repite! Voy a tocar una secuencia de notas de colores, y tú deberás repetirla en el mismo orden. Cada ronda la secuencia crece un poco más. ¿Hasta dónde llega tu memoria musical?"`,
+        clef: "Estilo 'Simon' musical",
+        target: "Llegar a la ronda 10",
+        time: "Sin límite (memoria pura)",
+        notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "memoria.html"
       }
     };
 
