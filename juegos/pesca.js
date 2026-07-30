@@ -652,17 +652,20 @@ function drawFish(fish) {
   const textWidth = ctx.measureText(labelText).width;
   const badgeW = textWidth + 12;
   const badgeH = 16;
+  // Shift toward the tail side (away from the eye/head) based on swim
+  // direction, without mirroring the text itself.
+  const labelX = fish.x - scaleX * r * 0.32;
 
   ctx.beginPath();
-  ctx.roundRect ? ctx.roundRect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH, 8)
-                : ctx.rect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH);
+  ctx.roundRect ? ctx.roundRect(labelX - badgeW / 2, y - badgeH / 2, badgeW, badgeH, 8)
+                : ctx.rect(labelX - badgeW / 2, y - badgeH / 2, badgeW, badgeH);
   ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
   ctx.fill();
 
   ctx.fillStyle = "#0b0d19";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(labelText, fish.x, y + 1);
+  ctx.fillText(labelText, labelX, y + 1);
   ctx.restore();
 }
 
