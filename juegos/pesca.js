@@ -396,7 +396,15 @@ function resolveHookCatch(x, y) {
 function handleCatchCorrect(fish) {
   fish.caught = true;
   fish.caughtAnim = 1;
-  playSplashSound(true);
+
+  if (chosenMode === "ver") {
+    // Play the actual pitch of the caught note instead of a generic splash,
+    // so the ear starts associating "this note = this position" -- priming
+    // the same skill that "Escuchar y Pescar" will ask for later.
+    playNoteSound(fish.note.freq, 0.55);
+  } else {
+    playSplashSound(true);
+  }
 
   score++;
   hudScore.textContent = `${score} / ${TARGET_CATCHES}`;
