@@ -1,7 +1,7 @@
 // --- DATA & CONFIG ---
 // Same note/color mapping used by Atrapa Notas and Memoria Musical, for
-// visual consistency across the three "arcade" games.
-const NOTE_DEFS = [
+// visual consistency across the three "arcade" games. One pool per clef.
+const TREBLE_NOTE_DEFS = [
   { id: "C4", name: "DO",  color: "#ef4444", freq: 261.63, staffY: 117, isLedger: true },
   { id: "D4", name: "RE",  color: "#f97316", freq: 293.66, staffY: 109, isLedger: false },
   { id: "E4", name: "MI",  color: "#eab308", freq: 329.63, staffY: 101, isLedger: false },
@@ -12,17 +12,33 @@ const NOTE_DEFS = [
   { id: "C5", name: "DO",  color: "#ec4899", freq: 523.25, staffY: 61,  isLedger: false }
 ];
 
-// Real vector G-clef glyph from the Bravura (SMuFL) music font (same one
+const BASS_NOTE_DEFS = [
+  { id: "C3", name: "DO",  color: "#ef4444", freq: 130.81, staffY: 77, isLedger: false },
+  { id: "D3", name: "RE",  color: "#f97316", freq: 146.83, staffY: 69, isLedger: false },
+  { id: "E3", name: "MI",  color: "#eab308", freq: 164.81, staffY: 61, isLedger: false },
+  { id: "F3", name: "FA",  color: "#22c55e", freq: 174.61, staffY: 53, isLedger: false },
+  { id: "G3", name: "SOL", color: "#00e5ff", freq: 196.00, staffY: 45, isLedger: false },
+  { id: "A3", name: "LA",  color: "#3b82f6", freq: 220.00, staffY: 37, isLedger: false },
+  { id: "B3", name: "SI",  color: "#a855f7", freq: 246.94, staffY: 29, isLedger: false },
+  { id: "C4b", name: "DO", color: "#ec4899", freq: 261.63, staffY: 21, isLedger: true }
+];
+
+const NEUTRAL_FISH_COLOR = "#94a3b8"; // used in "sin color" challenge mode
+
+// Real vector clef glyphs from the Bravura (SMuFL) music font (same ones
 // used in atrapa.js/game.js/teoria.html), so the mini staff renders
 // identically on every device.
 const GCLEF_PATH = "M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z";
-const MINI_STAFF_LINE_YS = [37, 53, 69, 85, 101]; // 16px spacing, matches NOTE_DEFS.staffY table
+const FCLEF_PATH = "M252 262c173 0 279 -116 279 -290c0 -304 -260 -482 -506 -602c-6 -3 -12 -5 -17 -5c-9 0 -13 6 -13 12c0 8 6 13 15 18c233 133 371 289 371 568c0 157 -46 261 -152 261c-102 0 -162 -73 -162 -113c0 -10 3 -18 16 -18s23 7 50 7c49 0 96 -40 96 -104c0 -62 -43 -106 -106 -106c-81 0 -123 69 -123 149c0 96 78 223 252 223zM629 180c31 0 55 -24 55 -55s-24 -55 -55 -55s-55 24 -55 55s24 55 55 55zM630 -71c31 0 54 -23 54 -54s-23 -54 -54 -54s-54 23 -54 54s23 54 54 54z";
+const MINI_STAFF_LINE_YS = [37, 53, 69, 85, 101]; // 16px spacing, matches the staffY tables above
 
 const TARGET_CATCHES = 12;
 const MAX_LIVES = 3;
 
 // --- STATE ---
 let chosenMode = "ver"; // "ver" | "escuchar"
+let chosenClef = "treble"; // "treble" | "bass"
+let chosenColorMode = "colored"; // "colored" | "plain" (real challenge, no color/label hints)
 let chosenFishCount = 4;
 let activeNotes = [];
 let fishes = [];
@@ -66,6 +82,22 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       chosenFishCount = parseInt(btn.dataset.fish);
       document.querySelectorAll("#difficulty-selector .btn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  document.querySelectorAll("#clef-selector .btn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      chosenClef = btn.dataset.clef;
+      document.querySelectorAll("#clef-selector .btn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  document.querySelectorAll("#color-selector .btn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      chosenColorMode = btn.dataset.color;
+      document.querySelectorAll("#color-selector .btn-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
@@ -135,17 +167,23 @@ function playSplashSound(isGood) {
 }
 
 // --- MINI STAFF (for "ver" mode) ---
+// Sol clef anchors on the Sol line (2nd from bottom, y=85); Fa clef anchors
+// on the Fa line (4th from bottom, y=53) -- same SMuFL convention already
+// used in atrapa.js/game.js/teoria.html.
 function renderMiniStaff(noteDef) {
   const lines = MINI_STAFF_LINE_YS.map(y => `<line x1="15" y1="${y}" x2="115" y2="${y}" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />`).join("");
 
-  const clef = `<g transform="translate(20, 85) scale(${16 / 250})"><g transform="scale(1,-1)"><path fill="var(--color-gold)" d="${GCLEF_PATH}" /></g></g>`;
+  const clefPath = chosenClef === "treble" ? GCLEF_PATH : FCLEF_PATH;
+  const clefOriginY = chosenClef === "treble" ? 85 : 53;
+  const clef = `<g transform="translate(20, ${clefOriginY}) scale(${16 / 250})"><g transform="scale(1,-1)"><path fill="var(--color-gold)" d="${clefPath}" /></g></g>`;
 
   let ledger = "";
   if (noteDef.isLedger) {
     ledger = `<line x1="76" y1="${noteDef.staffY}" x2="94" y2="${noteDef.staffY}" stroke="#ffffff" stroke-width="1.5" />`;
   }
 
-  const noteHead = `<ellipse cx="85" cy="${noteDef.staffY}" rx="7" ry="4.5" fill="${noteDef.color}" transform="rotate(-20, 85, ${noteDef.staffY})" />`;
+  const noteColor = chosenColorMode === "plain" ? "var(--color-gold)" : noteDef.color;
+  const noteHead = `<ellipse cx="85" cy="${noteDef.staffY}" rx="7" ry="4.5" fill="${noteColor}" transform="rotate(-20, 85, ${noteDef.staffY})" />`;
   const stemDir = noteDef.staffY > 85 ? -22 : 22;
   const stemX = noteDef.staffY > 85 ? 91 : 79;
   const stem = `<line x1="${stemX}" y1="${noteDef.staffY}" x2="${stemX}" y2="${noteDef.staffY + stemDir}" stroke="#ffffff" stroke-width="1.5" />`;
@@ -154,7 +192,7 @@ function renderMiniStaff(noteDef) {
 }
 
 function renderPromptOverlay() {
-  const noteDef = NOTE_DEFS.find(n => n.id === targetNoteId);
+  const noteDef = activeNotes.find(n => n.id === targetNoteId);
   if (!noteDef) return;
 
   if (chosenMode === "ver") {
@@ -170,8 +208,13 @@ function renderPromptOverlay() {
 
 // --- FISH SETUP ---
 function buildFishes() {
-  activeNotes = NOTE_DEFS.slice(0, chosenFishCount);
+  const pool = chosenClef === "treble" ? TREBLE_NOTE_DEFS : BASS_NOTE_DEFS;
+  activeNotes = pool.slice(0, chosenFishCount);
   fishes = activeNotes.map((noteDef, i) => createFish(noteDef, i));
+}
+
+function fishDisplayColor(noteDef) {
+  return chosenColorMode === "plain" ? NEUTRAL_FISH_COLOR : noteDef.color;
 }
 
 function createFish(noteDef, laneIndex) {
@@ -425,55 +468,121 @@ function showEncouragementToast() {
 }
 
 // --- RENDERING ---
+function shadeColor(hex, percent) {
+  // percent > 0 lightens, < 0 darkens
+  const num = parseInt(hex.slice(1), 16);
+  const amt = Math.round(2.55 * percent);
+  const r = Math.min(255, Math.max(0, (num >> 16) + amt));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amt));
+  const b = Math.min(255, Math.max(0, (num & 0x0000ff) + amt));
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 function drawFish(fish) {
   const bob = Math.sin(fish.phase) * 6;
   const y = fish.baseY + bob;
   fish.y = y;
+  const tailWag = Math.sin(fish.phase * 3) * 0.35;
 
   const facingRight = fish.vx > 0;
   const scaleX = facingRight ? 1 : -1;
   const shrink = fish.caughtAnim > 0 ? 1 - fish.caughtAnim * 0.6 : 1;
+  const baseColor = fishDisplayColor(fish.note);
+  const r = fish.radius;
 
   ctx.save();
   ctx.translate(fish.x, y);
   ctx.scale(scaleX * shrink, shrink);
   ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
 
-  // Tail
+  // Tail (forked, gently wagging)
+  ctx.save();
+  ctx.translate(-r * 0.85, 0);
+  ctx.rotate(tailWag);
   ctx.beginPath();
-  ctx.moveTo(-fish.radius, 0);
-  ctx.lineTo(-fish.radius - 14, -12);
-  ctx.lineTo(-fish.radius - 14, 12);
+  ctx.moveTo(0, 0);
+  ctx.quadraticCurveTo(-r * 0.55, -r * 0.9, -r * 1.05, -r * 0.95);
+  ctx.quadraticCurveTo(-r * 0.55, -r * 0.15, -r * 0.7, 0);
+  ctx.quadraticCurveTo(-r * 0.55, r * 0.15, -r * 1.05, r * 0.95);
+  ctx.quadraticCurveTo(-r * 0.55, r * 0.9, 0, 0);
   ctx.closePath();
-  ctx.fillStyle = fish.note.color;
+  ctx.fillStyle = shadeColor(baseColor, -15);
+  ctx.fill();
+  ctx.restore();
+
+  // Dorsal fin
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.15, -r * 0.62);
+  ctx.quadraticCurveTo(r * 0.1, -r * 1.25, r * 0.35, -r * 0.6);
+  ctx.quadraticCurveTo(r * 0.05, -r * 0.75, -r * 0.15, -r * 0.62);
+  ctx.fillStyle = shadeColor(baseColor, -10);
   ctx.fill();
 
-  // Body
+  // Body with a glossy gradient (light on top, deeper shade below)
+  const bodyGrad = ctx.createLinearGradient(0, -r * 0.7, 0, r * 0.7);
+  bodyGrad.addColorStop(0, shadeColor(baseColor, 35));
+  bodyGrad.addColorStop(0.5, baseColor);
+  bodyGrad.addColorStop(1, shadeColor(baseColor, -20));
+
   ctx.beginPath();
-  ctx.ellipse(0, 0, fish.radius, fish.radius * 0.7, 0, 0, Math.PI * 2);
-  ctx.fillStyle = fish.note.color;
+  ctx.ellipse(0, 0, r, r * 0.68, 0, 0, Math.PI * 2);
+  ctx.fillStyle = bodyGrad;
   ctx.fill();
-  ctx.strokeStyle = "rgba(255,255,255,0.35)";
+  ctx.strokeStyle = "rgba(255,255,255,0.3)";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Scale arcs for texture
+  ctx.strokeStyle = "rgba(255,255,255,0.18)";
+  ctx.lineWidth = 1;
+  for (let sx = -r * 0.5; sx < r * 0.6; sx += r * 0.35) {
+    ctx.beginPath();
+    ctx.arc(sx, r * 0.12, r * 0.22, Math.PI * 0.15, Math.PI * 0.85);
+    ctx.stroke();
+  }
+
+  // Pectoral fin
+  ctx.beginPath();
+  ctx.moveTo(r * 0.05, r * 0.25);
+  ctx.quadraticCurveTo(r * 0.1, r * 0.65, -r * 0.15, r * 0.55);
+  ctx.quadraticCurveTo(0, r * 0.4, r * 0.05, r * 0.25);
+  ctx.fillStyle = shadeColor(baseColor, -12);
+  ctx.fill();
+
+  // Gill mark
+  ctx.beginPath();
+  ctx.arc(r * 0.42, r * 0.02, r * 0.32, Math.PI * 0.35, Math.PI * 1.65);
+  ctx.strokeStyle = "rgba(0,0,0,0.18)";
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Eye
+  // Eye (white + dark pupil + tiny highlight)
   ctx.beginPath();
-  ctx.arc(fish.radius * 0.45, -fish.radius * 0.25, 3.5, 0, Math.PI * 2);
+  ctx.arc(r * 0.55, -r * 0.18, 5, 0, Math.PI * 2);
+  ctx.fillStyle = "#f8fafc";
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(r * 0.58, -r * 0.18, 2.8, 0, Math.PI * 2);
   ctx.fillStyle = "#0b0d19";
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(r * 0.63, -r * 0.28, 1, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
   ctx.fill();
 
   ctx.restore();
 
-  // Note label (not mirrored)
-  ctx.save();
-  ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
-  ctx.fillStyle = "#0b0d19";
-  ctx.font = "800 13px 'Outfit', sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(fish.note.name, fish.x, y);
-  ctx.restore();
+  // Note label (not mirrored) -- hidden in the colorless challenge mode
+  if (chosenColorMode !== "plain") {
+    ctx.save();
+    ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
+    ctx.fillStyle = "#0b0d19";
+    ctx.font = "800 12px 'Outfit', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(fish.note.name, fish.x, y + r * 0.62);
+    ctx.restore();
+  }
 }
 
 function gameLoop() {
