@@ -355,11 +355,12 @@ function handleCatchCorrect(fish) {
   feedbackBox.textContent = "¡Pez pescado!";
 
   setTimeout(() => {
-    // Respawn this fish slot with a fresh (possibly different) note from the pool
+    // Respawn with the SAME note it had: every note in the active pool must
+    // always be represented by exactly one live fish, otherwise the target
+    // note picked below could end up with no matching fish in the water.
     const idx = fishes.indexOf(fish);
-    if (idx !== -1) {
-      const newNoteDef = activeNotes[Math.floor(Math.random() * activeNotes.length)];
-      fishes[idx] = createFish(newNoteDef, idx);
+    if (idx !== -1 && isGameActive) {
+      fishes[idx] = createFish(fish.note, idx);
     }
   }, 500);
 
@@ -378,6 +379,15 @@ function handleCatchWrong(fish) {
   updateHeartsDisplay();
   feedbackBox.className = "feedback-box feedback-wrong";
   feedbackBox.textContent = "¡Ese pez no era! Fíjate bien.";
+
+  setTimeout(() => {
+    // Same rule as a correct catch: respawn with the SAME note so every
+    // note in the pool always stays represented by exactly one live fish.
+    const idx = fishes.indexOf(fish);
+    if (idx !== -1 && isGameActive) {
+      fishes[idx] = createFish(fish.note, idx);
+    }
+  }, 500);
 
   if (lives <= 0) {
     handleLose();
