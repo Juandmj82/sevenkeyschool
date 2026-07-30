@@ -2,14 +2,14 @@
 // Same note/color mapping used by Atrapa Notas and Memoria Musical, for
 // visual consistency across the three "arcade" games.
 const NOTE_DEFS = [
-  { id: "C4", name: "DO",  color: "#ef4444", freq: 261.63, staffY: 117 },
-  { id: "D4", name: "RE",  color: "#f97316", freq: 293.66, staffY: 109 },
-  { id: "E4", name: "MI",  color: "#eab308", freq: 329.63, staffY: 101 },
-  { id: "F4", name: "FA",  color: "#22c55e", freq: 349.23, staffY: 93 },
-  { id: "G4", name: "SOL", color: "#00e5ff", freq: 392.00, staffY: 85 },
-  { id: "A4", name: "LA",  color: "#3b82f6", freq: 440.00, staffY: 77 },
-  { id: "B4", name: "SI",  color: "#a855f7", freq: 493.88, staffY: 69 },
-  { id: "C5", name: "DO",  color: "#ec4899", freq: 523.25, staffY: 61 }
+  { id: "C4", name: "DO",  color: "#ef4444", freq: 261.63, staffY: 117, isLedger: true },
+  { id: "D4", name: "RE",  color: "#f97316", freq: 293.66, staffY: 109, isLedger: false },
+  { id: "E4", name: "MI",  color: "#eab308", freq: 329.63, staffY: 101, isLedger: false },
+  { id: "F4", name: "FA",  color: "#22c55e", freq: 349.23, staffY: 93,  isLedger: false },
+  { id: "G4", name: "SOL", color: "#00e5ff", freq: 392.00, staffY: 85,  isLedger: false },
+  { id: "A4", name: "LA",  color: "#3b82f6", freq: 440.00, staffY: 77,  isLedger: false },
+  { id: "B4", name: "SI",  color: "#a855f7", freq: 493.88, staffY: 69,  isLedger: false },
+  { id: "C5", name: "DO",  color: "#ec4899", freq: 523.25, staffY: 61,  isLedger: false }
 ];
 
 // Real vector G-clef glyph from the Bravura (SMuFL) music font (same one
@@ -141,7 +141,7 @@ function renderMiniStaff(noteDef) {
   const clef = `<g transform="translate(20, 85) scale(${16 / 250})"><g transform="scale(1,-1)"><path fill="var(--color-gold)" d="${GCLEF_PATH}" /></g></g>`;
 
   let ledger = "";
-  if (noteDef.staffY >= 117 || noteDef.staffY <= 61) {
+  if (noteDef.isLedger) {
     ledger = `<line x1="76" y1="${noteDef.staffY}" x2="94" y2="${noteDef.staffY}" stroke="#ffffff" stroke-width="1.5" />`;
   }
 
@@ -217,6 +217,7 @@ function startGame() {
   isGameActive = true;
   score = 0;
   lives = MAX_LIVES;
+  hook = null;
 
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScore.textContent = `0 / ${TARGET_CATCHES}`;
@@ -256,24 +257,85 @@ function updateHeartsDisplay() {
   }
 }
 
+// --- FISHING HOOK (cast down to where the player taps, then reel back up) ---
+const HOOK_DESCEND_MS = 480;
+const HOOK_ASCEND_MS = 380;
+let hook = null;
+
 function handleCanvasClick(e) {
-  if (!isGameActive) return;
+  if (!isGameActive || hook) return; // one cast at a time, feels more like real fishing
+
   const rect = canvas.getBoundingClientRect();
   const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
   const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
 
+  hook = {
+    x: clickX,
+    y: 0,
+    targetY: clickY,
+    phase: "down",
+    startTime: performance.now()
+  };
+}
+
+function updateHook() {
+  if (!hook) return;
+  const elapsed = performance.now() - hook.startTime;
+
+  if (hook.phase === "down") {
+    const t = Math.min(elapsed / HOOK_DESCEND_MS, 1);
+    hook.y = hook.targetY * t;
+    if (t >= 1) {
+      resolveHookCatch(hook.x, hook.targetY);
+      hook.phase = "up";
+      hook.startTime = performance.now();
+    }
+  } else if (hook.phase === "up") {
+    const t = Math.min(elapsed / HOOK_ASCEND_MS, 1);
+    hook.y = hook.targetY * (1 - t);
+    if (t >= 1) {
+      hook = null;
+    }
+  }
+}
+
+function drawHook() {
+  if (!hook) return;
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(241, 245, 249, 0.85)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(hook.x, 0);
+  ctx.lineTo(hook.x, hook.y);
+  ctx.stroke();
+
+  // Hook shape (small curved barb)
+  ctx.beginPath();
+  ctx.arc(hook.x, hook.y + 6, 6, Math.PI * 0.15, Math.PI * 1.5);
+  ctx.strokeStyle = "#d4af37";
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+function resolveHookCatch(x, y) {
   let hitFish = null;
   for (const fish of fishes) {
-    if (fish.caught) continue;
-    const dx = clickX - fish.x;
-    const dy = clickY - fish.y;
+    if (fish.caught || fish.caughtAnim > 0) continue;
+    const dx = x - fish.x;
+    const dy = y - fish.y;
     if (Math.sqrt(dx * dx + dy * dy) <= fish.radius) {
       hitFish = fish;
       break;
     }
   }
 
-  if (!hitFish) return; // miss the water, no penalty
+  if (!hitFish) {
+    feedbackBox.className = "feedback-box";
+    feedbackBox.textContent = "¡Uy, el anzuelo salió vacío!";
+    return;
+  }
 
   if (hitFish.note.id === targetNoteId) {
     handleCatchCorrect(hitFish);
@@ -423,6 +485,9 @@ function gameLoop() {
     }
     drawFish(fish);
   });
+
+  updateHook();
+  drawHook();
 
   animationId = requestAnimationFrame(gameLoop);
 }
