@@ -666,6 +666,19 @@
             <button class="btn-play-level" style="background: linear-gradient(135deg, var(--color-purple) 0%, #a100bc 100%); color: var(--text-main);">¡Jugar!</button>
           </div>
         </div>
+
+        <!-- Pesca Notas Game -->
+        <div class="level-card has-full-cover" id="card-pesca" onclick="showPreview('pesca')" style="border-color: rgba(0, 229, 255, 0.2);">
+          <div class="level-cover">
+            <img src="../img/pesca_notas.svg" alt="Pesca Notas">
+            <div class="level-header-overlay">
+              <span class="level-status-icon">🎣</span>
+            </div>
+          </div>
+          <div class="level-footer">
+            <button class="btn-play-level" style="background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%); color: var(--bg-dark);">¡Jugar!</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -794,6 +807,16 @@
         notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
         avatar: "../img/profe_celebrate.jpg",
         url: "memoria.html"
+      },
+      "pesca": {
+        title: "Pesca Notas",
+        description: `"¡A pescar se ha dicho! En el estanque nadan peces con distintas notas. Te diré cuál nota buscar (leyéndola o escuchándola) y tú debes tocar al pez correcto para pescarlo. ¡Idea de uno de nuestros propios alumnos!"`,
+        clef: "Ver y Pescar / Escuchar y Pescar",
+        target: "Pescar 12 notas correctas",
+        time: "Sin límite de tiempo",
+        notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "pesca.html"
       }
     };
 
