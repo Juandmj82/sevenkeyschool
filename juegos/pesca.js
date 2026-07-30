@@ -575,13 +575,26 @@ function drawFish(fish) {
   // Note label (not mirrored). Always shown -- it's the actual reading
   // exercise (matching the note NAME, not just a color swatch). Only the
   // fish's distinguishing color goes away in the colorless challenge mode.
+  // Drawn on a small white badge, centered on the body, so it stays legible
+  // regardless of the body's color/gradient underneath.
   ctx.save();
   ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
-  ctx.fillStyle = "#0b0d19";
   ctx.font = "800 12px 'Outfit', sans-serif";
+  const labelText = fish.note.name;
+  const textWidth = ctx.measureText(labelText).width;
+  const badgeW = textWidth + 12;
+  const badgeH = 16;
+
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH, 8)
+                : ctx.rect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
+  ctx.fill();
+
+  ctx.fillStyle = "#0b0d19";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(fish.note.name, fish.x, y + r * 0.62);
+  ctx.fillText(labelText, fish.x, y + 1);
   ctx.restore();
 }
 

@@ -18,19 +18,19 @@
     .profe-sticker {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 16px;
-      padding: 10px 14px;
-      margin: 8px 0;
+      padding: 8px 12px;
+      margin: 6px 0;
       width: 100%;
-      max-width: 420px;
+      max-width: 560px;
       text-align: left;
     }
     .profe-avatar {
-      width: 62px;
-      height: 62px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       object-fit: cover;
       border: 2.5px solid #a78bfa;
@@ -153,28 +153,39 @@
     main { justify-content: flex-start; }
     .game-container { min-height: calc(100dvh - 170px); }
 
-    .start-prompt { width: 95%; max-width: 460px; padding: 16px 20px; max-height: 100%; overflow-y: auto; }
+    .start-prompt { width: 95%; max-width: 620px; padding: 14px 20px; max-height: 100%; overflow-y: auto; }
 
     /* --- Settings chips, same pattern as Atrapa Notas / Memoria Musical --- */
-    .setting-group { width: 100%; margin-top: 6px; }
+    /* Two columns on wider screens so all 4 setting groups fit without
+       scrolling; collapses to one column on small/short phones. */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 18px;
+      width: 100%;
+    }
+    @media (max-width: 520px) {
+      .settings-grid { grid-template-columns: 1fr; }
+    }
+    .setting-group { width: 100%; margin-top: 4px; }
     .setting-label {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       text-align: center;
     }
-    .chip-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .chip-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
     .btn-chip {
       background: rgba(255, 255, 255, 0.03);
       border: 1.5px solid rgba(255, 255, 255, 0.1);
       color: var(--text-main);
-      padding: 8px 16px;
+      padding: 6px 13px;
       border-radius: 50px;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       transition: var(--transition-smooth);
@@ -247,7 +258,7 @@
     }
 
     @media (max-width: 600px) {
-      .pond-area { height: 280px; }
+      .pond-area { min-height: 320px; }
       .profe-toast {
         bottom: 145px !important;
         right: auto !important;
@@ -257,6 +268,22 @@
         width: 290px !important;
       }
       .profe-toast.show { transform: translate(-50%, 0) !important; }
+    }
+
+    /* Extra-compact start menu on narrow OR short screens so it fits
+       without scrolling the settings panel itself */
+    @media (max-width: 520px), (max-height: 480px) {
+      .start-prompt { padding: 10px 16px; }
+      .start-prompt h2 { font-size: 1.3rem !important; margin-bottom: 2px !important; }
+      .profe-sticker { padding: 6px 10px; margin: 4px 0; gap: 10px; }
+      .profe-avatar { width: 40px; height: 40px; }
+      .profe-bubble { font-size: 0.7rem; }
+      .settings-grid { gap: 2px 18px; }
+      .setting-group { margin-top: 3px; }
+      .setting-label { margin-bottom: 3px; }
+      .chip-row { gap: 5px; }
+      .btn-chip { padding: 5px 11px; font-size: 0.74rem; }
+      .btn-start-game { padding: 0.55rem 1.6rem !important; font-size: 1rem !important; margin-top: 6px !important; }
     }
   </style>
 </head>
@@ -312,40 +339,42 @@
           </div>
         </div>
 
-        <div class="setting-group">
-          <span class="setting-label">Modo de Juego</span>
-          <div class="chip-row" id="mode-selector">
-            <button class="btn-chip active" data-mode="ver">🎼 Ver y Pescar</button>
-            <button class="btn-chip" data-mode="escuchar">👂 Escuchar y Pescar</button>
+        <div class="settings-grid">
+          <div class="setting-group">
+            <span class="setting-label">Modo de Juego</span>
+            <div class="chip-row" id="mode-selector">
+              <button class="btn-chip active" data-mode="ver">🎼 Ver y Pescar</button>
+              <button class="btn-chip" data-mode="escuchar">👂 Escuchar y Pescar</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <span class="setting-label">Clave</span>
+            <div class="chip-row" id="clef-selector">
+              <button class="btn-chip active" data-clef="treble">𝄞 Sol</button>
+              <button class="btn-chip" data-clef="bass">𝄢 Fa</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <span class="setting-label">Cantidad de Peces</span>
+            <div class="chip-row" id="difficulty-selector">
+              <button class="btn-chip active" data-fish="4">4 Peces</button>
+              <button class="btn-chip" data-fish="6">6 Peces</button>
+              <button class="btn-chip" data-fish="8">8 Peces</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <span class="setting-label">Ayuda Visual (Peces)</span>
+            <div class="chip-row" id="color-selector">
+              <button class="btn-chip active" data-color="colored">🎨 Con Color</button>
+              <button class="btn-chip" data-color="plain">🐟 Sin Color</button>
+            </div>
           </div>
         </div>
 
-        <div class="setting-group">
-          <span class="setting-label">Cantidad de Peces</span>
-          <div class="chip-row" id="difficulty-selector">
-            <button class="btn-chip active" data-fish="4">4 Peces</button>
-            <button class="btn-chip" data-fish="6">6 Peces</button>
-            <button class="btn-chip" data-fish="8">8 Peces</button>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <span class="setting-label">Clave</span>
-          <div class="chip-row" id="clef-selector">
-            <button class="btn-chip active" data-clef="treble">𝄞 Sol</button>
-            <button class="btn-chip" data-clef="bass">𝄢 Fa</button>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <span class="setting-label">Ayuda Visual (Peces)</span>
-          <div class="chip-row" id="color-selector">
-            <button class="btn-chip active" data-color="colored">🎨 Con Color (Fácil)</button>
-            <button class="btn-chip" data-color="plain">🐟 Sin Color (Desafío)</button>
-          </div>
-        </div>
-
-        <button class="btn-start-game" id="btn-start" style="margin-top: 10px;">Iniciar Juego</button>
+        <button class="btn-start-game" id="btn-start" style="margin-top: 8px;">Iniciar Juego</button>
       </div>
 
       <!-- Target note card: its own row, always separate from the pond -->
@@ -411,6 +440,6 @@
     </div>
   </main>
 
-  <script src="pesca.js?v=5"></script>
+  <script src="pesca.js?v=6"></script>
 </body>
 </html>
