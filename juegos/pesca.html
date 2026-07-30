@@ -148,6 +148,11 @@
 
     .header-logo { height: 50px; width: auto; display: block; }
 
+    /* Let the game actually use the available screen height instead of
+       shrinking to a small centered box */
+    main { justify-content: flex-start; }
+    .game-container { min-height: calc(100dvh - 170px); }
+
     .start-prompt { width: 95%; max-width: 460px; padding: 16px 20px; max-height: 100%; overflow-y: auto; }
 
     /* --- Settings chips, same pattern as Atrapa Notas / Memoria Musical --- */
@@ -182,12 +187,17 @@
       box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
     }
 
-    /* --- Pond area --- */
+    /* --- Pond area: fills the remaining screen space, not a fixed small box --- */
     .pond-area {
-      height: 340px;
+      flex: 1;
+      min-height: 420px;
+      height: auto;
       padding: 0;
       overflow: hidden;
       position: relative;
+    }
+    @media (min-height: 750px) {
+      .pond-area { min-height: 560px; }
     }
     #pond-canvas {
       width: 100%;
@@ -197,20 +207,17 @@
       border-radius: 16px;
     }
 
-    /* Prompt overlay for "escuchar" mode (speaker button) */
-    .prompt-overlay {
-      position: absolute;
-      top: 10px; left: 50%;
-      transform: translateX(-50%);
+    /* Target-note card: its own row above the pond, never overlapping the fish */
+    .target-card {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      z-index: 5;
-      background: rgba(11, 13, 25, 0.55);
-      backdrop-filter: blur(4px);
-      padding: 8px 16px;
+      justify-content: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 16px;
+      padding: 10px 20px;
+      width: 100%;
     }
     .btn-listen-small {
       width: 54px;
@@ -226,15 +233,17 @@
       cursor: pointer;
       box-shadow: 0 0 18px var(--color-cyan-glow);
       transition: var(--transition-smooth);
+      flex-shrink: 0;
     }
     .btn-listen-small:hover { transform: scale(1.08); }
-    .prompt-hint { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .prompt-hint { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* Mini staff widget for "ver" mode */
     #mini-staff-svg {
-      width: 130px;
-      height: 100px;
+      width: 110px;
+      height: 84px;
       display: block;
+      flex-shrink: 0;
     }
 
     @media (max-width: 600px) {
@@ -323,12 +332,12 @@
         <button class="btn-start-game" id="btn-start" style="margin-top: 10px;">Iniciar Juego</button>
       </div>
 
+      <!-- Target note card: its own row, always separate from the pond -->
+      <div class="target-card" id="target-card"></div>
+
       <!-- Pond area -->
       <div class="staff-area pond-area">
         <canvas id="pond-canvas"></canvas>
-
-        <!-- Prompt overlay: mode-dependent content injected by JS -->
-        <div class="prompt-overlay" id="prompt-overlay"></div>
 
         <!-- Interactive Toast Alert when losing a life -->
         <div class="profe-toast" id="profe-toast">

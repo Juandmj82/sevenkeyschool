@@ -42,7 +42,7 @@ const heartsBox = document.getElementById("hearts-box");
 const feedbackBox = document.getElementById("feedback-box");
 const startOverlay = document.getElementById("start-overlay");
 const btnStart = document.getElementById("btn-start");
-const promptOverlay = document.getElementById("prompt-overlay");
+const targetCard = document.getElementById("target-card");
 const winModal = document.getElementById("win-modal");
 const loseModal = document.getElementById("lose-modal");
 const btnRestartWin = document.getElementById("btn-restart-win");
@@ -158,9 +158,9 @@ function renderPromptOverlay() {
   if (!noteDef) return;
 
   if (chosenMode === "ver") {
-    promptOverlay.innerHTML = `${renderMiniStaff(noteDef)}<span class="prompt-hint">Pesca esta nota</span>`;
+    targetCard.innerHTML = `${renderMiniStaff(noteDef)}<span class="prompt-hint">Pesca esta nota</span>`;
   } else {
-    promptOverlay.innerHTML = `
+    targetCard.innerHTML = `
       <button class="btn-listen-small" id="btn-listen-pond">🔊</button>
       <span class="prompt-hint">Escucha y pesca</span>
     `;
