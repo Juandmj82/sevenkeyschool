@@ -20,7 +20,7 @@ const BASS_NOTE_DEFS = [
   { id: "G3", name: "SOL", color: "#00e5ff", freq: 196.00, staffY: 45, isLedger: false },
   { id: "A3", name: "LA",  color: "#3b82f6", freq: 220.00, staffY: 37, isLedger: false },
   { id: "B3", name: "SI",  color: "#a855f7", freq: 246.94, staffY: 29, isLedger: false },
-  { id: "C4b", name: "DO", color: "#ec4899", freq: 261.63, staffY: 21, isLedger: true }
+  { id: "C4", name: "DO", color: "#ec4899", freq: 261.63, staffY: 21, isLedger: true }
 ];
 
 const NEUTRAL_FISH_COLOR = "#94a3b8"; // used in "sin color" challenge mode
@@ -114,14 +114,70 @@ function resizeCanvas() {
   canvas.height = wrap.clientHeight;
 }
 
-// --- AUDIO (self-contained synth) ---
+// --- AUDIO ---
+// Real piano samples (same open-source soundfont used by Atrapa Notas and
+// the Nivel 1-5 reading game), with the synth below kept only as a
+// fallback if a sample fails to load.
+const sampleCache = {};
+let samplesLoaded = false;
+
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
 }
 
-function playNoteSound(freq, duration = 0.6) {
+function loadPianoSamples(callback) {
+  initAudio();
+  const notesToLoad = [
+    "C3", "D3", "E3", "F3", "G3", "A3", "B3",
+    "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"
+  ];
+
+  const originalText = btnStart.textContent;
+  btnStart.setAttribute("disabled", "true");
+  btnStart.textContent = "Cargando piano real...";
+
+  const promises = notesToLoad.map(note => {
+    if (sampleCache[note]) return Promise.resolve();
+    const url = `https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/${note}.mp3`;
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error("Fetch failed");
+        return response.arrayBuffer();
+      })
+      .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+      .then(audioBuffer => { sampleCache[note] = audioBuffer; })
+      .catch(err => {
+        console.warn(`Error al cargar piano real para ${note}, usando sintetizador de respaldo.`, err);
+      });
+  });
+
+  Promise.all(promises).finally(() => {
+    btnStart.removeAttribute("disabled");
+    btnStart.textContent = originalText;
+    samplesLoaded = true;
+    callback();
+  });
+}
+
+// Play the real sampled piano note if available, otherwise fall back to
+// the synth tone at the note's frequency.
+function playNoteSound(noteDef, duration = 0.6) {
+  if (!audioCtx) return;
+
+  const buffer = sampleCache[noteDef.id];
+  if (buffer) {
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioCtx.destination);
+    source.start(0);
+  } else {
+    playTone(noteDef.freq, duration);
+  }
+}
+
+function playTone(freq, duration = 0.6) {
   if (!audioCtx) return;
   const now = audioCtx.currentTime;
 
@@ -202,7 +258,7 @@ function renderPromptOverlay() {
       <button class="btn-listen-small" id="btn-listen-pond">🔊</button>
       <span class="prompt-hint">Escucha y pesca</span>
     `;
-    document.getElementById("btn-listen-pond").addEventListener("click", () => playNoteSound(noteDef.freq, 0.7));
+    document.getElementById("btn-listen-pond").addEventListener("click", () => playNoteSound(noteDef, 0.7));
   }
 }
 
@@ -250,14 +306,18 @@ function pickNewTarget() {
   renderPromptOverlay();
 
   if (chosenMode === "escuchar") {
-    setTimeout(() => playNoteSound(noteDef.freq, 0.7), 350);
+    setTimeout(() => playNoteSound(noteDef, 0.7), 350);
   }
 }
 
 // --- GAME FLOW ---
 function handleStartClick() {
   initAudio();
-  startGame();
+  if (!samplesLoaded) {
+    loadPianoSamples(startGame);
+  } else {
+    startGame();
+  }
 }
 
 function startGame() {
@@ -401,7 +461,7 @@ function handleCatchCorrect(fish) {
     // Play the actual pitch of the caught note instead of a generic splash,
     // so the ear starts associating "this note = this position" -- priming
     // the same skill that "Escuchar y Pescar" will ask for later.
-    playNoteSound(fish.note.freq, 0.55);
+    playNoteSound(fish.note, 0.55);
   } else {
     playSplashSound(true);
   }
