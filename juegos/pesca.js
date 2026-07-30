@@ -572,17 +572,17 @@ function drawFish(fish) {
 
   ctx.restore();
 
-  // Note label (not mirrored) -- hidden in the colorless challenge mode
-  if (chosenColorMode !== "plain") {
-    ctx.save();
-    ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
-    ctx.fillStyle = "#0b0d19";
-    ctx.font = "800 12px 'Outfit', sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(fish.note.name, fish.x, y + r * 0.62);
-    ctx.restore();
-  }
+  // Note label (not mirrored). Always shown -- it's the actual reading
+  // exercise (matching the note NAME, not just a color swatch). Only the
+  // fish's distinguishing color goes away in the colorless challenge mode.
+  ctx.save();
+  ctx.globalAlpha = fish.caughtAnim > 0 ? 1 - fish.caughtAnim : 1;
+  ctx.fillStyle = "#0b0d19";
+  ctx.font = "800 12px 'Outfit', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(fish.note.name, fish.x, y + r * 0.62);
+  ctx.restore();
 }
 
 function gameLoop() {
