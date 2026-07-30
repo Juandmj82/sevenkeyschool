@@ -196,7 +196,13 @@ function createFish(noteDef, laneIndex) {
 }
 
 function pickNewTarget() {
-  const noteDef = activeNotes[Math.floor(Math.random() * activeNotes.length)];
+  // Safety net: always pick from the notes actually swimming right now (not
+  // just the theoretical pool), so the target can never point at a note
+  // with no matching fish in the water, no matter what caused a mismatch.
+  const liveNoteIds = fishes.filter(f => !f.caught).map(f => f.note.id);
+  const pool = liveNoteIds.length > 0 ? activeNotes.filter(n => liveNoteIds.includes(n.id)) : activeNotes;
+
+  const noteDef = pool[Math.floor(Math.random() * pool.length)];
   targetNoteId = noteDef.id;
   renderPromptOverlay();
 
