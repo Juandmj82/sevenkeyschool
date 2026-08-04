@@ -18,15 +18,24 @@ const NOTE_FREQS = {
   "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
 };
 
-const SLOT_X_POSITIONS = [110, 160, 210, 260, 310, 360, 410, 460];
-const MAX_NOTES_LIBRE = 8;
+const STAFF_X_START = 100;
+const STAFF_X_END = 480;
+const MAX_BEATS_LIBRE = 8; // total "tiempos" available in Modo Libre
+const BEAT_WIDTH = (STAFF_X_END - STAFF_X_START) / MAX_BEATS_LIBRE;
+const BEAT_MS = 420; // playback duration of one "tiempo" (negra)
+
+// negra = 1 tiempo, blanca = 2 tiempos, corchea = 1/2 tiempo
+const DURATION_BEATS = { negra: 1, blanca: 2, corchea: 0.5 };
+const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", corchea: "Corchea" };
+
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
 const MAX_LIVES = 3;
 
 // --- STATE ---
 let chosenMode = "libre"; // "libre" | "reto"
-let melody = [];
+let selectedDuration = "negra"; // "negra" | "blanca" | "corchea" (Modo Libre only)
+let melody = []; // array of { note, duration }
 let targetMelody = [];
 let score = 0;
 let lives = MAX_LIVES;
@@ -136,13 +145,17 @@ function playErrorSound() {
 function playMelody(notes, onDone) {
   if (isPlaying || notes.length === 0) return;
   isPlaying = true;
-  notes.forEach((noteId, i) => {
-    setTimeout(() => playNoteSound(noteId, 0.5), i * 550);
+  let elapsedMs = 0;
+  notes.forEach(({ note, duration }) => {
+    const beats = DURATION_BEATS[duration] || 1;
+    const noteMs = beats * BEAT_MS;
+    setTimeout(() => playNoteSound(note, noteMs / 1000 * 0.9), elapsedMs);
+    elapsedMs += noteMs;
   });
   setTimeout(() => {
     isPlaying = false;
     if (onDone) onDone();
-  }, notes.length * 550 + 200);
+  }, elapsedMs + 200);
 }
 
 // --- DOM ---
@@ -161,6 +174,7 @@ const btnUndo = document.getElementById("btn-undo");
 const btnClear = document.getElementById("btn-clear");
 const btnCheck = document.getElementById("btn-check");
 const noteCounter = document.getElementById("note-counter");
+const durationSelector = document.getElementById("duration-selector");
 const winModal = document.getElementById("win-modal");
 const loseModal = document.getElementById("lose-modal");
 const btnRestartWin = document.getElementById("btn-restart-win");
@@ -181,6 +195,14 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("#mode-selector .btn-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       overlayDesc.textContent = MODE_DESCRIPTIONS[chosenMode];
+    });
+  });
+
+  document.querySelectorAll("#duration-selector .duration-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedDuration = btn.dataset.duration;
+      document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
     });
   });
 
@@ -205,6 +227,7 @@ function drawStaffBase() {
     line.setAttribute("y1", y);
     line.setAttribute("x2", "490");
     line.setAttribute("y2", y);
+    line.setAttribute("class", "staff-line");
     line.setAttribute("stroke", "rgba(255, 255, 255, 0.25)");
     line.setAttribute("stroke-width", "2");
     staffSvg.appendChild(line);
@@ -223,17 +246,25 @@ function drawStaffBase() {
   staffSvg.appendChild(clefGroup);
 }
 
+function totalBeats(items) {
+  return items.reduce((sum, item) => sum + (DURATION_BEATS[item.duration] || 1), 0);
+}
+
 function redrawMelody() {
-  const linesAndClef = Array.from(staffSvg.querySelectorAll("line, g.clef-glyph"));
+  const linesAndClef = Array.from(staffSvg.querySelectorAll("line.staff-line, g.clef-glyph"));
   staffSvg.innerHTML = "";
   linesAndClef.forEach(el => staffSvg.appendChild(el));
 
-  melody.forEach((noteId, i) => {
-    drawNoteAt(SLOT_X_POSITIONS[i], NOTE_Y_MAP[noteId]);
+  let cumulativeBeats = 0;
+  melody.forEach(({ note, duration }) => {
+    const beats = DURATION_BEATS[duration] || 1;
+    const x = STAFF_X_START + (cumulativeBeats + beats / 2) * BEAT_WIDTH;
+    drawNoteAt(x, NOTE_Y_MAP[note], duration);
+    cumulativeBeats += beats;
   });
 }
 
-function drawNoteAt(x, y) {
+function drawNoteAt(x, y, duration = "negra") {
   if (y >= 160 || y <= 90) {
     const ledger = document.createElementNS("http://www.w3.org/2000/svg", "line");
     ledger.setAttribute("x1", x - 14);
@@ -245,32 +276,46 @@ function drawNoteAt(x, y) {
     staffSvg.appendChild(ledger);
   }
 
+  const isHollow = duration === "blanca";
   const head = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
   head.setAttribute("cx", x);
   head.setAttribute("cy", y);
   head.setAttribute("rx", "10");
   head.setAttribute("ry", "7");
-  head.setAttribute("fill", "var(--color-cyan)");
+  if (isHollow) {
+    head.setAttribute("fill", "var(--bg-dark)");
+    head.setAttribute("stroke", "var(--color-cyan)");
+    head.setAttribute("stroke-width", "2.5");
+  } else {
+    head.setAttribute("fill", "var(--color-cyan)");
+  }
   head.setAttribute("transform", `rotate(-20, ${x}, ${y})`);
   head.setAttribute("filter", "drop-shadow(0px 0px 4px var(--color-cyan-glow))");
   staffSvg.appendChild(head);
 
   const stem = document.createElementNS("http://www.w3.org/2000/svg", "line");
   const stemLength = 42;
-  if (y >= 100) {
-    stem.setAttribute("x1", x + 9);
-    stem.setAttribute("y1", y - 2);
-    stem.setAttribute("x2", x + 9);
-    stem.setAttribute("y2", y - stemLength);
-  } else {
-    stem.setAttribute("x1", x - 9);
-    stem.setAttribute("y1", y + 2);
-    stem.setAttribute("x2", x - 9);
-    stem.setAttribute("y2", y + stemLength);
-  }
+  const stemUp = y >= 100;
+  const stemX = stemUp ? x + 9 : x - 9;
+  const stemY1 = stemUp ? y - 2 : y + 2;
+  const stemY2 = stemUp ? y - stemLength : y + stemLength;
+  stem.setAttribute("x1", stemX);
+  stem.setAttribute("y1", stemY1);
+  stem.setAttribute("x2", stemX);
+  stem.setAttribute("y2", stemY2);
   stem.setAttribute("stroke", "var(--text-main)");
   stem.setAttribute("stroke-width", "2.2");
   staffSvg.appendChild(stem);
+
+  if (duration === "corchea") {
+    const flag = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const flagD = stemUp
+      ? `M ${stemX} ${stemY2} q 12 4 12 18 q -6 -8 -12 -8 Z`
+      : `M ${stemX} ${stemY2} q -12 -4 -12 -18 q 6 8 12 8 Z`;
+    flag.setAttribute("d", flagD);
+    flag.setAttribute("fill", "var(--text-main)");
+    staffSvg.appendChild(flag);
+  }
 }
 
 function nearestNoteFromY(clickY) {
@@ -289,8 +334,12 @@ function nearestNoteFromY(clickY) {
 function handleStaffClick(e) {
   if (!isGameActive || isPlaying) return;
 
-  const maxNotes = chosenMode === "reto" ? RETO_MELODY_LENGTH : MAX_NOTES_LIBRE;
-  if (melody.length >= maxNotes) return;
+  if (chosenMode === "reto") {
+    if (melody.length >= RETO_MELODY_LENGTH) return;
+  } else {
+    const duration = selectedDuration;
+    if (totalBeats(melody) + (DURATION_BEATS[duration] || 1) > MAX_BEATS_LIBRE) return;
+  }
 
   const point = staffSvg.createSVGPoint();
   point.x = e.clientX;
@@ -300,7 +349,8 @@ function handleStaffClick(e) {
   if (svgPoint.x < 95) return; // ignore clicks on the clef area
 
   const noteId = nearestNoteFromY(svgPoint.y);
-  melody.push(noteId);
+  const duration = chosenMode === "reto" ? "negra" : selectedDuration;
+  melody.push({ note: noteId, duration });
   redrawMelody();
   playNoteSound(noteId, 0.4);
   updateToolbarState();
@@ -329,18 +379,19 @@ function handleClearClick() {
 }
 
 function updateToolbarState() {
-  const maxNotes = chosenMode === "reto" ? RETO_MELODY_LENGTH : MAX_NOTES_LIBRE;
-  noteCounter.textContent = `${melody.length} / ${maxNotes} notas`;
-  btnUndo.disabled = melody.length === 0;
-  btnClear.disabled = melody.length === 0;
-  btnPlay.disabled = melody.length === 0;
-
   if (chosenMode === "reto") {
+    noteCounter.textContent = `${melody.length} / ${RETO_MELODY_LENGTH} notas`;
     btnCheck.hidden = false;
     btnCheck.disabled = melody.length !== RETO_MELODY_LENGTH;
   } else {
+    const used = totalBeats(melody);
+    const usedLabel = Number.isInteger(used) ? used : used.toFixed(1);
+    noteCounter.textContent = `${usedLabel} / ${MAX_BEATS_LIBRE} tiempos`;
     btnCheck.hidden = true;
   }
+  btnUndo.disabled = melody.length === 0;
+  btnClear.disabled = melody.length === 0;
+  btnPlay.disabled = melody.length === 0;
 }
 
 // --- GAME FLOW ---
@@ -364,6 +415,11 @@ function startGame() {
   hudLivesItem.hidden = chosenMode !== "reto";
   hudScore.textContent = `0 / ${RETO_TARGET_SCORE}`;
   updateHeartsDisplay();
+
+  durationSelector.hidden = chosenMode === "reto";
+  selectedDuration = "negra";
+  document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
+  document.querySelector('#duration-selector .duration-chip[data-duration="negra"]').classList.add("active");
 
   confettiActive = false;
   if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
@@ -406,7 +462,8 @@ function updateHeartsDisplay() {
 function generateTargetMelody() {
   const notes = [];
   for (let i = 0; i < RETO_MELODY_LENGTH; i++) {
-    notes.push(NOTE_ORDER[Math.floor(Math.random() * NOTE_ORDER.length)]);
+    const note = NOTE_ORDER[Math.floor(Math.random() * NOTE_ORDER.length)];
+    notes.push({ note, duration: "negra" });
   }
   return notes;
 }
@@ -430,7 +487,7 @@ function startNewRound() {
 function handleCheckClick() {
   if (melody.length !== RETO_MELODY_LENGTH) return;
 
-  const isCorrect = melody.every((noteId, i) => noteId === targetMelody[i]);
+  const isCorrect = melody.every((item, i) => item.note === targetMelody[i].note);
 
   if (isCorrect) {
     score++;

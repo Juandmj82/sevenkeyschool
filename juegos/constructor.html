@@ -250,6 +250,10 @@
       color: var(--text-muted);
     }
 
+    #duration-selector { margin-bottom: 4px; }
+    #duration-selector[hidden] { display: none !important; }
+    .duration-chip { padding: 6px 14px; font-size: 0.78rem; }
+
     @media (max-width: 600px) {
       .profe-toast {
         bottom: 145px !important;
@@ -352,6 +356,13 @@
 
       <!-- Feedback box -->
       <div class="feedback-box" id="feedback-box"></div>
+
+      <!-- Rhythm picker (Modo Libre only) -->
+      <div class="chip-row" id="duration-selector">
+        <button class="btn-chip duration-chip active" data-duration="negra" title="Negra (1 tiempo)">♩ Negra</button>
+        <button class="btn-chip duration-chip" data-duration="blanca" title="Blanca (2 tiempos)">𝅗𝅥 Blanca</button>
+        <button class="btn-chip duration-chip" data-duration="corchea" title="Corchea (medio tiempo)">♪ Corchea</button>
+      </div>
 
       <!-- Toolbar -->
       <div class="builder-toolbar" id="builder-toolbar">
