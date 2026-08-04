@@ -197,6 +197,17 @@
       color: #052532;
       box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
     }
+    .time-trial-results {
+      display: none;
+      margin: 12px 0 2px;
+      color: var(--color-gold);
+      font-size: 0.88rem;
+      font-weight: 800;
+      line-height: 1.6;
+      text-align: center;
+      white-space: pre-line;
+    }
+    .time-trial-results.visible { display: block; }
 
     /* --- Pond area: fills the remaining screen space, not a fixed small box --- */
     .pond-area {
@@ -311,6 +322,10 @@
             <span class="hud-label">Pescados</span>
             <span class="hud-value" id="hud-score">0 / 12</span>
           </div>
+          <div class="hud-item" id="hud-timer-item" hidden>
+            <span class="hud-label">Tiempo</span>
+            <span class="hud-value gold" id="hud-timer">0.0s</span>
+          </div>
         </div>
 
         <div class="hud-group">
@@ -372,6 +387,14 @@
               <button class="btn-chip" data-color="plain">🐟 Sin Color</button>
             </div>
           </div>
+
+          <div class="setting-group">
+            <span class="setting-label">Reto</span>
+            <div class="chip-row" id="challenge-selector">
+              <button class="btn-chip active" data-challenge="normal">🎣 Normal</button>
+              <button class="btn-chip" data-challenge="timed">⏱️ Contrarreloj</button>
+            </div>
+          </div>
         </div>
 
         <button class="btn-start-game" id="btn-start" style="margin-top: 8px;">Iniciar Juego</button>
@@ -412,6 +435,7 @@
             ¡Pescaste todas las notas correctas! Tienes muy buen ojo (y oído) musical.
           </div>
         </div>
+        <div class="time-trial-results" id="time-trial-results"></div>
 
         <div class="modal-buttons">
           <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
@@ -440,6 +464,6 @@
     </div>
   </main>
 
-  <script src="pesca.js?v=6"></script>
+  <script src="pesca.js?v=7"></script>
 </body>
 </html>
