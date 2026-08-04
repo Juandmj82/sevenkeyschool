@@ -51,6 +51,9 @@ Como estudiante, quiero ver mi propio nombre y foto de perfil en mi página de i
 - **FR-014**: Si el estudiante no tiene cargada una foto de perfil, el sistema DEBE autogenerar un avatar SVG dinámico basado en las iniciales de su nombre y con fondo de degradado estético.
 - **FR-015**: Los videos integrados DEBEN bloquear cualquier intento de apertura externa mediante un overlay transparente situado sobre la barra superior para asegurar una experiencia estrictamente contenida dentro del portal.
 - **FR-016**: La interfaz DEBE seguir pautas de UI/UX Pro Max, incluyendo transiciones fluidas en hover para acordeones, cursores interactivos consistentes y control estricto de contrastes.
+- **FR-017**: El mensaje flotante de confirmación (Toast) DEBE tener un `z-index` superior a `300` para mostrarse siempre por encima de cualquier modal activo (`z-index: 200`).
+- **FR-018**: El reproductor de video en dispositivos móviles DEBE recortar la cabecera nativa de Google Drive aplicando un desplazamiento `top: -46px` y una altura compensada para mejorar la visualización y visibilidad de los controles.
+- **FR-019**: El portal DEBE utilizar versionamiento query (`?v=X.Y.Z`) al enlazar la hoja de estilos CSS para forzar la actualización automática de caché en navegadores móviles.
 
 ## Success Criteria
 

@@ -58,3 +58,10 @@
 - [x] T016 [P] Asegurar coherencia tipográfica de fuentes Cinzel y Plus Jakarta Sans en todo el portal.
 - [x] T017 Probar el comportamiento responsivo en móviles verticales y asegurar la no existencia de scrolls horizontales o elementos cortados.
 - [x] T018 Ejecutar todas las pruebas del documento `quickstart.md`.
+
+---
+
+## Phase 7: Mobile Player & Notification Fixes (Post-MVP)
+- [x] T019 [US2] Corregir z-index del mensaje Toast (.toast-msg) de 100 a 300 para que se visualice por encima del modal overlay (.video-modal-overlay a z-index 200).
+- [x] T018 [US1] Recortar la cabecera nativa de Google Drive en celulares aplicando top: -46px e iframe height calc(100% + 46px) con un modal wrapper de altura fija a 260px para evitar encuadre distorsionado.
+- [x] T019 [US1] Implementar versionamiento de hoja de estilo en estudiantes/index.html (?v=1.1.3) para romper caché y forzar propagación inmediata en móviles.
