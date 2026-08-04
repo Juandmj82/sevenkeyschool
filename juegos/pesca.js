@@ -40,6 +40,7 @@ let chosenMode = "ver"; // "ver" | "escuchar"
 let chosenClef = "treble"; // "treble" | "bass"
 let chosenColorMode = "colored"; // "colored" | "plain" (real challenge, no color/label hints)
 let chosenFishCount = 4;
+let isTimeTrialMode = false;
 let activeNotes = [];
 let fishes = [];
 let targetNoteId = null;
@@ -48,6 +49,15 @@ let lives = MAX_LIVES;
 let isGameActive = false;
 let audioCtx = null;
 let animationId = null;
+let timeTrialStartAt = null;
+let targetAppearedAt = null;
+let timeTrialElapsed = 0;
+let fastestCatchTime = null;
+let personalBestTotalTime = null;
+let personalBestCatchTime = null;
+
+const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
+const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
 
 // --- DOM ---
 const canvas = document.getElementById("pond-canvas");
@@ -63,10 +73,16 @@ const winModal = document.getElementById("win-modal");
 const loseModal = document.getElementById("lose-modal");
 const btnRestartWin = document.getElementById("btn-restart-win");
 const btnRestartLose = document.getElementById("btn-restart-lose");
+const hudTimerItem = document.getElementById("hud-timer-item");
+const hudTimer = document.getElementById("hud-timer");
+const timeTrialResults = document.getElementById("time-trial-results");
 
 const MODE_LABELS = { ver: "Ver y Pescar", escuchar: "Escuchar y Pescar" };
 
 document.addEventListener("DOMContentLoaded", () => {
+  personalBestTotalTime = readStoredTime(TIME_TRIAL_BEST_TOTAL_KEY);
+  personalBestCatchTime = readStoredTime(TIME_TRIAL_BEST_CATCH_KEY);
+
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
 
@@ -98,6 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       chosenColorMode = btn.dataset.color;
       document.querySelectorAll("#color-selector .btn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  document.querySelectorAll("#challenge-selector .btn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      isTimeTrialMode = btn.dataset.challenge === "timed";
+      document.querySelectorAll("#challenge-selector .btn-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
@@ -304,6 +328,7 @@ function pickNewTarget() {
   const noteDef = pool[Math.floor(Math.random() * pool.length)];
   targetNoteId = noteDef.id;
   renderPromptOverlay();
+  if (isTimeTrialMode && isGameActive) targetAppearedAt = performance.now();
 
   if (chosenMode === "escuchar") {
     setTimeout(() => playNoteSound(noteDef, 0.7), 350);
@@ -328,8 +353,17 @@ function startGame() {
   lives = MAX_LIVES;
   hook = null;
 
+  timeTrialStartAt = isTimeTrialMode ? performance.now() : null;
+  targetAppearedAt = null;
+  timeTrialElapsed = 0;
+  fastestCatchTime = null;
+
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScore.textContent = `0 / ${TARGET_CATCHES}`;
+  hudTimerItem.hidden = !isTimeTrialMode;
+  hudTimer.textContent = "0.0s";
+  timeTrialResults.classList.remove("visible");
+  timeTrialResults.textContent = "";
   updateHeartsDisplay();
 
   confettiActive = false;
@@ -363,6 +397,33 @@ function updateHeartsDisplay() {
       heart.textContent = "🖤";
     }
     heartsBox.appendChild(heart);
+  }
+}
+
+function formatTime(milliseconds) {
+  return `${(milliseconds / 1000).toFixed(1)}s`;
+}
+
+function updateTimeTrialHud() {
+  if (!isTimeTrialMode || !isGameActive || timeTrialStartAt === null) return;
+  timeTrialElapsed = performance.now() - timeTrialStartAt;
+  hudTimer.textContent = formatTime(timeTrialElapsed);
+}
+
+function readStoredTime(key) {
+  try {
+    const value = Number.parseFloat(localStorage.getItem(key));
+    return Number.isFinite(value) && value >= 0 ? value : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveStoredTime(key, value) {
+  try {
+    localStorage.setItem(key, String(value));
+  } catch (error) {
+    // The game remains playable when storage is unavailable.
   }
 }
 
@@ -467,6 +528,10 @@ function handleCatchCorrect(fish) {
   }
 
   score++;
+  if (isTimeTrialMode && targetAppearedAt !== null) {
+    const catchTime = performance.now() - targetAppearedAt;
+    fastestCatchTime = fastestCatchTime === null ? catchTime : Math.min(fastestCatchTime, catchTime);
+  }
   hudScore.textContent = `${score} / ${TARGET_CATCHES}`;
   feedbackBox.className = "feedback-box feedback-correct";
   feedbackBox.textContent = "¡Pez pescado!";
@@ -672,6 +737,8 @@ function drawFish(fish) {
 function gameLoop() {
   if (!isGameActive) return;
 
+  updateTimeTrialHud();
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Pond background gradient
@@ -766,6 +833,31 @@ function updateAndDrawConfetti() {
 
 // --- WIN / LOSE ---
 function handleWin() {
+  let timeTrialSummary = null;
+  if (isTimeTrialMode && timeTrialStartAt !== null && fastestCatchTime !== null) {
+    timeTrialElapsed = performance.now() - timeTrialStartAt;
+    hudTimer.textContent = formatTime(timeTrialElapsed);
+
+    const isNewTotalRecord = personalBestTotalTime === null || timeTrialElapsed < personalBestTotalTime;
+    const isNewCatchRecord = personalBestCatchTime === null || fastestCatchTime < personalBestCatchTime;
+
+    if (isNewTotalRecord) {
+      saveStoredTime(TIME_TRIAL_BEST_TOTAL_KEY, timeTrialElapsed);
+      personalBestTotalTime = timeTrialElapsed;
+    }
+    if (isNewCatchRecord) {
+      saveStoredTime(TIME_TRIAL_BEST_CATCH_KEY, fastestCatchTime);
+      personalBestCatchTime = fastestCatchTime;
+    }
+
+    timeTrialSummary = {
+      total: formatTime(timeTrialElapsed),
+      fastestCatch: formatTime(fastestCatchTime),
+      isNewTotalRecord,
+      isNewCatchRecord
+    };
+  }
+
   isGameActive = false;
   if (animationId) cancelAnimationFrame(animationId);
 
@@ -777,6 +869,10 @@ function handleWin() {
     createConfetti();
     updateAndDrawConfetti();
     document.getElementById("win-message").textContent = `¡Pescaste ${TARGET_CATCHES} notas correctas! Tienes muy buen ojo (y oído) musical.`;
+    if (timeTrialSummary) {
+      timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${timeTrialSummary.fastestCatch}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
+      timeTrialResults.classList.add("visible");
+    }
   }, 500);
 }
 
