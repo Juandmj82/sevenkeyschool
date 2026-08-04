@@ -20,7 +20,7 @@ const BASS_NOTE_DEFS = [
   { id: "G3", name: "SOL", color: "#00e5ff", freq: 196.00, staffY: 45, isLedger: false },
   { id: "A3", name: "LA",  color: "#3b82f6", freq: 220.00, staffY: 37, isLedger: false },
   { id: "B3", name: "SI",  color: "#a855f7", freq: 246.94, staffY: 29, isLedger: false },
-  { id: "C4b", name: "DO", color: "#ec4899", freq: 261.63, staffY: 21, isLedger: true }
+  { id: "C4", name: "DO", color: "#ec4899", freq: 261.63, staffY: 21, isLedger: true }
 ];
 
 const NEUTRAL_FISH_COLOR = "#94a3b8"; // used in "sin color" challenge mode
@@ -53,11 +53,22 @@ let timeTrialStartAt = null;
 let targetAppearedAt = null;
 let timeTrialElapsed = 0;
 let fastestCatchTime = null;
+<<<<<<< HEAD
+let fastestCatchNote = null;
+let personalBestTotalTime = null;
+let personalBestCatchTime = null;
+let personalBestCatchNote = null;
+
+const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
+const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
+const TIME_TRIAL_BEST_CATCH_NOTE_KEY = "pescaNotas.contrarreloj.bestCatchNote";
+=======
 let personalBestTotalTime = null;
 let personalBestCatchTime = null;
 
 const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
 const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
 // --- DOM ---
 const canvas = document.getElementById("pond-canvas");
@@ -76,12 +87,22 @@ const btnRestartLose = document.getElementById("btn-restart-lose");
 const hudTimerItem = document.getElementById("hud-timer-item");
 const hudTimer = document.getElementById("hud-timer");
 const timeTrialResults = document.getElementById("time-trial-results");
+<<<<<<< HEAD
+const timeTrialRecord = document.getElementById("time-trial-record");
+const timeTrialRecordCopy = document.getElementById("time-trial-record-copy");
+=======
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
 const MODE_LABELS = { ver: "Ver y Pescar", escuchar: "Escuchar y Pescar" };
 
 document.addEventListener("DOMContentLoaded", () => {
   personalBestTotalTime = readStoredTime(TIME_TRIAL_BEST_TOTAL_KEY);
   personalBestCatchTime = readStoredTime(TIME_TRIAL_BEST_CATCH_KEY);
+<<<<<<< HEAD
+  personalBestCatchNote = readStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY);
+  renderTimeTrialRecord();
+=======
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
@@ -138,14 +159,70 @@ function resizeCanvas() {
   canvas.height = wrap.clientHeight;
 }
 
-// --- AUDIO (self-contained synth) ---
+// --- AUDIO ---
+// Real piano samples (same open-source soundfont used by Atrapa Notas and
+// the Nivel 1-5 reading game), with the synth below kept only as a
+// fallback if a sample fails to load.
+const sampleCache = {};
+let samplesLoaded = false;
+
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
 }
 
-function playNoteSound(freq, duration = 0.6) {
+function loadPianoSamples(callback) {
+  initAudio();
+  const notesToLoad = [
+    "C3", "D3", "E3", "F3", "G3", "A3", "B3",
+    "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"
+  ];
+
+  const originalText = btnStart.textContent;
+  btnStart.setAttribute("disabled", "true");
+  btnStart.textContent = "Cargando piano real...";
+
+  const promises = notesToLoad.map(note => {
+    if (sampleCache[note]) return Promise.resolve();
+    const url = `https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/${note}.mp3`;
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error("Fetch failed");
+        return response.arrayBuffer();
+      })
+      .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+      .then(audioBuffer => { sampleCache[note] = audioBuffer; })
+      .catch(err => {
+        console.warn(`Error al cargar piano real para ${note}, usando sintetizador de respaldo.`, err);
+      });
+  });
+
+  Promise.all(promises).finally(() => {
+    btnStart.removeAttribute("disabled");
+    btnStart.textContent = originalText;
+    samplesLoaded = true;
+    callback();
+  });
+}
+
+// Play the real sampled piano note if available, otherwise fall back to
+// the synth tone at the note's frequency.
+function playNoteSound(noteDef, duration = 0.6) {
+  if (!audioCtx) return;
+
+  const buffer = sampleCache[noteDef.id];
+  if (buffer) {
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioCtx.destination);
+    source.start(0);
+  } else {
+    playTone(noteDef.freq, duration);
+  }
+}
+
+function playTone(freq, duration = 0.6) {
   if (!audioCtx) return;
   const now = audioCtx.currentTime;
 
@@ -226,7 +303,7 @@ function renderPromptOverlay() {
       <button class="btn-listen-small" id="btn-listen-pond">🔊</button>
       <span class="prompt-hint">Escucha y pesca</span>
     `;
-    document.getElementById("btn-listen-pond").addEventListener("click", () => playNoteSound(noteDef.freq, 0.7));
+    document.getElementById("btn-listen-pond").addEventListener("click", () => playNoteSound(noteDef, 0.7));
   }
 }
 
@@ -275,14 +352,18 @@ function pickNewTarget() {
   if (isTimeTrialMode && isGameActive) targetAppearedAt = performance.now();
 
   if (chosenMode === "escuchar") {
-    setTimeout(() => playNoteSound(noteDef.freq, 0.7), 350);
+    setTimeout(() => playNoteSound(noteDef, 0.7), 350);
   }
 }
 
 // --- GAME FLOW ---
 function handleStartClick() {
   initAudio();
-  startGame();
+  if (!samplesLoaded) {
+    loadPianoSamples(startGame);
+  } else {
+    startGame();
+  }
 }
 
 function startGame() {
@@ -297,6 +378,10 @@ function startGame() {
   targetAppearedAt = null;
   timeTrialElapsed = 0;
   fastestCatchTime = null;
+<<<<<<< HEAD
+  fastestCatchNote = null;
+=======
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScore.textContent = `0 / ${TARGET_CATCHES}`;
@@ -359,6 +444,18 @@ function readStoredTime(key) {
   }
 }
 
+<<<<<<< HEAD
+function readStoredNote(key) {
+  try {
+    const note = JSON.parse(localStorage.getItem(key));
+    return note && typeof note.id === "string" && typeof note.name === "string" ? note : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+=======
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 function saveStoredTime(key, value) {
   try {
     localStorage.setItem(key, String(value));
@@ -367,6 +464,37 @@ function saveStoredTime(key, value) {
   }
 }
 
+<<<<<<< HEAD
+function saveStoredNote(key, note) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ id: note.id, name: note.name }));
+  } catch (error) {
+    // The game remains playable when storage is unavailable.
+  }
+}
+
+function formatNoteLabel(note) {
+  return `${note.name} · ${note.id}`;
+}
+
+function renderTimeTrialRecord() {
+  const hasRecord = personalBestTotalTime !== null || personalBestCatchTime !== null;
+  timeTrialRecord.hidden = !hasRecord;
+  if (!hasRecord) return;
+
+  const totalRecord = personalBestTotalTime === null
+    ? "Aún no hay tiempo total registrado."
+    : `Récord total: ${formatTime(personalBestTotalTime)}.`;
+  const catchRecord = personalBestCatchTime === null
+    ? ""
+    : personalBestCatchNote
+      ? ` Pez más veloz: ${formatNoteLabel(personalBestCatchNote)} — ${formatTime(personalBestCatchTime)}.`
+      : ` Pez más veloz: ${formatTime(personalBestCatchTime)} (la nota se registrará al superarlo).`;
+  timeTrialRecordCopy.textContent = `${totalRecord}${catchRecord}`;
+}
+
+=======
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 // --- FISHING HOOK (cast down to where the player taps, then reel back up) ---
 const HOOK_DESCEND_MS = 480;
 const HOOK_ASCEND_MS = 380;
@@ -457,12 +585,27 @@ function resolveHookCatch(x, y) {
 function handleCatchCorrect(fish) {
   fish.caught = true;
   fish.caughtAnim = 1;
-  playSplashSound(true);
+
+  if (chosenMode === "ver") {
+    // Play the actual pitch of the caught note instead of a generic splash,
+    // so the ear starts associating "this note = this position" -- priming
+    // the same skill that "Escuchar y Pescar" will ask for later.
+    playNoteSound(fish.note, 0.55);
+  } else {
+    playSplashSound(true);
+  }
 
   score++;
   if (isTimeTrialMode && targetAppearedAt !== null) {
     const catchTime = performance.now() - targetAppearedAt;
+<<<<<<< HEAD
+    if (fastestCatchTime === null || catchTime < fastestCatchTime) {
+      fastestCatchTime = catchTime;
+      fastestCatchNote = fish.note;
+    }
+=======
     fastestCatchTime = fastestCatchTime === null ? catchTime : Math.min(fastestCatchTime, catchTime);
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
   }
   hudScore.textContent = `${score} / ${TARGET_CATCHES}`;
   feedbackBox.className = "feedback-box feedback-correct";
@@ -649,17 +792,20 @@ function drawFish(fish) {
   const textWidth = ctx.measureText(labelText).width;
   const badgeW = textWidth + 12;
   const badgeH = 16;
+  // Shift toward the tail side (away from the eye/head) based on swim
+  // direction, without mirroring the text itself.
+  const labelX = fish.x - scaleX * r * 0.32;
 
   ctx.beginPath();
-  ctx.roundRect ? ctx.roundRect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH, 8)
-                : ctx.rect(fish.x - badgeW / 2, y - badgeH / 2, badgeW, badgeH);
+  ctx.roundRect ? ctx.roundRect(labelX - badgeW / 2, y - badgeH / 2, badgeW, badgeH, 8)
+                : ctx.rect(labelX - badgeW / 2, y - badgeH / 2, badgeW, badgeH);
   ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
   ctx.fill();
 
   ctx.fillStyle = "#0b0d19";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(labelText, fish.x, y + 1);
+  ctx.fillText(labelText, labelX, y + 1);
   ctx.restore();
 }
 
@@ -776,12 +922,26 @@ function handleWin() {
     }
     if (isNewCatchRecord) {
       saveStoredTime(TIME_TRIAL_BEST_CATCH_KEY, fastestCatchTime);
+<<<<<<< HEAD
+      saveStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY, fastestCatchNote);
+      personalBestCatchTime = fastestCatchTime;
+      personalBestCatchNote = fastestCatchNote;
+    }
+
+    renderTimeTrialRecord();
+
+    timeTrialSummary = {
+      total: formatTime(timeTrialElapsed),
+      fastestCatch: formatTime(fastestCatchTime),
+      fastestCatchNote: fastestCatchNote ? formatNoteLabel(fastestCatchNote) : null,
+=======
       personalBestCatchTime = fastestCatchTime;
     }
 
     timeTrialSummary = {
       total: formatTime(timeTrialElapsed),
       fastestCatch: formatTime(fastestCatchTime),
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
       isNewTotalRecord,
       isNewCatchRecord
     };
@@ -799,7 +959,14 @@ function handleWin() {
     updateAndDrawConfetti();
     document.getElementById("win-message").textContent = `¡Pescaste ${TARGET_CATCHES} notas correctas! Tienes muy buen ojo (y oído) musical.`;
     if (timeTrialSummary) {
+<<<<<<< HEAD
+      const fastestFish = timeTrialSummary.fastestCatchNote
+        ? `${timeTrialSummary.fastestCatchNote} — ${timeTrialSummary.fastestCatch}`
+        : timeTrialSummary.fastestCatch;
+      timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${fastestFish}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
+=======
       timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${timeTrialSummary.fastestCatch}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
+>>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
       timeTrialResults.classList.add("visible");
     }
   }, 500);
