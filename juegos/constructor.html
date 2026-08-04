@@ -253,6 +253,14 @@
     #duration-selector { margin-bottom: 4px; }
     #duration-selector[hidden] { display: none !important; }
     .duration-chip { padding: 6px 14px; font-size: 0.78rem; }
+    #btn-rest-toggle { padding: 6px 14px; font-size: 0.78rem; }
+    #btn-rest-toggle.active {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
+    }
+    #btn-rest-toggle:disabled { opacity: 0.35; cursor: not-allowed; }
 
     @media (max-width: 600px) {
       .profe-toast {
@@ -361,8 +369,10 @@
       <div class="chip-row" id="duration-selector">
         <button class="btn-chip duration-chip active" data-duration="negra" title="Negra (1 tiempo)">♩ Negra</button>
         <button class="btn-chip duration-chip" data-duration="blanca" title="Blanca (2 tiempos)">𝅗𝅥 Blanca</button>
-        <button class="btn-chip duration-chip" data-duration="corchea" title="Corchea (medio tiempo)">♪ Corchea</button>
-        <button class="btn-chip duration-chip" data-duration="semicorchea" title="Doble corchea (cuarto de tiempo)">𝅘𝅥𝅯 Doble Corchea</button>
+        <button class="btn-chip duration-chip" data-duration="blanca_punteada" title="Blanca con puntillo (3 tiempos)">𝅗𝅥. Blanca c. puntillo</button>
+        <button class="btn-chip duration-chip" data-duration="doble_corchea" title="Doble corchea: dos notas unidas por una barra (1 tiempo)">♫ Doble Corchea</button>
+        <button class="btn-chip duration-chip" data-duration="semicorchea" title="Semicorchea (cuarto de tiempo)">𝅘𝅥𝅯 Semicorchea</button>
+        <button class="btn-chip" id="btn-rest-toggle" title="Colocar un silencio en vez de una nota">𝄽 Silencio</button>
       </div>
 
       <!-- Toolbar -->

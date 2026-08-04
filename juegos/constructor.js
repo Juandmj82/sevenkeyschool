@@ -24,9 +24,12 @@ const MAX_BEATS_LIBRE = 8; // total "tiempos" available in Modo Libre
 const BEAT_WIDTH = (STAFF_X_END - STAFF_X_START) / MAX_BEATS_LIBRE;
 const BEAT_MS = 420; // playback duration of one "tiempo" (negra)
 
-// negra = 1 tiempo, blanca = 2 tiempos, corchea = 1/2 tiempo, semicorchea = 1/4 tiempo
-const DURATION_BEATS = { negra: 1, blanca: 2, corchea: 0.5, semicorchea: 0.25 };
-const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", corchea: "Corchea", semicorchea: "Doble Corchea" };
+// negra = 1 tiempo, blanca = 2, blanca con puntillo = 3, doble corchea (par unido) = 1, semicorchea = 1/4
+const DURATION_BEATS = { negra: 1, blanca: 2, blanca_punteada: 3, doble_corchea: 1, semicorchea: 0.25 };
+const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", blanca_punteada: "Blanca con puntillo", doble_corchea: "Doble Corchea", semicorchea: "Semicorchea" };
+const DURATION_ORDER = ["negra", "blanca", "blanca_punteada", "doble_corchea", "semicorchea"];
+// Rests are only allowed for these simpler durations (per teacher's request)
+const REST_ALLOWED_DURATIONS = ["negra", "blanca", "blanca_punteada"];
 
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
@@ -34,8 +37,9 @@ const MAX_LIVES = 3;
 
 // --- STATE ---
 let chosenMode = "libre"; // "libre" | "reto"
-let selectedDuration = "negra"; // "negra" | "blanca" | "corchea" (Modo Libre only)
-let melody = []; // array of { note, duration }
+let selectedDuration = "negra"; // one of DURATION_ORDER (Modo Libre only)
+let isRestMode = false; // when true, clicks place a silencio instead of a note (Modo Libre only)
+let melody = []; // array of { type: "note"|"rest", note, duration }
 let targetMelody = [];
 let score = 0;
 let lives = MAX_LIVES;
@@ -146,10 +150,18 @@ function playMelody(notes, onDone) {
   if (isPlaying || notes.length === 0) return;
   isPlaying = true;
   let elapsedMs = 0;
-  notes.forEach(({ note, duration }) => {
+  notes.forEach(({ type, note, duration }) => {
     const beats = DURATION_BEATS[duration] || 1;
     const noteMs = beats * BEAT_MS;
-    setTimeout(() => playNoteSound(note, noteMs / 1000 * 0.9), elapsedMs);
+    if (type === "rest") {
+      // silent
+    } else if (duration === "doble_corchea") {
+      const halfMs = noteMs / 2;
+      setTimeout(() => playNoteSound(note, halfMs / 1000 * 0.9), elapsedMs);
+      setTimeout(() => playNoteSound(note, halfMs / 1000 * 0.9), elapsedMs + halfMs);
+    } else {
+      setTimeout(() => playNoteSound(note, noteMs / 1000 * 0.9), elapsedMs);
+    }
     elapsedMs += noteMs;
   });
   setTimeout(() => {
@@ -175,6 +187,7 @@ const btnClear = document.getElementById("btn-clear");
 const btnCheck = document.getElementById("btn-check");
 const noteCounter = document.getElementById("note-counter");
 const durationSelector = document.getElementById("duration-selector");
+const btnRestToggle = document.getElementById("btn-rest-toggle");
 const winModal = document.getElementById("win-modal");
 const loseModal = document.getElementById("lose-modal");
 const btnRestartWin = document.getElementById("btn-restart-win");
@@ -203,7 +216,19 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedDuration = btn.dataset.duration;
       document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
+
+      const canRest = REST_ALLOWED_DURATIONS.includes(selectedDuration);
+      btnRestToggle.disabled = !canRest;
+      if (!canRest && isRestMode) {
+        isRestMode = false;
+        btnRestToggle.classList.remove("active");
+      }
     });
+  });
+
+  btnRestToggle.addEventListener("click", () => {
+    isRestMode = !isRestMode;
+    btnRestToggle.classList.toggle("active", isRestMode);
   });
 
   btnStart.addEventListener("click", handleStartClick);
@@ -256,10 +281,16 @@ function redrawMelody() {
   linesAndClef.forEach(el => staffSvg.appendChild(el));
 
   let cumulativeBeats = 0;
-  melody.forEach(({ note, duration }) => {
-    const beats = DURATION_BEATS[duration] || 1;
+  melody.forEach(item => {
+    const beats = DURATION_BEATS[item.duration] || 1;
     const x = STAFF_X_START + (cumulativeBeats + beats / 2) * BEAT_WIDTH;
-    drawNoteAt(x, NOTE_Y_MAP[note], duration);
+    if (item.type === "rest") {
+      drawRestAt(x, item.duration);
+    } else if (item.duration === "doble_corchea") {
+      drawDobleCorcheaAt(x, NOTE_Y_MAP[item.note]);
+    } else {
+      drawNoteAt(x, NOTE_Y_MAP[item.note], item.duration);
+    }
     cumulativeBeats += beats;
   });
 }
@@ -276,7 +307,7 @@ function drawNoteAt(x, y, duration = "negra") {
     staffSvg.appendChild(ledger);
   }
 
-  const isHollow = duration === "blanca";
+  const isHollow = duration === "blanca" || duration === "blanca_punteada";
   const head = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
   head.setAttribute("cx", x);
   head.setAttribute("cy", y);
@@ -293,6 +324,15 @@ function drawNoteAt(x, y, duration = "negra") {
   head.setAttribute("filter", "drop-shadow(0px 0px 4px var(--color-cyan-glow))");
   staffSvg.appendChild(head);
 
+  if (duration === "blanca_punteada") {
+    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    dot.setAttribute("cx", x + 16);
+    dot.setAttribute("cy", y);
+    dot.setAttribute("r", "2.2");
+    dot.setAttribute("fill", "var(--color-cyan)");
+    staffSvg.appendChild(dot);
+  }
+
   const stem = document.createElementNS("http://www.w3.org/2000/svg", "line");
   const stemLength = 42;
   const stemUp = y >= 100;
@@ -307,7 +347,7 @@ function drawNoteAt(x, y, duration = "negra") {
   stem.setAttribute("stroke-width", "2.2");
   staffSvg.appendChild(stem);
 
-  const flagCount = duration === "corchea" ? 1 : duration === "semicorchea" ? 2 : 0;
+  const flagCount = duration === "semicorchea" ? 2 : 0;
   for (let f = 0; f < flagCount; f++) {
     const offset = f * (stemUp ? 9 : -9);
     const flag = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -319,6 +359,99 @@ function drawNoteAt(x, y, duration = "negra") {
     flag.setAttribute("fill", "var(--text-main)");
     staffSvg.appendChild(flag);
   }
+}
+
+// "Doble corchea": two eighth notes at the same pitch joined by a beam —
+// simpler for kids to read than a single flagged note (per teacher request).
+function drawDobleCorcheaAt(centerX, y) {
+  const spacing = 13;
+  const leftX = centerX - spacing;
+  const rightX = centerX + spacing;
+  const stemUp = y >= 100;
+  const stemLength = 42;
+  const beamY = stemUp ? y - stemLength : y + stemLength;
+
+  [leftX, rightX].forEach(hx => {
+    if (y >= 160 || y <= 90) {
+      const ledger = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      ledger.setAttribute("x1", hx - 14);
+      ledger.setAttribute("y1", y);
+      ledger.setAttribute("x2", hx + 14);
+      ledger.setAttribute("y2", y);
+      ledger.setAttribute("stroke", "white");
+      ledger.setAttribute("stroke-width", "2");
+      staffSvg.appendChild(ledger);
+    }
+
+    const head = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+    head.setAttribute("cx", hx);
+    head.setAttribute("cy", y);
+    head.setAttribute("rx", "10");
+    head.setAttribute("ry", "7");
+    head.setAttribute("fill", "var(--color-cyan)");
+    head.setAttribute("transform", `rotate(-20, ${hx}, ${y})`);
+    head.setAttribute("filter", "drop-shadow(0px 0px 4px var(--color-cyan-glow))");
+    staffSvg.appendChild(head);
+
+    const stemX = stemUp ? hx + 9 : hx - 9;
+    const stem = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    stem.setAttribute("x1", stemX);
+    stem.setAttribute("y1", stemUp ? y - 2 : y + 2);
+    stem.setAttribute("x2", stemX);
+    stem.setAttribute("y2", beamY);
+    stem.setAttribute("stroke", "var(--text-main)");
+    stem.setAttribute("stroke-width", "2.2");
+    staffSvg.appendChild(stem);
+  });
+
+  const beam = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  const beamX1 = stemUp ? leftX + 9 : leftX - 9;
+  const beamX2 = stemUp ? rightX + 9 : rightX - 9;
+  beam.setAttribute("x", beamX1);
+  beam.setAttribute("y", stemUp ? beamY : beamY - 4.5);
+  beam.setAttribute("width", beamX2 - beamX1);
+  beam.setAttribute("height", "4.5");
+  beam.setAttribute("fill", "var(--text-main)");
+  staffSvg.appendChild(beam);
+}
+
+// Rests are placed at a fixed staff height (they have no pitch) and use
+// simplified but recognizable silhouettes distinguished by shape/flag count,
+// mirroring the note-flag convention used for corchea/semicorchea above.
+function drawRestAt(x, duration) {
+  const midY = 120; // middle staff line
+  const color = "var(--text-main)";
+
+  if (duration === "blanca" || duration === "blanca_punteada") {
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", x - 8);
+    rect.setAttribute("y", midY - 8);
+    rect.setAttribute("width", "16");
+    rect.setAttribute("height", "8");
+    rect.setAttribute("fill", color);
+    staffSvg.appendChild(rect);
+    if (duration === "blanca_punteada") {
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", x + 16);
+      dot.setAttribute("cy", midY - 4);
+      dot.setAttribute("r", "2.2");
+      dot.setAttribute("fill", color);
+      staffSvg.appendChild(dot);
+    }
+    return;
+  }
+
+  // negra (only remaining rest type): a small zigzag squiggle
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d",
+    `M ${x + 5} ${midY - 20} Q ${x - 7} ${midY - 12} ${x + 5} ${midY - 4} ` +
+    `Q ${x - 6} ${midY + 2} ${x + 3} ${midY + 8} L ${x - 4} ${midY + 20}`);
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", color);
+  path.setAttribute("stroke-width", "3.2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  staffSvg.appendChild(path);
 }
 
 function nearestNoteFromY(clickY) {
@@ -351,9 +484,17 @@ function handleStaffClick(e) {
 
   if (svgPoint.x < 95) return; // ignore clicks on the clef area
 
-  const noteId = nearestNoteFromY(svgPoint.y);
   const duration = chosenMode === "reto" ? "negra" : selectedDuration;
-  melody.push({ note: noteId, duration });
+
+  if (chosenMode === "libre" && isRestMode) {
+    melody.push({ type: "rest", duration });
+    redrawMelody();
+    updateToolbarState();
+    return;
+  }
+
+  const noteId = nearestNoteFromY(svgPoint.y);
+  melody.push({ type: "note", note: noteId, duration });
   redrawMelody();
   playNoteSound(noteId, 0.4);
   updateToolbarState();
@@ -421,6 +562,9 @@ function startGame() {
 
   durationSelector.hidden = chosenMode === "reto";
   selectedDuration = "negra";
+  isRestMode = false;
+  btnRestToggle.classList.remove("active");
+  btnRestToggle.disabled = false;
   document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
   document.querySelector('#duration-selector .duration-chip[data-duration="negra"]').classList.add("active");
 
