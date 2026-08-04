@@ -53,11 +53,14 @@ let timeTrialStartAt = null;
 let targetAppearedAt = null;
 let timeTrialElapsed = 0;
 let fastestCatchTime = null;
+let fastestCatchNote = null;
 let personalBestTotalTime = null;
 let personalBestCatchTime = null;
+let personalBestCatchNote = null;
 
 const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
 const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
+const TIME_TRIAL_BEST_CATCH_NOTE_KEY = "pescaNotas.contrarreloj.bestCatchNote";
 
 // --- DOM ---
 const canvas = document.getElementById("pond-canvas");
@@ -76,12 +79,16 @@ const btnRestartLose = document.getElementById("btn-restart-lose");
 const hudTimerItem = document.getElementById("hud-timer-item");
 const hudTimer = document.getElementById("hud-timer");
 const timeTrialResults = document.getElementById("time-trial-results");
+const timeTrialRecord = document.getElementById("time-trial-record");
+const timeTrialRecordCopy = document.getElementById("time-trial-record-copy");
 
 const MODE_LABELS = { ver: "Ver y Pescar", escuchar: "Escuchar y Pescar" };
 
 document.addEventListener("DOMContentLoaded", () => {
   personalBestTotalTime = readStoredTime(TIME_TRIAL_BEST_TOTAL_KEY);
   personalBestCatchTime = readStoredTime(TIME_TRIAL_BEST_CATCH_KEY);
+  personalBestCatchNote = readStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY);
+  renderTimeTrialRecord();
 
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
@@ -357,6 +364,7 @@ function startGame() {
   targetAppearedAt = null;
   timeTrialElapsed = 0;
   fastestCatchTime = null;
+  fastestCatchNote = null;
 
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScore.textContent = `0 / ${TARGET_CATCHES}`;
@@ -419,12 +427,49 @@ function readStoredTime(key) {
   }
 }
 
+function readStoredNote(key) {
+  try {
+    const note = JSON.parse(localStorage.getItem(key));
+    return note && typeof note.id === "string" && typeof note.name === "string" ? note : null;
+  } catch (error) {
+    return null;
+  }
+}
+
 function saveStoredTime(key, value) {
   try {
     localStorage.setItem(key, String(value));
   } catch (error) {
     // The game remains playable when storage is unavailable.
   }
+}
+
+function saveStoredNote(key, note) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ id: note.id, name: note.name }));
+  } catch (error) {
+    // The game remains playable when storage is unavailable.
+  }
+}
+
+function formatNoteLabel(note) {
+  return `${note.name} · ${note.id}`;
+}
+
+function renderTimeTrialRecord() {
+  const hasRecord = personalBestTotalTime !== null || personalBestCatchTime !== null;
+  timeTrialRecord.hidden = !hasRecord;
+  if (!hasRecord) return;
+
+  const totalRecord = personalBestTotalTime === null
+    ? "Aún no hay tiempo total registrado."
+    : `Récord total: ${formatTime(personalBestTotalTime)}.`;
+  const catchRecord = personalBestCatchTime === null
+    ? ""
+    : personalBestCatchNote
+      ? ` Pez más veloz: ${formatNoteLabel(personalBestCatchNote)} — ${formatTime(personalBestCatchTime)}.`
+      : ` Pez más veloz: ${formatTime(personalBestCatchTime)} (la nota se registrará al superarlo).`;
+  timeTrialRecordCopy.textContent = `${totalRecord}${catchRecord}`;
 }
 
 // --- FISHING HOOK (cast down to where the player taps, then reel back up) ---
@@ -530,7 +575,10 @@ function handleCatchCorrect(fish) {
   score++;
   if (isTimeTrialMode && targetAppearedAt !== null) {
     const catchTime = performance.now() - targetAppearedAt;
-    fastestCatchTime = fastestCatchTime === null ? catchTime : Math.min(fastestCatchTime, catchTime);
+    if (fastestCatchTime === null || catchTime < fastestCatchTime) {
+      fastestCatchTime = catchTime;
+      fastestCatchNote = fish.note;
+    }
   }
   hudScore.textContent = `${score} / ${TARGET_CATCHES}`;
   feedbackBox.className = "feedback-box feedback-correct";
@@ -847,12 +895,17 @@ function handleWin() {
     }
     if (isNewCatchRecord) {
       saveStoredTime(TIME_TRIAL_BEST_CATCH_KEY, fastestCatchTime);
+      saveStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY, fastestCatchNote);
       personalBestCatchTime = fastestCatchTime;
+      personalBestCatchNote = fastestCatchNote;
     }
+
+    renderTimeTrialRecord();
 
     timeTrialSummary = {
       total: formatTime(timeTrialElapsed),
       fastestCatch: formatTime(fastestCatchTime),
+      fastestCatchNote: fastestCatchNote ? formatNoteLabel(fastestCatchNote) : null,
       isNewTotalRecord,
       isNewCatchRecord
     };
@@ -870,7 +923,10 @@ function handleWin() {
     updateAndDrawConfetti();
     document.getElementById("win-message").textContent = `¡Pescaste ${TARGET_CATCHES} notas correctas! Tienes muy buen ojo (y oído) musical.`;
     if (timeTrialSummary) {
-      timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${timeTrialSummary.fastestCatch}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
+      const fastestFish = timeTrialSummary.fastestCatchNote
+        ? `${timeTrialSummary.fastestCatchNote} — ${timeTrialSummary.fastestCatch}`
+        : timeTrialSummary.fastestCatch;
+      timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${fastestFish}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
       timeTrialResults.classList.add("visible");
     }
   }, 500);
