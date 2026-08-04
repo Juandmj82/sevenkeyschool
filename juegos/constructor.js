@@ -24,9 +24,9 @@ const MAX_BEATS_LIBRE = 8; // total "tiempos" available in Modo Libre
 const BEAT_WIDTH = (STAFF_X_END - STAFF_X_START) / MAX_BEATS_LIBRE;
 const BEAT_MS = 420; // playback duration of one "tiempo" (negra)
 
-// negra = 1 tiempo, blanca = 2 tiempos, corchea = 1/2 tiempo
-const DURATION_BEATS = { negra: 1, blanca: 2, corchea: 0.5 };
-const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", corchea: "Corchea" };
+// negra = 1 tiempo, blanca = 2 tiempos, corchea = 1/2 tiempo, semicorchea = 1/4 tiempo
+const DURATION_BEATS = { negra: 1, blanca: 2, corchea: 0.5, semicorchea: 0.25 };
+const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", corchea: "Corchea", semicorchea: "Doble Corchea" };
 
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
@@ -307,11 +307,14 @@ function drawNoteAt(x, y, duration = "negra") {
   stem.setAttribute("stroke-width", "2.2");
   staffSvg.appendChild(stem);
 
-  if (duration === "corchea") {
+  const flagCount = duration === "corchea" ? 1 : duration === "semicorchea" ? 2 : 0;
+  for (let f = 0; f < flagCount; f++) {
+    const offset = f * (stemUp ? 9 : -9);
     const flag = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const fy = stemY2 + offset;
     const flagD = stemUp
-      ? `M ${stemX} ${stemY2} q 12 4 12 18 q -6 -8 -12 -8 Z`
-      : `M ${stemX} ${stemY2} q -12 -4 -12 -18 q 6 8 12 8 Z`;
+      ? `M ${stemX} ${fy} q 12 4 12 18 q -6 -8 -12 -8 Z`
+      : `M ${stemX} ${fy} q -12 -4 -12 -18 q 6 8 12 8 Z`;
     flag.setAttribute("d", flagD);
     flag.setAttribute("fill", "var(--text-main)");
     staffSvg.appendChild(flag);
@@ -385,7 +388,7 @@ function updateToolbarState() {
     btnCheck.disabled = melody.length !== RETO_MELODY_LENGTH;
   } else {
     const used = totalBeats(melody);
-    const usedLabel = Number.isInteger(used) ? used : used.toFixed(1);
+    const usedLabel = Number.isInteger(used) ? String(used) : used.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
     noteCounter.textContent = `${usedLabel} / ${MAX_BEATS_LIBRE} tiempos`;
     btnCheck.hidden = true;
   }
