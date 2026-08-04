@@ -24,10 +24,10 @@ const MAX_BEATS_LIBRE = 8; // total "tiempos" available in Modo Libre
 const BEAT_WIDTH = (STAFF_X_END - STAFF_X_START) / MAX_BEATS_LIBRE;
 const BEAT_MS = 420; // playback duration of one "tiempo" (negra)
 
-// negra = 1 tiempo, blanca = 2, blanca con puntillo = 3, doble corchea (par unido) = 1, semicorchea = 1/4
-const DURATION_BEATS = { negra: 1, blanca: 2, blanca_punteada: 3, doble_corchea: 1, semicorchea: 0.25 };
-const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", blanca_punteada: "Blanca con puntillo", doble_corchea: "Doble Corchea", semicorchea: "Semicorchea" };
-const DURATION_ORDER = ["negra", "blanca", "blanca_punteada", "doble_corchea", "semicorchea"];
+// negra = 1 tiempo, blanca = 2, blanca con puntillo = 3, doble corchea (par unido) = 1
+const DURATION_BEATS = { negra: 1, blanca: 2, blanca_punteada: 3, doble_corchea: 1 };
+const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", blanca_punteada: "Blanca con puntillo", doble_corchea: "Doble Corchea" };
+const DURATION_ORDER = ["negra", "blanca", "blanca_punteada", "doble_corchea"];
 // Rests are only allowed for these simpler durations (per teacher's request)
 const REST_ALLOWED_DURATIONS = ["negra", "blanca", "blanca_punteada"];
 
@@ -346,19 +346,6 @@ function drawNoteAt(x, y, duration = "negra") {
   stem.setAttribute("stroke", "var(--text-main)");
   stem.setAttribute("stroke-width", "2.2");
   staffSvg.appendChild(stem);
-
-  const flagCount = duration === "semicorchea" ? 2 : 0;
-  for (let f = 0; f < flagCount; f++) {
-    const offset = f * (stemUp ? 9 : -9);
-    const flag = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const fy = stemY2 + offset;
-    const flagD = stemUp
-      ? `M ${stemX} ${fy} q 12 4 12 18 q -6 -8 -12 -8 Z`
-      : `M ${stemX} ${fy} q -12 -4 -12 -18 q 6 8 12 8 Z`;
-    flag.setAttribute("d", flagD);
-    flag.setAttribute("fill", "var(--text-main)");
-    staffSvg.appendChild(flag);
-  }
 }
 
 // "Doble corchea": two eighth notes at the same pitch joined by a beam —
@@ -417,7 +404,7 @@ function drawDobleCorcheaAt(centerX, y) {
 
 // Rests are placed at a fixed staff height (they have no pitch) and use
 // simplified but recognizable silhouettes distinguished by shape/flag count,
-// mirroring the note-flag convention used for corchea/semicorchea above.
+// mirroring the beamed-pair convention used for doble corchea above.
 function drawRestAt(x, duration) {
   const midY = 120; // middle staff line
   const color = "var(--text-main)";
