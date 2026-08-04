@@ -679,6 +679,19 @@
             <button class="btn-play-level" style="background: linear-gradient(135deg, #00e5ff 0%, #00a5bb 100%); color: var(--bg-dark);">¡Jugar!</button>
           </div>
         </div>
+
+        <!-- Constructor de Melodías Game -->
+        <div class="level-card has-full-cover" id="card-constructor" onclick="showPreview('constructor')" style="border-color: rgba(192, 132, 252, 0.3);">
+          <div class="level-cover" style="min-height: 190px; background: linear-gradient(135deg, #2d1b69 0%, #4c1d95 55%, #1a0533 100%); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 4.8rem; filter: drop-shadow(0 0 22px rgba(192,132,252,0.7)); line-height:1;">🎼</span>
+            <div class="level-header-overlay">
+              <span class="level-status-icon">🎵</span>
+            </div>
+          </div>
+          <div class="level-footer">
+            <button class="btn-play-level" style="background: linear-gradient(135deg, #c084fc 0%, #7c3aed 100%); color: #fff;">¡Crear!</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -817,6 +830,16 @@
         notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
         avatar: "../img/profe_celebrate.jpg",
         url: "pesca.html"
+      },
+      "constructor": {
+        title: "Constructor de Melodías",
+        description: `"¡Hora de ser compositor! Elige las notas (Do, Re, Mi, Fa, Sol, La, Si) y colócalas en las 8 casillas de tu melodía. Ajusta el tempo y dale a Reproducir para escuchar tu creación. ¡La música está en tus manos!"`,
+        clef: "🎼 Creación libre",
+        target: "¡Componer tu propia melodía!",
+        time: "Tempo ajustable (60–180 BPM)",
+        notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
+        avatar: "../img/profe_celebrate.jpg",
+        url: "constructor.html"
       }
     };
 

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Microsoft Clarity Tracking Code -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xfop6mj4wx");
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Keys School | Constructor de Melodías</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .header-logo { height: 50px; width: auto; display: block; }
+
+    .game-wrapper {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      padding: 0 16px 48px;
+    }
+
+    .page-title {
+      text-align: center;
+      padding: 2rem 1rem 0.25rem;
+    }
+    .page-title h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 60%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    .page-title p {
+      color: #94a3b8;
+      font-size: 0.92rem;
+      margin-top: 4px;
+    }
+
+    /* Profe welcome */
+    .profe-welcome-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 16px 20px;
+      width: 100%;
+    }
+    .profe-avatar-welcome {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a78bfa;
+      box-shadow: 0 0 14px rgba(167,139,250,0.4);
+      flex-shrink: 0;
+    }
+    .profe-welcome-bubble { display: flex; flex-direction: column; gap: 4px; }
+    .profe-name { font-size: 0.72rem; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 1px; display: block; }
+    .profe-welcome-bubble p { font-size: 0.87rem; color: #e2e8f0; line-height: 1.42; font-style: italic; }
+
+    /* Controls bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-play {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(34,197,94,0.35);
+      transition: all 0.2s cubic-bezier(0.175,0.885,0.32,1.275);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      letter-spacing: 0.4px;
+    }
+    .btn-play:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34,197,94,0.45); }
+    .btn-play:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; transform: none; }
+    .btn-play.playing {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 14px rgba(239,68,68,0.35);
+    }
+
+    .btn-clear {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      color: #94a3b8;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-clear:hover { border-color: #ef4444; color: #ef4444; }
+
+    .tempo-control {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      padding: 8px 16px;
+    }
+    .tempo-label { font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tempo-value { font-size: 0.9rem; font-weight: 800; color: var(--color-gold); min-width: 32px; text-align: center; }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--color-gold);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(212,175,55,0.45);
+    }
+
+    /* Melody grid */
+    .melody-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .melody-cell {
+      aspect-ratio: 1;
+      background: rgba(255,255,255,0.03);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+      min-height: 62px;
+      user-select: none;
+    }
+    .melody-cell:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); }
+    .melody-cell.selected {
+      border-color: #c084fc !important;
+      box-shadow: 0 0 0 3px rgba(192,132,252,0.25);
+      background: rgba(192,132,252,0.08) !important;
+    }
+    .melody-cell.playing-now {
+      transform: scale(1.08);
+      z-index: 2;
+      transition: transform 0.1s;
+    }
+
+    .cell-number {
+      position: absolute;
+      top: 4px; left: 6px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.35);
+    }
+    .cell-note-name {
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+    .cell-placeholder {
+      font-size: 1.3rem;
+      opacity: 0.18;
+      line-height: 1;
+    }
+    .cell-clear-btn {
+      position: absolute;
+      top: 2px; right: 4px;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.4);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      line-height: 1;
+      display: none;
+      transition: color 0.15s;
+    }
+    .melody-cell.has-note .cell-clear-btn { display: block; }
+    .cell-clear-btn:hover { color: #ef4444; }
+
+    /* Note palette */
+    .note-palette {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .note-btn {
+      flex: 1;
+      min-width: 68px;
+      max-width: 88px;
+      padding: 14px 6px;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.15s cubic-bezier(0.175,0.885,0.32,1.275);
+      letter-spacing: 0.3px;
+    }
+    .note-btn:hover { transform: translateY(-3px) scale(1.05); }
+    .note-btn:active { transform: translateY(0) scale(0.96); }
+
+    /* Feedback */
+    .feedback-area {
+      min-height: 28px;
+      font-size: 0.88rem;
+      color: #64748b;
+      text-align: center;
+      font-style: italic;
+      transition: color 0.3s;
+    }
+    .feedback-area.success { color: #22c55e; }
+    .feedback-area.info { color: #c084fc; }
+
+    @media (max-width: 600px) {
+      .melody-grid { gap: 5px; }
+      .melody-cell { min-height: 44px; border-radius: 9px; }
+      .cell-note-name { font-size: 0.72rem; }
+      .cell-number { font-size: 0.52rem; }
+      .note-btn { padding: 11px 4px; font-size: 0.82rem; min-width: 52px; border-radius: 10px; }
+      .controls-bar { gap: 7px; }
+      input[type=range] { width: 60px; }
+      .profe-welcome-container { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Zona de Juegos
+    </a>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Constructor de Melodías</h1>
+      <p>Compón tu propia melodía y escúchala al instante 🎵</p>
+    </div>
+
+    <div class="game-wrapper">
+
+      <!-- Profe welcome -->
+      <div class="profe-welcome-container">
+        <img src="../img/profe.jpg" class="profe-avatar-welcome" alt="Teacher Juan Di">
+        <div class="profe-welcome-bubble">
+          <span class="profe-name">Teacher Juan Di</span>
+          <p>"¡Hola compositores! Selecciona una casilla y luego elige la nota que quieres poner. Cuando termines, dale a <strong>Reproducir</strong> para escuchar tu melodía. ¡Puedes ajustar el tempo como quieras!"</p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-bar">
+        <button class="btn-play" id="btn-play" disabled>&#9654; Reproducir</button>
+        <button class="btn-clear" id="btn-clear">✕ Borrar todo</button>
+        <div class="tempo-control">
+          <span class="tempo-label">Tempo</span>
+          <input type="range" id="tempo-slider" min="60" max="180" value="100" step="10">
+          <span class="tempo-value" id="tempo-value">100</span>
+          <span style="font-size:0.68rem;color:#475569;">BPM</span>
+        </div>
+      </div>
+
+      <!-- Melody grid -->
+      <div class="melody-grid" id="melody-grid"></div>
+
+      <!-- Note palette -->
+      <div class="note-palette" id="note-palette"></div>
+
+      <!-- Feedback -->
+      <div class="feedback-area" id="feedback-area">
+        Selecciona una casilla y luego elige una nota del panel de abajo
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const NOTES = [
+      { name: "DO",  midi: 60, color: "#ef4444", dark: "#b91c1c" },
+      { name: "RE",  midi: 62, color: "#f97316", dark: "#c2410c" },
+      { name: "MI",  midi: 64, color: "#eab308", dark: "#a16207" },
+      { name: "FA",  midi: 65, color: "#22c55e", dark: "#15803d" },
+      { name: "SOL", midi: 67, color: "#06b6d4", dark: "#0e7490" },
+      { name: "LA",  midi: 69, color: "#3b82f6", dark: "#1d4ed8" },
+      { name: "SI",  midi: 71, color: "#a855f7", dark: "#7e22ce" },
+    ];
+
+    const CELL_COUNT = 8;
+    let melody = new Array(CELL_COUNT).fill(null);
+    let selectedCell = 0;
+    let isPlaying = false;
+    let playTimeout = null;
+    let audioCtx = null;
+
+    const grid       = document.getElementById("melody-grid");
+    const palette    = document.getElementById("note-palette");
+    const btnPlay    = document.getElementById("btn-play");
+    const btnClear   = document.getElementById("btn-clear");
+    const tempoSlider = document.getElementById("tempo-slider");
+    const tempoValue = document.getElementById("tempo-value");
+    const feedbackEl = document.getElementById("feedback-area");
+
+    // --- Build grid ---
+    function buildGrid() {
+      grid.innerHTML = "";
+      for (let i = 0; i < CELL_COUNT; i++) {
+        const note = melody[i];
+        const cell = document.createElement("div");
+        cell.className = "melody-cell";
+        if (note !== null) cell.classList.add("has-note");
+        if (selectedCell === i) cell.classList.add("selected");
+        cell.dataset.index = i;
+
+        const num = document.createElement("span");
+        num.className = "cell-number";
+        num.textContent = i + 1;
+        cell.appendChild(num);
+
+        if (note !== null) {
+          cell.style.background = NOTES[note].color + "28";
+          cell.style.borderColor = NOTES[note].color + "99";
+
+          const label = document.createElement("span");
+          label.className = "cell-note-name";
+          label.style.color = NOTES[note].color;
+          label.textContent = NOTES[note].name;
+          cell.appendChild(label);
+
+          const xBtn = document.createElement("button");
+          xBtn.className = "cell-clear-btn";
+          xBtn.textContent = "✕";
+          xBtn.title = "Borrar esta nota";
+          xBtn.onclick = (e) => { e.stopPropagation(); clearCell(i); };
+          cell.appendChild(xBtn);
+        } else {
+          const ph = document.createElement("span");
+          ph.className = "cell-placeholder";
+          ph.textContent = "♩";
+          cell.appendChild(ph);
+        }
+
+        cell.addEventListener("click", () => selectCell(i));
+        grid.appendChild(cell);
+      }
+      syncPlayButton();
+    }
+
+    // --- Build palette ---
+    function buildPalette() {
+      NOTES.forEach((note, i) => {
+        const btn = document.createElement("button");
+        btn.className = "note-btn";
+        btn.style.background = `linear-gradient(135deg, ${note.color} 0%, ${note.dark} 100%)`;
+        btn.style.boxShadow = `0 4px 14px ${note.color}44`;
+        btn.textContent = note.name;
+        btn.title = `Colocar ${note.name} (Do4–Si4)`;
+        btn.onclick = () => placeNote(i);
+        palette.appendChild(btn);
+      });
+    }
+
+    function selectCell(i) {
+      if (isPlaying) return;
+      selectedCell = i;
+      buildGrid();
+      setFeedback(`Casilla ${i + 1} seleccionada — elige la nota`, "info");
+    }
+
+    function placeNote(noteIndex) {
+      if (isPlaying) return;
+      initAudio();
+
+      if (selectedCell === null) selectedCell = findNextEmpty(0) ?? 0;
+
+      melody[selectedCell] = noteIndex;
+      previewNote(noteIndex);
+
+      const next = findNextEmpty(selectedCell + 1);
+      const prev = selectedCell;
+      selectedCell = next ?? selectedCell;
+
+      buildGrid();
+
+      if (next !== null) {
+        setFeedback(`${NOTES[noteIndex].name} colocado en casilla ${prev + 1}. Casilla ${next + 1} lista.`, "info");
+      } else {
+        setFeedback("¡Melodía completa! Dale a Reproducir para escucharla 🎵", "success");
+      }
+    }
+
+    function findNextEmpty(from) {
+      for (let i = from; i < CELL_COUNT; i++) {
+        if (melody[i] === null) return i;
+      }
+      return null;
+    }
+
+    function clearCell(i) {
+      if (isPlaying) return;
+      melody[i] = null;
+      selectedCell = i;
+      buildGrid();
+      setFeedback(`Casilla ${i + 1} borrada`, "");
+    }
+
+    function syncPlayButton() {
+      btnPlay.disabled = !melody.some(n => n !== null);
+    }
+
+    function setFeedback(msg, type) {
+      feedbackEl.textContent = msg;
+      feedbackEl.className = "feedback-area" + (type ? " " + type : "");
+    }
+
+    // --- Audio ---
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function midiToFreq(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    function playTone(freq, startOffset, duration) {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime + startOffset;
+
+      const masterGain = audioCtx.createGain();
+      masterGain.connect(audioCtx.destination);
+      masterGain.gain.setValueAtTime(0, now);
+      masterGain.gain.linearRampToValueAtTime(0.35, now + 0.01);
+      masterGain.gain.exponentialRampToValueAtTime(0.15, now + 0.2);
+      masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(freq * 4, now);
+      filter.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.3);
+      filter.connect(masterGain);
+
+      const osc1 = audioCtx.createOscillator();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(freq, now);
+      const g1 = audioCtx.createGain();
+      g1.gain.setValueAtTime(0.8, now);
+      osc1.connect(g1);
+      g1.connect(filter);
+
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(freq * 2, now);
+      const g2 = audioCtx.createGain();
+      g2.gain.setValueAtTime(0.22, now);
+      osc2.connect(g2);
+      g2.connect(filter);
+
+      osc1.start(now); osc2.start(now);
+      osc1.stop(now + duration); osc2.stop(now + duration);
+    }
+
+    function previewNote(noteIndex) {
+      playTone(midiToFreq(NOTES[noteIndex].midi), 0, 0.38);
+    }
+
+    // --- Playback ---
+    function getBeatMs() {
+      return (60 / parseInt(tempoSlider.value)) * 1000;
+    }
+
+    function playMelody() {
+      if (isPlaying) { stopMelody(); return; }
+      initAudio();
+      isPlaying = true;
+      btnPlay.classList.add("playing");
+      btnPlay.textContent = "⏹ Detener";
+
+      let step = 0;
+
+      function tick() {
+        if (!isPlaying || step >= CELL_COUNT) { finishPlayback(); return; }
+
+        const cells = grid.querySelectorAll(".melody-cell");
+        cells.forEach(c => c.classList.remove("playing-now"));
+        const currentCell = cells[step];
+        if (currentCell) {
+          currentCell.classList.add("playing-now");
+          const noteIdx = melody[step];
+          if (noteIdx !== null) {
+            const beatMs = getBeatMs();
+            currentCell.style.boxShadow = `0 0 0 3px ${NOTES[noteIdx].color}88, 0 0 20px ${NOTES[noteIdx].color}55`;
+            setTimeout(() => { if (currentCell) currentCell.style.boxShadow = ""; }, getBeatMs() * 0.8);
+            playTone(midiToFreq(NOTES[noteIdx].midi), 0, beatMs / 1000 * 0.82);
+          }
+        }
+
+        step++;
+        playTimeout = setTimeout(tick, getBeatMs());
+      }
+
+      tick();
+    }
+
+    function stopMelody() {
+      isPlaying = false;
+      if (playTimeout) { clearTimeout(playTimeout); playTimeout = null; }
+      finishPlayback();
+    }
+
+    function finishPlayback() {
+      isPlaying = false;
+      btnPlay.classList.remove("playing");
+      btnPlay.textContent = "▶ Reproducir";
+      grid.querySelectorAll(".melody-cell").forEach(c => {
+        c.classList.remove("playing-now");
+        c.style.boxShadow = "";
+      });
+      if (melody.some(n => n !== null)) {
+        setFeedback("¡Sonó tu melodía! Sigue editando o vuelve a reproducirla 🎶", "success");
+      }
+    }
+
+    // --- Events ---
+    btnPlay.addEventListener("click", playMelody);
+
+    btnClear.addEventListener("click", () => {
+      if (isPlaying) stopMelody();
+      melody.fill(null);
+      selectedCell = 0;
+      buildGrid();
+      setFeedback("Melodía borrada. ¡Empieza de nuevo!", "");
+    });
+
+    tempoSlider.addEventListener("input", () => {
+      tempoValue.textContent = tempoSlider.value;
+    });
+
+    // --- Init ---
+    buildGrid();
+    buildPalette();
+  </script>
+
+</body>
+</html>
