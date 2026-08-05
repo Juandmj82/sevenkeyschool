@@ -52,6 +52,7 @@ const LEVEL_DESCRIPTIONS = {
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
 const MAX_LIVES = 3;
+const MAX_REPLAYS = 3;
 
 // --- STATE ---
 let chosenMode = "libre"; // "libre" | "reto"
@@ -61,6 +62,7 @@ let melody = []; // array of { type: "note"|"rest", note, duration }
 let targetMelody = [];
 let score = 0;
 let lives = MAX_LIVES;
+let replaysLeft = 0;
 let isGameActive = false;
 let audioCtx = null;
 let isPlaying = false;
@@ -203,6 +205,7 @@ const btnPlay = document.getElementById("btn-play");
 const btnUndo = document.getElementById("btn-undo");
 const btnClear = document.getElementById("btn-clear");
 const btnCheck = document.getElementById("btn-check");
+const btnReplay = document.getElementById("btn-replay");
 const noteCounter = document.getElementById("note-counter");
 const durationSelector = document.getElementById("duration-selector");
 const btnRestToggle = document.getElementById("btn-rest-toggle");
@@ -268,6 +271,18 @@ document.addEventListener("DOMContentLoaded", () => {
   btnUndo.addEventListener("click", handleUndoClick);
   btnClear.addEventListener("click", handleClearClick);
   btnCheck.addEventListener("click", handleCheckClick);
+  btnReplay.addEventListener("click", () => {
+    if (replaysLeft <= 0 || isPlaying) return;
+    replaysLeft--;
+    if (replaysLeft > 0) {
+      btnReplay.textContent = `🎵 Escuchar otra vez (${replaysLeft})`;
+    } else {
+      btnReplay.textContent = "🎵 Sin más escuchas";
+      btnReplay.disabled = true;
+    }
+    initAudio();
+    playMelody(targetMelody);
+  });
   staffSvg.addEventListener("click", handleStaffClick);
 });
 
@@ -691,6 +706,10 @@ function startGame() {
   redrawMelody();
   updateToolbarState();
 
+  btnReplay.hidden = (chosenMode !== "reto");
+  btnReplay.disabled = false;
+  btnReplay.textContent = `🎵 Escuchar otra vez (${MAX_REPLAYS})`;
+
   if (chosenMode === "reto") {
     startNewRound();
   }
@@ -726,6 +745,10 @@ function startNewRound() {
   melody = [];
   redrawMelody();
   updateToolbarState();
+  replaysLeft = MAX_REPLAYS;
+  btnReplay.disabled = false;
+  btnReplay.textContent = `🎵 Escuchar otra vez (${MAX_REPLAYS})`;
+
   feedbackBox.className = "feedback-box";
   feedbackBox.textContent = "Escucha la melodía y luego reconstrúyela...";
 
