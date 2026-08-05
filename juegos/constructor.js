@@ -24,12 +24,22 @@ const MAX_BEATS_LIBRE = 8; // total "tiempos" available in Modo Libre
 const BEAT_WIDTH = (STAFF_X_END - STAFF_X_START) / MAX_BEATS_LIBRE;
 const BEAT_MS = 420; // playback duration of one "tiempo" (negra)
 
-// negra = 1 tiempo, blanca = 2, blanca con puntillo = 3, doble corchea (par unido) = 1
-const DURATION_BEATS = { negra: 1, blanca: 2, blanca_punteada: 3, doble_corchea: 1 };
-const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", blanca_punteada: "Blanca con puntillo", doble_corchea: "Doble Corchea" };
-const DURATION_ORDER = ["negra", "blanca", "blanca_punteada", "doble_corchea"];
+// negra = 1 tiempo, blanca = 2, blanca con puntillo = 3, doble corchea (par unido) = 1, redonda = 4
+const DURATION_BEATS = { negra: 1, blanca: 2, blanca_punteada: 3, doble_corchea: 1, redonda: 4 };
+const DURATION_LABELS = { negra: "Negra", blanca: "Blanca", blanca_punteada: "Blanca con puntillo", doble_corchea: "Doble Corchea", redonda: "Redonda" };
+const DURATION_ORDER = ["negra", "blanca", "blanca_punteada", "doble_corchea", "redonda"];
 // Rests are only allowed for these simpler durations (per teacher's request)
 const REST_ALLOWED_DURATIONS = ["negra", "blanca", "blanca_punteada"];
+
+// --- NIVEL CONFIG ---
+const LEVELS = {
+  1: { allowedDurations: ["negra"], restAllowed: false, maxBeats: 4, numMeasures: 1, showNoteLabels: true },
+  2: { allowedDurations: ["negra"], restAllowed: true,  maxBeats: 4, numMeasures: 1, showNoteLabels: true },
+  3: { allowedDurations: ["negra","blanca"], restAllowed: true, maxBeats: 4, numMeasures: 1, showNoteLabels: true },
+  4: { allowedDurations: ["negra","blanca","redonda"], restAllowed: true, maxBeats: 4, numMeasures: 1, showNoteLabels: true },
+  5: { allowedDurations: ["negra","blanca","redonda"], restAllowed: true, maxBeats: 8, numMeasures: 2, showNoteLabels: false }
+};
+let chosenLevel = 1;
 
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
@@ -202,6 +212,14 @@ const MODE_DESCRIPTIONS = {
 document.addEventListener("DOMContentLoaded", () => {
   drawStaffBase();
 
+  document.querySelectorAll("#level-selector .btn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      chosenLevel = parseInt(btn.dataset.level);
+      document.querySelectorAll("#level-selector .btn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
   document.querySelectorAll("#mode-selector .btn-chip").forEach(btn => {
     btn.addEventListener("click", () => {
       chosenMode = btn.dataset.mode;
@@ -269,6 +287,57 @@ function drawStaffBase() {
   flip.appendChild(path);
   clefGroup.appendChild(flip);
   staffSvg.appendChild(clefGroup);
+
+  // Time signature 4/4
+  const timeSig4Top = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timeSig4Top.setAttribute("x", "55");
+  timeSig4Top.setAttribute("y", "95");
+  timeSig4Top.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
+  timeSig4Top.setAttribute("font-size", "18");
+  timeSig4Top.setAttribute("font-weight", "bold");
+  timeSig4Top.setAttribute("text-anchor", "middle");
+  timeSig4Top.textContent = "4";
+  staffSvg.appendChild(timeSig4Top);
+
+  const timeSig4Bottom = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  timeSig4Bottom.setAttribute("x", "55");
+  timeSig4Bottom.setAttribute("y", "120");
+  timeSig4Bottom.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
+  timeSig4Bottom.setAttribute("font-size", "18");
+  timeSig4Bottom.setAttribute("font-weight", "bold");
+  timeSig4Bottom.setAttribute("text-anchor", "middle");
+  timeSig4Bottom.textContent = "4";
+  staffSvg.appendChild(timeSig4Bottom);
+
+  // Measure bars (one at end for 1 measure, two for 2 measures)
+  const lvlCfg = LEVELS[chosenLevel];
+  const barsX = lvlCfg.numMeasures === 1 ? [STAFF_X_END] : [290, STAFF_X_END];
+  barsX.forEach(bx => {
+    const bar = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    bar.setAttribute("x1", bx);
+    bar.setAttribute("y1", "60");
+    bar.setAttribute("x2", bx);
+    bar.setAttribute("y2", "140");
+    bar.setAttribute("stroke", "rgba(255, 255, 255, 0.5)");
+    bar.setAttribute("stroke-width", "2");
+    staffSvg.appendChild(bar);
+  });
+
+  // Note labels (only if showNoteLabels is true)
+  if (lvlCfg.showNoteLabels) {
+    NOTE_ORDER.forEach(noteId => {
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const nameKey = noteId[0]; // C→DO, D→RE, etc.
+      label.setAttribute("x", "88");
+      label.setAttribute("y", (NOTE_Y_MAP[noteId] + 4));
+      label.setAttribute("fill", "rgba(167, 139, 250, 0.8)");
+      label.setAttribute("font-size", "8.5");
+      label.setAttribute("font-weight", "700");
+      label.setAttribute("text-anchor", "end");
+      label.textContent = NOTE_NAMES_ES[nameKey] + (noteId === "C5" ? "₅" : "₄");
+      staffSvg.appendChild(label);
+    });
+  }
 }
 
 function totalBeats(items) {
@@ -461,7 +530,7 @@ function handleStaffClick(e) {
     if (melody.length >= RETO_MELODY_LENGTH) return;
   } else {
     const duration = selectedDuration;
-    if (totalBeats(melody) + (DURATION_BEATS[duration] || 1) > MAX_BEATS_LIBRE) return;
+    if (totalBeats(melody) + (DURATION_BEATS[duration] || 1) > LEVELS[chosenLevel].maxBeats) return;
   }
 
   const point = staffSvg.createSVGPoint();
@@ -541,19 +610,42 @@ function startGame() {
   score = 0;
   lives = MAX_LIVES;
 
+  // Apply level config
+  const lvl = LEVELS[chosenLevel];
+
+  // Show/hide duration selector (hide in Reto mode or if only one duration allowed)
+  durationSelector.hidden = (chosenMode === "reto" || lvl.allowedDurations.length <= 1);
+
+  // Show/hide rest button
+  btnRestToggle.hidden = !lvl.restAllowed;
+
+  // Filter available duration chips
+  document.querySelectorAll("#duration-selector .duration-chip").forEach(btn => {
+    btn.hidden = !lvl.allowedDurations.includes(btn.dataset.duration);
+  });
+
+  // If only one duration allowed, force selection
+  if (lvl.allowedDurations.length === 1) {
+    selectedDuration = lvl.allowedDurations[0];
+  } else {
+    selectedDuration = "negra";
+  }
+
+  // Reset rest mode
+  isRestMode = false;
+  btnRestToggle.classList.remove("active");
+  btnRestToggle.disabled = false;
+
+  // Update duration selector display
+  document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
+  const activeBtn = document.querySelector(`#duration-selector .duration-chip[data-duration="${selectedDuration}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScoreItem.hidden = chosenMode !== "reto";
   hudLivesItem.hidden = chosenMode !== "reto";
   hudScore.textContent = `0 / ${RETO_TARGET_SCORE}`;
   updateHeartsDisplay();
-
-  durationSelector.hidden = chosenMode === "reto";
-  selectedDuration = "negra";
-  isRestMode = false;
-  btnRestToggle.classList.remove("active");
-  btnRestToggle.disabled = false;
-  document.querySelectorAll("#duration-selector .duration-chip").forEach(b => b.classList.remove("active"));
-  document.querySelector('#duration-selector .duration-chip[data-duration="negra"]').classList.add("active");
 
   confettiActive = false;
   if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
