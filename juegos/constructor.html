@@ -3,589 +3,429 @@
 <head>
   <!-- Microsoft Clarity Tracking Code -->
   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "xfop6mj4wx");
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xfop6mj4wx");
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seven Keys School | Constructor de Melodías</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .header-logo { height: 50px; width: auto; display: block; }
-
-    .game-wrapper {
+    /* Profe styles reused verbatim from the other games for visual consistency */
+    .profe-sticker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 8px 12px;
+      margin: 6px 0;
       width: 100%;
-      max-width: 780px;
+      max-width: 560px;
+      text-align: left;
+    }
+    .profe-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid #a78bfa;
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+      flex-shrink: 0;
+    }
+    .profe-text-box { display: flex; flex-direction: column; gap: 2px; }
+    .profe-name {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+    .profe-bubble { font-size: 0.76rem; color: #f1f5f9; line-height: 1.35; font-style: italic; }
+
+    .profe-showcase {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 22px;
-      padding: 0 16px 48px;
-    }
-
-    .page-title {
-      text-align: center;
-      padding: 2rem 1rem 0.25rem;
-    }
-    .page-title h1 {
-      font-size: 1.9rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 0%, #c084fc 60%, #6366f1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-    }
-    .page-title p {
-      color: #94a3b8;
-      font-size: 0.92rem;
-      margin-top: 4px;
-    }
-
-    /* Profe welcome */
-    .profe-welcome-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 20px;
-      padding: 16px 20px;
+      gap: 8px;
+      margin: 4px 0 8px;
       width: 100%;
     }
-    .profe-avatar-welcome {
-      width: 68px; height: 68px;
+    .profe-avatar-large {
+      width: 105px;
+      height: 105px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #a78bfa;
-      box-shadow: 0 0 14px rgba(167,139,250,0.4);
-      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.55);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .profe-welcome-bubble { display: flex; flex-direction: column; gap: 4px; }
-    .profe-name { font-size: 0.72rem; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 1px; display: block; }
-    .profe-welcome-bubble p { font-size: 0.87rem; color: #e2e8f0; line-height: 1.42; font-style: italic; }
+    .profe-avatar-large:hover { transform: scale(1.06) rotate(2deg); }
+    .profe-bubble-large {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.76rem;
+      color: #f1f5f9;
+      line-height: 1.35;
+      font-style: italic;
+      position: relative;
+      max-width: 410px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.02);
+    }
+    .profe-bubble-large::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 8px 8px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.07) transparent;
+    }
 
-    /* Controls bar */
-    .controls-bar {
+    @keyframes fadeInCentred {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    .overlay-modal {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      right: auto; bottom: auto;
+      transform: translate(-50%, -50%);
+      width: 95%; max-width: 480px;
+      max-height: 96dvh;
+      overflow-y: auto;
+      background: radial-gradient(circle at center, rgba(18, 15, 42, 0.99) 0%, rgba(6, 5, 20, 1.0) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.15);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 24px;
+      text-align: center;
+      border-radius: 20px;
+      z-index: 100;
+      animation: fadeInCentred 0.3s ease-out forwards;
+    }
+    .modal-icon { font-size: 2.4rem; line-height: 1; margin-bottom: 0px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5)); }
+    .modal-title { font-size: 1.6rem; font-weight: 800; }
+    .modal-buttons { display: flex; gap: 10px; margin-top: 6px; justify-content: center; width: 100%; flex-wrap: wrap; }
+
+    .profe-toast {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
       display: flex;
+      align-items: center;
+      gap: 12px;
+      background: radial-gradient(circle at center, rgba(30, 27, 75, 0.98) 0%, rgba(15, 12, 45, 0.99) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(239, 68, 68, 0.2);
+      border-radius: 14px;
+      padding: 10px 14px;
+      max-width: 290px;
+      z-index: 200;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    .profe-toast.show { transform: translateY(0); opacity: 1; }
+    .profe-toast-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ef4444; object-fit: cover; flex-shrink: 0; }
+    .profe-toast-content { display: flex; flex-direction: column; gap: 1px; }
+    .profe-toast-name { font-size: 0.65rem; font-weight: 800; color: #f87171; text-transform: uppercase; letter-spacing: 0.5px; }
+    .profe-toast-text { font-size: 0.72rem; color: #f1f5f9; line-height: 1.3; font-style: italic; }
+    .profe-toast.positive { border-color: rgba(16, 185, 129, 0.55); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(16, 185, 129, 0.25); }
+    .profe-toast.positive .profe-toast-avatar { border-color: #10b981; }
+    .profe-toast.positive .profe-toast-name { color: #34d399; }
+
+    .header-logo { height: 50px; width: auto; display: block; }
+
+    /* .hud-item's shared display:flex otherwise beats the [hidden] attribute */
+    .hud-item[hidden] { display: none !important; }
+
+    main { justify-content: flex-start; }
+    .game-container { min-height: calc(100dvh - 170px); }
+
+    .start-prompt { width: 95%; max-width: 500px; padding: 14px 20px; max-height: 100%; overflow-y: auto; }
+
+    .setting-group { width: 100%; margin-top: 6px; }
+    .setting-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .chip-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+    .btn-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .btn-chip:hover { border-color: var(--color-cyan); }
+    .btn-chip.active {
+      background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    /* --- Interactive staff area --- */
+    .staff-area {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      flex: 1;
+      min-height: 260px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #builder-staff-svg {
+      width: 100%;
+      height: 100%;
+      max-width: 700px;
+      cursor: crosshair;
+    }
+
+    /* --- Toolbar under the staff --- */
+    .builder-toolbar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
+      padding: 4px 0;
     }
-
-    .btn-play {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    .btn-tool {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .btn-tool:hover:not(:disabled) { border-color: var(--color-cyan); transform: translateY(-1px); }
+    .btn-tool:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-tool.primary {
+      background: linear-gradient(135deg, var(--color-cyan) 0%, #00a5bb 100%);
+      color: var(--bg-dark);
+      border: none;
+      box-shadow: 0 4px 15px var(--color-cyan-glow);
+    }
+    .btn-tool.success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: #fff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(34,197,94,0.35);
-      transition: all 0.2s cubic-bezier(0.175,0.885,0.32,1.275);
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      letter-spacing: 0.4px;
     }
-    .btn-play:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34,197,94,0.45); }
-    .btn-play:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; transform: none; }
-    .btn-play.playing {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 4px 14px rgba(239,68,68,0.35);
-    }
-
-    .btn-clear {
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.12);
-      color: #94a3b8;
-      padding: 12px 20px;
-      border-radius: 30px;
-      font-size: 0.88rem;
+    .note-counter {
+      font-size: 0.78rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-clear:hover { border-color: #ef4444; color: #ef4444; }
-
-    .tempo-control {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 30px;
-      padding: 8px 16px;
-    }
-    .tempo-label { font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .tempo-value { font-size: 0.9rem; font-weight: 800; color: var(--color-gold); min-width: 32px; text-align: center; }
-    input[type=range] {
-      -webkit-appearance: none;
-      width: 80px; height: 4px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 2px;
-      outline: none;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: var(--color-gold);
-      cursor: pointer;
-      box-shadow: 0 0 8px rgba(212,175,55,0.45);
+      color: var(--text-muted);
     }
 
-    /* Melody grid */
-    .melody-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 8px;
-      width: 100%;
-    }
-
-    .melody-cell {
-      aspect-ratio: 1;
-      background: rgba(255,255,255,0.03);
-      border: 2px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
-      min-height: 62px;
-      user-select: none;
-    }
-    .melody-cell:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); }
-    .melody-cell.selected {
-      border-color: #c084fc !important;
-      box-shadow: 0 0 0 3px rgba(192,132,252,0.25);
-      background: rgba(192,132,252,0.08) !important;
-    }
-    .melody-cell.playing-now {
-      transform: scale(1.08);
-      z-index: 2;
-      transition: transform 0.1s;
-    }
-
-    .cell-number {
-      position: absolute;
-      top: 4px; left: 6px;
-      font-size: 0.58rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.35);
-    }
-    .cell-note-name {
-      font-size: 0.88rem;
-      font-weight: 800;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-    }
-    .cell-placeholder {
-      font-size: 1.3rem;
-      opacity: 0.18;
-      line-height: 1;
-    }
-    .cell-clear-btn {
-      position: absolute;
-      top: 2px; right: 4px;
-      font-size: 0.6rem;
-      color: rgba(255,255,255,0.4);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px;
-      line-height: 1;
-      display: none;
-      transition: color 0.15s;
-    }
-    .melody-cell.has-note .cell-clear-btn { display: block; }
-    .cell-clear-btn:hover { color: #ef4444; }
-
-    /* Note palette */
-    .note-palette {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .note-btn {
-      flex: 1;
-      min-width: 68px;
-      max-width: 88px;
-      padding: 14px 6px;
-      border: none;
-      border-radius: 14px;
-      font-size: 1rem;
-      font-weight: 800;
+    #duration-selector { margin-bottom: 4px; }
+    #duration-selector[hidden] { display: none !important; }
+    .duration-chip { padding: 6px 14px; font-size: 0.78rem; }
+    #btn-rest-toggle { padding: 6px 14px; font-size: 0.78rem; }
+    #btn-rest-toggle.active {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      border-color: transparent;
       color: #fff;
-      cursor: pointer;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.35);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: all 0.15s cubic-bezier(0.175,0.885,0.32,1.275);
-      letter-spacing: 0.3px;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
     }
-    .note-btn:hover { transform: translateY(-3px) scale(1.05); }
-    .note-btn:active { transform: translateY(0) scale(0.96); }
-
-    /* Feedback */
-    .feedback-area {
-      min-height: 28px;
-      font-size: 0.88rem;
-      color: #64748b;
-      text-align: center;
-      font-style: italic;
-      transition: color 0.3s;
-    }
-    .feedback-area.success { color: #22c55e; }
-    .feedback-area.info { color: #c084fc; }
+    #btn-rest-toggle:disabled { opacity: 0.35; cursor: not-allowed; }
 
     @media (max-width: 600px) {
-      .melody-grid { gap: 5px; }
-      .melody-cell { min-height: 44px; border-radius: 9px; }
-      .cell-note-name { font-size: 0.72rem; }
-      .cell-number { font-size: 0.52rem; }
-      .note-btn { padding: 11px 4px; font-size: 0.82rem; min-width: 52px; border-radius: 10px; }
-      .controls-bar { gap: 7px; }
-      input[type=range] { width: 60px; }
-      .profe-welcome-container { flex-direction: column; text-align: center; }
+      .profe-toast {
+        bottom: 145px !important;
+        right: auto !important;
+        left: 50% !important;
+        transform: translate(-50%, 80px) !important;
+        max-width: 90% !important;
+        width: 290px !important;
+      }
+      .profe-toast.show { transform: translate(-50%, 0) !important; }
+      .staff-area { min-height: 200px; }
+    }
+
+    @media (max-width: 520px), (max-height: 480px) {
+      .start-prompt { padding: 10px 16px; }
+      .start-prompt h2 { font-size: 1.3rem !important; margin-bottom: 2px !important; }
+      .profe-sticker { padding: 6px 10px; margin: 4px 0; gap: 10px; }
+      .profe-avatar { width: 40px; height: 40px; }
+      .profe-bubble { font-size: 0.7rem; }
+      .btn-start-game { padding: 0.55rem 1.6rem !important; font-size: 1rem !important; margin-top: 6px !important; }
     }
   </style>
 </head>
-<body>
-
+<body class="game-page-layout">
   <header>
     <div class="logo-container">
       <img src="../img/logo.png" alt="Seven Keys School" class="header-logo">
     </div>
     <a href="index.html" class="btn-back">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      Zona de Juegos
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Menú de Niveles
     </a>
   </header>
 
   <main>
-    <div class="page-title">
-      <h1>Constructor de Melodías</h1>
-      <p>Compón tu propia melodía y escúchala al instante 🎵</p>
-    </div>
+    <div class="game-container">
+      <!-- HUD / Stats -->
+      <div class="game-hud">
+        <div class="hud-group">
+          <div class="hud-item">
+            <span class="hud-label">Modo</span>
+            <span class="hud-value gold" id="hud-mode">Modo Libre</span>
+          </div>
+          <div class="hud-item" id="hud-score-item" hidden>
+            <span class="hud-label">Melodías</span>
+            <span class="hud-value" id="hud-score">0 / 8</span>
+          </div>
+        </div>
 
-    <div class="game-wrapper">
+        <div class="hud-group">
+          <div class="hud-item" style="align-items: center;" id="hud-lives-item" hidden>
+            <span class="hud-label">Vidas</span>
+            <div class="hearts-container" id="hearts-box">
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
+              <span class="heart-filled">❤️</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- Profe welcome -->
-      <div class="profe-welcome-container">
-        <img src="../img/profe.jpg" class="profe-avatar-welcome" alt="Teacher Juan Di">
-        <div class="profe-welcome-bubble">
+      <!-- Start screen overlay with Profe speaking instructions + settings -->
+      <div class="start-prompt" id="start-overlay">
+        <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 4px;">Constructor de Melodías</h2>
+
+        <div class="profe-sticker">
+          <img src="../img/profe.jpg" class="profe-avatar" alt="Teacher Juan Di">
+          <div class="profe-text-box">
+            <span class="profe-name">Teacher Juan Di</span>
+            <div class="profe-bubble" id="overlay-desc">
+              "¡Toca el pentagrama para ir colocando notas y componer tu propia melodía! Después la puedes escuchar tocando el botón de reproducir."
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <span class="setting-label">Modo</span>
+          <div class="chip-row" id="mode-selector">
+            <button class="btn-chip active" data-mode="libre">🎨 Modo Libre</button>
+            <button class="btn-chip" data-mode="reto">🎯 Modo Reto</button>
+          </div>
+        </div>
+
+        <button class="btn-start-game" id="btn-start" style="margin-top: 10px;">Iniciar</button>
+      </div>
+
+      <!-- Interactive staff -->
+      <div class="staff-area">
+        <svg id="builder-staff-svg" viewBox="0 0 500 200"></svg>
+
+        <!-- Interactive Toast Alert -->
+        <div class="profe-toast" id="profe-toast">
+          <img src="../img/profe_sad.jpg" class="profe-toast-avatar" alt="Teacher Juan Di">
+          <div class="profe-toast-content">
+            <span class="profe-toast-name">Teacher Juan Di</span>
+            <span class="profe-toast-text" id="profe-toast-text">"¡Tú puedes! ¡Inténtalo de nuevo!"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback box -->
+      <div class="feedback-box" id="feedback-box"></div>
+
+      <!-- Rhythm picker (Modo Libre only) -->
+      <div class="chip-row" id="duration-selector">
+        <button class="btn-chip duration-chip active" data-duration="negra" title="Negra (1 tiempo)">♩ Negra</button>
+        <button class="btn-chip duration-chip" data-duration="blanca" title="Blanca (2 tiempos)">𝅗𝅥 Blanca</button>
+        <button class="btn-chip duration-chip" data-duration="blanca_punteada" title="Blanca con puntillo (3 tiempos)">𝅗𝅥. Blanca c. puntillo</button>
+        <button class="btn-chip duration-chip" data-duration="doble_corchea" title="Doble corchea: dos notas unidas por una barra (1 tiempo)">♫ Doble Corchea</button>
+        <button class="btn-chip" id="btn-rest-toggle" title="Colocar un silencio en vez de una nota">𝄽 Silencio</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="builder-toolbar" id="builder-toolbar">
+        <button class="btn-tool primary" id="btn-play">▶️ Reproducir</button>
+        <button class="btn-tool" id="btn-undo">⌫ Borrar última</button>
+        <button class="btn-tool" id="btn-clear">🗑️ Limpiar</button>
+        <button class="btn-tool success" id="btn-check" hidden>✅ Comprobar</button>
+        <span class="note-counter" id="note-counter">0 / 8 notas</span>
+      </div>
+
+      <!-- Confetti Canvas -->
+      <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; border-radius: 24px;"></canvas>
+
+      <!-- Win Modal Overlay -->
+      <div class="overlay-modal" id="win-modal">
+        <div class="modal-icon win">🏆</div>
+        <div class="modal-title">¡Gran Compositor!</div>
+
+        <div class="profe-showcase">
+          <img src="../img/profe_celebrate.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
           <span class="profe-name">Teacher Juan Di</span>
-          <p>"¡Hola compositores! Selecciona una casilla y luego elige la nota que quieres poner. Cuando termines, dale a <strong>Reproducir</strong> para escuchar tu melodía. ¡Puedes ajustar el tempo como quieras!"</p>
+          <div class="profe-bubble-large" id="win-message">
+            ¡Reconstruiste todas las melodías! Tu oído y tu lectura van de la mano.
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-restart-win">Jugar de Nuevo</button>
         </div>
       </div>
 
-      <!-- Controls -->
-      <div class="controls-bar">
-        <button class="btn-play" id="btn-play" disabled>&#9654; Reproducir</button>
-        <button class="btn-clear" id="btn-clear">✕ Borrar todo</button>
-        <div class="tempo-control">
-          <span class="tempo-label">Tempo</span>
-          <input type="range" id="tempo-slider" min="60" max="180" value="100" step="10">
-          <span class="tempo-value" id="tempo-value">100</span>
-          <span style="font-size:0.68rem;color:#475569;">BPM</span>
+      <!-- Lose Modal Overlay -->
+      <div class="overlay-modal" id="lose-modal">
+        <div class="modal-icon lose">❌</div>
+        <div class="modal-title">Fin del Reto</div>
+
+        <div class="profe-showcase">
+          <img src="../img/profe_sad.jpg" class="profe-avatar-large" alt="Teacher Juan Di">
+          <span class="profe-name">Teacher Juan Di</span>
+          <div class="profe-bubble-large">
+            "¡Ouch, nos quedamos sin vidas! ⚡ Reconstruir melodías de oído es de los retos más difíciles. ¿Lo intentamos otra vez?"
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Menú Principal</button>
+          <button class="btn-primary" id="btn-restart-lose">Intentar de Nuevo</button>
         </div>
       </div>
-
-      <!-- Melody grid -->
-      <div class="melody-grid" id="melody-grid"></div>
-
-      <!-- Note palette -->
-      <div class="note-palette" id="note-palette"></div>
-
-      <!-- Feedback -->
-      <div class="feedback-area" id="feedback-area">
-        Selecciona una casilla y luego elige una nota del panel de abajo
-      </div>
-
     </div>
   </main>
 
-  <script>
-    const NOTES = [
-      { name: "DO",  midi: 60, color: "#ef4444", dark: "#b91c1c" },
-      { name: "RE",  midi: 62, color: "#f97316", dark: "#c2410c" },
-      { name: "MI",  midi: 64, color: "#eab308", dark: "#a16207" },
-      { name: "FA",  midi: 65, color: "#22c55e", dark: "#15803d" },
-      { name: "SOL", midi: 67, color: "#06b6d4", dark: "#0e7490" },
-      { name: "LA",  midi: 69, color: "#3b82f6", dark: "#1d4ed8" },
-      { name: "SI",  midi: 71, color: "#a855f7", dark: "#7e22ce" },
-    ];
-
-    const CELL_COUNT = 8;
-    let melody = new Array(CELL_COUNT).fill(null);
-    let selectedCell = 0;
-    let isPlaying = false;
-    let playTimeout = null;
-    let audioCtx = null;
-
-    const grid       = document.getElementById("melody-grid");
-    const palette    = document.getElementById("note-palette");
-    const btnPlay    = document.getElementById("btn-play");
-    const btnClear   = document.getElementById("btn-clear");
-    const tempoSlider = document.getElementById("tempo-slider");
-    const tempoValue = document.getElementById("tempo-value");
-    const feedbackEl = document.getElementById("feedback-area");
-
-    // --- Build grid ---
-    function buildGrid() {
-      grid.innerHTML = "";
-      for (let i = 0; i < CELL_COUNT; i++) {
-        const note = melody[i];
-        const cell = document.createElement("div");
-        cell.className = "melody-cell";
-        if (note !== null) cell.classList.add("has-note");
-        if (selectedCell === i) cell.classList.add("selected");
-        cell.dataset.index = i;
-
-        const num = document.createElement("span");
-        num.className = "cell-number";
-        num.textContent = i + 1;
-        cell.appendChild(num);
-
-        if (note !== null) {
-          cell.style.background = NOTES[note].color + "28";
-          cell.style.borderColor = NOTES[note].color + "99";
-
-          const label = document.createElement("span");
-          label.className = "cell-note-name";
-          label.style.color = NOTES[note].color;
-          label.textContent = NOTES[note].name;
-          cell.appendChild(label);
-
-          const xBtn = document.createElement("button");
-          xBtn.className = "cell-clear-btn";
-          xBtn.textContent = "✕";
-          xBtn.title = "Borrar esta nota";
-          xBtn.onclick = (e) => { e.stopPropagation(); clearCell(i); };
-          cell.appendChild(xBtn);
-        } else {
-          const ph = document.createElement("span");
-          ph.className = "cell-placeholder";
-          ph.textContent = "♩";
-          cell.appendChild(ph);
-        }
-
-        cell.addEventListener("click", () => selectCell(i));
-        grid.appendChild(cell);
-      }
-      syncPlayButton();
-    }
-
-    // --- Build palette ---
-    function buildPalette() {
-      NOTES.forEach((note, i) => {
-        const btn = document.createElement("button");
-        btn.className = "note-btn";
-        btn.style.background = `linear-gradient(135deg, ${note.color} 0%, ${note.dark} 100%)`;
-        btn.style.boxShadow = `0 4px 14px ${note.color}44`;
-        btn.textContent = note.name;
-        btn.title = `Colocar ${note.name} (Do4–Si4)`;
-        btn.onclick = () => placeNote(i);
-        palette.appendChild(btn);
-      });
-    }
-
-    function selectCell(i) {
-      if (isPlaying) return;
-      selectedCell = i;
-      buildGrid();
-      setFeedback(`Casilla ${i + 1} seleccionada — elige la nota`, "info");
-    }
-
-    function placeNote(noteIndex) {
-      if (isPlaying) return;
-      initAudio();
-
-      if (melody.every(n => n !== null)) {
-        setFeedback("¡Melodía completa! Borra una casilla para cambiar una nota, o dale a ▶ Reproducir 🎵", "success");
-        return;
-      }
-
-      if (selectedCell === null) selectedCell = findNextEmpty(0) ?? 0;
-
-      melody[selectedCell] = noteIndex;
-      previewNote(noteIndex);
-
-      const next = findNextEmpty(selectedCell + 1);
-      const prev = selectedCell;
-      selectedCell = next ?? selectedCell;
-
-      buildGrid();
-
-      if (next !== null) {
-        setFeedback(`${NOTES[noteIndex].name} colocado en casilla ${prev + 1}. Casilla ${next + 1} lista.`, "info");
-      } else {
-        setFeedback("¡Melodía completa! Dale a Reproducir para escucharla 🎵", "success");
-      }
-    }
-
-    function findNextEmpty(from) {
-      for (let i = from; i < CELL_COUNT; i++) {
-        if (melody[i] === null) return i;
-      }
-      return null;
-    }
-
-    function clearCell(i) {
-      if (isPlaying) return;
-      melody[i] = null;
-      selectedCell = i;
-      buildGrid();
-      setFeedback(`Casilla ${i + 1} borrada`, "");
-    }
-
-    function syncPlayButton() {
-      btnPlay.disabled = !melody.some(n => n !== null);
-    }
-
-    function setFeedback(msg, type) {
-      feedbackEl.textContent = msg;
-      feedbackEl.className = "feedback-area" + (type ? " " + type : "");
-    }
-
-    // --- Audio ---
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function midiToFreq(midi) {
-      return 440 * Math.pow(2, (midi - 69) / 12);
-    }
-
-    function playTone(freq, startOffset, duration) {
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime + startOffset;
-
-      const masterGain = audioCtx.createGain();
-      masterGain.connect(audioCtx.destination);
-      masterGain.gain.setValueAtTime(0, now);
-      masterGain.gain.linearRampToValueAtTime(0.35, now + 0.01);
-      masterGain.gain.exponentialRampToValueAtTime(0.15, now + 0.2);
-      masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(freq * 4, now);
-      filter.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.3);
-      filter.connect(masterGain);
-
-      const osc1 = audioCtx.createOscillator();
-      osc1.type = "sine";
-      osc1.frequency.setValueAtTime(freq, now);
-      const g1 = audioCtx.createGain();
-      g1.gain.setValueAtTime(0.8, now);
-      osc1.connect(g1);
-      g1.connect(filter);
-
-      const osc2 = audioCtx.createOscillator();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(freq * 2, now);
-      const g2 = audioCtx.createGain();
-      g2.gain.setValueAtTime(0.22, now);
-      osc2.connect(g2);
-      g2.connect(filter);
-
-      osc1.start(now); osc2.start(now);
-      osc1.stop(now + duration); osc2.stop(now + duration);
-    }
-
-    function previewNote(noteIndex) {
-      playTone(midiToFreq(NOTES[noteIndex].midi), 0, 0.38);
-    }
-
-    // --- Playback ---
-    function getBeatMs() {
-      return (60 / parseInt(tempoSlider.value)) * 1000;
-    }
-
-    function playMelody() {
-      if (isPlaying) { stopMelody(); return; }
-      initAudio();
-      isPlaying = true;
-      btnPlay.classList.add("playing");
-      btnPlay.textContent = "⏹ Detener";
-
-      let step = 0;
-
-      function tick() {
-        if (!isPlaying || step >= CELL_COUNT) { finishPlayback(); return; }
-
-        const cells = grid.querySelectorAll(".melody-cell");
-        cells.forEach(c => c.classList.remove("playing-now"));
-        const currentCell = cells[step];
-        if (currentCell) {
-          currentCell.classList.add("playing-now");
-          const noteIdx = melody[step];
-          if (noteIdx !== null) {
-            const beatMs = getBeatMs();
-            currentCell.style.boxShadow = `0 0 0 3px ${NOTES[noteIdx].color}88, 0 0 20px ${NOTES[noteIdx].color}55`;
-            setTimeout(() => { if (currentCell) currentCell.style.boxShadow = ""; }, getBeatMs() * 0.8);
-            playTone(midiToFreq(NOTES[noteIdx].midi), 0, beatMs / 1000 * 0.82);
-          }
-        }
-
-        step++;
-        playTimeout = setTimeout(tick, getBeatMs());
-      }
-
-      tick();
-    }
-
-    function stopMelody() {
-      isPlaying = false;
-      if (playTimeout) { clearTimeout(playTimeout); playTimeout = null; }
-      finishPlayback();
-    }
-
-    function finishPlayback() {
-      isPlaying = false;
-      btnPlay.classList.remove("playing");
-      btnPlay.textContent = "▶ Reproducir";
-      grid.querySelectorAll(".melody-cell").forEach(c => {
-        c.classList.remove("playing-now");
-        c.style.boxShadow = "";
-      });
-      if (melody.some(n => n !== null)) {
-        setFeedback("¡Sonó tu melodía! Sigue editando o vuelve a reproducirla 🎶", "success");
-      }
-    }
-
-    // --- Events ---
-    btnPlay.addEventListener("click", playMelody);
-
-    btnClear.addEventListener("click", () => {
-      if (isPlaying) stopMelody();
-      melody.fill(null);
-      selectedCell = 0;
-      buildGrid();
-      setFeedback("Melodía borrada. ¡Empieza de nuevo!", "");
-    });
-
-    tempoSlider.addEventListener("input", () => {
-      tempoValue.textContent = tempoSlider.value;
-    });
-
-    // --- Init ---
-    buildGrid();
-    buildPalette();
-  </script>
-
+  <script src="constructor.js"></script>
 </body>
 </html>

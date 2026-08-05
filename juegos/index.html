@@ -681,15 +681,15 @@
         </div>
 
         <!-- Constructor de Melodías Game -->
-        <div class="level-card has-full-cover" id="card-constructor" onclick="showPreview('constructor')" style="border-color: rgba(192, 132, 252, 0.3);">
+        <div class="level-card has-full-cover" id="card-constructor" onclick="showPreview('constructor')" style="border-color: rgba(192, 132, 252, 0.25);">
           <div class="level-cover">
             <img src="../img/constructor_melodias.png" alt="Constructor de Melodías">
             <div class="level-header-overlay">
-              <span class="level-status-icon">🎵</span>
+              <span class="level-status-icon">🎼</span>
             </div>
           </div>
           <div class="level-footer">
-            <button class="btn-play-level" style="background: linear-gradient(135deg, #c084fc 0%, #7c3aed 100%); color: #fff;">¡Crear!</button>
+            <button class="btn-play-level" style="background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%); color: var(--text-main);">¡Jugar!</button>
           </div>
         </div>
       </div>
@@ -833,12 +833,12 @@
       },
       "constructor": {
         title: "Constructor de Melodías",
-        description: `"¡Hora de ser compositor! Elige las notas (Do, Re, Mi, Fa, Sol, La, Si) y colócalas en las 8 casillas de tu melodía. Ajusta el tempo y dale a Reproducir para escuchar tu creación. ¡La música está en tus manos!"`,
-        clef: "🎼 Creación libre",
-        target: "¡Componer tu propia melodía!",
-        time: "Tempo ajustable (60–180 BPM)",
+        description: `"¡Ahora tú compones! Toca el pentagrama para ir colocando notas y crea tu propia melodía en Modo Libre, o escucha una melodía y reconstrúyela de oído en Modo Reto. ¡Tu creatividad musical al mando!"`,
+        clef: "Modo Libre / Modo Reto",
+        target: "Reconstruir 8 melodías (Modo Reto)",
+        time: "Sin límite de tiempo",
         notes: ["DO", "RE", "MI", "FA", "SOL", "LA", "SI"],
-        avatar: "../img/profe_celebrate.jpg",
+        avatar: "../img/profe.jpg",
         url: "constructor.html"
       }
     };
