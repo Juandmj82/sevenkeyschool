@@ -41,6 +41,14 @@ const LEVELS = {
 };
 let chosenLevel = 1;
 
+const LEVEL_DESCRIPTIONS = {
+  1: "Solo negras — coloca hasta 4 notas en un compás",
+  2: "Negra + silencio de negra — el silencio también vale 1 tiempo",
+  3: "Se agrega la blanca — vale 2 tiempos, y su silencio",
+  4: "Se agrega la redonda — llena el compás completo sola",
+  5: "Todo junto: negras, blancas y redondas en 2 compases"
+};
+
 const RETO_MELODY_LENGTH = 4;
 const RETO_TARGET_SCORE = 8;
 const MAX_LIVES = 3;
@@ -217,8 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
       chosenLevel = parseInt(btn.dataset.level);
       document.querySelectorAll("#level-selector .btn-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
+      document.getElementById("level-description").textContent = LEVEL_DESCRIPTIONS[chosenLevel];
     });
   });
+
+  // Show initial level description
+  document.getElementById("level-description").textContent = LEVEL_DESCRIPTIONS[1];
 
   document.querySelectorAll("#mode-selector .btn-chip").forEach(btn => {
     btn.addEventListener("click", () => {
