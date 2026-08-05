@@ -388,7 +388,7 @@ function drawNoteAt(x, y, duration = "negra") {
     staffSvg.appendChild(ledger);
   }
 
-  const isHollow = duration === "blanca" || duration === "blanca_punteada";
+  const isHollow = duration === "blanca" || duration === "blanca_punteada" || duration === "redonda";
   const head = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
   head.setAttribute("cx", x);
   head.setAttribute("cy", y);
@@ -413,6 +413,9 @@ function drawNoteAt(x, y, duration = "negra") {
     dot.setAttribute("fill", "var(--color-cyan)");
     staffSvg.appendChild(dot);
   }
+
+  // Redonda (whole note) has no stem
+  if (duration === "redonda") return;
 
   const stem = document.createElementNS("http://www.w3.org/2000/svg", "line");
   const stemLength = 42;
