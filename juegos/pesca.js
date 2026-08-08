@@ -53,7 +53,6 @@ let timeTrialStartAt = null;
 let targetAppearedAt = null;
 let timeTrialElapsed = 0;
 let fastestCatchTime = null;
-<<<<<<< HEAD
 let fastestCatchNote = null;
 let personalBestTotalTime = null;
 let personalBestCatchTime = null;
@@ -62,13 +61,6 @@ let personalBestCatchNote = null;
 const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
 const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
 const TIME_TRIAL_BEST_CATCH_NOTE_KEY = "pescaNotas.contrarreloj.bestCatchNote";
-=======
-let personalBestTotalTime = null;
-let personalBestCatchTime = null;
-
-const TIME_TRIAL_BEST_TOTAL_KEY = "pescaNotas.contrarreloj.bestTotalTime";
-const TIME_TRIAL_BEST_CATCH_KEY = "pescaNotas.contrarreloj.bestCatchTime";
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
 // --- DOM ---
 const canvas = document.getElementById("pond-canvas");
@@ -87,22 +79,16 @@ const btnRestartLose = document.getElementById("btn-restart-lose");
 const hudTimerItem = document.getElementById("hud-timer-item");
 const hudTimer = document.getElementById("hud-timer");
 const timeTrialResults = document.getElementById("time-trial-results");
-<<<<<<< HEAD
 const timeTrialRecord = document.getElementById("time-trial-record");
 const timeTrialRecordCopy = document.getElementById("time-trial-record-copy");
-=======
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
 const MODE_LABELS = { ver: "Ver y Pescar", escuchar: "Escuchar y Pescar" };
 
 document.addEventListener("DOMContentLoaded", () => {
   personalBestTotalTime = readStoredTime(TIME_TRIAL_BEST_TOTAL_KEY);
   personalBestCatchTime = readStoredTime(TIME_TRIAL_BEST_CATCH_KEY);
-<<<<<<< HEAD
   personalBestCatchNote = readStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY);
   renderTimeTrialRecord();
-=======
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
@@ -378,10 +364,7 @@ function startGame() {
   targetAppearedAt = null;
   timeTrialElapsed = 0;
   fastestCatchTime = null;
-<<<<<<< HEAD
   fastestCatchNote = null;
-=======
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 
   hudMode.textContent = MODE_LABELS[chosenMode];
   hudScore.textContent = `0 / ${TARGET_CATCHES}`;
@@ -444,7 +427,6 @@ function readStoredTime(key) {
   }
 }
 
-<<<<<<< HEAD
 function readStoredNote(key) {
   try {
     const note = JSON.parse(localStorage.getItem(key));
@@ -454,8 +436,6 @@ function readStoredNote(key) {
   }
 }
 
-=======
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 function saveStoredTime(key, value) {
   try {
     localStorage.setItem(key, String(value));
@@ -464,7 +444,6 @@ function saveStoredTime(key, value) {
   }
 }
 
-<<<<<<< HEAD
 function saveStoredNote(key, note) {
   try {
     localStorage.setItem(key, JSON.stringify({ id: note.id, name: note.name }));
@@ -493,8 +472,6 @@ function renderTimeTrialRecord() {
   timeTrialRecordCopy.textContent = `${totalRecord}${catchRecord}`;
 }
 
-=======
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
 // --- FISHING HOOK (cast down to where the player taps, then reel back up) ---
 const HOOK_DESCEND_MS = 480;
 const HOOK_ASCEND_MS = 380;
@@ -598,14 +575,10 @@ function handleCatchCorrect(fish) {
   score++;
   if (isTimeTrialMode && targetAppearedAt !== null) {
     const catchTime = performance.now() - targetAppearedAt;
-<<<<<<< HEAD
     if (fastestCatchTime === null || catchTime < fastestCatchTime) {
       fastestCatchTime = catchTime;
       fastestCatchNote = fish.note;
     }
-=======
-    fastestCatchTime = fastestCatchTime === null ? catchTime : Math.min(fastestCatchTime, catchTime);
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
   }
   hudScore.textContent = `${score} / ${TARGET_CATCHES}`;
   feedbackBox.className = "feedback-box feedback-correct";
@@ -922,7 +895,6 @@ function handleWin() {
     }
     if (isNewCatchRecord) {
       saveStoredTime(TIME_TRIAL_BEST_CATCH_KEY, fastestCatchTime);
-<<<<<<< HEAD
       saveStoredNote(TIME_TRIAL_BEST_CATCH_NOTE_KEY, fastestCatchNote);
       personalBestCatchTime = fastestCatchTime;
       personalBestCatchNote = fastestCatchNote;
@@ -934,14 +906,6 @@ function handleWin() {
       total: formatTime(timeTrialElapsed),
       fastestCatch: formatTime(fastestCatchTime),
       fastestCatchNote: fastestCatchNote ? formatNoteLabel(fastestCatchNote) : null,
-=======
-      personalBestCatchTime = fastestCatchTime;
-    }
-
-    timeTrialSummary = {
-      total: formatTime(timeTrialElapsed),
-      fastestCatch: formatTime(fastestCatchTime),
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
       isNewTotalRecord,
       isNewCatchRecord
     };
@@ -959,14 +923,10 @@ function handleWin() {
     updateAndDrawConfetti();
     document.getElementById("win-message").textContent = `¡Pescaste ${TARGET_CATCHES} notas correctas! Tienes muy buen ojo (y oído) musical.`;
     if (timeTrialSummary) {
-<<<<<<< HEAD
       const fastestFish = timeTrialSummary.fastestCatchNote
         ? `${timeTrialSummary.fastestCatchNote} — ${timeTrialSummary.fastestCatch}`
         : timeTrialSummary.fastestCatch;
       timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${fastestFish}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
-=======
-      timeTrialResults.textContent = `Tiempo total: ${timeTrialSummary.total}${timeTrialSummary.isNewTotalRecord ? " (RÉCORD)" : ""}\nTu pez más rápido: ${timeTrialSummary.fastestCatch}${timeTrialSummary.isNewCatchRecord ? " (RÉCORD)" : ""}`;
->>>>>>> 2f6001c (feat(pescanotas): add time trial mode)
       timeTrialResults.classList.add("visible");
     }
   }, 500);
