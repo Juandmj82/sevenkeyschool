@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /estudiantes/
+Disallow: /coming-soon.html
+
+Sitemap: https://sevenkeyschool.com/sitemap.xml
