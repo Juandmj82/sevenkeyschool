@@ -129,12 +129,13 @@
     if (!counters.length) return;
     const run = (el) => {
       const target = parseInt(el.dataset.count, 10) || 0;
+      const from = parseInt(el.dataset.from, 10) || 0;
       if (reduceMotion) { el.textContent = target; return; }
-      const dur = 1400, start = performance.now();
+      const dur = from ? 2000 : 1400, start = performance.now();
       const step = (now) => {
         const t = Math.min(1, (now - start) / dur);
         const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.round(target * eased);
+        el.textContent = Math.round(from + (target - from) * eased);
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
