@@ -261,10 +261,13 @@
   .part-text-top { left: 11.2%; top: 12.4%; width: 77.6%; height: 37.4%; transform-origin: 50.0% 100.5%; }
   .part-text-bottom { left: 13.2%; top: 54%; width: 73.8%; height: 31.8%; transform-origin: 49.9% -12.6%; }
   .logo-glow { position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, rgba(246, 173, 85, .55), rgba(246, 173, 85, 0) 62%); filter: blur(18px); opacity: 0; pointer-events: none; }
-  .orbit { position: absolute; inset: -9%; border-radius: 50%; pointer-events: none; opacity: 0; }
+  .orbit { position: absolute; inset: -3%; border-radius: 50%; pointer-events: none; opacity: 0; container-type: size; }
   .orbit-note { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: rotate(calc(var(--p) * 120deg)) translateY(-50cqmin); }
-  .orbit { container-type: size; }
-  .orbit-note .icon { display: block; max-width: none; width: 1.35rem; height: 1.35rem; color: var(--gold-300); translate: -50% -50%; filter: drop-shadow(0 0 8px rgba(246, 173, 85, .6)); transform: rotate(calc(var(--p) * -120deg)); }
+  .orbit-note .icon { display: block; max-width: none; width: 1.35rem; height: 1.35rem; translate: -50% -50%; filter: drop-shadow(0 0 8px rgba(246, 173, 85, .6)); transform: rotate(calc(var(--p) * -120deg)); animation: note-bob 6s ease-in-out infinite; }
+  .orbit-note.note-a .icon { animation-delay: 0s; transform: rotate(calc(var(--p) * -120deg)) rotate(-6deg); }
+  .orbit-note.note-b .icon { animation-delay: -2.1s; width: 1.6rem; transform: rotate(calc(var(--p) * -120deg)) rotate(4deg); }
+  .orbit-note.note-c .icon { animation-delay: -4.3s; width: 1.15rem; transform: rotate(calc(var(--p) * -120deg)) rotate(-3deg); }
+  @keyframes note-bob { 0%, 100% { margin-top: 0; } 50% { margin-top: -.3rem; } }
 
   .is-assembled .part-disc { animation: la-disc .8s var(--ease-spring) both; }
   .is-assembled .part-ring { animation: la-ring 1.1s .35s var(--ease-out-expo) both; }
@@ -558,6 +561,12 @@
 }
 
 /* ---------- RESPONSIVE ---------- */
+@media (max-width: 47.9375em) {
+  .orbit { inset: -1%; }
+  .orbit-note .icon { width: 1.1rem; }
+  .orbit-note.note-b .icon { width: 1.3rem; }
+  .orbit-note.note-c .icon { width: .95rem; }
+}
 @media (min-width: 48em) {
   .story { grid-template-columns: 1fr 1.4fr; }
   .community { grid-template-columns: 1.1fr 1fr; }
