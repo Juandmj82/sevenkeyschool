@@ -254,10 +254,10 @@
   .part-ring { left: 6.4%; top: 6.4%; width: 87.2%; height: 87.2%; --sweep: 0deg; -webkit-mask-image: conic-gradient(from -90deg, #000 var(--sweep), transparent 0); mask-image: conic-gradient(from -90deg, #000 var(--sweep), transparent 0); }
   .part-arc-1 { left: 33.4%; top: 34%; width: 33.2%; height: 31.6%; transform-origin: 50.0% 50.6%; }
   .part-arc-2 { left: 29.2%; top: 29.4%; width: 41.6%; height: 40.4%; transform-origin: 50.0% 51.0%; }
-  .part-arc-3 { left: 18.2%; top: 23.8%; width: 63.8%; height: 52.4%; transform-origin: 49.8% 50.0%; }
+  .part-arc-3 { left: 19.6%; top: 23.8%; width: 61%; height: 52.4%; transform-origin: 49.8% 50.0%; }
   .part-clef { left: 21%; top: 24%; width: 59.2%; height: 52%; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .18)); }
-  .part-star-l { left: 11%; top: 44.6%; width: 8%; height: 10.8%; }
-  .part-star-r { left: 81.2%; top: 44.8%; width: 8%; height: 10.6%; }
+  .part-star-l { left: 11%; top: 44.6%; width: 9%; height: 10.8%; }
+  .part-star-r { left: 80.2%; top: 44.8%; width: 9%; height: 10.6%; }
   .part-text-top { left: 11.2%; top: 12.4%; width: 77.6%; height: 37.4%; transform-origin: 50.0% 100.5%; }
   .part-text-bottom { left: 13.2%; top: 54%; width: 73.8%; height: 31.8%; transform-origin: 49.9% -12.6%; }
   .logo-glow { position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, rgba(246, 173, 85, .55), rgba(246, 173, 85, 0) 62%); filter: blur(18px); opacity: 0; pointer-events: none; }
