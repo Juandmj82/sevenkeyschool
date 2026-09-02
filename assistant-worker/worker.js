@@ -1,6 +1,6 @@
 // Cloudflare Worker: asistente de chat para Seven Keys Music School.
-// Recibe el historial de la conversación, le pregunta a Gemini y decide
-// si conviene invitar al visitante a continuar por WhatsApp.
+// Recibe el historial de la conversación, le pregunta a Groq (Llama) y
+// decide si conviene invitar al visitante a continuar por WhatsApp.
 
 const ALLOWED_ORIGINS = new Set([
   "https://sevenkeyschool.com",
@@ -11,7 +11,7 @@ const ALLOWED_ORIGINS = new Set([
 
 const WHATSAPP_NUMBER = "573133697599";
 
-const SYSTEM_INSTRUCTION = `Eres el asistente virtual de Seven Keys Music School, una escuela de música colombiana. Respondes preguntas de posibles estudiantes o acudientes con calidez y precisión, usando SOLO los datos que se listan abajo. Si no sabes algo (precio exacto, disponibilidad de horario específica, casos particulares), dilo con honestidad y sugiere continuar por WhatsApp.
+const SYSTEM_PROMPT = `Eres el asistente virtual de Seven Keys Music School, una escuela de música colombiana. Respondes preguntas de posibles estudiantes o acudientes con calidez y precisión, usando SOLO los datos que se listan abajo. Si no sabes algo (precio exacto, disponibilidad de horario específica, casos particulares), dilo con honestidad y sugiere continuar por WhatsApp.
 
 DATOS REALES DE LA ESCUELA (no inventes nada fuera de esto):
 - Fundada en 2020, en Colombia. Sin sede fija / sin oficina propia.
@@ -29,16 +29,10 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 3. Nunca inventes precios, horarios exactos, nombres de profesores o promociones que no estén arriba.
 4. Marca "handoff": true cuando el usuario muestre intención real de inscribirse, pida precio, pida agendar, pregunte por disponibilidad específica, o pida hablar con una persona. En ese caso, en tu respuesta invita amablemente a continuar por WhatsApp (sin inventar que ya lo hiciste tú).
 5. Marca "handoff": false para preguntas generales o exploratorias (qué instrumentos, cómo funciona, si necesitan experiencia previa, etc.) — sigue respondiendo tú mientras el usuario solo esté explorando.
-6. Si preguntan algo totalmente ajeno a la escuela de música, responde brevemente que solo puedes ayudar con temas de Seven Keys Music School.`;
+6. Si preguntan algo totalmente ajeno a la escuela de música, responde brevemente que solo puedes ayudar con temas de Seven Keys Music School.
 
-const RESPONSE_SCHEMA = {
-  type: "OBJECT",
-  properties: {
-    reply: { type: "STRING", description: "Respuesta en texto plano para mostrar al usuario." },
-    handoff: { type: "BOOLEAN", description: "true si conviene invitar a continuar por WhatsApp ahora." },
-  },
-  required: ["reply", "handoff"],
-};
+Responde SIEMPRE y ÚNICAMENTE con un objeto JSON válido, sin texto fuera del JSON, con exactamente esta forma:
+{"reply": "tu respuesta en texto plano", "handoff": true o false}`;
 
 function corsHeaders(origin) {
   const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "";
@@ -90,34 +84,28 @@ export default {
 
     // Cap history and message length to keep cost/abuse bounded.
     const trimmed = messages.slice(-12).map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: String(m.content || "").slice(0, 1000) }],
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: String(m.content || "").slice(0, 1000),
     }));
 
-    const geminiUrl =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
-    const geminiRes = await fetch(geminiUrl, {
+    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-goog-api-key": env.GEMINI_API_KEY,
+        "Authorization": `Bearer ${env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        contents: trimmed,
-        systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: RESPONSE_SCHEMA,
-          temperature: 0.4,
-          maxOutputTokens: 300,
-        },
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
+        response_format: { type: "json_object" },
+        temperature: 0.4,
+        max_tokens: 300,
       }),
     });
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error("Gemini error", geminiRes.status, errText);
+    if (!groqRes.ok) {
+      const errText = await groqRes.text();
+      console.error("Groq error", groqRes.status, errText);
       return new Response(
         JSON.stringify({
           reply: "Tuvimos un problema técnico. ¿Prefieres escribirnos directo por WhatsApp?",
@@ -127,8 +115,8 @@ export default {
       );
     }
 
-    const data = await geminiRes.json();
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const data = await groqRes.json();
+    const rawText = data?.choices?.[0]?.message?.content || "{}";
 
     let parsed;
     try {
