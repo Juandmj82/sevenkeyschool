@@ -375,7 +375,7 @@
   /* ---------- Asistente de chat (Cloudflare Worker + Gemini) ---------- */
   // Reemplaza esta URL por la de tu Worker una vez lo despliegues, p. ej.:
   // "https://sevenkeys-assistant.tu-subdominio.workers.dev"
-  const CHAT_WORKER_URL = 'REEMPLAZA_CON_TU_URL_DE_WORKER';
+  const CHAT_WORKER_URL = 'https://sevenkeys-assistant.juandidev82.workers.dev';
 
   function initChatAssistant() {
     const widget = $('#chat-widget');
