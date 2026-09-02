@@ -47,7 +47,7 @@
 
     --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem;
     --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: 4rem;
-    --section-y: clamp(4rem, 9vw, 7.5rem);
+    --section-y: clamp(3rem, 6vw, 4.5rem);
 
     --r-sm: 10px; --r-md: 16px; --r-lg: 24px; --r-xl: 32px; --r-pill: 999px;
 
@@ -74,7 +74,7 @@
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    scroll-padding-top: calc(var(--nav-h) + 12px);
+    scroll-padding-top: 72px;
   }
   body {
     font-family: var(--font-body);
@@ -122,10 +122,10 @@
   .glow-alt::before { left: auto; right: -140px; top: 10%; }
   .glow-alt::after { right: auto; left: -100px; bottom: -120px; }
 
-  .section-head { text-align: center; max-width: 760px; margin: 0 auto var(--space-7); }
+  .section-head { text-align: center; max-width: 760px; margin: 0 auto var(--space-6); }
   .section-head-left { text-align: left; margin-inline: 0; }
   .section-head h2 { margin-top: var(--space-3); }
-  .section-sub { margin-top: var(--space-4); font-size: var(--fs-lead); color: var(--ink-600); }
+  .section-sub { margin-top: var(--space-3); font-size: var(--fs-lead); color: var(--ink-600); }
   .section-navy .section-sub { color: rgba(230, 237, 247, .78); }
 }
 
@@ -308,7 +308,9 @@
   .video-card.is-hidden { display: none; }
   .video-facade { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--navy-950); }
   .video-facade img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-out-expo), filter .5s; }
-  .video-facade::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(22, 36, 60, 0) 40%, rgba(22, 36, 60, .55)); }
+  .video-facade::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(22, 36, 60, 0) 40%, rgba(22, 36, 60, .55)); pointer-events: none; }
+  .video-facade.is-playing { cursor: default; }
+  .video-facade.is-playing::after { display: none; }
   .card:hover .video-facade img { transform: scale(1.06); }
   .play-btn { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--gold-400); color: var(--navy-950); box-shadow: 0 10px 30px -6px rgba(0, 0, 0, .5); transition: transform var(--d-base) var(--ease-spring), background-color var(--d-fast); z-index: 1; }
   .play-btn::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(246, 173, 85, .6); animation: pulse-ring-lg 2.2s infinite; }
