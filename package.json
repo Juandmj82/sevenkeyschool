@@ -1,0 +1,12 @@
+{
+  "name": "sevenkeyschool-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build tooling for the Seven Keys School static site (Tailwind CSS purge build).",
+  "scripts": {
+    "build:css": "tailwindcss -i ./tailwind-input.css -o ./css/tailwind.min.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^2.2.19"
+  }
+}
