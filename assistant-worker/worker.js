@@ -99,35 +99,54 @@ export default {
       });
     }
 
-    // Cap history and message length to keep cost/abuse bounded.
-    const trimmed = messages.slice(-12).map((m) => ({
+    // Cap history and message length to keep token usage (and abuse) bounded —
+    // the free Groq tier has a tokens-per-minute limit, so smaller requests
+    // also mean fewer 429s.
+    const trimmed = messages.slice(-8).map((m) => ({
       role: m.role === "assistant" ? "assistant" : "user",
-      content: String(m.content || "").slice(0, 1000),
+      content: String(m.content || "").slice(0, 500),
     }));
 
-    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-oss-20b",
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
-        response_format: { type: "json_object" },
-        temperature: 0.4,
-        max_tokens: 700,
-        reasoning_effort: "low",
-      }),
-    });
+    async function callGroq() {
+      return fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-oss-20b",
+          messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
+          response_format: { type: "json_object" },
+          temperature: 0.4,
+          max_tokens: 450,
+          reasoning_effort: "low",
+        }),
+      });
+    }
+
+    let groqRes = await callGroq();
+
+    // El tier gratuito de Groq tiene un límite de tokens por minuto; si lo
+    // topamos, esperamos el tiempo sugerido (con tope de 6s) y reintentamos
+    // una vez antes de rendirnos.
+    if (groqRes.status === 429) {
+      const retryText = await groqRes.text();
+      const wait = Math.min(6000, Math.ceil((JSON.parse(retryText)?.error?.message?.match(/(\d+(\.\d+)?)s/)?.[1] || 2) * 1000));
+      await new Promise((r) => setTimeout(r, wait));
+      groqRes = await callGroq();
+    }
 
     if (!groqRes.ok) {
       const errText = await groqRes.text();
       console.error("Groq error", groqRes.status, errText);
+      const rateLimited = groqRes.status === 429;
       return new Response(
         JSON.stringify({
-          reply: "Tuvimos un problema técnico. ¿Prefieres escribirnos directo por WhatsApp?",
-          handoff: true,
+          reply: rateLimited
+            ? "Estamos recibiendo muchas preguntas a la vez, dame un segundo e intenta de nuevo."
+            : "Tuvimos un problema técnico. ¿Prefieres escribirnos directo por WhatsApp?",
+          handoff: !rateLimited,
         }),
         { status: 200, headers: { ...headers, "Content-Type": "application/json" } }
       );
