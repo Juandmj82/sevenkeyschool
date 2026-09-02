@@ -514,7 +514,7 @@
   @keyframes la-arc-cw { from { opacity: 0; transform: rotate(-150deg) scale(1.3); } 40% { opacity: 1; } to { opacity: 1; transform: none; } }
   @keyframes la-arc-ccw { from { opacity: 0; transform: rotate(150deg) scale(1.3); } 40% { opacity: 1; } to { opacity: 1; transform: none; } }
   @keyframes la-clef { from { opacity: 0; transform: translateY(-22%) rotate(-12deg) scale(.8); } 55% { opacity: 1; transform: translateY(2.5%) rotate(1.5deg) scale(1.03); } 78% { transform: translateY(-.8%) rotate(-.5deg) scale(1); } to { opacity: 1; transform: none; } }
-  @keyframes la-pop { from { opacity: 0; transform: scale(0) rotate(-40deg); } 65% { opacity: 1; transform: scale(1.35) rotate(6deg); } to { opacity: 1; transform: none; } }
+  @keyframes la-pop { from { opacity: 0; transform: scale(0); } 65% { opacity: 1; transform: scale(1.35); } to { opacity: 1; transform: none; } }
   @keyframes la-text-top { from { opacity: 0; transform: rotate(-30deg); } to { opacity: 1; transform: none; } }
   @keyframes la-text-bottom { from { opacity: 0; transform: rotate(30deg); } to { opacity: 1; transform: none; } }
   @keyframes la-glow { from { opacity: 0; transform: scale(.7); } 35% { opacity: 1; transform: scale(1.05); } to { opacity: .4; transform: scale(1); } }
