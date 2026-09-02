@@ -364,12 +364,117 @@
 
   /* ---------- FAB WhatsApp ---------- */
   function initFab() {
-    const fab = $('#fab-whatsapp'), hero = $('.hero');
+    const fab = $('#fab-chat'), hero = $('.hero');
     if (!fab) return;
     if (!hero || !hasIO) { fab.classList.add('is-visible'); return; }
     new IntersectionObserver((entries) => {
       entries.forEach((en) => fab.classList.toggle('is-visible', !en.isIntersecting));
     }, { threshold: 0.2 }).observe(hero);
+  }
+
+  /* ---------- Asistente de chat (Cloudflare Worker + Gemini) ---------- */
+  // Reemplaza esta URL por la de tu Worker una vez lo despliegues, p. ej.:
+  // "https://sevenkeys-assistant.tu-subdominio.workers.dev"
+  const CHAT_WORKER_URL = 'REEMPLAZA_CON_TU_URL_DE_WORKER';
+
+  function initChatAssistant() {
+    const widget = $('#chat-widget');
+    const fab = $('#fab-chat');
+    const panel = $('#chat-panel');
+    const closeBtn = $('#chat-close');
+    const body = $('#chat-body');
+    const form = $('#chat-form');
+    const input = $('#chat-input');
+    const handoffBox = $('#chat-handoff');
+    if (!widget || !fab || !panel || !form || !input) return;
+
+    const history = [];
+    let sending = false;
+
+    function openPanel() {
+      widget.classList.add('is-open');
+      fab.setAttribute('aria-expanded', 'true');
+      setTimeout(() => input.focus(), 200);
+    }
+    function closePanel() {
+      widget.classList.remove('is-open');
+      fab.setAttribute('aria-expanded', 'false');
+    }
+    fab.addEventListener('click', () => {
+      widget.classList.contains('is-open') ? closePanel() : openPanel();
+    });
+    closeBtn?.addEventListener('click', closePanel);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && widget.classList.contains('is-open')) closePanel();
+    });
+    document.addEventListener('click', (e) => {
+      if (widget.classList.contains('is-open') && !widget.contains(e.target)) closePanel();
+    });
+
+    function addMessage(text, role) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + (role === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
+      div.textContent = text;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+      return div;
+    }
+
+    function addTyping() {
+      const div = document.createElement('div');
+      div.className = 'chat-msg-typing';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+      return div;
+    }
+
+    async function sendMessage(text) {
+      if (sending) return;
+      sending = true;
+      addMessage(text, 'user');
+      history.push({ role: 'user', content: text });
+      const typing = addTyping();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+
+      if (!CHAT_WORKER_URL || CHAT_WORKER_URL.startsWith('REEMPLAZA')) {
+        typing.remove();
+        addMessage('El asistente todavía no está configurado. Escríbenos directo por WhatsApp.', 'bot');
+        handoffBox?.removeAttribute('hidden');
+        sending = false;
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch(CHAT_WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history }),
+        });
+        const data = await res.json();
+        typing.remove();
+        addMessage(data.reply || 'No pude procesar tu mensaje, intenta de nuevo.', 'bot');
+        history.push({ role: 'assistant', content: data.reply || '' });
+        if (data.handoff) handoffBox?.removeAttribute('hidden');
+      } catch (err) {
+        typing.remove();
+        addMessage('Tuvimos un problema de conexión. ¿Prefieres escribirnos por WhatsApp?', 'bot');
+        handoffBox?.removeAttribute('hidden');
+      } finally {
+        sending = false;
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      sendMessage(text);
+    });
   }
 
   /* ---------- Año del footer ---------- */
@@ -381,7 +486,7 @@
   const init = () => {
     initNav(); initActiveSection(); initScrollProgress(); initSplitWords(); initReveal(); initCounters();
     initParallax(); initLogoAssembly(); initCardGlow(); initMarquee(); initVideoFacades(); initFilters(); initCarousel();
-    initReadMore(); initLightbox(); initInstagramFacade(); initFab(); initFooterYear();
+    initReadMore(); initLightbox(); initInstagramFacade(); initFab(); initChatAssistant(); initFooterYear();
   };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();

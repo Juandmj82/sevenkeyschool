@@ -934,11 +934,32 @@
         </div>
     </footer>
 
-    <!-- WhatsApp flotante -->
-    <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="fab-whatsapp" id="fab-whatsapp" aria-label="Escríbenos por WhatsApp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-        <span class="fab-tip">¿Hablamos?</span>
-    </a>
+    <!-- Asistente de chat + WhatsApp flotante -->
+    <div class="chat-widget" id="chat-widget">
+        <button type="button" class="fab-whatsapp" id="fab-chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chat-panel" aria-label="Chatea con nosotros">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <span class="fab-tip">¿Hablamos?</span>
+        </button>
+        <div class="chat-panel" id="chat-panel" role="dialog" aria-modal="false" aria-label="Asistente Seven Keys">
+            <div class="chat-head">
+                <div>
+                    <strong>Asistente Seven Keys</strong>
+                    <span>Resolvemos tus dudas al instante</span>
+                </div>
+                <button type="button" class="chat-close" id="chat-close" aria-label="Cerrar chat"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="chat-msg chat-msg-bot">¡Hola! Soy el asistente de Seven Keys Music School. Puedo contarte sobre instrumentos, modalidades, metodología y cómo inscribirte. ¿En qué te ayudo?</div>
+            </div>
+            <div class="chat-handoff" id="chat-handoff" hidden>
+                <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-shine"><i class="fab fa-whatsapp" aria-hidden="true"></i> Continuar por WhatsApp</a>
+            </div>
+            <form class="chat-form" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Escribe tu pregunta…" autocomplete="off" maxlength="500" aria-label="Tu pregunta">
+                <button type="submit" aria-label="Enviar"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            </form>
+        </div>
+    </div>
 
     <!-- Lightbox para las páginas del artículo -->
     <dialog class="lightbox" id="lightbox" aria-label="Imagen ampliada">
