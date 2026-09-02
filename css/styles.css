@@ -469,12 +469,12 @@
   .footer-brand img { width: 72px; height: 72px; border-radius: 50%; margin-bottom: 1rem; }
   .footer-brand p { font-size: var(--fs-sm); max-width: 32ch; }
   .footer-social { display: flex; gap: .6rem; margin-top: 1.2rem; }
-  .footer-social a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-light); color: #fff; transition: background-color var(--d-fast), color var(--d-fast), transform var(--d-fast) var(--ease-out-expo); }
-  .footer-social a:hover { background: var(--gold-400); color: var(--navy-950); transform: translateY(-3px); }
+  .footer-social a, .footer-social button { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-light); color: #fff; cursor: pointer; transition: background-color var(--d-fast), color var(--d-fast), transform var(--d-fast) var(--ease-out-expo); }
+  .footer-social a:hover, .footer-social button:hover { background: var(--gold-400); color: var(--navy-950); transform: translateY(-3px); }
   .footer-col { display: flex; flex-direction: column; gap: .55rem; }
   .footer-col h3 { color: #fff; font-family: var(--font-body); font-weight: 700; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; margin-bottom: .4rem; }
-  .footer-col a { font-size: var(--fs-sm); transition: color var(--d-fast), translate var(--d-fast); }
-  .footer-col a:hover { color: var(--gold-300); translate: 4px 0; }
+  .footer-col a, .footer-col button { display: block; text-align: left; font-size: var(--fs-sm); cursor: pointer; transition: color var(--d-fast), translate var(--d-fast); }
+  .footer-col a:hover, .footer-col button:hover { color: var(--gold-300); translate: 4px 0; }
   .footer-note { font-size: var(--fs-xs); color: rgba(230, 237, 247, .55); margin-top: .5rem; }
   .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-top: var(--space-7); padding-top: var(--space-5); border-top: 1px solid rgba(255, 255, 255, .08); font-size: var(--fs-sm); }
   .to-top { display: inline-flex; align-items: center; gap: .5em; font-weight: 600; color: #fff; }

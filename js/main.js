@@ -404,6 +404,11 @@
       widget.classList.contains('is-open') ? closePanel() : openPanel();
     });
     closeBtn?.addEventListener('click', closePanel);
+    // Todos los CTAs de WhatsApp del sitio abren el asistente primero,
+    // para que el visitante llegue ya filtrado (modalidad, duración, nombre).
+    $$('.js-open-chat').forEach((btn) => {
+      btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openPanel(); });
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && widget.classList.contains('is-open')) closePanel();
     });
