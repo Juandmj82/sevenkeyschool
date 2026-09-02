@@ -21,7 +21,7 @@ Como estudiante, quiero filtrar los juegos por categoría (Teoría, Melodía, Ri
 ## Requirements
 
 ### Functional Requirements
-- **FR-001**: La landing page DEBE presentar la propuesta de valor de Seven Keys usando tipografía Cinzel y Jakarta.
+- **FR-001**: La landing page DEBE presentar la propuesta de valor de Seven Keys usando tipografía Fraunces (display/citas) y Plus Jakarta Sans (texto/UI). Ver `specs/landing-redesign/spec.md` para el rediseño completo de la landing.
 - **FR-002**: El dashboard DEBE listar todos los niveles de juego de lectura de notas y juegos complementarios en tarjetas con la clase `.level-card`.
 - **FR-003**: Si es la primera vez que se ingresa al dashboard, el sistema DEBE mostrar el modal de bienvenida (`#welcome-modal-overlay`) con el mensaje de Teacher Juan Di.
 - **FR-004**: Al hacer clic en un nivel bloqueado, el sistema DEBE mostrar un modal con la descripción detallada del nivel y sus requisitos.
