@@ -116,7 +116,8 @@ export default {
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...trimmed],
         response_format: { type: "json_object" },
         temperature: 0.4,
-        max_tokens: 300,
+        max_tokens: 700,
+        reasoning_effort: "low",
       }),
     });
 
