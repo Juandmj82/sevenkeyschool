@@ -14,6 +14,7 @@
     <title>Seven Keys School | Clases de Música Virtuales (Piano, Guitarra, Arpa)</title>
     <meta name="description" content="Clases de música para niños y adultos: piano, guitarra, arpa llanera y más. Clases virtuales para cualquier país y presenciales en Bogotá y la Sabana Norte (sujeto a disponibilidad). Agenda por WhatsApp.">
     <link rel="canonical" href="https://sevenkeyschool.com/">
+    <meta name="theme-color" content="#2A4365">
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
@@ -53,1149 +54,648 @@
     }
     </script>
 
-    <link href="css/tailwind.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <!-- Fonts: Fraunces (display) + Plus Jakarta Sans (text/UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,50;1,9..144,400..700,50&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="img/logo.png">
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Estilos base */
-        :root {
-            --gold: #F6AD55;
-            --blue-900: #2a4365;
-        }
-
-        /* Video container styles */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0.5rem;
-        }
-        .video-card {
-            transition: transform 0.3s ease;
-        }
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Efectos de texto y animaciones */
-        .fade-in-text {
-            animation: fadeIn 1.5s ease-in;
-        }
-
-        .slide-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.8s ease forwards;
-        }
-
-        .glow-text {
-            text-shadow: 0 0 10px rgba(246, 173, 85, 0.5);
-            transition: text-shadow 0.3s ease;
-        }
-
-        .glow-text:hover {
-            text-shadow: 0 0 20px rgba(246, 173, 85, 0.8);
-        }
-
-        /* Menú móvil */
-        .mobile-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            transition: all 0.3s ease-in-out;
-            transform: translateY(-100%);
-            opacity: 0;
-        }
-
-        .mobile-menu.active {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Slider de testimonios */
-        .testimonials-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .testimonials-wrapper {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .testimonial-slide {
-            flex: 0 0 100%;
-        }
-
-        .slider-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--gold);
-            color: var(--blue-900);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        .slider-button:hover {
-            background-color: white;
-        }
-
-        .prev-button {
-            left: 10px;
-        }
-
-        .next-button {
-            right: 10px;
-        }
-
-        /* Ajustes específicos para móvil vertical */
-        @media (max-width: 768px) and (orientation: portrait) {
-            body {
-                display: block;
-                min-height: 100%;
-            }
-
-            section {
-                padding: 2rem 0;
-                margin: 0;
-            }
-
-            #contacto {
-                padding-bottom: 0;
-                margin-bottom: 0;
-            }
-
-            .social-links {
-                padding-bottom: 1rem;
-                margin-bottom: 0;
-            }
-
-            footer {
-                padding: 1rem 0;
-                margin: 0;
-            }
-
-            .container {
-                padding-bottom: 0;
-                margin-bottom: 0;
-            }
-
-            .py-20 {
-                padding-top: 2rem;
-                padding-bottom: 2rem;
-            }
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Estilos para el modal de imágenes */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            overflow: auto;
-        }
-
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 90vh;
-            margin-top: 2%;
-        }
-
-        .modal-content img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .close {
-            position: absolute;
-            right: 25px;
-            top: 15px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .zoomable {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .zoomable:hover {
-            transform: scale(1.02);
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                max-width: 95%;
-                margin-top: 10%;
-            }
-        }
-
-        /* Ajustes para el widget de Instagram */
-        .instagram-media-wrapper {
-            position: relative;
-            width: 100% !important;
-            max-width: 550px !important;
-            margin: 0 auto !important;
-            min-width: unset !important;
-        }
-
-        .instagram-media {
-            min-width: unset !important;
-            width: 100% !important;
-            margin: 0 auto !important;
-        }
-
-        @media (max-width: 768px) {
-            .instagram-media-wrapper {
-                max-width: 100% !important;
-                margin: 0 auto !important;
-                padding: 0 !important;
-            }
-
-            .instagram-media {
-                margin: 0 !important;
-                min-width: unset !important;
-                width: 100% !important;
-                border-radius: 0 !important;
-            }
-
-            /* Ajuste específico para el contenedor del widget */
-            #instagram-embed-container {
-                margin: 0 !important;
-                padding: 0 !important;
-                height: auto !important;
-                min-height: 450px !important;
-                overflow: hidden !important;
-            }
-        }
-
-        /* Estilos específicos de navegación */
-        .nav-transparent {
-            background-color: transparent !important;
-            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease !important;
-        }
-        .nav-scrolled {
-            background-color: rgba(42, 67, 101, 0.95) !important;
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome solo para íconos de marcas sociales (WhatsApp, Instagram, TikTok, LinkedIn) e instrumentos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
 </head>
-<body class="bg-gray-50">
+<body>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 nav-transparent">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="text-2xl font-bold text-white">
-                    <img src="img/logo.png" alt="Seven Keys School" class="h-24 w-auto" id="nav-logo" width="300" height="300">
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#inicio" class="text-white hover:text-gold transition nav-link">Inicio</a>
-                    <a href="#nuestra-escuela" class="text-white hover:text-gold transition nav-link">Nuestra Escuela</a>
-                    <a href="#programas" class="text-white hover:text-gold transition nav-link">Programas</a>
-                    <a href="#metodologia" class="text-white hover:text-gold transition nav-link">Metodología</a>
-                    <a href="#fundador" class="text-white hover:text-gold transition nav-link">Fundador</a>
-                    <a href="#contacto" class="text-white hover:text-gold transition nav-link">Contacto</a>
-                    <a href="estudiantes/index.html" class="btn-nav-portal px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5 self-center">
-                        <i class="fas fa-graduation-cap text-sm"></i> Portal Estudiantes
-                    </a>
-                    <a href="juegos/index.html" class="bg-gold text-blue-900 px-3.5 py-1.5 rounded-full font-bold transition hover:bg-white hover:text-blue-900 animate-pulse-glow flex items-center gap-1.5 self-center">
-                        <i class="fas fa-gamepad text-sm"></i> Juegos
-                    </a>
-                </div>
-                <button class="md:hidden text-white" aria-label="Menu" id="menu-button">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu hidden md:hidden">
-            <div class="bg-blue-900 bg-opacity-95 shadow-lg">
-                <div class="container mx-auto py-4">
-                    <div class="px-6 space-y-3">
-                        <a href="#inicio" class="block text-white hover:text-gold transition py-2">Inicio</a>
-                        <a href="#nuestra-escuela" class="block text-white hover:text-gold transition py-2">Nuestra Escuela</a>
-                        <a href="#programas" class="block text-white hover:text-gold transition py-2">Programas</a>
-                        <a href="#metodologia" class="block text-white hover:text-gold transition py-2">Metodología</a>
-                        <a href="#fundador" class="block text-white hover:text-gold transition py-2">Fundador</a>
-                        <a href="#contacto" class="block text-white hover:text-gold transition py-2">Contacto</a>
-                        <a href="estudiantes/index.html" class="block btn-nav-portal px-4 py-2 rounded-full font-bold text-center mt-2 mb-1"><i class="fas fa-graduation-cap"></i> Portal Estudiantes</a>
-                        <div class="pt-2 flex flex-col gap-2">
-                            <a href="juegos/index.html" class="inline-flex items-center justify-center gap-1.5 bg-gold text-blue-900 px-4 py-1.5 rounded-full font-bold transition hover:bg-white hover:text-blue-900 animate-pulse-glow">
-                                <i class="fas fa-gamepad"></i> ¡Zona de Juegos!
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- SVG symbols reutilizables (íconos de UI animables) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></symbol>
+            <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+            <symbol id="i-note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+            <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+            <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+            <symbol id="i-child" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3.5"/><path d="M6 21v-6a6 6 0 0 1 12 0v6"/><path d="M9 21v-4M15 21v-4"/></symbol>
+            <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+            <symbol id="i-gamepad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 12h4M9 10v4M15 11h.01M18 13h.01"/></symbol>
+            <symbol id="i-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2"/></symbol>
+            <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+            <symbol id="i-chev-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></symbol>
+            <symbol id="i-chev-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></symbol>
+            <symbol id="i-quote" viewBox="0 0 24 24"><path d="M7.2 5C4.3 5 2 7.4 2 10.3c0 2.6 1.9 4.7 4.4 5.1-.5 1.6-1.6 2.7-3.4 3.3v1.3c4.5-.6 7.5-3.9 7.5-8.5V5H7.2zm11.5 0c-2.9 0-5.2 2.4-5.2 5.3 0 2.6 1.9 4.7 4.4 5.1-.5 1.6-1.6 2.7-3.4 3.3v1.3c4.5-.6 7.5-3.9 7.5-8.5V5h-3.3z"/></symbol>
+        </defs>
+    </svg>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-overlay"></div>
-        </div>
-        <div class="container mx-auto px-6 text-center relative z-10 pt-28 md:pt-36">
-            <!-- Game zone alert badge -->
-            <div class="mb-6 flex flex-wrap gap-3 justify-center">
-                <a href="estudiantes/index.html" class="inline-flex items-center gap-2 bg-blue-800 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md hover:bg-gold hover:text-blue-900 transition duration-300">
-                    <span class="bg-gold text-blue-900 text-xs px-2 py-0.5 rounded-full font-extrabold">ESTUDIOS</span>
-                    <span>🎓 ¡Entra a tu Portal de Estudiante!</span>
-                </a>
-                <a href="juegos/index.html" class="inline-flex items-center gap-2 bg-yellow-400 text-blue-900 px-4 py-1.5 rounded-full text-sm font-bold shadow-md hover:bg-white transition duration-300">
-                    <span class="bg-blue-900 text-white text-xs px-2 py-0.5 rounded-full font-extrabold">¡NUEVO!</span>
-                    <span>🎮 ¡Explora la Zona de Juegos!</span>
-                </a>
-            </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-8 animate-fade-in text-white">Seven Keys School</h1>
-            <p class="text-xl mb-4 text-white italic">"Me até a la fuerza que vivía en mí, con siete llaves de imaginación"</p>
-            <p class="text-lg mb-8 text-white opacity-75 italic">&mdash; Alejandro Sanz</p>
-            <h2 class="text-2xl md:text-4xl mb-8 text-white">Descubre el placer de hacer música mientras aprendes</h2>
-            <p class="text-xl mb-12 text-white">Educación musical personalizada | Presencial y Virtual</p>
-            <div class="flex justify-center space-x-4">
-                <a href="#programas" class="bg-gold text-blue-900 px-8 py-3 rounded-full hover:bg-white transition">Explorar Programas</a>
-                <a href="juegos/index.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-blue-900 transition flex items-center gap-2 font-bold">
-                    <i class="fas fa-gamepad"></i> Zona de Juegos
-                </a>
-            </div>
-        </div>
-    </section>
+    <div class="scroll-progress" aria-hidden="true"></div>
 
-    <!-- Games Callout Banner -->
-    <section class="bg-gradient-to-r from-blue-900 to-indigo-850 py-6 text-white text-center shadow-inner relative z-20">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-4">
-            <span class="bg-yellow-400 text-blue-900 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">
-                ¡NUEVO!
-            </span>
-            <p class="text-lg font-semibold">
-                ¡Aprende música jugando! Diviértete en nuestra nueva **Zona de Juegos Interactiva**.
-            </p>
-            <a href="juegos/index.html" class="bg-white text-blue-900 px-6 py-2 rounded-full font-bold shadow-md hover:bg-yellow-400 hover:text-blue-900 transition duration-300 flex items-center gap-2">
-                <i class="fas fa-gamepad text-lg"></i> Ir a los Juegos
+    <!-- ===================== NAVIGATION ===================== -->
+    <header class="site-nav" id="site-nav">
+        <div class="container nav-inner">
+            <a href="#inicio" class="brand" aria-label="Seven Keys School, ir al inicio">
+                <img src="img/logo.png" alt="Seven Keys School" width="300" height="300" class="brand-logo">
+                <span class="brand-name">Seven Keys<small>Music School</small></span>
             </a>
+
+            <nav class="nav-links" aria-label="Principal">
+                <a href="#inicio" class="nav-link is-active" data-section="inicio">Inicio</a>
+                <a href="#nuestra-escuela" class="nav-link" data-section="nuestra-escuela">Escuela</a>
+                <a href="#nuestras-clases" class="nav-link" data-section="nuestras-clases">Clases</a>
+                <a href="#programas" class="nav-link" data-section="programas">Programas</a>
+                <a href="#metodologia" class="nav-link" data-section="metodologia">Metodología</a>
+                <a href="#fundador" class="nav-link" data-section="fundador">Fundador</a>
+                <a href="#preguntas-frecuentes" class="nav-link" data-section="preguntas-frecuentes">FAQ</a>
+                <a href="#contacto" class="nav-link" data-section="contacto">Contacto</a>
+            </nav>
+
+            <div class="nav-ctas">
+                <a href="estudiantes/index.html" class="btn btn-ghost btn-sm"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg> Portal Estudiantes</a>
+                <a href="juegos/index.html" class="btn btn-gold btn-sm btn-pulse"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> Juegos</a>
+            </div>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <nav class="mobile-menu" id="mobile-menu" aria-label="Menú móvil" hidden>
+            <div class="mobile-menu-inner">
+                <a href="#inicio" style="--i:1">Inicio</a>
+                <a href="#nuestra-escuela" style="--i:2">Nuestra Escuela</a>
+                <a href="#nuestras-clases" style="--i:3">Nuestras Clases</a>
+                <a href="#programas" style="--i:4">Programas</a>
+                <a href="#metodologia" style="--i:5">Metodología</a>
+                <a href="#fundador" style="--i:6">Fundador</a>
+                <a href="#preguntas-frecuentes" style="--i:7">Preguntas Frecuentes</a>
+                <a href="#contacto" style="--i:8">Contacto</a>
+                <div class="mobile-menu-ctas" style="--i:9">
+                    <a href="estudiantes/index.html" class="btn btn-ghost-light"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg> Portal Estudiantes</a>
+                    <a href="juegos/index.html" class="btn btn-gold"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> ¡Zona de Juegos!</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+        <div class="hero-bg" aria-hidden="true">
+            <span class="blob blob-1"></span>
+            <span class="blob blob-2"></span>
+            <span class="blob blob-3"></span>
+            <div class="hero-staff-lines"></div>
+            <div class="grain"></div>
+        </div>
+
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <p class="eyebrow reveal reveal-up" style="--delay:.05s">
+                    <span class="eyebrow-dot"></span> Escuela de música · Virtual y presencial · Desde 2020
+                </p>
+
+                <h1 id="hero-title" class="hero-title split-words">Descubre el placer de hacer música mientras aprendes</h1>
+
+                <blockquote class="hero-quote reveal reveal-up" style="--delay:.55s">
+                    <p>“Me até a la fuerza que vivía en mí, con siete llaves de imaginación”</p>
+                    <cite>— Alejandro Sanz</cite>
+                </blockquote>
+
+                <p class="hero-lead reveal reveal-up" style="--delay:.7s">
+                    Educación musical personalizada para niños, jóvenes y adultos. Clases en vivo con un profesor real, en tu horario y desde cualquier lugar del mundo.
+                </p>
+
+                <div class="hero-ctas reveal reveal-up" style="--delay:.85s">
+                    <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg btn-shine">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i> Agenda por WhatsApp
+                    </a>
+                    <a href="#programas" class="btn btn-ghost-light btn-lg">
+                        Ver programas <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+                    </a>
+                </div>
+                <a href="juegos/index.html" class="hero-tertiary reveal reveal-up" style="--delay:1s">
+                    <span class="badge-new">¡Nuevo!</span> Explora la Zona de Juegos interactiva <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </a>
+
+                <!-- Indicadores basados en datos ya presentes en el sitio (editar aquí) -->
+                <dl class="hero-stats reveal reveal-up" style="--delay:1.15s">
+                    <div><dt>Desde</dt><dd>2020</dd></div>
+                    <div><dt>Instrumentos</dt><dd><span class="count" data-count="10">0</span>+</dd></div>
+                    <div><dt>Países con estudiantes</dt><dd><span class="count" data-count="4">0</span></dd></div>
+                    <div><dt>Familias que nos recomiendan</dt><dd><span class="count" data-count="11">0</span>+</dd></div>
+                </dl>
+            </div>
+
+            <!-- Motion graphic principal -->
+            <div class="hero-visual reveal reveal-scale" style="--delay:.4s" aria-hidden="true">
+                <div class="hero-card glass" data-parallax="18">
+                    <svg class="staff-svg" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+                        <g class="staff-lines" stroke="currentColor" stroke-width="1.6" fill="none">
+                            <path class="draw" d="M36 70 H484"/>
+                            <path class="draw" d="M36 94 H484" style="--d:.15s"/>
+                            <path class="draw" d="M36 118 H484" style="--d:.3s"/>
+                            <path class="draw" d="M36 142 H484" style="--d:.45s"/>
+                            <path class="draw" d="M36 166 H484" style="--d:.6s"/>
+                        </g>
+                        <text class="clef" x="46" y="176" font-size="128" font-family="Georgia, 'Times New Roman', serif">𝄞</text>
+                        <!-- Notas -->
+                        <g class="note n1" style="--i:0"><ellipse cx="180" cy="130" rx="11" ry="8" transform="rotate(-20 180 130)"/><path d="M190 127 V70" /><path class="flag" d="M190 70 q22 8 16 32 q-4 -14 -16 -18z"/></g>
+                        <g class="note n2" style="--i:1"><ellipse cx="250" cy="106" rx="11" ry="8" transform="rotate(-20 250 106)"/><path d="M260 103 V46"/></g>
+                        <g class="note n3" style="--i:2"><ellipse cx="320" cy="142" rx="11" ry="8" transform="rotate(-20 320 142)"/><path d="M330 139 V82"/><path class="flag" d="M330 82 q22 8 16 32 q-4 -14 -16 -18z"/></g>
+                        <g class="note n4" style="--i:3"><ellipse cx="390" cy="94" rx="11" ry="8" transform="rotate(-20 390 94)"/><path d="M400 91 V34"/></g>
+                        <g class="note n5" style="--i:4"><ellipse cx="455" cy="118" rx="11" ry="8" transform="rotate(-20 455 118)"/><path d="M465 115 V58"/></g>
+                        <!-- Ecualizador -->
+                        <g class="eq" transform="translate(300 262)">
+                            <rect class="bar" x="0" y="-40" width="8" height="40" rx="4" style="--i:0"/>
+                            <rect class="bar" x="14" y="-40" width="8" height="40" rx="4" style="--i:1"/>
+                            <rect class="bar" x="28" y="-40" width="8" height="40" rx="4" style="--i:2"/>
+                            <rect class="bar" x="42" y="-40" width="8" height="40" rx="4" style="--i:3"/>
+                            <rect class="bar" x="56" y="-40" width="8" height="40" rx="4" style="--i:4"/>
+                            <rect class="bar" x="70" y="-40" width="8" height="40" rx="4" style="--i:5"/>
+                            <rect class="bar" x="84" y="-40" width="8" height="40" rx="4" style="--i:6"/>
+                            <rect class="bar" x="98" y="-40" width="8" height="40" rx="4" style="--i:7"/>
+                            <rect class="bar" x="112" y="-40" width="8" height="40" rx="4" style="--i:8"/>
+                            <rect class="bar" x="126" y="-40" width="8" height="40" rx="4" style="--i:9"/>
+                            <rect class="bar" x="140" y="-40" width="8" height="40" rx="4" style="--i:10"/>
+                            <rect class="bar" x="154" y="-40" width="8" height="40" rx="4" style="--i:11"/>
+                        </g>
+                    </svg>
+
+                    <!-- 7 teclas: Seven Keys -->
+                    <div class="piano">
+                        <span class="key" style="--i:0"></span><span class="key" style="--i:1"></span><span class="key" style="--i:2"></span><span class="key" style="--i:3"></span><span class="key" style="--i:4"></span><span class="key" style="--i:5"></span><span class="key" style="--i:6"></span>
+                        <span class="bkey" style="--p:1"></span><span class="bkey" style="--p:2"></span><span class="bkey" style="--p:4"></span><span class="bkey" style="--p:5"></span><span class="bkey" style="--p:6"></span>
+                    </div>
+                </div>
+
+                <div class="float-card fc-1 glass" data-parallax="34">
+                    <span class="live-dot"></span>
+                    <div><strong>Clase en vivo</strong><small>Estudiante en Francia · Piano</small></div>
+                </div>
+                <div class="float-card fc-2 glass" data-parallax="26">
+                    <svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg>
+                    <div><strong>Portal de Estudiantes</strong><small>Tus videos y clases, siempre a mano</small></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#por-que" class="scroll-cue" aria-label="Bajar al contenido"><span></span></a>
+    </section>
+
+    <!-- ===================== MARQUEE + JUEGOS ===================== -->
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <span>Guitarra</span><i>♪</i><span>Piano</span><i>♪</i><span>Batería</span><i>♪</i><span>Técnica Vocal</span><i>♪</i><span>Violín</span><i>♪</i><span>Bajo</span><i>♪</i><span>Ukelele</span><i>♪</i><span>Arpa</span><i>♪</i><span>Cuatro</span><i>♪</i><span>Maracas</span><i>♪</i><span>Iniciación Musical</span><i>♪</i>
+        </div>
+    </div>
+
+    <section class="games-band" aria-label="Zona de Juegos">
+        <div class="container games-band-inner reveal reveal-up">
+            <span class="badge-new">¡Nuevo!</span>
+            <p>¡Aprende música jugando! Diviértete en nuestra nueva <strong>Zona de Juegos Interactiva</strong>.</p>
+            <a href="juegos/index.html" class="btn btn-light btn-sm"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> Ir a los Juegos</a>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center p-6">
-                    <div class="text-4xl text-gold mb-4">
-                        <i class="fas fa-music"></i>
+    <!-- ===================== POR QUÉ SEVEN KEYS (bento) ===================== -->
+    <section id="por-que" class="section" aria-labelledby="porque-title">
+        <div class="container">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow">Por qué Seven Keys</p>
+                <h2 id="porque-title">Una escuela hecha a tu medida</h2>
+                <p class="section-sub">Tu música, tu tiempo, tu espacio.</p>
+            </div>
+
+            <div class="bento">
+                <article class="bento-cell cell-lg card reveal reveal-up" style="--delay:.05s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg></div>
+                    <h3>Múltiples Instrumentos</h3>
+                    <p>Aprende guitarra, piano, bajo, violín y más con profesores especializados.</p>
+                    <ul class="chips" aria-label="Instrumentos">
+                        <li class="chip"><i class="fas fa-guitar" aria-hidden="true"></i>Guitarra</li>
+                        <li class="chip"><i class="fas fa-music" aria-hidden="true"></i>Piano</li>
+                        <li class="chip"><i class="fas fa-drum" aria-hidden="true"></i>Batería</li>
+                        <li class="chip"><i class="fas fa-microphone" aria-hidden="true"></i>Técnica Vocal</li>
+                        <li class="chip"><i class="fas fa-music" aria-hidden="true"></i>Violín</li>
+                        <li class="chip"><i class="fas fa-guitar" aria-hidden="true"></i>Bajo</li>
+                        <li class="chip"><i class="fas fa-guitar" aria-hidden="true"></i>Ukelele</li>
+                        <li class="chip"><i class="fas fa-music" aria-hidden="true"></i>Arpa</li>
+                        <li class="chip"><i class="fas fa-guitar" aria-hidden="true"></i>Cuatro</li>
+                        <li class="chip"><i class="fas fa-drum" aria-hidden="true"></i>Maracas</li>
+                    </ul>
+                </article>
+
+                <article class="bento-cell card reveal reveal-up" style="--delay:.12s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg></div>
+                    <h3>Metodología Única</h3>
+                    <p>Programa personalizado adaptado a tus objetivos y ritmo de aprendizaje.</p>
+                </article>
+
+                <article class="bento-cell card reveal reveal-up" style="--delay:.19s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></div>
+                    <h3>Horarios Flexibles</h3>
+                    <p>Clases flexibles adaptadas a tu disponibilidad.</p>
+                </article>
+
+                <article class="bento-cell card reveal reveal-up" style="--delay:.26s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-child"/></svg></div>
+                    <h3>Iniciación Musical</h3>
+                    <p>Abriendo las puertas del mundo musical desde los 5 años.</p>
+                </article>
+
+                <article class="bento-cell card reveal reveal-up" style="--delay:.33s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg></div>
+                    <h3>Clases en Línea</h3>
+                    <p>Para estudiantes de todo el mundo.</p>
+                </article>
+
+                <article class="bento-cell cell-dark card reveal reveal-up" style="--delay:.4s">
+                    <div class="cell-icon"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg></div>
+                    <h3>Juega y practica</h3>
+                    <p>Refuerza lectura, ritmo y oído con nuestros juegos, y revisa tus clases en el Portal de Estudiantes.</p>
+                    <div class="cell-links">
+                        <a href="juegos/index.html" class="btn btn-gold btn-sm">Zona de Juegos</a>
+                        <a href="estudiantes/index.html" class="btn btn-ghost-light btn-sm">Portal</a>
                     </div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Múltiples Instrumentos</h3>
-                    <p class="text-gray-600 text-justify">Aprende guitarra, piano, bajo, violín y más con profesores especializados</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== NUESTRA ESCUELA ===================== -->
+    <section id="nuestra-escuela" class="section section-cream" aria-labelledby="escuela-title">
+        <div class="container">
+            <div class="story">
+                <div class="story-aside reveal reveal-left">
+                    <p class="eyebrow">Nuestra Escuela</p>
+                    <h2 id="escuela-title">Bienvenidos a Seven Keys</h2>
+                    <span class="big-year" aria-hidden="true">2020</span>
+                    <p class="story-caption">Nacimos en plena pandemia con una convicción: la música conecta hogares en cualquier lugar del mundo.</p>
                 </div>
-                <div class="text-center p-6">
-                    <div class="text-4xl text-gold mb-4">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Metodología Única</h3>
-                    <p class="text-gray-600 text-justify">Programa personalizado adaptado a tus objetivos y ritmo de aprendizaje</p>
+                <div class="story-body">
+                    <p class="reveal reveal-up">Seven Keys es una comunidad de músicos independientes que descubrimos, en un momento de la historia tan difícil como lo fue la pandemia, la posibilidad de usar las herramientas tecnológicas para brindar a las familias en cualquier lugar del mundo un momento de conexión, de alegría, de motivación a través de la música.</p>
+                    <p class="reveal reveal-up" style="--delay:.1s">¿Recuerdas esas imágenes de tantos amigos alrededor del mundo tocando en sus balcones para alegrar el vecindario? A pesar del dolor, la gente redescubrió en el arte, especialmente en la música, un aliciente para continuar a pesar de las dificultades.</p>
+                    <blockquote class="pull-quote reveal reveal-up" style="--delay:.2s">
+                        <svg class="quote-mark" aria-hidden="true"><use href="#i-quote"/></svg>
+                        <p>Eso queremos ser a través de nuestra escuela: una balsa que lleve la música a cualquier lugar del mundo para salvar del naufragio.</p>
+                    </blockquote>
                 </div>
-                <div class="text-center p-6">
-                    <div class="text-4xl text-gold mb-4">
-                        <i class="fas fa-globe"></i>
+            </div>
+
+            <div class="community reveal reveal-up">
+                <div class="community-copy">
+                    <h3>Nuestra Comunidad Musical</h3>
+                    <p>Únete a nuestra comunidad global de músicos y sé parte de esta historia.</p>
+                    <div class="social-row">
+                        <a href="https://www.instagram.com/sevenkeyschool/" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fab fa-instagram" aria-hidden="true"></i> Síguenos en Instagram</a>
+                        <a href="https://www.tiktok.com/@sevenkeyschool?_t=8rc80epH5IW&_r=1" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fab fa-tiktok" aria-hidden="true"></i> Síguenos en TikTok</a>
                     </div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">Clases Flexibles</h3>
-                    <p class="text-gray-600 text-justify">Tu música, tu tiempo, tu espacio</p>
+                </div>
+                <div class="ig-facade" id="ig-facade">
+                    <div class="ig-facade-inner">
+                        <i class="fab fa-instagram" aria-hidden="true"></i>
+                        <strong>@sevenkeyschool</strong>
+                        <p>Clases, logros de nuestros estudiantes y momentos de la escuela.</p>
+                        <button type="button" class="btn btn-gold" id="ig-load">Ver publicaciones</button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Testimonials Section -->
-    <section class="py-16 bg-gradient-to-r from-blue-900 to-indigo-800">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-white">Lo que dicen nuestros estudiantes</h2>
-            
-            <!-- Testimonials Slider -->
-            <div class="relative max-w-4xl mx-auto">
-                <div class="testimonials-container relative">
-                    <button class="slider-button prev-button" aria-label="Previous">
-                        <i class="fas fa-chevron-left"></i>
+
+    <!-- ===================== NUESTRAS CLASES (videos) ===================== -->
+    <section id="nuestras-clases" class="section" aria-labelledby="clases-title">
+        <div class="container">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow">Nuestras Clases</p>
+                <h2 id="clases-title">Así se vive una clase en Seven Keys</h2>
+                <p class="section-sub">En Seven Keys School nos adaptamos a tus necesidades. Ofrecemos clases tanto virtuales como presenciales, dependiendo de tu ubicación. Nuestra metodología personalizada garantiza un aprendizaje efectivo sin importar la modalidad elegida. Ya sea que te encuentres en cualquier parte del mundo o prefieras la experiencia presencial, estamos aquí para guiarte en tu viaje musical.</p>
+            </div>
+
+            <div class="filters reveal reveal-up" role="group" aria-label="Filtrar videos por modalidad">
+                <button type="button" class="chip chip-btn is-active" data-filter="all" aria-pressed="true">Todas</button>
+                <button type="button" class="chip chip-btn" data-filter="virtual" aria-pressed="false">Virtuales</button>
+                <button type="button" class="chip chip-btn" data-filter="presencial" aria-pressed="false">Presenciales</button>
+            </div>
+
+            <div class="video-grid" id="video-grid">
+                <article class="video-card card reveal reveal-up" data-kind="virtual">
+                    <button type="button" class="video-facade" data-yt="rq90OWv6m8w" aria-label="Reproducir: Felipe Morales en clase Virtual desde Guaymaral">
+                        <img src="https://i.ytimg.com/vi/rq90OWv6m8w/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
                     </button>
-                    
-                    <div class="testimonials-wrapper">
-                        <!-- Testimonio 1 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Angela María</h4>
-                                        <p class="text-gray-600">Madre de Familia desde Francia</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Mis hijos, de 10 y 19 años, disfrutan mucho de sus clases de piano y de arpa que se ajustan, no solamente a sus intereses particulares sino a sus necesidades y horarios, considerando que vivimos en Francia con 6 y 7 horas de diferencia horaria. Juan Diego diseña sus clases buscando siempre la comprensión de lo que estudian pues es la mejor manera de poder aplicar lo aprendido en otros contextos. Para ello, propone ejercicios muy interesantes y complementa sus clases, ejercitación y deberes con divertidas actividades en línea que permiten reforzar las nociones, entrenarse y progresar en autonomía."</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Testimonio 2 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Diana Guío</h4>
-                                        <p class="text-gray-600">Madre de Familia desde Yopal</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Fue una experiencia maravillosa, mi hijo Juan Alejandro disfrutó las clases de iniciación musical junto con la profesora Keila que tiene una magia inmensa con los niños, desde entonces mi hijo ama la música, ahora es estudiante de piano."</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Testimonio 3 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Laura Argüello</h4>
-                                        <p class="text-gray-600">Madre de Familia desde Reino Unido</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Mi hijo disfruta mucho las clases online de guitarra con el profesor Juan Diego y su avance han sido muy significativo. El hecho de que podamos conectarnos estando fuera de Colombia es una oportunidad para tener clases personalizadas, en horarios convenientes y con flexibilidad. Juan Diego se preocupa por ofrecer lecciones acordes a sus canciones preferidas y prepara videos para que pueda practicar y mejorar su técnica cada semana. ¡Totalmente recomendable!"</p>
-                            </div>
-                        </div>
-                         <!-- Testimonio 4 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white p-6 rounded-lg shadow-lg">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Olga Besedischeck</h4>
-                                        <p class="text-gray-600">Madre de Familia desde Cajicá</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Estoy muy contenta con las clases de música! La asesoría que Juan Diego nos dio desde el principio para facilitar el proceso del niño ha hecho toda la diferencia! Empezaron con ukelele y ahora mi hijo se la ha facilitado mucho el proceso con la guitarra! Verlo tan feliz y avanzando cada vez más me encanta! Juan tiene mucho feeling con los niños! Gracias por tanta dedicación!"</p>
-                            </div>
-                        </div>
-                        <!-- Testimonio 5 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Gustavo Barbosa</h4>
-                                        <p class="text-gray-600">Estudiante</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"El método de enseñanza es ideal para aprender al ritmo que necesitas; sin afanes, sin estrés, te diviertes aprendiendo y avanzas con agilidad."</p>
-                            </div>
-                        </div>
-                    
-                        <!-- Testimonio 6 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Lina Ramírez</h4>
-                                        <p class="text-gray-600">Madre de familia - Yerbabuena, Chía</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Las clases de piano y guitarra para Ema y Lucas han representado para ellos alegría, amor por la música, aprendizaje en lectura de partituras y sobre todo un proceso de crecimiento y madurez en sus rutinas de estudio y disciplina. Las habilidades no solo musicales sino pedagógicas de Juan Diego han contribuido a sacar el mayor potencial de Ema y Lucas, a poner en evidencia para ellos mismos su talento y resultados como producto de su compromiso y disposición de aprender sus instrumentos."</p>
-                            </div>
-                        </div>
-                    
-                        <!-- Testimonio 7 -->
-                        <div class="testimonial-slide w-full flex-shrink-0 px-4">
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <div class="flex items-center mb-4">
-                                    <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-xl font-semibold">Carolina Gómez</h4>
-                                        <p class="text-gray-600">Madre de familia - Sopó</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic text-justify">"Tenemos el agrado de conocer a Juan Diego hace más de 5 años con quien mis 3 hijos, de diferentes edades, toman clase en diferentes instrumentos. Como papás, hemos visto que el avance lo marca también el estudio en casa por lo que amamos el balance que Juan Diego proporciona entre su carisma y empatía con los niños como también la exigencia y personalización a cada uno."</p>
-                            </div>
-                        </div>
-
-                           <!-- Testimonio 8 -->
-<div class="testimonial-slide w-full flex-shrink-0 px-4">
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <div class="flex items-center mb-4">
-            <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-white text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h4 class="text-xl font-semibold">Catalina Romero</h4>
-                <p class="text-gray-600">Madre de familia - Yerbabuena, Chía</p>
-            </div>
-        </div>
-        <p class="text-gray-600 italic text-justify">"Recomiendo a Juan Diego como profesor de piano. Ha logrado que mi hija Julieta vea el aprendizaje como algo fácil y divertido. En muy corto tiempo, ha progresado increíblemente y ya puede tocar canciones completas. Lo más destacado es que ahora quiere practicar todos los días. ¡Un profesor excepcional!"</p>
-    </div>
-</div>
-                       <!-- Testimonio 9 (Juan José) - Asegurarse de que esté completo -->
-<div class="testimonial-slide w-full flex-shrink-0 px-4">
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <div class="flex items-center mb-4">
-            <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-white text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h4 class="text-xl font-semibold">Juan José</h4>
-                <p class="text-gray-600">Estudiante, 19 años - Francia</p>
-            </div>
-        </div>
-        <p class="text-gray-600 italic text-justify">"Tomé clases de arpa con Juan Diego y fue una experiencia enriquecedora. Nos enfocamos en un proyecto apasionante: interpretar música llanera en un arpa céltica, adaptando técnicas y estilos de forma creativa. Durante las sesiones, pude aprender las bases del arpa llanera. Lo que más disfruté fue su manera de enseñar: siempre motivador, paciente y atento a mis dudas, lo que me hizo sentir muy cómodo y confiado en mi progreso. En poco tiempo, logré un avance significativo, especialmente en mi capacidad para escuchar melodías y ritmos tradicionales y reproducirlos rápidamente sin necesidad de partituras, una habilidad muy valorada en la música llanera. Gracias a estas clases, cuando asistía al conservatorio de música en Francia, los profesores quedaron muy sorprendidos por mi conocimiento de este género y las técnicas únicas que había adquirido. Su flexibilidad permitió que las sesiones se adaptaran a mi horario, haciendo que el aprendizaje fuera aún más accesible."</p>
-    </div>
-</div>
-
-<!-- Testimonio 10 (Javier Contreras) -->
-<div class="testimonial-slide w-full flex-shrink-0 px-4">
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <div class="flex items-center mb-4">
-            <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-white text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h4 class="text-xl font-semibold">Javier Contreras</h4>
-                <p class="text-gray-600">49 años, Bogotá</p>
-            </div>
-        </div>
-        <p class="text-gray-600 italic text-justify">"Seven Keys fue la mejor decisión para poder encontrar la profesora de canto adecuada. Ya casi llevo un año y no puedo estar más agradecido por lograr sembrar en mi la confianza y entusiasmo por aprender a cantar. Mis clases son el mejor antídoto al stress acumulado de toda una semana de trabajo. Espero con ansias que ya llegue el viernes"</p>
-    </div>
-</div>
-
-<!-- Testimonio 11 (Andrea y Javier) -->
-<div class="testimonial-slide w-full flex-shrink-0 px-4">
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <div class="flex items-center mb-4">
-            <div class="h-12 w-12 bg-gold rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-white text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h4 class="text-xl font-semibold">Andrea y Javier</h4>
-                <p class="text-gray-600">Padres de Emilio, 12 años, Bogotá</p>
-            </div>
-        </div>
-        <p class="text-gray-600 italic text-justify">"Las clases de piano han sido una experiencia maravillosa para nuestro hijo Emilio. La metodología de enseñanza es muy didáctica y divertida, lo que ha mantenido su interés y motivación. Hemos visto un progreso significativo no solo en sus habilidades musicales, sino también en su disciplina y concentración."</p>
-    </div>
-</div>
-</div> <!-- Cierre de testimonials-wrapper -->
-
-<button class="slider-button next-button" aria-label="Next">
-    <i class="fas fa-chevron-right"></i>
-</button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- About Section -->
-    <section id="nuestra-escuela" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Nuestra Escuela</h2>
-            
-            <!-- Historia y Misión -->
-            <div class="max-w-4xl mx-auto mb-20">
-                <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white rounded-2xl overflow-hidden shadow-2xl">
-                    <div class="p-8 md:p-12">
-                        <h3 class="text-xl md:text-2xl font-bold mb-6 text-gold">Bienvenidos a Seven Keys</h3>
-                        <div class="prose prose-lg prose-invert stagger-animate">
-                            <p class="mb-6 text-lg leading-relaxed text-justify slide-up">
-                                Seven Keys es una comunidad de músicos independientes que descubrimos, en un momento de la historia tan difícil como lo fue la pandemia, la posibilidad de usar las herramientas tecnológicas para brindar a las familias en cualquier lugar del mundo un momento de conexión, de alegría, de motivación a través de la música.
-                            </p>
-                            <p class="mb-6 text-lg leading-relaxed text-justify slide-up" style="animation-delay: 0.3s;">
-                                ¿Recuerdas esas imágenes de tantos amigos alrededor del mundo tocando en sus balcones para alegrar el vecindario? A pesar del dolor, la gente redescubrió en el arte, especialmente en la música, un aliciente para continuar a pesar de las dificultades.
-                            </p>
-                            <p class="text-xl font-semibold text-gold italic glow-text slide-up" style="animation-delay: 0.6s;">
-                                "Eso queremos ser a través de nuestra escuela: una balsa que lleve la música a cualquier lugar del mundo para salvar del naufragio."
-                            </p>
-                        </div>
+                    <div class="video-meta">
+                        <span class="tag tag-virtual"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg> Clase Virtual</span>
+                        <h3>Felipe Morales</h3><p>Clase desde Guaymaral</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Características -->
-            <div class="grid md:grid-cols-3 gap-8 mb-20">
-                <div class="transform hover:scale-105 transition-transform duration-300">
-                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
-                        <i class="fas fa-child text-4xl text-blue-800 mb-6"></i>
-                        <h4 class="text-xl font-bold mb-4">Iniciación Musical</h4>
-                        <p class="text-gray-600 text-justify">Abriendo las puertas del mundo musical desde los 5 años</p>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="presencial" style="--delay:.06s">
+                    <button type="button" class="video-facade" data-yt="gl5ozcTGruY" aria-label="Reproducir: Hermanos Fajardo desde Chía">
+                        <img src="https://i.ytimg.com/vi/gl5ozcTGruY/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-presencial"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg> Clase Presencial</span>
+                        <h3>Hermanos Fajardo</h3><p>Clase desde Chía</p>
                     </div>
-                </div>
-                <div class="transform hover:scale-105 transition-transform duration-300">
-                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
-                        <i class="fas fa-clock text-4xl text-blue-800 mb-6"></i>
-                        <h4 class="text-xl font-bold mb-4">Horarios Flexibles</h4>
-                        <p class="text-gray-600 text-justify">Adaptados a tu disponibilidad</p>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="virtual" style="--delay:.12s">
+                    <button type="button" class="video-facade" data-yt="Q3FocSvkRXM" aria-label="Reproducir: Clase Virtual desde New York">
+                        <img src="https://i.ytimg.com/vi/Q3FocSvkRXM/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-virtual"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg> Clase Virtual</span>
+                        <h3>David</h3><p>Desde New York, USA</p>
                     </div>
-                </div>
-                <div class="transform hover:scale-105 transition-transform duration-300">
-                    <div class="p-8 bg-white rounded-xl shadow-lg border-t-4 border-gold h-full">
-                        <i class="fas fa-globe text-4xl text-blue-800 mb-6"></i>
-                        <h4 class="text-xl font-bold mb-4">Clases en Línea</h4>
-                        <p class="text-gray-600 text-justify">Para estudiantes de todo el mundo</p>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="virtual" style="--delay:.18s">
+                    <button type="button" class="video-facade" data-yt="F0AmRiKPpik" aria-label="Reproducir: Salomé desde Bogotá y Matías desde Seattle">
+                        <img src="https://i.ytimg.com/vi/F0AmRiKPpik/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-virtual"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg> Clase Virtual</span>
+                        <h3>Salomé y Matías</h3><p>Desde Bogotá y Seattle</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Comunidad Musical -->
-            <div class="text-center mb-12">
-                <h3 class="text-2xl font-bold text-blue-900 mb-4">Nuestra Comunidad Musical</h3>
-                <p class="text-gray-600 mb-8 text-justify">Únete a nuestra comunidad global de músicos y sé parte de esta historia</p>
-            </div>
-            
-            <!-- Instagram Feed con diseño mejorado -->
-            <div class="bg-gray-50 rounded-2xl p-8 shadow-inner max-w-5xl mx-auto">
-                <div class="instagram-feed-container mb-8">
-                    <script>
-                        window.onload = function() {
-                            var container = document.createElement('div');
-                            container.innerHTML = '<iframe src="https://www.instagram.com/sevenkeyschool/embed" width="100%" height="750" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
-                            document.querySelector('.instagram-feed-container').appendChild(container);
-                        }
-                    </script>
-                </div>
-                <div class="text-center">
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a href="https://www.instagram.com/sevenkeyschool/" target="_blank" rel="noopener noreferrer" class="text-blue-900 hover:text-gold transition">
-                            <i class="fab fa-instagram text-2xl"></i>
-                            Síguenos en Instagram
-                        </a>
-                        <a href="https://www.tiktok.com/@sevenkeyschool?_t=8rc80epH5IW&_r=1" target="_blank" rel="noopener noreferrer" class="text-blue-900 hover:text-gold transition">
-                            <i class="fab fa-tiktok text-2xl"></i>
-                            Síguenos en TikTok
-                        </a>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="virtual" style="--delay:.24s">
+                    <button type="button" class="video-facade" data-yt="-cBd_uHgZzc" aria-label="Reproducir: Juan José en clase Virtual desde Francia">
+                        <img src="https://i.ytimg.com/vi/-cBd_uHgZzc/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-virtual"><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg> Clase Virtual</span>
+                        <h3>Juan José</h3><p>Desde Francia</p>
                     </div>
-                </div>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="presencial" style="--delay:.3s">
+                    <button type="button" class="video-facade" data-yt="mbJgol68VwU" aria-label="Reproducir: Lucas clase presencial Yerbabuena, Chía">
+                        <img src="https://i.ytimg.com/vi/mbJgol68VwU/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-presencial"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg> Clase Presencial</span>
+                        <h3>Lucas</h3><p>Yerbabuena, Chía</p>
+                    </div>
+                </article>
+                <article class="video-card card reveal reveal-up" data-kind="presencial" style="--delay:.36s">
+                    <button type="button" class="video-facade" data-yt="_jvV5Cw2ASs" aria-label="Reproducir: Ema clase presencial Yerbabuena, Chía">
+                        <img src="https://i.ytimg.com/vi/_jvV5Cw2ASs/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                        <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                    </button>
+                    <div class="video-meta">
+                        <span class="tag tag-presencial"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg> Clase Presencial</span>
+                        <h3>Ema</h3><p>Yerbabuena, Chía</p>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- Nuestras Clases Section -->
-    <section id="nuestras-clases" class="py-16 bg-blue-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-8 text-blue-900">Nuestras Clases</h2>
-            
-            <div class="max-w-3xl mx-auto text-center mb-12">
-                <p class="text-lg text-gray-700 text-justify mb-8">
-                    En Seven Keys School nos adaptamos a tus necesidades. Ofrecemos clases tanto virtuales como presenciales, 
-                    dependiendo de tu ubicación. Nuestra metodología personalizada garantiza un aprendizaje efectivo sin importar 
-                    la modalidad elegida. Ya sea que te encuentres en cualquier parte del mundo o prefieras la experiencia presencial, 
-                    estamos aquí para guiarte en tu viaje musical.
-                </p>
+    <!-- ===================== PROGRAMAS ===================== -->
+    <section id="programas" class="section section-navy" aria-labelledby="programas-title">
+        <div class="section-glow" aria-hidden="true"></div>
+        <div class="container">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow eyebrow-light">Nuestros Programas</p>
+                <h2 id="programas-title">Dos caminos, un mismo destino: disfrutar la música</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Video 1: Felipe Morales -->
-                <div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/rq90OWv6m8w"
-                            title="Felipe Morales en clase Virtual desde Guaymaral"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-video text-blue-600"></i>
-                            <span class="text-sm font-semibold text-blue-600">Clase Virtual</span>
+            <div class="programs">
+                <article class="program card-dark reveal reveal-left">
+                    <div class="program-icon"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg></div>
+                    <h3>Iniciación Musical</h3>
+                    <p>Programa diseñado para introducir a los más pequeños en el maravilloso mundo de la música. A través de juegos, canciones y actividades lúdicas, desarrollamos las bases musicales fundamentales.</p>
+                    <ul class="check-list">
+                        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Desarrollo auditivo</li>
+                        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Ritmo y movimiento</li>
+                        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Expresión corporal</li>
+                        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Canto y voz</li>
+                    </ul>
+                </article>
+
+                <article class="program card-dark reveal reveal-right">
+                    <div class="program-icon"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg></div>
+                    <h3>Desarrollo Musical</h3>
+                    <p>Clases personalizadas virtuales y presenciales* en diversos instrumentos, adaptadas a tu nivel y objetivos musicales.</p>
+                    <div class="program-cols">
+                        <div>
+                            <h4>Instrumentos</h4>
+                            <ul class="instrument-list">
+                                <li><i class="fas fa-guitar" aria-hidden="true"></i>Guitarra</li>
+                                <li><i class="fas fa-music" aria-hidden="true"></i>Piano</li>
+                                <li><i class="fas fa-drum" aria-hidden="true"></i>Batería</li>
+                                <li><i class="fas fa-microphone" aria-hidden="true"></i>Técnica Vocal</li>
+                                <li><i class="fas fa-music" aria-hidden="true"></i>Violín</li>
+                            </ul>
                         </div>
-                        <h3 class="text-lg font-semibold mb-1">Felipe Morales</h3>
-                        <p class="text-gray-600">Clase desde Guaymaral</p>
-                    </div>
-                </div>
-
-                <!-- Video 2: Hermanos Fajardo -->
-                <div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/gl5ozcTGruY"
-                            title="Hermanos Fajardo desde Chía"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-user-group text-blue-600"></i>
-                            <span class="text-sm font-semibold text-blue-600">Clase Presencial</span>
+                        <div>
+                            <h4>Y también</h4>
+                            <ul class="instrument-list">
+                                <li><i class="fas fa-music" aria-hidden="true"></i>Bajo</li>
+                                <li><i class="fas fa-guitar" aria-hidden="true"></i>Ukelele</li>
+                                <li><i class="fas fa-music" aria-hidden="true"></i>Arpa</li>
+                                <li><i class="fas fa-guitar" aria-hidden="true"></i>Cuatro</li>
+                                <li><i class="fas fa-drum" aria-hidden="true"></i>Maracas</li>
+                            </ul>
                         </div>
-                        <h3 class="text-lg font-semibold mb-1">Hermanos Fajardo</h3>
-                        <p class="text-gray-600">Clase desde Chía</p>
                     </div>
-                </div>
-
-                <!-- Video 3: Estudiante desde New York -->
-                <div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/Q3FocSvkRXM"
-                            title="Clase Virtual desde New York"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-video text-blue-600"></i>
-                            <span class="text-sm font-semibold text-blue-600">Clase Virtual</span>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">David</h3>
-                        <p class="text-gray-600">Desde New York, USA</p>
-                    </div>
-                </div>
-
-                <!-- Video 4: Salomé y Matías -->
-                <div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/F0AmRiKPpik"
-                            title="Salomé desde Bogotá y Matías desde Seattle"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-video text-blue-600"></i>
-                            <span class="text-sm font-semibold text-blue-600">Clase Virtual</span>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Salomé y Matías</h3>
-                        <p class="text-gray-600">Desde Bogotá y Seattle</p>
-                    </div>
-                </div>
-
-                <!-- Video 5: Juan José desde Francia -->
-                <div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/-cBd_uHgZzc"
-                            title="Juan José en clase Virtual desde Francia"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-video text-blue-600"></i>
-                            <span class="text-sm font-semibold text-blue-600">Clase Virtual</span>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">Juan José</h3>
-                        <p class="text-gray-600">Desde Francia</p>
-                    </div>
-                </div>
-                <!-- Video: Lucas clase presencial -->
-<div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/mbJgol68VwU"
-            title="Lucas clase presencial Yerbabuena, Chía"
-            class="w-full aspect-video"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
-    </div>
-    <div class="p-4">
-        <h3 class="text-lg font-semibold mb-2">Lucas - Clase Presencial</h3>
-        <p class="text-gray-600">Yerbabuena, Chía</p>
-    </div>
-</div>
-
-<!-- Video: Ema clase presencial -->
-<div class="video-card bg-white rounded-lg shadow-lg overflow-hidden">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/_jvV5Cw2ASs"
-            title="Ema clase presencial Yerbabuena, Chía"
-            class="w-full aspect-video"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
-    </div>
-    <div class="p-4">
-        <h3 class="text-lg font-semibold mb-2">Ema - Clase Presencial</h3>
-        <p class="text-gray-600">Yerbabuena, Chía</p>
-    </div>
-</div>
-
-
+                    <p class="footnote">* Las clases presenciales están sujetas a la ubicación geográfica.</p>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- Programs Section -->
-    <section id="programas" class="py-20 bg-blue-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Nuestros Programas</h2>
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Iniciación Musical -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <div class="p-8">
-                        <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mb-6">
-                            <i class="fas fa-music text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-4">Iniciación Musical</h3>
-                        <p class="text-gray-600 mb-6 text-justify">
-                            Programa diseñado para introducir a los más pequeños en el maravilloso mundo de la música. 
-                            A través de juegos, canciones y actividades lúdicas, desarrollamos las bases musicales fundamentales.
-                        </p>
-                        <ul class="text-gray-600 space-y-2">
-                            <li><i class="fas fa-check text-gold mr-2"></i>Desarrollo auditivo</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i>Ritmo y movimiento</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i>Expresión corporal</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i>Canto y voz</li>
-                        </ul>
-                    </div>
+    <!-- ===================== METODOLOGÍA ===================== -->
+    <section id="metodologia" class="section" aria-labelledby="metodologia-title">
+        <div class="container">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow">Metodología</p>
+                <h2 id="metodologia-title">Personalización y flexibilidad, paso a paso</h2>
+                <p class="section-sub">Nuestra metodología se basa en la personalización y la flexibilidad. Cada estudiante tiene un plan de estudios adaptado a sus necesidades y objetivos.</p>
+            </div>
+
+            <ol class="steps" id="steps">
+                <svg class="steps-line" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true"><path class="draw-on-view" d="M0 20 C 250 -10, 500 50, 1000 20"/></svg>
+                <li class="step reveal reveal-up" style="--delay:.05s">
+                    <span class="step-num">01</span>
+                    <div class="step-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
+                    <h3>Escríbenos</h3>
+                    <p>Cuéntanos por WhatsApp qué te gustaría aprender, para ti o para tu hijo/a.</p>
+                </li>
+                <li class="step reveal reveal-up" style="--delay:.15s">
+                    <span class="step-num">02</span>
+                    <div class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></div>
+                    <h3>Plan de estudios personalizado</h3>
+                    <p>Diseñamos un plan adaptado a tus necesidades y objetivos.</p>
+                </li>
+                <li class="step reveal reveal-up" style="--delay:.25s">
+                    <span class="step-num">03</span>
+                    <div class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></div>
+                    <h3>Horarios flexibles</h3>
+                    <p>Clases virtuales o presenciales, adaptadas a tu disponibilidad.</p>
+                </li>
+                <li class="step reveal reveal-up" style="--delay:.35s">
+                    <span class="step-num">04</span>
+                    <div class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg></div>
+                    <h3>Clases en línea, desde donde estés</h3>
+                    <p>Para estudiantes de todo el mundo, con juegos y Portal para practicar entre clases.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ===================== TESTIMONIOS ===================== -->
+    <section id="testimonios" class="section section-navy testimonials" aria-labelledby="testimonios-title">
+        <div class="section-glow glow-alt" aria-hidden="true"></div>
+        <div class="container">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow eyebrow-light">Testimonios</p>
+                <h2 id="testimonios-title">Lo que dicen nuestros estudiantes</h2>
+            </div>
+        </div>
+
+        <div class="carousel reveal reveal-up" id="carousel">
+            <div class="carousel-track" id="carousel-track" tabindex="0" aria-live="polite">
+                <article class="t-card"><header><span class="avatar" style="--h:32">AM</span><div><h3>Angela María</h3><p>Madre de Familia desde Francia</p></div></header><blockquote class="t-text clamp">"Mis hijos, de 10 y 19 años, disfrutan mucho de sus clases de piano y de arpa que se ajustan, no solamente a sus intereses particulares sino a sus necesidades y horarios, considerando que vivimos en Francia con 6 y 7 horas de diferencia horaria. Juan Diego diseña sus clases buscando siempre la comprensión de lo que estudian pues es la mejor manera de poder aplicar lo aprendido en otros contextos. Para ello, propone ejercicios muy interesantes y complementa sus clases, ejercitación y deberes con divertidas actividades en línea que permiten reforzar las nociones, entrenarse y progresar en autonomía."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:200">DG</span><div><h3>Diana Guío</h3><p>Madre de Familia desde Yopal</p></div></header><blockquote class="t-text clamp">"Fue una experiencia maravillosa, mi hijo Juan Alejandro disfrutó las clases de iniciación musical junto con la profesora Keila que tiene una magia inmensa con los niños, desde entonces mi hijo ama la música, ahora es estudiante de piano."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:280">LA</span><div><h3>Laura Argüello</h3><p>Madre de Familia desde Reino Unido</p></div></header><blockquote class="t-text clamp">"Mi hijo disfruta mucho las clases online de guitarra con el profesor Juan Diego y su avance han sido muy significativo. El hecho de que podamos conectarnos estando fuera de Colombia es una oportunidad para tener clases personalizadas, en horarios convenientes y con flexibilidad. Juan Diego se preocupa por ofrecer lecciones acordes a sus canciones preferidas y prepara videos para que pueda practicar y mejorar su técnica cada semana. ¡Totalmente recomendable!"</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:150">OB</span><div><h3>Olga Besedischeck</h3><p>Madre de Familia desde Cajicá</p></div></header><blockquote class="t-text clamp">"Estoy muy contenta con las clases de música! La asesoría que Juan Diego nos dio desde el principio para facilitar el proceso del niño ha hecho toda la diferencia! Empezaron con ukelele y ahora mi hijo se la ha facilitado mucho el proceso con la guitarra! Verlo tan feliz y avanzando cada vez más me encanta! Juan tiene mucho feeling con los niños! Gracias por tanta dedicación!"</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:20">GB</span><div><h3>Gustavo Barbosa</h3><p>Estudiante</p></div></header><blockquote class="t-text clamp">"El método de enseñanza es ideal para aprender al ritmo que necesitas; sin afanes, sin estrés, te diviertes aprendiendo y avanzas con agilidad."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:330">LR</span><div><h3>Lina Ramírez</h3><p>Madre de familia - Yerbabuena, Chía</p></div></header><blockquote class="t-text clamp">"Las clases de piano y guitarra para Ema y Lucas han representado para ellos alegría, amor por la música, aprendizaje en lectura de partituras y sobre todo un proceso de crecimiento y madurez en sus rutinas de estudio y disciplina. Las habilidades no solo musicales sino pedagógicas de Juan Diego han contribuido a sacar el mayor potencial de Ema y Lucas, a poner en evidencia para ellos mismos su talento y resultados como producto de su compromiso y disposición de aprender sus instrumentos."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:260">CG</span><div><h3>Carolina Gómez</h3><p>Madre de familia - Sopó</p></div></header><blockquote class="t-text clamp">"Tenemos el agrado de conocer a Juan Diego hace más de 5 años con quien mis 3 hijos, de diferentes edades, toman clase en diferentes instrumentos. Como papás, hemos visto que el avance lo marca también el estudio en casa por lo que amamos el balance que Juan Diego proporciona entre su carisma y empatía con los niños como también la exigencia y personalización a cada uno."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:5">CR</span><div><h3>Catalina Romero</h3><p>Madre de familia - Yerbabuena, Chía</p></div></header><blockquote class="t-text clamp">"Recomiendo a Juan Diego como profesor de piano. Ha logrado que mi hija Julieta vea el aprendizaje como algo fácil y divertido. En muy corto tiempo, ha progresado increíblemente y ya puede tocar canciones completas. Lo más destacado es que ahora quiere practicar todos los días. ¡Un profesor excepcional!"</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:190">JJ</span><div><h3>Juan José</h3><p>Estudiante, 19 años - Francia</p></div></header><blockquote class="t-text clamp">"Tomé clases de arpa con Juan Diego y fue una experiencia enriquecedora. Nos enfocamos en un proyecto apasionante: interpretar música llanera en un arpa céltica, adaptando técnicas y estilos de forma creativa. Durante las sesiones, pude aprender las bases del arpa llanera. Lo que más disfruté fue su manera de enseñar: siempre motivador, paciente y atento a mis dudas, lo que me hizo sentir muy cómodo y confiado en mi progreso. En poco tiempo, logré un avance significativo, especialmente en mi capacidad para escuchar melodías y ritmos tradicionales y reproducirlos rápidamente sin necesidad de partituras, una habilidad muy valorada en la música llanera. Gracias a estas clases, cuando asistía al conservatorio de música en Francia, los profesores quedaron muy sorprendidos por mi conocimiento de este género y las técnicas únicas que había adquirido. Su flexibilidad permitió que las sesiones se adaptaran a mi horario, haciendo que el aprendizaje fuera aún más accesible."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:100">JC</span><div><h3>Javier Contreras</h3><p>49 años, Bogotá</p></div></header><blockquote class="t-text clamp">"Seven Keys fue la mejor decisión para poder encontrar la profesora de canto adecuada. Ya casi llevo un año y no puedo estar más agradecido por lograr sembrar en mi la confianza y entusiasmo por aprender a cantar. Mis clases son el mejor antídoto al stress acumulado de toda una semana de trabajo. Espero con ansias que ya llegue el viernes"</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+                <article class="t-card"><header><span class="avatar" style="--h:300">AJ</span><div><h3>Andrea y Javier</h3><p>Padres de Emilio, 12 años, Bogotá</p></div></header><blockquote class="t-text clamp">"Las clases de piano han sido una experiencia maravillosa para nuestro hijo Emilio. La metodología de enseñanza es muy didáctica y divertida, lo que ha mantenido su interés y motivación. Hemos visto un progreso significativo no solo en sus habilidades musicales, sino también en su disciplina y concentración."</blockquote><button type="button" class="read-more" aria-expanded="false">Leer más</button></article>
+            </div>
+
+            <div class="carousel-controls container">
+                <button type="button" class="c-btn" id="c-prev" aria-label="Testimonio anterior"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg></button>
+                <div class="c-dots" id="c-dots" role="tablist" aria-label="Ir a un testimonio"></div>
+                <button type="button" class="c-btn" id="c-next" aria-label="Siguiente testimonio"><svg class="icon" aria-hidden="true"><use href="#i-chev-right"/></svg></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FUNDADOR ===================== -->
+    <section id="fundador" class="section section-cream" aria-labelledby="fundador-title">
+        <div class="container">
+            <div class="founder">
+                <div class="founder-media reveal reveal-left">
+                    <svg class="founder-arc" viewBox="0 0 400 400" aria-hidden="true"><path class="draw-on-view" d="M200 20 A180 180 0 1 1 20 200" fill="none" stroke-linecap="round"/></svg>
+                    <img src="img/Founder.png?v=2" alt="Juan Diego Merchán, fundador de Seven Keys School" width="600" height="771" loading="lazy" class="founder-img">
+                    <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" class="founder-linkedin" aria-label="LinkedIn de Juan Diego Merchán"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                </div>
+                <div class="founder-copy">
+                    <p class="eyebrow reveal reveal-up">Nuestro Fundador</p>
+                    <h2 id="fundador-title" class="reveal reveal-up">Juan Diego Merchán</h2>
+                    <p class="founder-role reveal reveal-up">Músico del Taller Musical Francisco Cristancho · Docente con más de 10 años de experiencia</p>
+                    <p class="reveal reveal-up" style="--delay:.1s">Soy Juan Diego Merchán músico del taller musical Francisco Cristancho de Bogotá, con mi esposa Ángela Paola Delgado fundamos la escuela de música Seven keys en el año 2020, fue una época difícil para muchas personas por la pandemia, pero a pesar de esas dificultades nos dio la oportunidad de crear nuestra escuela llevando la música a muchos hogares en Colombia y al rededor del mundo, aprovechando la tecnología como medio de conexión para desarrollar nuestras clases.</p>
+                    <p class="reveal reveal-up" style="--delay:.2s">Mi trayectoria incluye más de 10 años ejerciendo la docencia especialmente en las edades de preescolar y primaria, en el año 2017 fui el ganador del premio al Maestro en el Gimnasio Fontana por el proyecto de investigación "¿Puede el aprendizaje de la gramática musical incluirse en la edad de preescolar?"</p>
+                    <p class="reveal reveal-up" style="--delay:.3s">Seven Keys es una escuela informal, han sido los mismos usuarios los que con sus recomendaciones nos han hecho crecer y aquí podrás encontrar una comunidad de maestros dispuestos a acompañarte en tu proceso adaptando las clases a tus intereses, bien sea que estés comenzando o quieras mejorar el nivel que ya tienes. ¡Bienvenido!</p>
+                </div>
+            </div>
+
+            <!-- Galería de Experiencia -->
+            <div class="gallery">
+                <div class="section-head section-head-left reveal reveal-up">
+                    <h3 class="h2-like">Galería de Experiencia</h3>
                 </div>
 
-                <!-- Desarrollo Musical -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <div class="p-8">
-                        <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mb-6">
-                            <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                <div class="gallery-top">
+                    <article class="video-card card reveal reveal-up">
+                        <button type="button" class="video-facade" data-yt="JUBTn9BbfDc" aria-label="Reproducir: Proyecto de Investigación Musical">
+                            <img src="https://i.ytimg.com/vi/JUBTn9BbfDc/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+                            <span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+                        </button>
+                        <div class="video-meta">
+                            <h4>Proyecto de Investigación Musical</h4>
+                            <p>Investigación premiada sobre la implementación de la gramática musical en preescolar, demostrando la efectividad de nuestra metodología de enseñanza temprana.</p>
                         </div>
-                        <h3 class="text-2xl font-bold mb-4">Desarrollo Musical</h3>
-                        <p class="text-gray-600 mb-6 text-justify">
-                            Clases personalizadas virtuales y presenciales* en diversos instrumentos, adaptadas a tu nivel y objetivos musicales.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Instrumentos:</h4>
-                                <ul class="text-gray-600 space-y-2">
-                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Guitarra</li>
-                                    <li><i class="fas fa-music text-gold mr-2"></i>Piano</li>
-                                    <li><i class="fas fa-drum text-gold mr-2"></i>Batería</li>
-                                    <li><i class="fas fa-microphone text-gold mr-2"></i>Técnica Vocal</li>
-                                    <li><i class="fas fa-music text-gold mr-2"></i>Violín</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Y también:</h4>
-                                <ul class="text-gray-600 space-y-2">
-                                    <li><i class="fas fa-music text-gold mr-2"></i>Bajo</li>
-                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Ukelele</li>
-                                    <li><i class="fas fa-music text-gold mr-2"></i>Arpa</li>
-                                    <li><i class="fas fa-guitar text-gold mr-2"></i>Cuatro</li>
-                                    <li><i class="fas fa-drum text-gold mr-2"></i>Maracas</li>
-                                </ul>
-                            </div>
+                    </article>
+
+                    <article class="article-card card reveal reveal-up" style="--delay:.1s">
+                        <div class="article-copy">
+                            <p class="eyebrow">Publicación</p>
+                            <h4>Artículo en Revista Apuntes de Familia - Universidad de la Sabana</h4>
+                            <p>Aporte de nuestro fundador al artículo sobre la Música una forma de expresión publicado en la revista Apuntes de Familia de la Universidad de la Sabana.</p>
+                            <span class="hint">Toca una página para ampliarla</span>
                         </div>
-                        <p class="text-sm text-gray-500 italic">* Las clases presenciales están sujetas a la ubicación geográfica.</p>
-                    </div>
+                        <div class="article-pages">
+                            <button type="button" class="zoomable" data-full="img/articulo1.jpeg" aria-label="Ampliar: Artículo Apuntes de Familia página 1"><img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" width="1080" height="1334" loading="lazy"></button>
+                            <button type="button" class="zoomable" data-full="img/articulo2.jpeg" aria-label="Ampliar: Artículo Apuntes de Familia página 2"><img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" width="1080" height="1318" loading="lazy"></button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="gallery-grid">
+                    <article class="video-card card reveal reveal-up">
+                        <button type="button" class="video-facade" data-yt="ooY3AedtD-s" aria-label="Reproducir: Perfil Profesional"><img src="https://i.ytimg.com/vi/ooY3AedtD-s/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Perfil Profesional</h4><p>Presentación de mis habilidades y experiencia como educador musical, mostrando mi enfoque pedagógico y compromiso con la enseñanza.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.06s">
+                        <button type="button" class="video-facade" data-yt="RfCJn8_Hnx0" aria-label="Reproducir: Premio Maestro Francisco Cristancho"><img src="https://i.ytimg.com/vi/RfCJn8_Hnx0/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Premio Maestro Francisco Cristancho</h4><p>Momento especial recibiendo un regalo del Maestro Francisco Cristancho durante mi graduación, un reconocimiento significativo a mi trayectoria musical.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.12s">
+                        <button type="button" class="video-facade" data-yt="UXYUijj7zcY" aria-label="Reproducir: Educación Sin Fronteras"><img src="https://i.ytimg.com/vi/UXYUijj7zcY/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Educación Sin Fronteras</h4><p>Experiencia de enseñanza virtual internacional, conectando maestros de Bogotá y Cajicá con una estudiante de canto en Francia.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.18s">
+                        <button type="button" class="video-facade" data-yt="Bvlc37MtmT0" aria-label="Reproducir: Interpretación con Maestro Cristancho"><img src="https://i.ytimg.com/vi/Bvlc37MtmT0/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Interpretación con Maestro Cristancho</h4><p>Interpretación musical acompañado al piano por el reconocido Maestro Francisco Cristancho, demostrando la excelencia artística de nuestra escuela.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.24s">
+                        <button type="button" class="video-facade" data-yt="-3f16qGkhjk" aria-label="Reproducir: Ensamble de Tambores"><img src="https://i.ytimg.com/vi/-3f16qGkhjk/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Ensamble de Tambores</h4><p>Participación como cantante en el ensamble de tambores del Taller Musical Francisco Cristancho, fusionando voces y percusión en una experiencia musical única.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.3s">
+                        <button type="button" class="video-facade" data-yt="Ha9IbfjsS_M" aria-label="Reproducir: Nuestra Música Colombiana"><img src="https://i.ytimg.com/vi/Ha9IbfjsS_M/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>Nuestra Música Colombiana</h4><p>La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p></div>
+                    </article>
+                    <article class="video-card card reveal reveal-up" style="--delay:.36s">
+                        <button type="button" class="video-facade" data-yt="-X-XTbTrCks" aria-label="Reproducir: A Dónde vas"><img src="https://i.ytimg.com/vi/-X-XTbTrCks/hqdefault.jpg" alt="" width="480" height="360" loading="lazy"><span class="play-btn"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></button>
+                        <div class="video-meta"><h4>A Dónde vas</h4><p>Video oficial de la producción "A Dónde vas", 12 composiciones propias de tipo religioso. Producción realizada en el año 2015.</p></div>
+                    </article>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Methodology Section -->
-    <section id="metodologia" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Metodología</h2>
-            <div class="max-w-3xl mx-auto text-center">
-                <p class="text-lg text-gray-600 mb-8 text-justify">
-                    Nuestra metodología se basa en la personalización y la flexibilidad. 
-                    Cada estudiante tiene un plan de estudios adaptado a sus necesidades y objetivos.
-                </p>
-                <div class="grid md:grid-cols-3 gap-8 mt-12">
-                    <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <i class="fas fa-book text-3xl text-blue-800 mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Plan de Estudios Personalizado</h4>
-                        <p class="text-gray-600 text-justify">Adaptado a tus necesidades y objetivos</p>
-                    </div>
-                    <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <i class="fas fa-clock text-3xl text-blue-800 mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Horarios Flexibles</h4>
-                        <p class="text-gray-600 text-justify">Adaptados a tu disponibilidad</p>
-                    </div>
-                    <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <i class="fas fa-globe text-3xl text-blue-800 mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Clases en Línea</h4>
-                        <p class="text-gray-600 text-justify">Para estudiantes de todo el mundo</p>
-                    </div>
-                </div>
+    <!-- ===================== FAQ ===================== -->
+    <section id="preguntas-frecuentes" class="section" aria-labelledby="faq-title">
+        <div class="container faq-wrap">
+            <div class="section-head reveal reveal-up">
+                <p class="eyebrow">Preguntas Frecuentes</p>
+                <h2 id="faq-title">¿Tienes dudas? Aquí las resolvemos</h2>
             </div>
-        </div>
-    </section>
-
-    <!-- Founder Section -->
-    <section id="fundador" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Nuestro Fundador</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="flex flex-col md:flex-row items-start gap-8">
-                        <div class="md:w-1/3">
-                            <img src="img/Founder.png?v=2" alt="Fundador Seven Keys School" class="rounded-lg shadow-lg w-full" width="600" height="771" loading="lazy">
-                            <div class="text-center">
-                                <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" class="text-blue-900 hover:text-gold transition">
-                                    <i class="fab fa-linkedin text-2xl"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="md:w-2/3">
-                            <div class="prose max-w-none">
-                                <p class="text-gray-600 mb-6 text-justify">
-                                    Soy Juan Diego Merchán músico del taller musical Francisco Cristancho de Bogotá, con mi esposa Ángela Paola Delgado fundamos la escuela de música Seven keys en el año 2020, fue una época difícil para muchas personas por la pandemia, pero a pesar de esas dificultades nos dio la oportunidad de crear nuestra escuela llevando la música a muchos hogares en Colombia y al rededor del mundo, aprovechando la tecnología como medio de conexión para desarrollar nuestras clases.
-                                </p>
-                                <p class="text-gray-600 mb-6 text-justify">
-                                    Mi trayectoria incluye más de 10 años ejerciendo la docencia especialmente en las edades de preescolar y primaria, en el año 2017 fui el ganador del premio al Maestro en el Gimnasio Fontana por el proyecto de investigación "¿Puede el aprendizaje de la gramática musical incluirse en la edad de preescolar?"
-                                </p>
-                                <p class="text-gray-600 text-justify">
-                                    Seven Keys es una escuela informal, han sido los mismos usuarios los que con sus recomendaciones nos han hecho crecer y aquí podrás encontrar una comunidad de maestros dispuestos a acompañarte en tu proceso adaptando las clases a tus intereses, bien sea que estés comenzando o quieras mejorar el nivel que ya tienes. ¡Bienvenido!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-         
-                <!-- Galería de Experiencia -->
-                <div class="mt-12 bg-white p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold mb-6">Galería de Experiencia</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Video Destacado -->
-                        <div class="lg:col-span-1 space-y-4">
-                            <div class="aspect-w-16 aspect-h-9">
-                                <iframe 
-                                    class="w-full rounded-lg shadow-md"
-                                    height="315"
-                                    src="https://www.youtube.com/embed/JUBTn9BbfDc" 
-                                    title="Proyecto de Investigación Musical" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                                </iframe>
-                            </div>
-                            <h4 class="text-lg font-semibold text-blue-900">Proyecto de Investigación Musical</h4>
-                            <p class="text-sm text-gray-600 text-justify">Investigación premiada sobre la implementación de la gramática musical en preescolar, demostrando la efectividad de nuestra metodología de enseñanza temprana.</p>
-                        </div>
-
-                        <!-- Artículo Universidad de la Sabana -->
-                        <div class="lg:col-span-2 space-y-4">
-                            <div class="bg-gray-50 p-6 rounded-lg">
-                                <h4 class="text-lg font-semibold text-blue-900 mb-3">Artículo en Revista Apuntes de Familia - Universidad de la Sabana</h4>
-                                <p class="text-gray-600 mb-4 text-justify">Aporte de nuestro fundador al artículo sobre la Música una forma de expresión publicado en la revista Apuntes de Familia de la Universidad de la Sabana.</p>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <img src="img/articulo1.jpeg" alt="Artículo Apuntes de Familia página 1" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable" width="1080" height="1334" loading="lazy">
-                                    <img src="img/articulo2.jpeg" alt="Artículo Apuntes de Familia página 2" class="w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 zoomable" width="1080" height="1318" loading="lazy">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Grid de Videos -->
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:col-span-3">
-                            <!-- Video 1 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/ooY3AedtD-s" 
-                                        title="Perfil Profesional" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Perfil Profesional</h4>
-                                <p class="text-sm text-gray-600 text-justify">Presentación de mis habilidades y experiencia como educador musical, mostrando mi enfoque pedagógico y compromiso con la enseñanza.</p>
-                            </div>
-                            <!-- Video 2 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/RfCJn8_Hnx0" 
-                                        title="Premio Maestro Francisco Cristancho" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Premio Maestro Francisco Cristancho</h4>
-                                <p class="text-sm text-gray-600 text-justify">Momento especial recibiendo un regalo del Maestro Francisco Cristancho durante mi graduación, un reconocimiento significativo a mi trayectoria musical.</p>
-                            </div>
-                            <!-- Video 3 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/UXYUijj7zcY" 
-                                        title="Educación Internacional" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Educación Sin Fronteras</h4>
-                                <p class="text-sm text-gray-600 text-justify">Experiencia de enseñanza virtual internacional, conectando maestros de Bogotá y Cajicá con una estudiante de canto en Francia.</p>
-                            </div>
-                            <!-- Video 4 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/Bvlc37MtmT0" 
-                                        title="Interpretación con Maestro Cristancho" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Interpretación con Maestro Cristancho</h4>
-                                <p class="text-sm text-gray-600 text-justify">Interpretación musical acompañado al piano por el reconocido Maestro Francisco Cristancho, demostrando la excelencia artística de nuestra escuela.</p>
-                            </div>
-                            <!-- Video 5 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/-3f16qGkhjk" 
-                                        title="Ensamble de Tambores" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Ensamble de Tambores</h4>
-                                <p class="text-sm text-gray-600 text-justify">Participación como cantante en el ensamble de tambores del Taller Musical Francisco Cristancho, fusionando voces y percusión en una experiencia musical única.</p>
-                            </div>
-                            <!-- Video 6 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/Ha9IbfjsS_M" 
-                                        title="Música Colombiana" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">Nuestra Música Colombiana</h4>
-                                <p class="text-sm text-gray-600 text-justify">La importancia de enseñarles a nuestros niños a amar desde pequeños nuestra música colombiana, cultivando el aprecio por nuestras raíces culturales.</p>
-                            </div>
-                            <!-- Video 7 -->
-                            <div class="space-y-2">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe 
-                                        class="w-full h-full rounded-lg shadow-lg"
-                                        src="https://www.youtube.com/embed/-X-XTbTrCks" 
-                                        title="A Dónde vas" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                                <h4 class="text-lg font-semibold text-blue-900">A Dónde vas</h4>
-                                <p class="text-sm text-gray-600 text-justify">Video oficial de la producción "A Dónde vas", 12 composiciones propias de tipo religioso. Producción realizada en el año 2015.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="preguntas-frecuentes" class="py-16 bg-white">
-        <div class="container mx-auto px-6 max-w-3xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-900">Preguntas Frecuentes</h2>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">¿Las clases son virtuales o presenciales?</h3>
-                    <p class="text-gray-600">Ofrecemos ambas modalidades. Las clases virtuales son por videollamada en vivo con un profesor real, disponibles para estudiantes de cualquier ciudad o país. Las clases presenciales están disponibles en Bogotá y la Sabana Norte, sujeto a disponibilidad de horario y zona.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">¿Qué instrumentos puedo aprender?</h3>
-                    <p class="text-gray-600">Ofrecemos clases de piano, guitarra, arpa llanera, canto y otros instrumentos, para niños, jóvenes y adultos, desde nivel de iniciación hasta niveles más avanzados.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">¿Necesito saber solfeo o tener un instrumento en casa para empezar?</h3>
-                    <p class="text-gray-600">No. Empezamos desde cero: entrenamos primero el oído y la lectura musical con ejercicios y juegos interactivos, y te orientamos sobre qué instrumento conseguir a medida que avanzas.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">¿Cómo agendo o me inscribo a una clase?</h3>
-                    <p class="text-gray-600">Escríbenos directamente por WhatsApp y te ayudamos a elegir el instrumento, el horario y el plan que mejor se ajuste a ti o a tu hijo/a.</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-blue-900 mb-2">¿Dónde queda ubicada Seven Keys School?</h3>
-                    <p class="text-gray-600">Somos una escuela colombiana fundada en 2020, sin sede fija. Las clases presenciales se dan en Bogotá y la Sabana Norte (sujeto a disponibilidad), y las virtuales llegan a estudiantes de cualquier ciudad o país.</p>
-                </div>
+            <div class="faq">
+                <details class="faq-item reveal reveal-up" open>
+                    <summary><span>¿Las clases son virtuales o presenciales?</span><svg class="icon faq-icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+                    <div class="faq-body"><p>Ofrecemos ambas modalidades. Las clases virtuales son por videollamada en vivo con un profesor real, disponibles para estudiantes de cualquier ciudad o país. Las clases presenciales están disponibles en Bogotá y la Sabana Norte, sujeto a disponibilidad de horario y zona.</p></div>
+                </details>
+                <details class="faq-item reveal reveal-up" style="--delay:.05s">
+                    <summary><span>¿Qué instrumentos puedo aprender?</span><svg class="icon faq-icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+                    <div class="faq-body"><p>Ofrecemos clases de piano, guitarra, arpa llanera, canto y otros instrumentos, para niños, jóvenes y adultos, desde nivel de iniciación hasta niveles más avanzados.</p></div>
+                </details>
+                <details class="faq-item reveal reveal-up" style="--delay:.1s">
+                    <summary><span>¿Necesito saber solfeo o tener un instrumento en casa para empezar?</span><svg class="icon faq-icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+                    <div class="faq-body"><p>No. Empezamos desde cero: entrenamos primero el oído y la lectura musical con ejercicios y juegos interactivos, y te orientamos sobre qué instrumento conseguir a medida que avanzas.</p></div>
+                </details>
+                <details class="faq-item reveal reveal-up" style="--delay:.15s">
+                    <summary><span>¿Cómo agendo o me inscribo a una clase?</span><svg class="icon faq-icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+                    <div class="faq-body"><p>Escríbenos directamente por WhatsApp y te ayudamos a elegir el instrumento, el horario y el plan que mejor se ajuste a ti o a tu hijo/a.</p></div>
+                </details>
+                <details class="faq-item reveal reveal-up" style="--delay:.2s">
+                    <summary><span>¿Dónde queda ubicada Seven Keys School?</span><svg class="icon faq-icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+                    <div class="faq-body"><p>Somos una escuela colombiana fundada en 2020, sin sede fija. Las clases presenciales se dan en Bogotá y la Sabana Norte (sujeto a disponibilidad), y las virtuales llegan a estudiantes de cualquier ciudad o país.</p></div>
+                </details>
             </div>
         </div>
     </section>
@@ -1248,244 +748,79 @@
     }
     </script>
 
-    <!-- Contact Section -->
-    <section id="contacto" class="py-16 bg-gradient-to-r from-indigo-500 to-purple-600">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-white mb-4">Contacto</h2>
-                <p class="text-white">¡Comienza tu viaje musical hoy!</p>
-            </div>
-            <div class="flex flex-wrap justify-center gap-8 mb-8">
-                <!-- WhatsApp -->
-                <a href="https://wa.me/573133697599" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
-                    <i class="fab fa-whatsapp text-2xl"></i>
-                    <span>WhatsApp</span>
-                </a>
-                <!-- Instagram -->
-                <a href="https://www.instagram.com/sevenkeyschool" target="_blank" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
-                    <i class="fab fa-instagram text-2xl"></i>
-                    <span>Instagram</span>
-                </a>
-                <!-- TikTok -->
-                <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
-                    <i class="fab fa-tiktok text-2xl"></i>
-                    <span>TikTok</span>
-                </a>
-                <!-- Email -->
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 bg-gold text-blue-900 px-6 py-3 rounded-lg hover:bg-white transition duration-300">
-                    <i class="fas fa-envelope text-2xl"></i>
-                    <span>Email</span>
-                </a>
+    <!-- ===================== CONTACTO ===================== -->
+    <section id="contacto" class="section contact" aria-labelledby="contacto-title">
+        <div class="container">
+            <div class="contact-card reveal reveal-scale">
+                <div class="contact-keys" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <p class="eyebrow eyebrow-light">Contacto</p>
+                <h2 id="contacto-title">¡Comienza tu viaje musical hoy!</h2>
+                <p class="contact-sub">Escríbenos y te ayudamos a elegir el instrumento, el horario y el plan ideal para ti o para tu hijo/a.</p>
+                <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-xl btn-shine"><i class="fab fa-whatsapp" aria-hidden="true"></i> Escríbenos por WhatsApp</a>
+                <div class="contact-links">
+                    <a href="https://www.instagram.com/sevenkeyschool" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-instagram" aria-hidden="true"></i><span>Instagram</span></a>
+                    <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-tiktok" aria-hidden="true"></i><span>TikTok</span></a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" rel="noopener noreferrer" class="contact-link"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span></a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-4">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Seven Keys School. Todos los derechos reservados.</p>
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <img src="img/logo.png" alt="Seven Keys School" width="300" height="300" loading="lazy">
+                <p>Educación musical personalizada, presencial y virtual, para llevar la música a cualquier lugar del mundo.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/sevenkeyschool/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://www.tiktok.com/@sevenkeyschool" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                    <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <nav class="footer-col" aria-label="Navegación del sitio">
+                <h4>Navegación</h4>
+                <a href="#nuestra-escuela">Nuestra Escuela</a>
+                <a href="#nuestras-clases">Nuestras Clases</a>
+                <a href="#programas">Programas</a>
+                <a href="#metodologia">Metodología</a>
+                <a href="#fundador">Fundador</a>
+                <a href="#preguntas-frecuentes">Preguntas Frecuentes</a>
+            </nav>
+            <nav class="footer-col" aria-label="Plataforma">
+                <h4>Plataforma</h4>
+                <a href="estudiantes/index.html">Portal de Estudiantes</a>
+                <a href="juegos/index.html">Zona de Juegos</a>
+                <a href="juegos/teoria.html">Curso de Lectura de Notas</a>
+            </nav>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" rel="noopener noreferrer">sevenkeyschool@gmail.com</a>
+                <p class="footer-note">Clases virtuales para cualquier país · Presenciales en Bogotá y Sabana Norte (sujeto a disponibilidad)</p>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; <span id="year">2024</span> Seven Keys School. Todos los derechos reservados.</p>
+            <a href="#inicio" class="to-top">Volver arriba <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
     </footer>
 
-    <!-- Modal para las imágenes -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <div class="modal-content">
-            <img id="modalImage" src="" alt="Imagen ampliada">
-        </div>
-    </div>
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="fab-whatsapp" id="fab-whatsapp" aria-label="Escríbenos por WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        <span class="fab-tip">¿Hablamos?</span>
+    </a>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Navigation Scroll Effect
-            const nav = document.querySelector('nav');
-            const handleScroll = () => {
-                const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-                if (scrollTop > 50) {
-                    nav.style.setProperty('background-color', 'rgba(42, 67, 101, 0.95)', 'important');
-                    nav.style.setProperty('backdrop-filter', 'blur(8px)', 'important');
-                    nav.style.setProperty('-webkit-backdrop-filter', 'blur(8px)', 'important');
-                    nav.style.setProperty('box-shadow', '0 4px 20px rgba(0, 0, 0, 0.15)', 'important');
-                } else {
-                    nav.style.setProperty('background-color', 'transparent', 'important');
-                    nav.style.setProperty('backdrop-filter', 'none', 'important');
-                    nav.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
-                    nav.style.setProperty('box-shadow', 'none', 'important');
-                }
-            };
-            window.addEventListener('scroll', handleScroll);
-            document.addEventListener('scroll', handleScroll);
-            setInterval(handleScroll, 250);
-            handleScroll();
+    <!-- Lightbox para las páginas del artículo -->
+    <dialog class="lightbox" id="lightbox" aria-label="Imagen ampliada">
+        <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Cerrar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        <img id="lightbox-img" src="" alt="Imagen ampliada">
+    </dialog>
 
-            // Menú móvil
-            const menuButton = document.getElementById('menu-button');
-            const mobileMenu = document.querySelector('.mobile-menu');
-
-            if (menuButton && mobileMenu) {
-                menuButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    mobileMenu.classList.toggle('hidden');
-                    mobileMenu.classList.toggle('active');
-                });
-
-                // Cerrar menú al hacer clic en un enlace
-                const mobileLinks = mobileMenu.querySelectorAll('a');
-                mobileLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
-                        mobileMenu.classList.remove('active');
-                    });
-                });
-
-                // Cerrar menú al hacer clic fuera
-                document.addEventListener('click', (e) => {
-                    if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-                        mobileMenu.classList.add('hidden');
-                        mobileMenu.classList.remove('active');
-                    }
-                });
-            }
-
-            // Slider de testimonios
-            const testimonialsWrapper = document.querySelector('.testimonials-wrapper');
-            const slides = document.querySelectorAll('.testimonial-slide');
-            const prevButton = document.querySelector('.prev-button');
-            const nextButton = document.querySelector('.next-button');
-            let currentSlide = 0;
-
-            function updateSlidePosition() {
-                if (testimonialsWrapper && slides.length > 0) {
-                    testimonialsWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
-                }
-            }
-
-            function nextSlide() {
-                if (slides.length > 0) {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    updateSlidePosition();
-                }
-            }
-
-            function prevSlide() {
-                if (slides.length > 0) {
-                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                    updateSlidePosition();
-                }
-            }
-
-            if (prevButton) {
-                prevButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    prevSlide();
-                });
-            }
-
-            if (nextButton) {
-                nextButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    nextSlide();
-                });
-            }
-
-            // Inicializar posición del slider
-            updateSlidePosition();
-
-            // Soporte para swipe en móvil
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            if (testimonialsWrapper) {
-                testimonialsWrapper.addEventListener('touchstart', (e) => {
-                    touchStartX = e.touches[0].clientX;
-                });
-
-                testimonialsWrapper.addEventListener('touchmove', (e) => {
-                    touchEndX = e.touches[0].clientX;
-                });
-
-                testimonialsWrapper.addEventListener('touchend', () => {
-                    const swipeDistance = touchEndX - touchStartX;
-                    if (Math.abs(swipeDistance) > 50) {
-                        if (swipeDistance > 0) {
-                            prevSlide();
-                        } else {
-                            nextSlide();
-                        }
-                    }
-                });
-            }
-
-            // Funcionalidad del modal de imágenes
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            const closeBtn = document.getElementsByClassName('close')[0];
-            const zoomableImages = document.getElementsByClassName('zoomable');
-
-            // Agregar evento click a todas las imágenes zoomables
-            Array.from(zoomableImages).forEach(img => {
-                img.onclick = function() {
-                    modal.style.display = 'block';
-                    modalImg.src = this.src;
-                    modalImg.alt = this.alt;
-                    document.body.style.overflow = 'hidden'; // Prevenir scroll
-                }
-            });
-
-            // Cerrar modal al hacer click en X
-            closeBtn.onclick = closeModal;
-
-            // Cerrar modal al hacer click fuera de la imagen
-            modal.onclick = function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            }
-
-            // Función para cerrar el modal
-            function closeModal() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Restaurar scroll
-            }
-
-            // Cerrar modal con la tecla ESC
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeModal();
-                }
-            });
-        });
-    </script>
-
-    <!-- Sección de Instagram -->
-    <div id="instagram-embed-container" class="instagram-media-wrapper">
-        <blockquote 
-            class="instagram-media" 
-            data-instgrm-permalink="https://www.instagram.com/reel/C3HtIgfLkG_/?utm_source=ig_embed&amp;utm_campaign=loading" 
-            data-instgrm-version="14"
-            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; padding:0;">
-        </blockquote>
-    </div>
-
-    <script>
-        // Función para recargar el widget de Instagram
-        function reloadInstagramEmbed() {
-            if (window.instgrm) {
-                window.instgrm.Embeds.process();
-            }
-        }
-
-        // Recargar widget cuando cambie el tamaño de la ventana
-        let resizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(reloadInstagramEmbed, 250);
-        });
-
-        // Asegurarse de que el widget se cargue correctamente
-        document.addEventListener('DOMContentLoaded', function() {
-            reloadInstagramEmbed();
-        });
-    </script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
