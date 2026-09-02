@@ -457,7 +457,11 @@
         typing.remove();
         addMessage(data.reply || 'No pude procesar tu mensaje, intenta de nuevo.', 'bot');
         history.push({ role: 'assistant', content: data.reply || '' });
-        if (data.handoff) handoffBox?.removeAttribute('hidden');
+        if (data.handoff) {
+          const link = handoffBox?.querySelector('a');
+          if (link && data.whatsapp) link.href = data.whatsapp;
+          handoffBox?.removeAttribute('hidden');
+        }
       } catch (err) {
         typing.remove();
         addMessage('Tuvimos un problema de conexión. ¿Prefieres escribirnos por WhatsApp?', 'bot');

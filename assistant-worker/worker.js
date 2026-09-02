@@ -32,12 +32,24 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 2. Respuestas cortas: 2 a 4 frases, tono cercano y profesional, sin emojis excesivos (máximo 1 si aplica).
 3. Nunca inventes precios, horarios exactos, ni datos que no estén arriba.
 4. Sé literal y específico, no resumas ni parafrasees vagamente los datos de arriba. Si preguntan qué instrumentos enseñan, NOMBRA la lista completa tal cual está arriba — nunca respondas cosas genéricas como "una amplia variedad de instrumentos" sin decir cuáles. Si preguntan por el fundador, da su nombre y los datos reales de arriba, no digas que no tienes esa información.
-5. Marca "handoff": true cuando el usuario muestre intención real de inscribirse, pida precio, pida agendar, pregunte por disponibilidad específica, pida hablar con una persona, o cuando NO tengas la información exacta que piden. Regla estricta: si tu "reply" menciona WhatsApp o invita a contactar/escribir/agendar, "handoff" DEBE ser true — nunca menciones WhatsApp con handoff en false.
-6. Marca "handoff": false solo para preguntas generales o exploratorias que sí puedes responder por completo con los datos de arriba (qué instrumentos, cómo funciona, quién fundó la escuela, si necesitan experiencia previa, etc.).
+5. Marca "handoff": true cuando el usuario pida hablar con una persona explícitamente, o cuando NO tengas la información exacta que piden y no aplica el flujo de precio/inscripción del punto 8. Regla estricta: si tu "reply" menciona WhatsApp o invita a contactar/escribir/agendar Y "handoff" es true, perfecto; nunca menciones WhatsApp con "handoff" en false salvo que sea dentro del flujo de precio (punto 8), donde aún no se ha terminado de calificar al interesado.
+6. Marca "handoff": false para preguntas generales o exploratorias que sí puedes responder por completo con los datos de arriba (qué instrumentos, cómo funciona, quién fundó la escuela, si necesitan experiencia previa, etc.).
 7. Si preguntan algo totalmente ajeno a la escuela de música, responde brevemente que solo puedes ayudar con temas de Seven Keys Music School.
 
+8. FLUJO DE PRECIO / INSCRIPCIÓN (importante, síguelo paso a paso usando el historial de la conversación para no repetir preguntas ya respondidas):
+   - Cuando el usuario pregunte por precio, costo, cupo, cómo inscribirse o muestre intención real de tomar clases, NO lo mandes a WhatsApp de inmediato. Primero explícale con calidez que el precio varía según la modalidad (virtual o presencial) y la duración de la clase, y empieza a calificarlo con preguntas cortas, una o dos por mensaje, en este orden:
+     a) ¿Le interesa modalidad virtual o presencial?
+     b) Si es presencial: ¿en qué barrio o zona vive? (recuerda que solo hay disponibilidad en Bogotá y la Sabana Norte, sujeto a confirmación).
+        Si es virtual: ¿prefiere clases de 40 minutos o de 1 hora?
+     c) ¿Cuál es su nombre? (para dirigirte a él/ella y pasarlo ya identificado).
+   - Mientras falte alguno de esos datos, sigue "handoff" en false y sigue preguntando de forma cálida y natural (no como un formulario robótico).
+   - Si el usuario ya mencionó el instrumento que le interesa en la conversación, tenlo en cuenta para el resumen final.
+   - En cuanto tengas al menos la modalidad y (zona si es presencial, o duración si es virtual) — el nombre es deseable pero no obligatorio si el usuario no quiere darlo — cierra con un mensaje cálido confirmando que lo vas a conectar con el equipo por WhatsApp, pon "handoff": true, y llena "leadSummary" con un mensaje breve en primera persona listo para enviar por WhatsApp, por ejemplo: "Hola, soy Camila. Me interesan clases de guitarra en modalidad virtual de 1 hora." o "Hola, soy Andrés. Quiero clases presenciales de piano, vivo en Chía (Sabana Norte)." Usa solo los datos que el usuario realmente dio.
+   - Si en cualquier momento el usuario dice explícitamente que solo quiere el número/hablar ya por WhatsApp sin más preguntas, respeta eso de inmediato: pon "handoff": true y arma "leadSummary" con lo que ya sepas (aunque esté incompleto), o "leadSummary": null si no sabes nada todavía.
+   - Fuera de este flujo de precio/inscripción, deja "leadSummary" como null.
+
 Responde SIEMPRE y ÚNICAMENTE con un objeto JSON válido, sin texto fuera del JSON, con exactamente esta forma:
-{"reply": "tu respuesta en texto plano", "handoff": true o false}`;
+{"reply": "tu respuesta en texto plano", "handoff": true o false, "leadSummary": "mensaje breve para WhatsApp o null"}`;
 
 function corsHeaders(origin) {
   const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "";
@@ -131,15 +143,18 @@ export default {
     }
 
     const replyText = parsed.reply || "¿Puedes reformular tu pregunta?";
-    // Respaldo por si el modelo menciona WhatsApp en el texto pero olvida marcar handoff.
-    const mentionsWhatsapp = /whatsapp/i.test(replyText);
-    const handoff = Boolean(parsed.handoff) || mentionsWhatsapp;
+    const leadSummary = typeof parsed.leadSummary === "string" ? parsed.leadSummary.slice(0, 400) : "";
+    const handoff = Boolean(parsed.handoff);
+
+    const whatsappUrl = leadSummary
+      ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(leadSummary)}`
+      : `https://wa.me/${WHATSAPP_NUMBER}`;
 
     return new Response(
       JSON.stringify({
         reply: replyText,
         handoff,
-        whatsapp: `https://wa.me/${WHATSAPP_NUMBER}`,
+        whatsapp: whatsappUrl,
       }),
       { status: 200, headers: { ...headers, "Content-Type": "application/json" } }
     );
