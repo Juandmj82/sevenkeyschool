@@ -11,39 +11,58 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seven Keys School | Clases de Música Virtuales (Piano, Guitarra, Arpa)</title>
+    <title>Seven Keys School | Clases de Música Online y Presenciales</title>
     <link rel="icon" type="image/png" sizes="300x300" href="img/logo.png">
     <link rel="apple-touch-icon" href="img/logo.png">
-    <meta name="description" content="Clases de música para niños y adultos: piano, guitarra, arpa llanera y más. Clases virtuales para cualquier país y presenciales en Bogotá y la Sabana Norte (sujeto a disponibilidad). Agenda por WhatsApp.">
+    <meta name="description" content="Clases de piano, guitarra, arpa llanera y más para niños y adultos. Virtuales para cualquier país y presenciales en Bogotá y Sabana Norte. Agenda por WhatsApp.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://sevenkeyschool.com/">
     <meta name="theme-color" content="#2A4365">
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sevenkeyschool.com/">
-    <meta property="og:title" content="Seven Keys School | Clases de Música Virtuales">
+    <meta property="og:title" content="Seven Keys School | Clases de Música Online y Presenciales">
+    <meta property="og:site_name" content="Seven Keys School">
     <meta property="og:description" content="Clases de música para niños y adultos: piano, guitarra, arpa llanera y más. Virtuales para cualquier país, y presenciales en Bogotá y la Sabana Norte (sujeto a disponibilidad).">
-    <meta property="og:image" content="https://sevenkeyschool.com/img/logo.png">
+    <meta property="og:image" content="https://sevenkeyschool.com/img/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Seven Keys School: clases de música online y presenciales">
     <meta property="og:locale" content="es_CO">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Seven Keys School | Clases de Música Virtuales">
+    <meta name="twitter:title" content="Seven Keys School | Clases de Música Online y Presenciales">
     <meta name="twitter:description" content="Clases de música para niños y adultos: piano, guitarra, arpa llanera y más. Virtuales para cualquier país, y presenciales en Bogotá y la Sabana Norte (sujeto a disponibilidad).">
-    <meta name="twitter:image" content="https://sevenkeyschool.com/img/logo.png">
+    <meta name="twitter:image" content="https://sevenkeyschool.com/img/og-cover.jpg">
 
-    <!-- Structured data: helps search engines and AI assistants answer
-         questions about the school (who, what, where, how to contact) -->
+    <!-- Structured data: organización, sitio, página, programas y pasos (ayuda a buscadores y asistentes de IA) -->
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
+      "@type": [
+        "EducationalOrganization",
+        "MusicSchool"
+      ],
+      "@id": "https://sevenkeyschool.com/#organization",
       "name": "Seven Keys School",
+      "alternateName": "Seven Keys Music School",
       "url": "https://sevenkeyschool.com/",
       "logo": "https://sevenkeyschool.com/img/logo.png",
+      "image": "https://sevenkeyschool.com/img/og-cover.jpg",
       "description": "Escuela de música fundada en 2020 en Colombia. Ofrece clases virtuales de piano, guitarra, arpa llanera y otros instrumentos para estudiantes de cualquier país, y clases presenciales en Bogotá y la Sabana Norte (sujeto a disponibilidad).",
+      "slogan": "Descubre el placer de hacer música mientras aprendes",
       "foundingDate": "2020",
-      "areaServed": ["Worldwide", "Bogotá y Sabana Norte, Colombia"],
+      "inLanguage": "es",
+      "areaServed": [
+        "Worldwide",
+        "Bogotá y Sabana Norte, Colombia"
+      ],
+      "telephone": "+57 313 369 7599",
+      "email": "sevenkeyschool@gmail.com",
       "sameAs": [
         "https://www.instagram.com/sevenkeyschool/",
         "https://www.tiktok.com/@sevenkeyschool"
@@ -51,9 +70,143 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "url": "https://wa.me/573133697599"
+        "telephone": "+57 313 369 7599",
+        "url": "https://wa.me/573133697599",
+        "availableLanguage": "es"
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Juan Diego Merchán",
+        "jobTitle": "Fundador y profesor de música",
+        "sameAs": "https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/",
+        "award": "Premio al Maestro, Gimnasio Fontana (2017)"
+      },
+      "knowsAbout": [
+        "Piano",
+        "Guitarra",
+        "Arpa llanera",
+        "Técnica vocal",
+        "Violín",
+        "Bajo",
+        "Ukelele",
+        "Cuatro",
+        "Batería",
+        "Maracas",
+        "Iniciación musical",
+        "Lectura de notas",
+        "Teoría musical"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Programas",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Course",
+              "name": "Iniciación Musical",
+              "description": "Programa para introducir a los más pequeños (desde los 5 años) en la música a través de juegos, canciones y actividades lúdicas: desarrollo auditivo, ritmo y movimiento, expresión corporal, canto y voz.",
+              "provider": {
+                "@id": "https://sevenkeyschool.com/#organization"
+              },
+              "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": [
+                  "online",
+                  "onsite"
+                ]
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Course",
+              "name": "Desarrollo Musical",
+              "description": "Clases personalizadas virtuales y presenciales de guitarra, piano, batería, técnica vocal, violín, bajo, ukelele, arpa, cuatro y maracas, adaptadas al nivel y objetivos de cada estudiante.",
+              "provider": {
+                "@id": "https://sevenkeyschool.com/#organization"
+              },
+              "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": [
+                  "online",
+                  "onsite"
+                ]
+              }
+            }
+          }
+        ]
       }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://sevenkeyschool.com/#website",
+      "url": "https://sevenkeyschool.com/",
+      "name": "Seven Keys School",
+      "inLanguage": "es",
+      "publisher": {
+        "@id": "https://sevenkeyschool.com/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://sevenkeyschool.com/#webpage",
+      "url": "https://sevenkeyschool.com/",
+      "name": "Seven Keys School | Clases de Música Online y Presenciales",
+      "isPartOf": {
+        "@id": "https://sevenkeyschool.com/#website"
+      },
+      "about": {
+        "@id": "https://sevenkeyschool.com/#organization"
+      },
+      "inLanguage": "es",
+      "primaryImageOfPage": "https://sevenkeyschool.com/img/og-cover.jpg",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "#hero-title",
+          ".hero-lead",
+          "#preguntas-frecuentes"
+        ]
+      }
+    },
+    {
+      "@type": "HowTo",
+      "name": "Cómo empezar clases de música en Seven Keys School",
+      "description": "Pasos para comenzar clases de música virtuales o presenciales con Seven Keys School.",
+      "inLanguage": "es",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Escríbenos",
+          "text": "Cuéntanos por WhatsApp qué te gustaría aprender, para ti o para tu hijo/a.",
+          "url": "https://wa.me/573133697599"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Plan de estudios personalizado",
+          "text": "Diseñamos un plan adaptado a tus necesidades y objetivos."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Horarios flexibles",
+          "text": "Clases virtuales o presenciales, adaptadas a tu disponibilidad."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Clases en línea, desde donde estés",
+          "text": "Para estudiantes de todo el mundo, con juegos y Portal para practicar entre clases.",
+          "url": "https://sevenkeyschool.com/juegos/index.html"
+        }
+      ]
     }
+  ]
+}
     </script>
 
     <!-- Fonts: Fraunces (display) + Plus Jakarta Sans (text/UI) -->
@@ -62,7 +215,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,50;1,9..144,400..700,50&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="img/logo.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=2.0.7">
+    <link rel="stylesheet" href="css/styles.css?v=2.0.8">
     <!-- Font Awesome solo para íconos de marcas sociales (WhatsApp, Instagram, TikTok, LinkedIn) e instrumentos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -753,7 +906,7 @@
                 </div>
             </div>
             <nav class="footer-col" aria-label="Navegación del sitio">
-                <h4>Navegación</h4>
+                <h3>Navegación</h3>
                 <a href="#nuestra-escuela">Nuestra Escuela</a>
                 <a href="#nuestras-clases">Nuestras Clases</a>
                 <a href="#programas">Programas</a>
@@ -762,13 +915,13 @@
                 <a href="#preguntas-frecuentes">Preguntas Frecuentes</a>
             </nav>
             <nav class="footer-col" aria-label="Plataforma">
-                <h4>Plataforma</h4>
+                <h3>Plataforma</h3>
                 <a href="estudiantes/index.html">Portal de Estudiantes</a>
                 <a href="juegos/index.html">Zona de Juegos</a>
                 <a href="juegos/teoria.html">Curso de Lectura de Notas</a>
             </nav>
             <div class="footer-col">
-                <h4>Contacto</h4>
+                <h3>Contacto</h3>
                 <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sevenkeyschool@gmail.com&su=Información sobre clases" target="_blank" rel="noopener noreferrer">sevenkeyschool@gmail.com</a>
                 <p class="footer-note">Clases virtuales para cualquier país · Presenciales en Bogotá y Sabana Norte (sujeto a disponibilidad)</p>
@@ -789,9 +942,9 @@
     <!-- Lightbox para las páginas del artículo -->
     <dialog class="lightbox" id="lightbox" aria-label="Imagen ampliada">
         <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Cerrar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-        <img id="lightbox-img" src="" alt="Imagen ampliada">
+        <img id="lightbox-img" src="" alt="Imagen ampliada" width="1080" height="1334">
     </dialog>
 
-    <script src="js/main.js?v=2.0.7" defer></script>
+    <script src="js/main.js?v=2.0.8" defer></script>
 </body>
 </html>
