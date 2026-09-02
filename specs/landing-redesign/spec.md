@@ -24,7 +24,7 @@ La landing (`index.html`) mezclaba Tailwind 2, ~280 líneas de CSS inline, ~160 
 Como padre/madre o estudiante potencial, quiero llegar a la landing y entender en segundos qué ofrece Seven Keys, con una experiencia visual cuidada que invite a seguir bajando.
 
 **Acceptance Scenarios**:
-1. **Given** la landing en un móvil de 390px o un escritorio de 1440px, **When** carga, **Then** el hero ocupa la primera pantalla con titular, cita, CTAs (WhatsApp, Programas, Juegos) y el motion graphic musical (pentagrama que se dibuja, notas flotantes, 7 teclas que se iluminan, ecualizador), sin scroll horizontal.
+1. **Given** la landing en un móvil de 390px o un escritorio de 1440px, **When** carga, **Then** el hero muestra titular, cita, CTAs (WhatsApp, Programas), el motion graphic musical (pentagrama que se dibuja, notas flotantes, 7 teclas que se iluminan, ecualizador) y una franja de indicadores bajo el grid, sin recortes en ventanas de 610 px de alto ni scroll horizontal. La Zona de Juegos se enlaza desde nav, menú móvil, bento y footer sin etiquetas de "nuevo".
 2. **Given** cualquier ancho, **When** el usuario hace scroll, **Then** la barra de navegación se compacta con efecto vidrio, el enlace de la sección visible se marca como activo y una barra de progreso dorada refleja el avance.
 3. **Given** un móvil, **When** pulsa el botón hamburguesa, **Then** se abre un menú a pantalla completa con enlaces en cascada, el scroll del fondo se bloquea y se cierra con Esc, con la X o al navegar.
 
@@ -64,7 +64,7 @@ Como padre/madre, quiero leer opiniones reales de otras familias.
 
 ### Non-Functional Requirements
 - **NFR-001**: Sin scroll horizontal entre 360px y 1920px; layouts fluidos con `clamp()`, `dvh` y `minmax()`.
-- **NFR-002**: Todas las `<img>` con `width`/`height` y `loading="lazy"` salvo el logo/hero (CLS estable).
+- **NFR-002**: Todas las `<img>` con `width`/`height` y `loading="lazy"` salvo el logo/hero (CLS estable). La foto del fundador usa `srcset` (600w PNG + 1200w JPEG) para pantallas de alta densidad.
 - **NFR-003**: `css/styles.css` ≤ 55 KB y `js/main.js` ≤ 20 KB sin minificar (sin frameworks ni librerías externas).
 - **NFR-004**: Contraste AA: el dorado `#F6AD55` solo como texto sobre navy; sobre fondos claros se usa `--navy-700`.
 - **NFR-005**: Un único `<h1>`; jerarquía de encabezados consistente; `:focus-visible` visible en todos los controles.

@@ -114,7 +114,7 @@
 
             <div class="nav-ctas">
                 <a href="estudiantes/index.html" class="btn btn-ghost btn-sm"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg> Portal Estudiantes</a>
-                <a href="juegos/index.html" class="btn btn-gold btn-sm btn-pulse"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> Juegos</a>
+                <a href="juegos/index.html" class="btn btn-gold btn-sm"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> Juegos</a>
             </div>
 
             <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
@@ -169,7 +169,7 @@
                     Educación musical personalizada para niños, jóvenes y adultos. Clases en vivo con un profesor real, en tu horario y desde cualquier lugar del mundo.
                 </p>
 
-                <div class="hero-ctas reveal reveal-up" style="--delay:.85s">
+                <div class="hero-ctas reveal reveal-up" style="--delay:.8s">
                     <a href="https://wa.me/573133697599" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg btn-shine">
                         <i class="fab fa-whatsapp" aria-hidden="true"></i> Agenda por WhatsApp
                     </a>
@@ -177,17 +177,6 @@
                         Ver programas <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
                     </a>
                 </div>
-                <a href="juegos/index.html" class="hero-tertiary reveal reveal-up" style="--delay:1s">
-                    <span class="badge-new">¡Nuevo!</span> Explora la Zona de Juegos interactiva <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-                </a>
-
-                <!-- Indicadores basados en datos ya presentes en el sitio (editar aquí) -->
-                <dl class="hero-stats reveal reveal-up" style="--delay:1.15s">
-                    <div><dt>Desde</dt><dd>2020</dd></div>
-                    <div><dt>Instrumentos</dt><dd><span class="count" data-count="10">0</span>+</dd></div>
-                    <div><dt>Países con estudiantes</dt><dd><span class="count" data-count="4">0</span></dd></div>
-                    <div><dt>Familias que nos recomiendan</dt><dd><span class="count" data-count="11">0</span>+</dd></div>
-                </dl>
             </div>
 
             <!-- Motion graphic principal -->
@@ -243,7 +232,16 @@
             </div>
         </div>
 
-        <a href="#por-que" class="scroll-cue" aria-label="Bajar al contenido"><span></span></a>
+
+        <!-- Indicadores basados en datos ya presentes en el sitio (editar aquí) -->
+        <div class="container">
+            <dl class="hero-stats reveal reveal-up" style="--delay:.9s">
+                <div><dt>Desde</dt><dd>2020</dd></div>
+                <div><dt>Instrumentos</dt><dd><span class="count" data-count="10">0</span>+</dd></div>
+                <div><dt>Países con estudiantes</dt><dd><span class="count" data-count="4">0</span></dd></div>
+                <div><dt>Familias que nos recomiendan</dt><dd><span class="count" data-count="11">0</span>+</dd></div>
+            </dl>
+        </div>
     </section>
 
     <!-- ===================== MARQUEE + JUEGOS ===================== -->
@@ -252,14 +250,6 @@
             <span>Guitarra</span><i>♪</i><span>Piano</span><i>♪</i><span>Batería</span><i>♪</i><span>Técnica Vocal</span><i>♪</i><span>Violín</span><i>♪</i><span>Bajo</span><i>♪</i><span>Ukelele</span><i>♪</i><span>Arpa</span><i>♪</i><span>Cuatro</span><i>♪</i><span>Maracas</span><i>♪</i><span>Iniciación Musical</span><i>♪</i>
         </div>
     </div>
-
-    <section class="games-band" aria-label="Zona de Juegos">
-        <div class="container games-band-inner reveal reveal-up">
-            <span class="badge-new">¡Nuevo!</span>
-            <p>¡Aprende música jugando! Diviértete en nuestra nueva <strong>Zona de Juegos Interactiva</strong>.</p>
-            <a href="juegos/index.html" class="btn btn-light btn-sm"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg> Ir a los Juegos</a>
-        </div>
-    </section>
 
     <!-- ===================== POR QUÉ SEVEN KEYS (bento) ===================== -->
     <section id="por-que" class="section" aria-labelledby="porque-title">
@@ -512,7 +502,7 @@
     </section>
 
     <!-- ===================== METODOLOGÍA ===================== -->
-    <section id="metodologia" class="section" aria-labelledby="metodologia-title">
+    <section id="metodologia" class="section section-cream" aria-labelledby="metodologia-title">
         <div class="container">
             <div class="section-head reveal reveal-up">
                 <p class="eyebrow">Metodología</p>
@@ -588,8 +578,7 @@
         <div class="container">
             <div class="founder">
                 <div class="founder-media reveal reveal-left">
-                    <svg class="founder-arc" viewBox="0 0 400 400" aria-hidden="true"><path class="draw-on-view" d="M200 20 A180 180 0 1 1 20 200" fill="none" stroke-linecap="round"/></svg>
-                    <img src="img/Founder.png?v=2" alt="Juan Diego Merchán, fundador de Seven Keys School" width="600" height="771" loading="lazy" class="founder-img">
+                    <img src="img/Founder.png" srcset="img/Founder.png 600w, img/founder-1200.jpg 1200w" sizes="(min-width: 48em) 420px, 90vw" alt="Juan Diego Merchán, fundador de Seven Keys School" width="600" height="771" loading="lazy" class="founder-img">
                     <a href="https://www.linkedin.com/in/juan-diego-merch%C3%A1n-321200b4/" target="_blank" rel="noopener noreferrer" class="founder-linkedin" aria-label="LinkedIn de Juan Diego Merchán"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
                 </div>
                 <div class="founder-copy">
