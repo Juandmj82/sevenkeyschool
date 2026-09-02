@@ -102,7 +102,13 @@
         if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    items.forEach((el) => io.observe(el));
+    // Lo que ya asoma en la primera pantalla se muestra de inmediato (aunque quede cortado por el borde inferior).
+    const vh = window.innerHeight;
+    items.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) { el.classList.add('is-visible'); return; }
+      io.observe(el);
+    });
   }
 
   /* ---------- H1 palabra por palabra ---------- */
