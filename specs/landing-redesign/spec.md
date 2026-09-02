@@ -24,7 +24,7 @@ La landing (`index.html`) mezclaba Tailwind 2, ~280 líneas de CSS inline, ~160 
 Como padre/madre o estudiante potencial, quiero llegar a la landing y entender en segundos qué ofrece Seven Keys, con una experiencia visual cuidada que invite a seguir bajando.
 
 **Acceptance Scenarios**:
-1. **Given** la landing en un móvil de 390px o un escritorio de 1440px, **When** carga, **Then** el hero muestra titular, cita, CTAs (WhatsApp, Programas), el motion graphic musical (pentagrama que se dibuja, notas flotantes, 7 teclas que se iluminan, ecualizador) y una franja de indicadores bajo el grid, sin recortes en ventanas de 610 px de alto ni scroll horizontal. La Zona de Juegos se enlaza desde nav, menú móvil, bento y footer sin etiquetas de "nuevo".
+1. **Given** la landing en un móvil de 390px o un escritorio de 1440px, **When** carga, **Then** el hero muestra titular, cita, CTAs (WhatsApp, Programas), el montaje animado del logo (sus piezas, recortadas del logo original sin redibujar, se ensamblan al cargar y se vuelven a montar al pasar el cursor o tocar) y una franja de indicadores bajo el grid, sin recortes en ventanas de 610 px de alto ni scroll horizontal. La Zona de Juegos se enlaza desde nav, menú móvil, bento y footer sin etiquetas de "nuevo".
 2. **Given** cualquier ancho, **When** el usuario hace scroll, **Then** la barra de navegación se compacta con efecto vidrio, el enlace de la sección visible se marca como activo y una barra de progreso dorada refleja el avance.
 3. **Given** un móvil, **When** pulsa el botón hamburguesa, **Then** se abre un menú a pantalla completa con enlaces en cascada, el scroll del fondo se bloquea y se cierra con Esc, con la X o al navegar.
 
@@ -60,6 +60,7 @@ Como padre/madre, quiero leer opiniones reales de otras familias.
 - **FR-005**: Las FAQ DEBEN ser un acordeón nativo (`<details>`) accesible por teclado.
 - **FR-006**: Todo movimiento DEBE desactivarse con `prefers-reduced-motion: reduce`, mostrando el contenido visible de inmediato.
 - **FR-007**: La landing NO DEBE depender de `css/tailwind.min.css` ni de ninguna librería JS externa (Font Awesome solo para íconos de marcas sociales).
+- **FR-009**: El hero DEBE mostrar el logo ensamblándose a partir de recortes exactos del logo original (`img/logo-parts/`, generados por script desde `img/logo-500.png`); con `prefers-reduced-motion` se muestra completo y estático.
 - **FR-008**: Los indicadores numéricos del hero DEBEN basarse solo en datos ya presentes en el sitio (fundación 2020, 10 instrumentos, estudiantes en 4 países según testimonios/videos).
 
 ### Non-Functional Requirements

@@ -176,6 +176,27 @@
     hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(tick); });
   }
 
+  /* ---------- Montaje del logo en el hero ---------- */
+  function initLogoAssembly() {
+    const stage = $('#logo-stage');
+    if (!stage) return;
+    if (reduceMotion) { stage.classList.add('is-assembled'); return; }
+    let lock = false;
+    const assemble = () => {
+      if (lock) return;
+      lock = true;
+      stage.classList.remove('is-assembled');
+      void stage.offsetWidth; // reinicia las animaciones
+      stage.classList.add('is-assembled');
+      setTimeout(() => { lock = false; }, 3400);
+    };
+    const imgs = $$('img.part', stage);
+    const loaded = Promise.all(imgs.map((im) => im.complete ? Promise.resolve() : new Promise((r) => { im.addEventListener('load', r, { once: true }); im.addEventListener('error', r, { once: true }); })));
+    Promise.race([loaded, new Promise((r) => setTimeout(r, 1200))]).then(() => requestAnimationFrame(assemble));
+    if (finePointer) stage.addEventListener('pointerenter', assemble);
+    stage.addEventListener('click', assemble);
+  }
+
   /* ---------- Brillo que sigue al cursor en tarjetas ---------- */
   function initCardGlow() {
     if (!finePointer) return;
@@ -359,7 +380,7 @@
 
   const init = () => {
     initNav(); initActiveSection(); initScrollProgress(); initSplitWords(); initReveal(); initCounters();
-    initParallax(); initCardGlow(); initMarquee(); initVideoFacades(); initFilters(); initCarousel();
+    initParallax(); initLogoAssembly(); initCardGlow(); initMarquee(); initVideoFacades(); initFilters(); initCarousel();
     initReadMore(); initLightbox(); initInstagramFacade(); initFab(); initFooterYear();
   };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();

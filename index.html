@@ -215,7 +215,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,50;1,9..144,400..700,50&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="img/logo.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=2.0.8">
+    <link rel="stylesheet" href="css/styles.css?v=2.0.9">
     <!-- Font Awesome solo para íconos de marcas sociales (WhatsApp, Instagram, TikTok, LinkedIn) e instrumentos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -337,43 +337,24 @@
             <!-- Motion graphic principal -->
             <div class="hero-visual reveal reveal-scale" style="--delay:.4s" aria-hidden="true">
                 <div class="hero-card glass" data-parallax="18">
-                    <svg class="staff-svg" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
-                        <g class="staff-lines" stroke="currentColor" stroke-width="1.6" fill="none">
-                            <path class="draw" d="M36 70 H484"/>
-                            <path class="draw" d="M36 94 H484" style="--d:.15s"/>
-                            <path class="draw" d="M36 118 H484" style="--d:.3s"/>
-                            <path class="draw" d="M36 142 H484" style="--d:.45s"/>
-                            <path class="draw" d="M36 166 H484" style="--d:.6s"/>
-                        </g>
-                        <!-- Clave de sol: trazado vectorial Bravura (SMuFL), espiral anclada a la 2.ª línea (Sol, y=142); escala 24/250 -->
-                        <g class="clef" transform="translate(44 142) scale(0.096)"><g transform="scale(1,-1)"><path d="M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z"/></g></g>
-                        <!-- Notas -->
-                        <g class="note n1" style="--i:0"><ellipse cx="180" cy="130" rx="11" ry="8" transform="rotate(-20 180 130)"/><path d="M190 127 V70" /><path class="flag" d="M190 70 q22 8 16 32 q-4 -14 -16 -18z"/></g>
-                        <g class="note n2" style="--i:1"><ellipse cx="250" cy="106" rx="11" ry="8" transform="rotate(-20 250 106)"/><path d="M260 103 V46"/></g>
-                        <g class="note n3" style="--i:2"><ellipse cx="320" cy="142" rx="11" ry="8" transform="rotate(-20 320 142)"/><path d="M330 139 V82"/><path class="flag" d="M330 82 q22 8 16 32 q-4 -14 -16 -18z"/></g>
-                        <g class="note n4" style="--i:3"><ellipse cx="390" cy="94" rx="11" ry="8" transform="rotate(-20 390 94)"/><path d="M400 91 V34"/></g>
-                        <g class="note n5" style="--i:4"><ellipse cx="455" cy="118" rx="11" ry="8" transform="rotate(-20 455 118)"/><path d="M465 115 V58"/></g>
-                        <!-- Ecualizador -->
-                        <g class="eq" transform="translate(300 262)">
-                            <rect class="bar" x="0" y="-40" width="8" height="40" rx="4" style="--i:0"/>
-                            <rect class="bar" x="14" y="-40" width="8" height="40" rx="4" style="--i:1"/>
-                            <rect class="bar" x="28" y="-40" width="8" height="40" rx="4" style="--i:2"/>
-                            <rect class="bar" x="42" y="-40" width="8" height="40" rx="4" style="--i:3"/>
-                            <rect class="bar" x="56" y="-40" width="8" height="40" rx="4" style="--i:4"/>
-                            <rect class="bar" x="70" y="-40" width="8" height="40" rx="4" style="--i:5"/>
-                            <rect class="bar" x="84" y="-40" width="8" height="40" rx="4" style="--i:6"/>
-                            <rect class="bar" x="98" y="-40" width="8" height="40" rx="4" style="--i:7"/>
-                            <rect class="bar" x="112" y="-40" width="8" height="40" rx="4" style="--i:8"/>
-                            <rect class="bar" x="126" y="-40" width="8" height="40" rx="4" style="--i:9"/>
-                            <rect class="bar" x="140" y="-40" width="8" height="40" rx="4" style="--i:10"/>
-                            <rect class="bar" x="154" y="-40" width="8" height="40" rx="4" style="--i:11"/>
-                        </g>
-                    </svg>
-
-                    <!-- 7 teclas: Seven Keys -->
-                    <div class="piano">
-                        <span class="key" style="--i:0"></span><span class="key" style="--i:1"></span><span class="key" style="--i:2"></span><span class="key" style="--i:3"></span><span class="key" style="--i:4"></span><span class="key" style="--i:5"></span><span class="key" style="--i:6"></span>
-                        <span class="bkey" style="--p:1"></span><span class="bkey" style="--p:2"></span><span class="bkey" style="--p:4"></span><span class="bkey" style="--p:5"></span><span class="bkey" style="--p:6"></span>
+                    <!-- Montaje del logo: cada pieza es un recorte exacto del logo original (img/logo-parts) -->
+                    <div class="logo-stage" id="logo-stage" role="img" aria-label="Logo de Seven Keys Music School">
+                        <span class="logo-glow" aria-hidden="true"></span>
+                        <span class="part part-disc" aria-hidden="true"></span>
+                        <img class="part part-ring" src="img/logo-parts/ring.png" alt="" width="436" height="436" fetchpriority="high" decoding="async">
+                        <img class="part part-arc-3" src="img/logo-parts/arc-3.png" alt="" width="319" height="262" decoding="async">
+                        <img class="part part-arc-2" src="img/logo-parts/arc-2.png" alt="" width="208" height="202" decoding="async">
+                        <img class="part part-arc-1" src="img/logo-parts/arc-1.png" alt="" width="166" height="158" decoding="async">
+                        <img class="part part-clef" src="img/logo-parts/clef.png" alt="" width="296" height="260" fetchpriority="high" decoding="async">
+                        <img class="part part-star-l" src="img/logo-parts/star-l.png" alt="" width="40" height="54" decoding="async">
+                        <img class="part part-star-r" src="img/logo-parts/star-r.png" alt="" width="40" height="53" decoding="async">
+                        <img class="part part-text-top" src="img/logo-parts/text-top.png" alt="" width="388" height="187" fetchpriority="high" decoding="async">
+                        <img class="part part-text-bottom" src="img/logo-parts/text-bottom.png" alt="" width="369" height="159" decoding="async">
+                        <div class="orbit" aria-hidden="true">
+                            <span class="orbit-note" style="--p:0"><svg class="icon"><use href="#i-note"/></svg></span>
+                            <span class="orbit-note" style="--p:1"><svg class="icon"><use href="#i-note"/></svg></span>
+                            <span class="orbit-note" style="--p:2"><svg class="icon"><use href="#i-note"/></svg></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -945,6 +926,6 @@
         <img id="lightbox-img" src="" alt="Imagen ampliada" width="1080" height="1334">
     </dialog>
 
-    <script src="js/main.js?v=2.0.8" defer></script>
+    <script src="js/main.js?v=2.0.9" defer></script>
 </body>
 </html>
