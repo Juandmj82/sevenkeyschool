@@ -237,7 +237,6 @@
   .hero-copy { max-width: 640px; }
   .hero-title { color: #fff; margin-top: var(--space-4); font-style: italic; font-variation-settings: 'SOFT' 50; }
   .hero-attribution { display: block; margin-top: .4rem; font-size: var(--fs-sm); color: var(--gold-300); font-weight: 600; }
-  .hero-tagline { margin-top: var(--space-4); padding-left: 1rem; border-left: 2px solid var(--gold-400); font-size: clamp(1rem, .3vw + .9rem, 1.15rem); color: rgba(255, 255, 255, .9); font-weight: 500; }
   .hero-lead { margin-top: var(--space-3); font-size: clamp(1rem, .25vw + .9rem, 1.15rem); color: rgba(255, 255, 255, .8); max-width: 48ch; }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: var(--space-4); }
 
